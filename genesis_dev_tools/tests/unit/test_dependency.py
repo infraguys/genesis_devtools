@@ -18,7 +18,7 @@ import shutil
 import typing as tp
 import tempfile
 
-from gcl_images.builder.dependency import LocalPathDependency
+from genesis_dev_tools.builder.dependency import LocalPathDependency
 
 
 class TestDependency:

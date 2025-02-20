@@ -16,8 +16,7 @@
 
 import typing as tp
 
-PKG_NAME = "gcl_images"
-EP_GCL_IMAGE_BUILDER_GROUP = "gcl_image_builder"
+PKG_NAME = "genesis_dev_tools"
 LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
 DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"

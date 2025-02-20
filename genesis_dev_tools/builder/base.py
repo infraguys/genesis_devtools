@@ -18,8 +18,8 @@ import abc
 import os
 import typing as tp
 
-from gcl_images.logger import AbstractLogger
-from gcl_images import constants as c
+from genesis_dev_tools.logger import AbstractLogger
+from genesis_dev_tools import constants as c
 
 
 class Image(tp.NamedTuple):

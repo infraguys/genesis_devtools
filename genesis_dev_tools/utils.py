@@ -19,7 +19,7 @@ import typing as tp
 from importlib.metadata import entry_points
 import yaml
 
-import gcl_images.constants as c
+import genesis_dev_tools.constants as c
 
 
 def load_from_entry_point(group: str, name: str) -> tp.Any:

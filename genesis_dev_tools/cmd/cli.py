@@ -22,12 +22,12 @@ import tempfile
 import click
 import prettytable
 
-import gcl_images.constants as c
-from gcl_images import utils
-from gcl_images.logger import ClickLogger
-from gcl_images.builder.builder import SimpleBuilder
-from gcl_images.builder.packer import PackerBuilder
-from gcl_images import libvirt
+import genesis_dev_tools.constants as c
+from genesis_dev_tools import utils
+from genesis_dev_tools.logger import ClickLogger
+from genesis_dev_tools.builder.builder import SimpleBuilder
+from genesis_dev_tools.builder.packer import PackerBuilder
+from genesis_dev_tools import libvirt
 
 
 BOOTSTRAP_TAG = "bootstrap"

@@ -20,9 +20,9 @@ import typing as tp
 import shutil
 from importlib.resources import files
 
-from gcl_images.builder import base
-from gcl_images.logger import AbstractLogger, DummyLogger
-from gcl_images import constants as c
+from genesis_dev_tools.builder import base
+from genesis_dev_tools.logger import AbstractLogger, DummyLogger
+from genesis_dev_tools import constants as c
 
 
 file_provisioner_tmpl = """

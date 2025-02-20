@@ -20,7 +20,7 @@ import typing as tp
 import tempfile
 import subprocess
 
-from gcl_images import constants as c
+from genesis_dev_tools import constants as c
 
 domain_template = """
 <domain type="kvm">

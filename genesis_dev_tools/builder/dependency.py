@@ -18,7 +18,7 @@ import os
 import shutil
 import typing as tp
 
-from gcl_images.builder import base
+from genesis_dev_tools.builder import base
 
 
 class LocalPathDependency(base.AbstractDependency):

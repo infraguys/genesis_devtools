@@ -19,14 +19,14 @@ from unittest.mock import MagicMock
 import pytest
 import yaml
 
-from gcl_images.builder.builder import SimpleBuilder
-from gcl_images.builder.base import (
+from genesis_dev_tools.builder.builder import SimpleBuilder
+from genesis_dev_tools.builder.base import (
     AbstractDependency,
     AbstractImageBuilder,
     Element,
 )
-from gcl_images.logger import DummyLogger
-from gcl_images.builder.dependency import LocalPathDependency
+from genesis_dev_tools.logger import DummyLogger
+from genesis_dev_tools.builder.dependency import LocalPathDependency
 
 
 @pytest.fixture

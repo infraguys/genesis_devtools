@@ -14,4 +14,4 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from gcl_images.builder import dependency
+from genesis_dev_tools.builder import dependency
