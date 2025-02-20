@@ -1,2 +1,4 @@
 pbr>=1.10.0,<5.8.1  # Apache-2.0
 click>=8.1.7,<9.0.0  # BSD-3
+pyyaml>=6.0.0,<7.0.0  # MIT
+prettytable>=3.7.0,<4.0.0  # MIT

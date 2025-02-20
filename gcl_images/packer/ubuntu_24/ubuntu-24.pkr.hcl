@@ -46,18 +46,39 @@ source "qemu" "ubuntu-24" {
   # qemu_img_args {
   #   resize  = ["--shrink"]
   # }
-  output_directory          = "build"
+  output_directory          = var.output_directory
   vm_name                   = "${source.name}.raw"
   ssh_private_key_file      = data.sshkey.install.private_key_path
   cd_label                  = "cidata"
   cd_content                = local.cd_content
   shutdown_command        = <<EOF
 set -ex
+
+# Default network settings
+cat << EOF1 | sudo tee /etc/netplan/90-genesis-net-base-config.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    alleths:
+      match:
+        name: en*
+      dhcp4: true
+EOF1
+
 # Logs
 sudo rm -fr /var/log/*
 
-# Ssh keys
-sudo rm -f /etc/ssh/*host*key*
+# Remove temporary keys
+# Disable removing host keys temporarily
+# sudo rm -f /etc/ssh/*host*key*
+
+# Add developer keys
+sudo mkdir -p /home/ubuntu/.ssh
+[[ -f /tmp/__dev_keys ]] && sudo mv /tmp/__dev_keys /home/ubuntu/.ssh/authorized_keys
+
+# Temporary solution only for development
+echo 'ubuntu:ubuntu' | sudo chpasswd
 
 # Tmp files
 sudo rm -rf /tmp/* /var/tmp/*

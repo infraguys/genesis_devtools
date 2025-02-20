@@ -14,5 +14,18 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import typing as tp
+
 PKG_NAME = "gcl_images"
 EP_GCL_IMAGE_BUILDER_GROUP = "gcl_image_builder"
+LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
+DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
+DEF_GEN_WORK_DIR_NAME = "genesis"
+DEF_GEN_OUTPUT_DIR_NAME = "output"
+
+# ENV vars
+ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
+
+# Types
+ImageProfileType = tp.Literal["ubuntu_24"]
+ImageFormatType = tp.Literal["raw"]
