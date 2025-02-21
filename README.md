@@ -164,7 +164,7 @@ genesis delete genesis-core
 
 ## Versions
 
-Simver is used for project versioning. There are three types of versions:
+Semver is used for project versioning. There are three types of versions:
 - stable version
 - release candidate version
 - development version
