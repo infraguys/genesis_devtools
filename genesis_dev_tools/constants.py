@@ -21,6 +21,7 @@ LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
 DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"
 DEF_GEN_OUTPUT_DIR_NAME = "output"
+RC_BRANCHES = ("master", "main")
 
 # ENV vars
 ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"

@@ -23,9 +23,6 @@ sudo adduser $USER libvirt
 ```
 
 Install packer like described in [this article](https://yandex.cloud/ru/docs/tutorials/infrastructure-management/packer-quickstart#from-y-mirror)
-```sh
-
-```
 
 # Install
 
@@ -163,4 +160,19 @@ To delete genesis installation, run the `genesis delete` command. For instance,
 
 ```sh
 genesis delete genesis-core
+```
+
+## Versions
+
+Simver is used for project versioning. There are three types of versions:
+- stable version
+- release candidate version
+- development version
+
+Stable version looks like `1.0.0`, only three digits. Release candidate version looks like `0.0.1.rc.ff4c436c.20250221110024`. Development version looks like `0.0.1.dev.ff4c436c.20250221110024`.
+
+To get project version, run the `genesis get-version` with path to the project root directory as an argument to the command. For instance,
+
+```sh
+genesis get-version /path/to/my_project
 ```

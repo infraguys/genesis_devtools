@@ -293,6 +293,14 @@ def delete_cmd(name: str) -> None:
     logger.important(f"Destroyed genesis installation: {name}")
 
 
+@main.command("get-version", help="Return the version of the project")
+@click.argument("element_dir", type=click.Path())
+def get_project_version_cmd(element_dir: str) -> None:
+    logger = ClickLogger()
+    version = utils.get_project_version(element_dir)
+    logger.important(version)
+
+
 def _list_installations() -> tp.List[tp.Tuple[str, str]]:
     installations = []
 
