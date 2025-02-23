@@ -1,3 +1,5 @@
+![Tests workflow](https://github.com/infraguys/genesis_dev_tools/actions/workflows/tests.yml/badge.svg)
+
 # Genesis Dev Tools
 
 The tools to manager life cycle of genesis projects
