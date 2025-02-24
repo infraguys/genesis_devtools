@@ -22,7 +22,7 @@ import yaml
 
 import git
 
-import genesis_dev_tools.constants as c
+import genesis_devtools.constants as c
 
 
 def load_from_entry_point(group: str, name: str) -> tp.Any:
