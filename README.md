@@ -167,11 +167,11 @@ genesis delete genesis-core
 ## Versions
 
 Semver is used for project versioning. There are three types of versions:
-- stable version
-- release candidate version
-- development version
+- stable version - format `X.Y.Z`
+- release candidate version - format `X.Y.Z-rc+YYYYMMDDHHMMSS.commit_hash[:8]`
+- development version - format `X.Y.Z-dev+YYYYMMDDHHMMSS.commit_hash[:8]`
 
-Stable version looks like `1.0.0`, only three digits. Release candidate version looks like `0.0.1.rc.ff4c436c.20250221110024`. Development version looks like `0.0.1.dev.ff4c436c.20250221110024`.
+Stable version looks like `1.0.0`, only three digits. Release candidate version looks like `0.0.1-rc+20250224092842.e11604e9`. Development version looks like `0.0.1-dev+20250223180245.fb195339`.
 
 To get project version, run the `genesis get-version` with path to the project root directory as an argument to the command. For instance,
 

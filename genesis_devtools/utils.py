@@ -140,4 +140,4 @@ def get_project_version(
     else:
         prefix = "dev"
 
-    return f"{major}.{minor}.{patch}.{prefix}.{hexsha[:8]}.{date_repr}"
+    return f"{major}.{minor}.{patch}-{prefix}+{date_repr}.{hexsha[:8]}"
