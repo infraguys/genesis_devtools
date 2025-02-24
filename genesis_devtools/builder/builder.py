@@ -17,8 +17,8 @@
 import typing as tp
 import tempfile
 
-from genesis_dev_tools.builder import base
-from genesis_dev_tools.logger import AbstractLogger, DummyLogger
+from genesis_devtools.builder import base
+from genesis_devtools.logger import AbstractLogger, DummyLogger
 
 
 class SimpleBuilder:

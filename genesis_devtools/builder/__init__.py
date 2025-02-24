@@ -14,18 +14,4 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import typing as tp
-
-PKG_NAME = "genesis_dev_tools"
-LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
-DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
-DEF_GEN_WORK_DIR_NAME = "genesis"
-DEF_GEN_OUTPUT_DIR_NAME = "output"
-RC_BRANCHES = ("master", "main")
-
-# ENV vars
-ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
-
-# Types
-ImageProfileType = tp.Literal["ubuntu_24"]
-ImageFormatType = tp.Literal["raw"]
+from genesis_devtools.builder import dependency

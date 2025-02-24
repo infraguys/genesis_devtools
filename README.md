@@ -1,4 +1,4 @@
-![Tests workflow](https://github.com/infraguys/genesis_dev_tools/actions/workflows/tests.yml/badge.svg)
+![Tests workflow](https://github.com/infraguys/genesis_devtools/actions/workflows/tests.yml/badge.svg)
 
 # Genesis Dev Tools
 
@@ -32,12 +32,12 @@ To install the `genesis-dev-tools` package, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/infraguys/genesis_dev_tools.git
+    git clone https://github.com/infraguys/genesis_devtools.git
     ```
 
 2. Navigate to the project directory:
     ```sh
-    cd genesis_dev_tools
+    cd genesis_devtools
     ```
 
 3. Install the required dependencies:

@@ -16,8 +16,8 @@
 import typing as tp
 from unittest.mock import MagicMock
 
-from genesis_dev_tools.builder.builder import SimpleBuilder
-from genesis_dev_tools.logger import DummyLogger
+from genesis_devtools.builder.builder import SimpleBuilder
+from genesis_devtools.logger import DummyLogger
 
 
 class TestBuilder:

@@ -18,7 +18,7 @@ import shutil
 import typing as tp
 import tempfile
 
-from genesis_dev_tools.builder.dependency import LocalPathDependency
+from genesis_devtools.builder.dependency import LocalPathDependency
 
 
 class TestDependency:
