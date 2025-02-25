@@ -13,6 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+from __future__ import annotations
 
 import os
 import subprocess
@@ -72,6 +73,33 @@ build {{
 """
 
 
+class PackerVariable(tp.NamedTuple):
+    name: str
+    value: str | int | float | list | dict | None = ""
+    var_tmpl: str = "{name} = {value}"
+
+    def render(self) -> str:
+        data = self._asdict()
+        data.pop("var_tmpl", None)
+
+        # Need quotes for strings in HCL
+        if isinstance(self.value, str):
+            data["value"] = f'"{self.value}"'
+
+        return self.var_tmpl.format(**data)
+
+    @classmethod
+    def variable_file_content(cls, overrides: tp.Dict[str, tp.Any]) -> str:
+        if not overrides:
+            return ""
+
+        variables = []
+        for k, v in overrides.items():
+            variables.append(cls(name=k, value=v))
+
+        return "\n".join([v.render() for v in variables])
+
+
 def _get_profile_files(base: str) -> str:
     """Get base files for the image."""
     profile_files = []
@@ -88,7 +116,7 @@ class PackerBuilder(base.DummyImageBuilder):
     """
 
     def __init__(
-        self, output_dir: str, logger: tp.Optional[AbstractLogger] = None
+        self, output_dir: str, logger: AbstractLogger | None = None
     ) -> None:
         super().__init__()
         self._logger = logger or DummyLogger()
@@ -99,12 +127,9 @@ class PackerBuilder(base.DummyImageBuilder):
         image_dir: str,
         image: base.Image,
         deps: tp.List[base.AbstractDependency],
-        developer_keys: tp.Optional[str] = None,
+        developer_keys: str | None = None,
     ) -> None:
         """Actions to prepare the environment for building the image."""
-        if image.override:
-            self._logger.error("Override not supported at the moment")
-            raise ValueError("Override not supported")
 
         # Prepare the packer build file
         # Data provisioners
@@ -152,13 +177,22 @@ class PackerBuilder(base.DummyImageBuilder):
         for bfile in profile_files:
             shutil.copy(bfile, image_dir)
 
+        # Override variables if they are provided
+        if variables := PackerVariable.variable_file_content(
+            image.override or ()
+        ):
+            with open(
+                os.path.join(image_dir, "overrides.auto.pkrvars.hcl"), "w"
+            ) as f:
+                f.write(variables)
+
         subprocess.run(["packer", "init", image_dir], check=True)
 
     def build(
         self,
         image_dir: str,
         image: base.Image,
-        developer_keys: tp.Optional[str] = None,
+        developer_keys: str | None = None,
     ) -> None:
         """Actions to build the image."""
         self._logger.important(f"Build image: {image.name}")

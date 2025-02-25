@@ -14,6 +14,21 @@ locals {
   }
 }
 
+variable cpus {
+  type    = number
+  default = 4
+}
+
+variable memory {
+  type    = number
+  default = 4096
+}
+
+variable disk_size {
+  type    = string
+  default = "4500M"
+}
+
 data "sshkey" "install" {
   name = "packer"
 }
@@ -24,10 +39,10 @@ source "qemu" "ubuntu-24" {
   accelerator               = "kvm"
   boot_wait                 = "5s"
   boot_command              = ["<enter>"]
-  cpus                      = 4
-  memory                    = 4092
+  cpus                      = var.cpus
+  memory                    = var.memory
   disk_image                = true
-  disk_size                 = "4000M"
+  disk_size                 = var.disk_size
   disk_interface            = "virtio-scsi"
   disk_cache                = "unsafe"
   disk_discard              = "unmap"

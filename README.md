@@ -115,6 +115,11 @@ build:
 
         # Provisioning script
         script: images/install.sh
+
+        # Override image build parameters, for instance Packer parameters
+        override:
+          disk_size: "10G"
+
       manifest: manifests/genesis-core.yaml
       
       # List of artifacts in the element

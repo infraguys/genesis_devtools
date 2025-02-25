@@ -13,12 +13,12 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+from __future__ import annotations
 
 import abc
 import os
 import typing as tp
 
-from genesis_devtools.logger import AbstractLogger
 from genesis_devtools import constants as c
 
 
@@ -28,9 +28,9 @@ class Image(tp.NamedTuple):
     script: str
     profile: c.ImageProfileType = "ubuntu_24"
     format: c.ImageFormatType = "raw"
-    name: tp.Optional[str] = None
-    envs: tp.Optional[tp.List[str]] = None
-    override: tp.Optional[tp.Dict[str, tp.Any]] = None
+    name: str | None = None
+    envs: tp.List[str] | None = None
+    override: tp.Dict[str, tp.Any] | None = None
 
     @classmethod
     def from_config(
