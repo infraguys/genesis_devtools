@@ -217,6 +217,15 @@ def get_domain_ip(name: str) -> tp.Optional[str]:
                 return re.findall(r"\d+\.\d+\.\d+\.\d+", line)[0]
 
 
+def get_domain_disk(name: str) -> tp.Optional[str]:
+    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = out.decode().strip()
+
+    # The simplest implementation, take first disk
+    if disks := re.findall(r"<source file='(.*?)'", out):
+        return disks[0]
+
+
 def has_domain(name: str) -> bool:
     return name in list_domains()
 
@@ -227,12 +236,33 @@ def has_net(name: str) -> bool:
 
 def destroy_domain(name: str) -> None:
     """Delete domain."""
-    subprocess.run(
-        f"sudo virsh destroy {name} 1>/dev/null && "
-        f"sudo virsh undefine {name} 1>/dev/null",
-        shell=True,
-        check=True,
-    )
+    disk_path = get_domain_disk(name)
+
+    try:
+        subprocess.run(
+            f"sudo virsh destroy {name} 1>/dev/null",
+            shell=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError:
+        # Nothing to do, the domain is already destroyed
+        pass
+
+    try:
+        subprocess.run(
+            f"sudo virsh undefine {name} 1>/dev/null",
+            shell=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError:
+        # Nothing to do, the domain is already undefined
+        pass
+
+    # Remove the disk
+    if disk_path:
+        subprocess.run(
+            f"sudo rm -f {disk_path} 1>/dev/null", shell=True, check=True
+        )
 
 
 def destroy_net(name: str) -> None:
