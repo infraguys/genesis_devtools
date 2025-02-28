@@ -16,7 +16,7 @@ Before you can install and use genesis tools you need to install several require
 Install packages
 ```sh
 sudo apt update
-sudo apt install qemu-kvm libvirt-daemon-system mkisofs
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-dev mkisofs
 ```
 
 Add user to group
