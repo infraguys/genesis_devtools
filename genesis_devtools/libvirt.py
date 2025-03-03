@@ -13,12 +13,14 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+from __future__ import annotations
 
 import os
 import re
 import typing as tp
 import tempfile
 import subprocess
+import ipaddress
 
 from genesis_devtools import constants as c
 
@@ -26,9 +28,8 @@ domain_template = """
 <domain type="kvm">
   <name>{name}</name>
   <metadata>
-    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
-      <libosinfo:os id="http://ubuntu.com/ubuntu/24.04"/>
-    </libosinfo:libosinfo>
+    <genesis:genesis xmlns:genesis="https://github.com/infraguys">
+    </genesis:genesis>
   </metadata>
   <memory>{memory}</memory>
   <currentMemory>{memory}</currentMemory>
@@ -62,10 +63,7 @@ domain_template = """
     <controller type="usb" model="qemu-xhci" ports="5"/>
     <controller type="pci" model="pcie-root"/>
     <controller type="pci" model="pcie-root-port"/>
-    <interface type="network">
-      <source network="{network}"/>
-      <model type="virtio"/>
-    </interface>
+    {net_iface}
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
@@ -90,25 +88,66 @@ domain_template = """
 </domain>
 """
 
+
 nat_network_template = """
 <network>
   <name>{name}</name>
   <forward mode="nat"/>
   <domain name="{name}"/>
-  <ip address="192.168.{net_number}.1" netmask="255.255.255.0">
+  <ip address="{ip}" netmask="{netmask}">
     <dhcp>
-      <range start="192.168.{net_number}.128" end="192.168.{net_number}.254"/>
+      <range start="{range_start}" end="{range_end}"/>
     </dhcp>
   </ip>
 </network>
 """
 
 
-def list_domains():
+nat_network_no_dhcp_template = """
+<network>
+  <name>{name}</name>
+  <forward mode="nat"/>
+  <domain name="network"/>
+  <ip address="{ip}" netmask="{netmask}"/>
+</network>
+"""
+
+
+network_iface_template = """
+    <interface type="network">
+      <source network="{network}"/>
+      <model type="virtio"/>
+    </interface>
+"""
+
+
+bridge_iface_template = """
+    <interface type="bridge">
+      <source bridge="{network}"/>
+      <model type="virtio"/>
+    </interface>
+"""
+
+
+def list_domains(meta_tag: str | None = None):
     """List all domains."""
     out = subprocess.check_output("sudo virsh list --all --name", shell=True)
     out = out.decode().strip()
-    return out.split("\n")
+    names = out.split("\n")
+
+    if not meta_tag:
+        return names
+
+    # FIXME(akremenetsky): Need more optimization here
+    # Find all domains with the corresponding meta tag
+    domains = []
+    for name in names:
+        out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+        out = out.decode().strip()
+        if meta_tag in out:
+            domains.append(name)
+
+    return domains
 
 
 def list_nets():
@@ -129,8 +168,21 @@ def list_pool():
     return out.split("\n")
 
 
-def create_nat_network(name: str, net_number: int = 130):
-    network = nat_network_template.format(name=name, net_number=net_number)
+def create_nat_network(
+    name: str, cidr: ipaddress.IPv4Network, dhcp_enabled: bool = True
+):
+    net_params = {
+        "name": name,
+        "netmask": str(cidr.netmask),
+        "ip": str(cidr[1]),
+        "range_start": str(cidr[10]),
+        "range_end": str(cidr[100]),
+    }
+
+    if dhcp_enabled:
+        network = nat_network_template.format(**net_params)
+    else:
+        network = nat_network_no_dhcp_template.format(**net_params)
 
     with tempfile.TemporaryDirectory() as temp_dir:
         network_path = os.path.join(temp_dir, f"{name}.xml")
@@ -158,6 +210,7 @@ def create_domain(
     memory: int,
     image: str,
     network: str,
+    net_type: str = "network",
     pool: str = c.LIBVIRT_DEF_POOL_PATH,
 ):
     # Copy the image to a pool
@@ -172,12 +225,17 @@ def create_domain(
             check=True,
         )
 
+    if net_type == "network":
+        network_iface = network_iface_template.format(network=network)
+    else:
+        network_iface = bridge_iface_template.format(network=network)
+
     domain = domain_template.format(
         name=name,
         cores=cores,
         memory=memory,
         image=pool_image_path,
-        network=network,
+        net_iface=network_iface,
     )
 
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -267,9 +325,22 @@ def destroy_domain(name: str) -> None:
 
 def destroy_net(name: str) -> None:
     """Delete network."""
-    subprocess.run(
-        f"sudo virsh net-destroy {name} 1>/dev/null && "
-        f"sudo virsh net-undefine {name} 1>/dev/null",
-        shell=True,
-        check=True,
-    )
+    try:
+        subprocess.run(
+            f"sudo virsh net-destroy {name} 1>/dev/null",
+            shell=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError:
+        # Nothing to do, the network is already destroyed
+        pass
+
+    try:
+        subprocess.run(
+            f"sudo virsh net-undefine {name} 1>/dev/null",
+            shell=True,
+            check=True,
+        )
+    except subprocess.CalledProcessError:
+        # Nothing to do, the network is already undefined
+        pass

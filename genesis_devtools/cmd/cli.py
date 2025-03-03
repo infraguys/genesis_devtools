@@ -18,6 +18,7 @@ import os
 import shutil
 import typing as tp
 import tempfile
+import ipaddress
 
 import click
 import prettytable
@@ -164,6 +165,26 @@ def build_cmd(
     help="Name of the installation",
 )
 @click.option(
+    "--cidr",
+    default="10.20.0.0/22",
+    help="Network CIDR",
+    show_default=True,
+    type=ipaddress.IPv4Network,
+)
+@click.option(
+    "--bridge",
+    default=None,
+    help="Name of the linux bridge, it will be created if not set.",
+)
+@click.option(
+    "--dhcp",
+    default=False,
+    type=bool,
+    show_default=True,
+    is_flag=True,
+    help="Enable DHCP on 'network' network type",
+)
+@click.option(
     "-f",
     "--force",
     default=False,
@@ -178,6 +199,9 @@ def bootstrap_cmd(
     cores: int,
     memory: int,
     name: str,
+    cidr: ipaddress.IPv4Network,
+    bridge: str,
+    dhcp: bool,
     force: bool,
 ) -> None:
     if profile is None and image_path is None:
@@ -195,7 +219,10 @@ def bootstrap_cmd(
 
     # Check if the any genesis installation is running
     has_domain = libvirt.has_domain(bootstrap_domain_name)
-    has_net = libvirt.has_net(net_name)
+
+    # Don't delete the network if it was created by the user
+    has_net = False if bridge else libvirt.has_net(net_name)
+
     if has_domain or has_net:
         if not force:
             logger.warn(
@@ -204,21 +231,21 @@ def bootstrap_cmd(
             )
             return
 
-        if has_domain:
-            libvirt.destroy_domain(bootstrap_domain_name)
-
-        if has_net:
-            libvirt.destroy_net(net_name)
-
+        # Delete old genesis installation
+        _delete_installation(name, delete_net=has_net)
         logger.info("Destroyed old genesis installation")
 
-    libvirt.create_nat_network(net_name)
+    # The 'bridge' should be created by the user
+    if not bridge:
+        libvirt.create_nat_network(net_name, cidr, dhcp)
+
     libvirt.create_domain(
         name=bootstrap_domain_name,
         cores=cores,
         memory=memory,
         image=image_path,
-        network=net_name,
+        network=bridge or net_name,
+        net_type="bridge" if bridge else "network",
     )
     logger.important("Launched genesis installation. Started VM: " + name)
 
@@ -272,25 +299,7 @@ def ps_cmd() -> None:
 @main.command("delete", help="Delete the genesis installation")
 @click.argument("name", type=str)
 def delete_cmd(name: str) -> None:
-    logger = ClickLogger()
-    destroyed = False
-
-    net_name = utils.installation_net_name(name)
-    bootstrap_domain_name = utils.installation_bootstrap_name(name)
-
-    if libvirt.has_domain(bootstrap_domain_name):
-        libvirt.destroy_domain(bootstrap_domain_name)
-        destroyed = True
-
-    if libvirt.has_net(net_name):
-        libvirt.destroy_net(net_name)
-        destroyed = True
-
-    if not destroyed:
-        logger.warn("Genesis installation not found")
-        return
-
-    logger.important(f"Destroyed genesis installation: {name}")
+    return _delete_installation(name)
 
 
 @main.command("get-version", help="Return the version of the project")
@@ -311,3 +320,29 @@ def _list_installations() -> tp.List[tp.Tuple[str, str]]:
             ip = libvirt.get_domain_ip(domain)
             installations.append((installation, str(ip)))
     return installations
+
+
+def _delete_installation(name: str, delete_net: bool = True) -> None:
+    logger = ClickLogger()
+    destroyed = False
+
+    net_name = utils.installation_net_name(name)
+
+    # Multiple stands will be supported in the future
+    # bootstrap_domain_name = utils.installation_bootstrap_name(name)
+
+    genesis_domains = libvirt.list_domains(c.GENESIS_META_TAG)
+    for domain in genesis_domains:
+        logger.info(f"Found genesis domain: {domain}")
+        libvirt.destroy_domain(domain)
+        destroyed = True
+
+    if delete_net and libvirt.has_net(net_name):
+        libvirt.destroy_net(net_name)
+        destroyed = True
+
+    if not destroyed:
+        logger.warn("Genesis installation not found")
+        return
+
+    logger.important(f"Destroyed genesis installation: {name}")

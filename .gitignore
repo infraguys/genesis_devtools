@@ -126,3 +126,6 @@ docs/source/*.png
 
 # Vagrant
 .vagrant/
+
+# GC build
+ output/

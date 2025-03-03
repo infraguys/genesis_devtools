@@ -1,0 +1,29 @@
+# Build section. It specifies the build process of the project
+build:
+  
+  # Dependencies of the project
+  deps:
+    # Target path in the image
+    - dst: /opt/genesis_devtools
+      # Local path
+      path:
+        src: ../../genesis_devtools
+  
+  # List of elements in the project
+  elements:
+    # List of images in the element
+    - images:
+      - name: genesis-devtools
+        format: raw
+        
+        # OS profile for the image
+        profile: ubuntu_24
+
+        # Provisioning script
+        script: images/install.sh
+        
+        # Override image build parameters, for instance Packer parameters
+        override:
+          disk_size: "4G"
+      # manifest: manifests/genesis-core.yaml
+

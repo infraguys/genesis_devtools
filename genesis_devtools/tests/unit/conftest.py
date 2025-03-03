@@ -55,6 +55,9 @@ build:
     - dst: /opt/genesis_core
       path:
         src: /tmp/genesis_core_test_dir
+    - dst: /opt/undionly.kpxe
+      http:
+        src: http://46.138.252.241:8081/ipxe/latest/undionly.kpxe
   elements:
     - images:
       - name: genesis-core

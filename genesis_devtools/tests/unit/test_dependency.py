@@ -16,9 +16,8 @@
 import os
 import shutil
 import typing as tp
-import tempfile
 
-from genesis_devtools.builder.dependency import LocalPathDependency
+from genesis_devtools.builder import dependency as deps
 
 
 class TestDependency:
@@ -27,7 +26,7 @@ class TestDependency:
         self, build_config: tp.Dict[str, tp.Any]
     ) -> None:
         work_dir = "/tmp/work_dir"
-        dep = LocalPathDependency.from_config(
+        dep = deps.LocalPathDependency.from_config(
             build_config["deps"][0],
             work_dir,
         )
@@ -41,7 +40,7 @@ class TestDependency:
     ) -> None:
         os.makedirs("/tmp/genesis_core_test_dir", exist_ok=True)
 
-        dep = LocalPathDependency.from_config(
+        dep = deps.LocalPathDependency.from_config(
             build_config["deps"][0],
             "/tmp",
         )
@@ -53,4 +52,34 @@ class TestDependency:
             assert os.path.exists("/tmp/___deps_dir/genesis_core_test_dir")
         finally:
             shutil.rmtree("/tmp/genesis_core_test_dir")
+            shutil.rmtree("/tmp/___deps_dir")
+
+    def test_http_from_config(
+        self, build_config: tp.Dict[str, tp.Any]
+    ) -> None:
+        work_dir = "/tmp/work_dir"
+        dep = deps.HttpDependency.from_config(
+            build_config["deps"][1],
+            work_dir,
+        )
+
+        assert dep.img_dest == "/opt/undionly.kpxe"
+        assert (
+            dep._endpoint
+            == "http://46.138.252.241:8081/ipxe/latest/undionly.kpxe"
+        )
+        assert dep.local_path is None
+
+    def test_http_fetch(self, build_config: tp.Dict[str, tp.Any]) -> None:
+        dep = deps.HttpDependency.from_config(
+            build_config["deps"][1],
+            "/tmp",
+        )
+
+        os.makedirs("/tmp/___deps_dir", exist_ok=True)
+        dep.fetch("/tmp/___deps_dir")
+
+        try:
+            assert os.path.exists("/tmp/___deps_dir/undionly.kpxe")
+        finally:
             shutil.rmtree("/tmp/___deps_dir")

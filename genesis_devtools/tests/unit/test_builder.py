@@ -40,6 +40,6 @@ class TestBuilder:
             DummyLogger(),
         )
 
-        assert len(builder._deps) == 1
+        assert len(builder._deps) == 2
         assert len(builder._elements) == 1
         assert builder._work_dir == work_dir

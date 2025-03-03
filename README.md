@@ -28,7 +28,7 @@ Install packer like described in [this article](https://yandex.cloud/ru/docs/tut
 
 # Install
 
-To install the `genesis-dev-tools` package, follow these steps:
+To install the `genesis-devtools` package, follow these steps:
 
 1. Clone the repository:
     ```sh

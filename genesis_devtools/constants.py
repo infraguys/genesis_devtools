@@ -22,6 +22,7 @@ DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"
 DEF_GEN_OUTPUT_DIR_NAME = "output"
 RC_BRANCHES = ("master", "main")
+GENESIS_META_TAG = "genesis:genesis"
 
 # ENV vars
 ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
@@ -29,3 +30,4 @@ ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
 # Types
 ImageProfileType = tp.Literal["ubuntu_24"]
 ImageFormatType = tp.Literal["raw"]
+NetType = tp.Literal["network", "bridge"]
