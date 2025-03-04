@@ -22,6 +22,7 @@ sudo apt install qemu-kvm libvirt-daemon-system libvirt-dev mkisofs
 Add user to group
 ```sh
 sudo adduser $USER libvirt
+sudo adduser $USER kvm
 ```
 
 Install packer like described in [this article](https://yandex.cloud/ru/docs/tutorials/infrastructure-management/packer-quickstart#from-y-mirror)
