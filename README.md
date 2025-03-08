@@ -1,4 +1,6 @@
 ![Tests workflow](https://github.com/infraguys/genesis_devtools/actions/workflows/tests.yml/badge.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/genesis-devtools)
+
 
 # Genesis Dev Tools
 
