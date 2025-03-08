@@ -133,7 +133,7 @@ def list_domains(meta_tag: str | None = None):
     """List all domains."""
     out = subprocess.check_output("sudo virsh list --all --name", shell=True)
     out = out.decode().strip()
-    names = out.split("\n")
+    names = [o for o in out.split("\n") if o]
 
     if not meta_tag:
         return names

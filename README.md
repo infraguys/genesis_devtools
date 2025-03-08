@@ -51,6 +51,49 @@ To install the `genesis-devtools` package, follow these steps:
     pip install .
     ```
 
+# Quickstart
+
+## Build
+Firstly you need to build the genesis project. Navigate to your project directory and run the genesis build command, specifying the path to your project root directory as an argument. This will build the project according to the configuration defined in the `genesis.yaml` file.
+
+Here are some examples of how to use the build command:
+```sh
+genesis build /path/to/my/project
+```
+
+There are some useful options for the genesis build command.
+- Build a Genesis project with a custom developer key path:
+```sh
+genesis build -i /path/to/my/developer/key /path/to/my/project
+```
+
+- Build a Genesis project with the --force option to rebuild if the output already exists:
+```sh
+genesis build -f /path/to/my/project
+```
+
+Look at the `genesis build --help` command for more options.
+
+## Bootstrap
+
+To bootstrap a Genesis installation locally, use the genesis bootstrap command. This command creates and boots a virtual machine with the specified Genesis image.
+
+One of the key options for the bootstrap command is `--launch-mode`, which allows you to specify the launch mode for the application. There are three available modes:
+
+- `element`: This is the default mode, which launches the installation as a single element.
+- `core`: This mode launches the installation as a core.
+- `custom`: This mode allows you to launch the installation with a custom configuration.
+
+Here are some examples of how to use the `--launch-mode` option:
+```sh+
+genesis bootstrap -i output/genesis-element.raw
+```
+
+Launch the installation in `core` mode:
+```sh
+genesis bootstrap -i output/genesis-core.raw -m core
+```
+
 # Usage
 
 The package provides a command line interface for building genesis projects, managing genesis installations and cover many other useful aspects. To use the command line interface, run the `genesis` command from the command line. For full documentation about CLI commands, run `genesis --help`.

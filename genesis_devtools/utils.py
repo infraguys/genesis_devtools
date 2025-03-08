@@ -13,9 +13,11 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+from __future__ import annotations
 
 import os
 import time
+import itertools
 import typing as tp
 from importlib.metadata import entry_points
 import yaml
@@ -141,3 +143,24 @@ def get_project_version(
         prefix = "dev"
 
     return f"{major}.{minor}.{patch}-{prefix}+{date_repr}.{hexsha[:8]}"
+
+
+def wait_for(
+    predicate: tp.Callable,
+    timeout: float = 120.0,
+    step: float = 0.5,
+    title: str | None = None,
+) -> None:
+    spinner = itertools.cycle(("-", "\\", "|", "/"))
+    start = time.monotonic()
+    print(f"{title} ... ", end="")
+    while not predicate():
+        # Print the title and interactive spinner
+        if title:
+            print(f"\r{title} ... {next(spinner)}", end="")
+
+        if time.monotonic() - start > timeout:
+            raise TimeoutError(f"Timeout after {timeout} seconds")
+        time.sleep(step)
+
+    print(f"\r{title} ... ok")

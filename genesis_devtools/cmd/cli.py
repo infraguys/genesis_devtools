@@ -13,6 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+from __future__ import annotations
 
 import os
 import shutil
@@ -32,6 +33,8 @@ from genesis_devtools import libvirt
 
 
 BOOTSTRAP_TAG = "bootstrap"
+LaunchModeType = tp.Literal["core", "element", "custom"]
+GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
 
 
 @click.group(invoke_without_command=True)
@@ -142,12 +145,6 @@ def build_cmd(
     help="Path to the genesis image",
 )
 @click.option(
-    "-p",
-    "--profile",
-    default=None,
-    help="Name of the image profile",
-)
-@click.option(
     "--cores",
     default=2,
     show_default=True,
@@ -164,9 +161,19 @@ def build_cmd(
     default="genesis-core",
     help="Name of the installation",
 )
+# It's a temporary option, will be removed in the future but now it's
+# convenient to run elements and cores slightly differently
+@click.option(
+    "-m",
+    "--launch-mode",
+    default="element",
+    type=click.Choice([s for s in tp.get_args(LaunchModeType)]),
+    show_default=True,
+    help="Launch mode for start element, core or custom configuration",
+)
 @click.option(
     "--cidr",
-    default="10.20.0.0/22",
+    default="192.168.4.0/22",
     help="Network CIDR",
     show_default=True,
     type=ipaddress.IPv4Network,
@@ -193,24 +200,44 @@ def build_cmd(
     is_flag=True,
     help="Rebuild if the output already exists",
 )
+@click.option(
+    "--no-wait",
+    default=False,
+    type=bool,
+    show_default=True,
+    is_flag=True,
+    help="Cancel waiting for the installation to start",
+)
 def bootstrap_cmd(
     image_path: tp.Optional[str],
-    profile: tp.Optional[str],
     cores: int,
     memory: int,
     name: str,
+    launch_mode: LaunchModeType,
     cidr: ipaddress.IPv4Network,
-    bridge: str,
+    bridge: str | None,
     dhcp: bool,
     force: bool,
+    no_wait: bool,
 ) -> None:
-    if profile is None and image_path is None:
-        raise click.UsageError("No image path or profile specified")
+    if image_path is None or not os.path.exists(image_path):
+        raise click.UsageError("No image path specified or not found")
 
     if image_path and not os.path.isabs(image_path):
         image_path = os.path.abspath(image_path)
 
     logger = ClickLogger()
+
+    # Modify network paramters based on the launch mode
+    if launch_mode == "element":
+        bridge, dhcp = None, True
+        logger.info("Starting genesis bootstrap in 'element' mode")
+    elif launch_mode == "core":
+        bridge, dhcp, cidr = None, False, GC_CIDR
+        logger.info("Starting genesis bootstrap in 'core' mode")
+    else:
+        # Custom launch mode, nothing to do
+        logger.info("Starting genesis bootstrap in 'custom' mode")
 
     # KiB for libvirt
     memory = memory << 10
@@ -247,7 +274,23 @@ def bootstrap_cmd(
         network=bridge or net_name,
         net_type="bridge" if bridge else "network",
     )
-    logger.important("Launched genesis installation. Started VM: " + name)
+    logger.info("Launched genesis installation. Started VM: " + name)
+
+    # Wait for the installation to start
+    if no_wait:
+        return
+
+    if not dhcp:
+        logger.warn("Unable to detect IP address if DHCP is disabled. Bye.")
+        return
+
+    utils.wait_for(
+        lambda: bool(libvirt.get_domain_ip(bootstrap_domain_name)),
+        title=f"Waiting for installation {name}",
+    )
+
+    ip = libvirt.get_domain_ip(bootstrap_domain_name)
+    logger.important(f"The installation {name} is ready at:\nssh ubuntu@{ip}")
 
 
 @main.command("ssh", help="Connect to genesis installation")
@@ -330,7 +373,6 @@ def _delete_installation(name: str, delete_net: bool = True) -> None:
 
     # Multiple stands will be supported in the future
     # bootstrap_domain_name = utils.installation_bootstrap_name(name)
-
     genesis_domains = libvirt.list_domains(c.GENESIS_META_TAG)
     for domain in genesis_domains:
         logger.info(f"Found genesis domain: {domain}")
