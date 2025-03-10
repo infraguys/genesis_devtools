@@ -57,7 +57,27 @@ build:
         src: /tmp/genesis_core_test_dir
     - dst: /opt/undionly.kpxe
       http:
-        src: http://46.138.252.241:8081/ipxe/latest/undionly.kpxe
+        src: http://repository.genesis-core.tech:8081/ipxe/latest/undionly.kpxe
+  elements:
+    - images:
+      - name: genesis-core
+        format: raw
+        profile: ubuntu_24
+        script: images/install.sh
+"""
+    cfg = yaml.safe_load(fixture)
+    return cfg["build"]
+
+
+@pytest.fixture
+def build_git_config() -> tp.Dict[str, tp.Any]:
+    fixture = """
+build:
+  deps:
+    - dst: /opt/genesis_templates
+      git:
+        src: https://github.com/infraguys/genesis_templates.git
+        branch: master
   elements:
     - images:
       - name: genesis-core
