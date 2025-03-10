@@ -19,6 +19,7 @@ import os
 import shutil
 import typing as tp
 
+import git
 import bazooka
 
 from genesis_devtools.builder import base
@@ -77,7 +78,7 @@ class LocalPathDependency(base.AbstractDependency):
 class HttpDependency(base.AbstractDependency):
     """HTTP dependency item."""
 
-    CHUNK_SIZE = 8192
+    CHUNK_SIZE = 32768
 
     def __init__(self, endpoint: str, img_dest: str) -> None:
         super().__init__()
@@ -123,3 +124,62 @@ class HttpDependency(base.AbstractDependency):
         img_dest = dep_config["dst"]
 
         return cls(endpoint, img_dest)
+
+
+class GitDependency(base.AbstractDependency):
+    """Git dependency item."""
+
+    def __init__(
+        self, repo_url: str, img_dest: str, branch: str | None = None
+    ) -> None:
+        super().__init__()
+        self._repo_url = repo_url
+        self._branch = branch
+        self._img_dest = img_dest
+        self._local_path = None
+
+    @property
+    def img_dest(self) -> str | None:
+        """Destination for the image."""
+        return self._img_dest
+
+    @property
+    def local_path(self) -> str | None:
+        """Local path to the dependency."""
+        return self._local_path
+
+    def fetch(self, output_dir: str) -> None:
+        """Fetch the dependency."""
+        repo_dir = os.path.basename(self._repo_url)
+        if repo_dir.endswith(".git"):
+            repo_dir = repo_dir[:-4]
+        repo_dir = os.path.join(output_dir, repo_dir)
+
+        if self._branch is not None:
+            git.Repo.clone_from(self._repo_url, repo_dir, branch=self._branch)
+        else:
+            git.Repo.clone_from(self._repo_url, repo_dir)
+
+        self._local_path = repo_dir
+
+    def __str__(self):
+        if self._branch is None:
+            return f"Git repo -> git clone {self._repo_url}"
+        return f"Git repo -> git clone -b {self._branch} {self._repo_url}"
+
+    @classmethod
+    def from_config(
+        cls, dep_config: tp.Dict[str, tp.Any], work_dir: str
+    ) -> "LocalPathDependency":
+        """Create a dependency item from configuration."""
+        if "git" not in dep_config or "src" not in dep_config["git"]:
+            raise ValueError(
+                "Git source not found in dependency "
+                f"configuration: {dep_config}"
+            )
+
+        repo_url = dep_config["git"]["src"]
+        branch = dep_config["git"].get("branch")
+        img_dest = dep_config["dst"]
+
+        return cls(repo_url, img_dest, branch)

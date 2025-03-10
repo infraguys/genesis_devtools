@@ -66,7 +66,7 @@ class TestDependency:
         assert dep.img_dest == "/opt/undionly.kpxe"
         assert (
             dep._endpoint
-            == "http://46.138.252.241:8081/ipxe/latest/undionly.kpxe"
+            == "http://repository.genesis-core.tech:8081/ipxe/latest/undionly.kpxe"
         )
         assert dep.local_path is None
 
@@ -81,5 +81,35 @@ class TestDependency:
 
         try:
             assert os.path.exists("/tmp/___deps_dir/undionly.kpxe")
+        finally:
+            shutil.rmtree("/tmp/___deps_dir")
+
+    def test_git_from_config(
+        self, build_git_config: tp.Dict[str, tp.Any]
+    ) -> None:
+        work_dir = "/tmp/work_dir"
+        dep = deps.GitDependency.from_config(
+            build_git_config["deps"][0],
+            work_dir,
+        )
+
+        assert dep.img_dest == "/opt/genesis_templates"
+        assert (
+            dep._repo_url
+            == "https://github.com/infraguys/genesis_templates.git"
+        )
+        assert dep.local_path is None
+
+    def test_git_fetch(self, build_git_config: tp.Dict[str, tp.Any]) -> None:
+        dep = deps.GitDependency.from_config(
+            build_git_config["deps"][0],
+            "/tmp",
+        )
+
+        os.makedirs("/tmp/___deps_dir", exist_ok=True)
+        dep.fetch("/tmp/___deps_dir")
+
+        try:
+            assert os.path.exists("/tmp/___deps_dir/genesis_templates")
         finally:
             shutil.rmtree("/tmp/___deps_dir")
