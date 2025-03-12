@@ -21,27 +21,19 @@ set -x
 set -o pipefail
 
 GC_PATH="/opt/genesis_devtools"
-GC_CFG_DIR=/etc/genesis_devtools
-VENV_PATH="$GC_PATH/.venv"
-
-GC_PG_USER="genesis_core"
-GC_PG_PASS="genesis_core"
-GC_PG_DB="genesis_core"
+WORK_DIR="/var/lib/genesis"
 
 SYSTEMD_SERVICE_DIR=/etc/systemd/system/
 
 # Install packages
 sudo apt update
-sudo apt install build-essential python3.12-dev python3.12-venv -y
+sudo apt install build-essential python3.12-dev python3.12-venv \
+    cloud-initramfs-growroot irqbalance qemu-guest-agent -y
 
-# Install genesis devtools
-sudo mkdir -p $GC_CFG_DIR
-mkdir -p "$VENV_PATH"
-python3 -m venv "$VENV_PATH"
-source "$GC_PATH"/.venv/bin/activate
-pip install pip --upgrade
-pip install -r "$GC_PATH"/requirements.txt
-pip install -e "$GC_PATH"
+# Install stuff for bootstrap procedure
+sudo mkdir -p "$WORK_DIR/bootstrap/scripts/"
+sudo cp "$GC_PATH/artifacts/bootstrap.sh" "$WORK_DIR/bootstrap/"
+sudo cp "$GC_PATH/artifacts/genesis-bootstrap.service" $SYSTEMD_SERVICE_DIR
 
-# Create links to venv
-sudo ln -sf "$VENV_PATH/bin/genesis" "/usr/bin/genesis"
+# Clean up
+sudo rm -fr "$GC_PATH"

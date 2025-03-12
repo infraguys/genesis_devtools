@@ -13,17 +13,15 @@ build:
   elements:
     # List of images in the element
     - images:
-      - name: genesis-devtools
-        format: raw
+      - name: genesis-base
+        format: qcow2
         
         # OS profile for the image
         profile: ubuntu_24
 
         # Provisioning script
-        script: images/install.sh
+        script: images/install_genesis_base.sh
         
         # Override image build parameters, for instance Packer parameters
         override:
           disk_size: "4G"
-      # manifest: manifests/genesis-core.yaml
-

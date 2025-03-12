@@ -22,10 +22,7 @@ from genesis_devtools.logger import AbstractLogger, DummyLogger
 
 
 class SimpleBuilder:
-    """Abstract element builder.
-
-    This class defines the interface for building elements.
-    """
+    """Simple element builder."""
 
     DEP_KEY = "deps"
     ELEMENT_KEY = "elements"

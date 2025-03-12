@@ -177,14 +177,18 @@ class PackerBuilder(base.DummyImageBuilder):
         for bfile in profile_files:
             shutil.copy(bfile, image_dir)
 
-        # Override variables if they are provided
-        if variables := PackerVariable.variable_file_content(
-            image.override or ()
-        ):
-            with open(
-                os.path.join(image_dir, "overrides.auto.pkrvars.hcl"), "w"
-            ) as f:
-                f.write(variables)
+        # Override variables
+        override = image.override or {}
+
+        # Enrich with the image format
+        override["img_format"] = image.format
+
+        # Write the packer variables
+        variables = PackerVariable.variable_file_content(override)
+        with open(
+            os.path.join(image_dir, "overrides.auto.pkrvars.hcl"), "w"
+        ) as f:
+            f.write(variables)
 
         subprocess.run(["packer", "init", image_dir], check=True)
 

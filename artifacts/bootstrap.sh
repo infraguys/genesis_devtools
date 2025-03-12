@@ -1,6 +1,8 @@
-#    Copyright 2025 Genesis Corporation.
+#!/usr/bin/env bash
+
+# Copyright 2025 Genesis Corporation
 #
-#    All Rights Reserved.
+# All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -14,20 +16,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import typing as tp
+WORK_DIR="/var/lib/genesis/bootstrap"
+DONE_PATH="$WORK_DIR/__done"
 
-PKG_NAME = "genesis_devtools"
-LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
-DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
-DEF_GEN_WORK_DIR_NAME = "genesis"
-DEF_GEN_OUTPUT_DIR_NAME = "output"
-RC_BRANCHES = ("master", "main")
-GENESIS_META_TAG = "genesis:genesis"
 
-# ENV vars
-ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
+for EXECUTABLE in $(ls $WORK_DIR/scripts/ | sort)
+do
+  echo "Start - $WORK_DIR/scripts/$EXECUTABLE"
+  "$WORK_DIR/scripts/$EXECUTABLE"
+  echo "Completed - $WORK_DIR/scripts/$EXECUTABLE"
+done
 
-# Types
-ImageProfileType = tp.Literal["ubuntu_24"]
-ImageFormatType = tp.Literal["raw", "qcow2"]
-NetType = tp.Literal["network", "bridge"]
+
+echo "Done" > "$DONE_PATH"

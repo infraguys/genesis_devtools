@@ -56,7 +56,7 @@ domain_template = """
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
-      <driver name="qemu" type="raw"/>
+      <driver name="qemu" type="{image_format}"/>
       <source file="{image}"/>
       <target dev="vda" bus="virtio"/>
     </disk>
@@ -216,6 +216,7 @@ def create_domain(
     # Copy the image to a pool
     image_name = os.path.basename(image)
     pool_image_path = os.path.join(pool, image_name)
+    image_format = "qcow2" if image_name.endswith("qcow2") else "raw"
 
     # TODO: Need default user pool
     if not os.path.exists(pool_image_path):
@@ -236,6 +237,7 @@ def create_domain(
         memory=memory,
         image=pool_image_path,
         net_iface=network_iface,
+        image_format=image_format,
     )
 
     with tempfile.TemporaryDirectory() as temp_dir:

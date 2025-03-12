@@ -38,9 +38,9 @@ data "sshkey" "install" {
   name = "packer"
 }
 
-source "qemu" "ubuntu-24" {
-  iso_url                   = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
-  iso_checksum              = "file:https://cloud-images.ubuntu.com/releases/24.04/release/SHA256SUMS"
+source "qemu" "genesis-base" {
+  iso_url                   = "http://repository.genesis-core.tech:8081/genesis-base/latest/genesis-base.qcow2"
+  iso_checksum              = "file:http://repository.genesis-core.tech:8081/SHA256SUMS"
   accelerator               = "kvm"
   boot_wait                 = "5s"
   boot_command              = ["<enter>"]
@@ -74,20 +74,11 @@ source "qemu" "ubuntu-24" {
   shutdown_command        = <<EOF
 set -ex
 
-# Default network settings
-cat << EOF1 | sudo tee /etc/netplan/90-genesis-net-base-config.yaml
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    alleths:
-      match:
-        name: en*
-      dhcp4: true
-EOF1
-
 # Logs
 sudo rm -fr /var/log/*
+
+# Enable bootstrap scripts
+sudo systemctl enable genesis-bootstrap.service
 
 # Remove temporary keys
 # Disable removing host keys temporarily

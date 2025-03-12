@@ -1,0 +1,14 @@
+[Unit]
+Description=Genesis Bootstrap one shot unit
+Wants=network-online.target
+After=network-online.target
+ConditionPathExists=!/var/lib/genesis/bootstrap/__done
+
+[Service]
+Type=oneshot
+PrivateTmp=true
+ExecStart=/var/lib/genesis/bootstrap/bootstrap.sh
+WorkingDirectory=/var/lib/genesis/bootstrap
+
+[Install]
+WantedBy=multi-user.target
