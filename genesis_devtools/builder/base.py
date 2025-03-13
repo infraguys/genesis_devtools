@@ -18,11 +18,13 @@ from __future__ import annotations
 import abc
 import os
 import typing as tp
+import dataclasses
 
 from genesis_devtools import constants as c
 
 
-class Image(tp.NamedTuple):
+@dataclasses.dataclass
+class Image:
     """Image representation."""
 
     script: str

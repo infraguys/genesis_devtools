@@ -164,3 +164,19 @@ def wait_for(
         time.sleep(step)
 
     print(f"\r{title} ... ok")
+
+
+def get_version_suffix(version_type: c.VersionSuffixType, **kwargs) -> str:
+    if version_type == "latest":
+        return "latest"
+    elif version_type == "none":
+        return ""
+    elif version_type == "element":
+        if "project_dir" not in kwargs:
+            raise ValueError(
+                "project_dir is required for element version type"
+            )
+        project_dir = kwargs["project_dir"]
+        return get_project_version(project_dir)
+
+    raise ValueError(f"Invalid version type {version_type}")
