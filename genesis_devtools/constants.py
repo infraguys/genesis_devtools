@@ -28,6 +28,8 @@ GENESIS_META_TAG = "genesis:genesis"
 ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
 
 # Types
-ImageProfileType = tp.Literal["ubuntu_24"]
+ImageProfileType = tp.Literal["ubuntu_24", "genesis_base"]
 ImageFormatType = tp.Literal["raw", "qcow2"]
 NetType = tp.Literal["network", "bridge"]
+
+VersionSuffixType = tp.Literal["latest", "none", "element"]

@@ -71,6 +71,14 @@ def main() -> None:
     help="Path to developer public key",
 )
 @click.option(
+    "-s",
+    "--version-suffix",
+    default="none",
+    type=click.Choice([s for s in tp.get_args(c.VersionSuffixType)]),
+    show_default=True,
+    help="Version suffix will be used for the build",
+)
+@click.option(
     "-f",
     "--force",
     default=False,
@@ -86,6 +94,7 @@ def build_cmd(
     build_dir: tp.Optional[str],
     output_dir: tp.Optional[str],
     developer_key_path: tp.Optional[str],
+    version_suffix: c.VersionSuffixType,
     force: bool,
     project_dir: str,
 ) -> None:
@@ -128,13 +137,18 @@ def build_cmd(
         os.path.join(project_dir, c.DEF_GEN_WORK_DIR_NAME)
     )
 
+    # Prepare a build suffix
+    build_suffix = utils.get_version_suffix(
+        version_suffix, project_dir=project_dir
+    )
+
     for _, build in builds.items():
         builder = SimpleBuilder.from_config(
             work_dir, build, packer_image_builder, logger
         )
         with tempfile.TemporaryDirectory() as temp_dir:
             builder.fetch_dependency(deps_dir or temp_dir)
-            builder.build(build_dir, developer_keys)
+            builder.build(build_dir, developer_keys, build_suffix)
 
 
 @main.command("bootstrap", help="Bootstrap genesis locally")

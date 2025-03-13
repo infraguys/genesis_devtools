@@ -13,6 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+from __future__ import annotations
 
 import typing as tp
 import tempfile
@@ -51,14 +52,18 @@ class SimpleBuilder:
 
     def build(
         self,
-        build_dir: tp.Optional[str] = None,
-        developer_keys: tp.Optional[str] = None,
+        build_dir: str | None = None,
+        developer_keys: str | None = None,
+        build_suffix: str = "",
     ) -> None:
         """Build all elements."""
         self._logger.important("Building elements")
         for e in self._elements:
             self._logger.info(f"Building element: {e}")
             for img in e.images:
+                if build_suffix:
+                    img.name = f"{img.name}.{build_suffix}"
+
                 # The build_dir is used only for debugging purposes to observe
                 # the content of the image. In production, the image is built
                 # in a temporary directory.
