@@ -180,3 +180,29 @@ def get_version_suffix(version_type: c.VersionSuffixType, **kwargs) -> str:
         return get_project_version(project_dir)
 
     raise ValueError(f"Invalid version type {version_type}")
+
+
+def get_directory_size(directory: str) -> int:
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(directory):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+
+        for d in dirnames:
+            total_size += get_directory_size(os.path.join(dirpath, d))
+
+    return total_size
+
+
+def human_readable_size(size: int, decimal_places: int = 2):
+    for unit in ["B", "KB", "MB", "GB", "TB"]:
+        if size < 1024.0:
+            break
+        size /= 1024.0
+    return f"{size:.{decimal_places}f} {unit}"
+
+
+def backup_path(backup_dir: str) -> str:
+    backup_relative_path = time.strftime("%Y-%m-%d-%H-%M-%S")
+    return os.path.join(backup_dir, backup_relative_path)

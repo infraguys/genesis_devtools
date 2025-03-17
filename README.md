@@ -231,3 +231,67 @@ To get project version, run the `genesis get-version` with path to the project r
 ```sh
 genesis get-version /path/to/my_project
 ```
+
+## Backups
+
+The `backup` command is used to backup the current installation. This guide provides a brief overview of the command and its usage, along with several examples to get you started.
+
+The basic syntax of the `backup` command is as follows:
+
+```bash
+genesis backup -d /path/to/backup/directory
+```
+
+Run the above command to backup the current installation to the specified directory. The command will create a subdirectory for each domain and copy its disks to the specified directory. The backup will repeat every 24 hours by default.
+
+To configure period of backup, run the following command:
+
+```bash
+genesis backup -d /path/to/backup/directory -p 1h
+```
+
+The above command will backup the current installation to the specified directory every hour.
+
+There is an option to do a backup once and exit:
+
+```bash
+genesis backup -d /path/to/backup/directory -oneshot
+```
+
+The above command will backup the current installation to the specified directory once and exit.
+
+### Basic Backup
+
+Run backup periodically of all libvirt domains and store it in the current directory:
+
+```bash
+genesis backup
+```
+
+### Backup Specific Domain
+
+Run backup periodically of a specific libvirt domain and store it in the current directory:
+
+```bash
+genesis backup -n domain-name
+```
+
+### Custom Periodic Backup
+
+Run backup periodically of all libvirt domains and store it in the current directory:
+
+```bash
+genesis backup -p 1h
+```
+
+Available periods are: `1m`, `5m`, `15m`, `30m`, `1h`, `3h`, `6h`, `12h`, `1d`, `3d`, `7d`
+
+### OneShot Backup
+
+Run backup of all libvirt domains and store it in the current directory:
+
+```bash
+genesis backup -oneshot
+```
+
+This command will backup the current installation to the specified directory once and exit.

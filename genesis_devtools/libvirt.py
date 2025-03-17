@@ -129,9 +129,13 @@ bridge_iface_template = """
 """
 
 
-def list_domains(meta_tag: str | None = None):
+def list_domains(
+    meta_tag: str | None = None, state: c.DomainState = "all"
+) -> tp.List[str]:
     """List all domains."""
-    out = subprocess.check_output("sudo virsh list --all --name", shell=True)
+    out = subprocess.check_output(
+        f"sudo virsh list --{state} --name", shell=True
+    )
     out = out.decode().strip()
     names = [o for o in out.split("\n") if o]
 
@@ -148,6 +152,10 @@ def list_domains(meta_tag: str | None = None):
             domains.append(name)
 
     return domains
+
+
+def is_active_domain(name: str) -> bool:
+    return name not in list_domains(state="inactive")
 
 
 def list_nets():
@@ -277,13 +285,21 @@ def get_domain_ip(name: str) -> tp.Optional[str]:
                 return re.findall(r"\d+\.\d+\.\d+\.\d+", line)[0]
 
 
-def get_domain_disk(name: str) -> tp.Optional[str]:
+def get_domain_disk(name: str) -> str | None:
     out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
     out = out.decode().strip()
 
     # The simplest implementation, take first disk
     if disks := re.findall(r"<source file='(.*?)'", out):
         return disks[0]
+
+
+def get_domain_disks(name: str) -> tp.List[str]:
+    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = out.decode().strip()
+
+    # The simplest implementation, take first disk
+    return re.findall(r"<source file='(.*?)'", out)
 
 
 def has_domain(name: str) -> bool:
@@ -296,17 +312,18 @@ def has_net(name: str) -> bool:
 
 def destroy_domain(name: str) -> None:
     """Delete domain."""
-    disk_path = get_domain_disk(name)
+    domain_disks = get_domain_disks(name)
 
-    try:
-        subprocess.run(
-            f"sudo virsh destroy {name} 1>/dev/null",
-            shell=True,
-            check=True,
-        )
-    except subprocess.CalledProcessError:
-        # Nothing to do, the domain is already destroyed
-        pass
+    if is_active_domain(name):
+        try:
+            subprocess.run(
+                f"sudo virsh destroy {name} 1>/dev/null",
+                shell=True,
+                check=True,
+            )
+        except subprocess.CalledProcessError:
+            # Nothing to do, the domain is already destroyed
+            pass
 
     try:
         subprocess.run(
@@ -319,7 +336,7 @@ def destroy_domain(name: str) -> None:
         pass
 
     # Remove the disk
-    if disk_path:
+    for disk_path in domain_disks:
         subprocess.run(
             f"sudo rm -f {disk_path} 1>/dev/null", shell=True, check=True
         )
@@ -346,3 +363,46 @@ def destroy_net(name: str) -> None:
     except subprocess.CalledProcessError:
         # Nothing to do, the network is already undefined
         pass
+
+
+def backup_domain(name: str, backup_path: str) -> None:
+    disks = get_domain_disks(name)
+
+    # Save domain xml
+    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = out.decode().strip()
+
+    with open(os.path.join(backup_path, "domain.xml"), "w") as f:
+        f.write(out)
+
+    # Not active domain
+    if not is_active_domain(name):
+        for disk in disks:
+            disk_name = os.path.basename(disk)
+            backup_disk_path = os.path.join(backup_path, disk_name)
+            subprocess.run(
+                f"sudo cp {disk} {backup_disk_path}", shell=True, check=True
+            )
+        return
+
+    # Active domain
+    try:
+        subprocess.run(
+            f"sudo virsh suspend {name} 1>/dev/null",
+            shell=True,
+            check=True,
+        )
+
+        for disk in disks:
+            disk_name = os.path.basename(disk)
+            backup_disk_path = os.path.join(backup_path, disk_name)
+            subprocess.run(
+                f"sudo cp {disk} {backup_disk_path}", shell=True, check=True
+            )
+
+    finally:
+        subprocess.run(
+            f"sudo virsh resume {name}  1>/dev/null",
+            shell=True,
+            check=True,
+        )

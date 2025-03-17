@@ -13,7 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-
+import enum
 import typing as tp
 
 PKG_NAME = "genesis_devtools"
@@ -31,5 +31,37 @@ ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
 ImageProfileType = tp.Literal["ubuntu_24", "genesis_base"]
 ImageFormatType = tp.Literal["raw", "qcow2"]
 NetType = tp.Literal["network", "bridge"]
-
 VersionSuffixType = tp.Literal["latest", "none", "element"]
+DomainState = tp.Literal["all", "inactive"]
+
+
+class BackupPeriod(str, enum.Enum):
+    M1 = "1m"
+    M5 = "5m"
+    M15 = "15m"
+    M30 = "30m"
+    H1 = "1h"
+    H3 = "3h"
+    H6 = "6h"
+    H12 = "12h"
+    D1 = "1d"
+    D3 = "3d"
+    D7 = "7d"
+
+    @property
+    def timeout(self) -> int:
+        """Return timeout in seconds based on current element in enum."""
+        timeouts = {
+            self.M1: 60,
+            self.M5: 60 * 5,
+            self.M15: 60 * 15,
+            self.M30: 60 * 30,
+            self.H1: 60 * 60,
+            self.H3: 60 * 60 * 3,
+            self.H6: 60 * 60 * 6,
+            self.H12: 60 * 60 * 12,
+            self.D1: 60 * 60 * 24,
+            self.D3: 60 * 60 * 24 * 3,
+            self.D7: 60 * 60 * 24 * 7,
+        }
+        return timeouts[self]

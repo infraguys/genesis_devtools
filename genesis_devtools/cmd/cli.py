@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import os
+import time
 import shutil
 import typing as tp
 import tempfile
@@ -365,6 +366,127 @@ def get_project_version_cmd(element_dir: str) -> None:
     logger = ClickLogger()
     version = utils.get_project_version(element_dir)
     logger.important(version)
+
+
+@main.command("backup", help="Backup the current installation")
+@click.option(
+    "-n",
+    "--name",
+    default=None,
+    multiple=True,
+    help="Name of the libvirt domain, if not provided, all will be backed up",
+)
+@click.option(
+    "-d",
+    "--backup-dir",
+    default=".",
+    type=click.Path(),
+    help="Directory where backups will be stored",
+)
+@click.option(
+    "-p",
+    "--period",
+    default=c.BackupPeriod.D1.value,
+    type=click.Choice([p for p in c.BackupPeriod]),
+    show_default=True,
+    help="the regularity of backups",
+)
+@click.option(
+    "--oneshot",
+    default=False,
+    type=bool,
+    show_default=True,
+    is_flag=True,
+    help="Do a backup once and exit",
+)
+def bakcup_cmd(
+    name: tp.List[str] | None,
+    backup_dir: str,
+    period: c.BackupPeriod,
+    oneshot: bool,
+) -> None:
+    domains = libvirt.list_domains()
+
+    # Check if the specified domains exist
+    if name:
+        if set(name) - set(domains):
+            diff = ", ".join(set(name) - set(domains))
+            raise click.UsageError(f"Domains {diff} not found")
+        domains = name
+
+    domains = list(set(domains))
+
+    # Do a single backup and exit
+    if oneshot:
+        backup_path = utils.backup_path(backup_dir)
+        _do_backup(backup_path, domains)
+        click.secho("Backup done", fg="green")
+        return
+
+    # Do periodic backups
+    click.secho(f"Current time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    ts = time.time() + period.timeout
+    click.secho(
+        f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
+    )
+    time.sleep(period.timeout)
+
+    next_ts = time.time() + period.timeout
+    while True:
+        click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+        backup_path = utils.backup_path(backup_dir)
+        _do_backup(backup_path, domains)
+
+        click.secho(
+            f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(next_ts))}"
+        )
+
+        timeout = next_ts - time.time()
+        timeout = 0 if timeout < 0 else timeout
+        next_ts += period.timeout
+
+        time.sleep(timeout)
+
+
+def _do_backup(backup_path: str, domains: tp.List[str]) -> None:
+    os.makedirs(backup_path, exist_ok=True)
+
+    table = prettytable.PrettyTable()
+    table.field_names = [
+        "domain",
+        "time start",
+        "time end",
+        "duration (s)",
+        "size",
+        "status",
+    ]
+
+    for domain in domains:
+        domain_backup_path = os.path.join(backup_path, domain)
+        os.makedirs(domain_backup_path, exist_ok=True)
+        start, end = time.monotonic(), str(None)
+        ts, te = time.strftime("%Y-%m-%d %H:%M:%S"), str(None)
+        status = "failed"
+        duration = str(None)
+        size = str(None)
+
+        try:
+            libvirt.backup_domain(domain, domain_backup_path)
+            end = time.monotonic()
+            te = time.strftime("%Y-%m-%d %H:%M:%S")
+            status = "success"
+            duration = f"{end - start:.2f}"
+            size = utils.human_readable_size(
+                utils.get_directory_size(domain_backup_path)
+            )
+            click.secho(f"Backup of {domain} done ({duration} s)", fg="green")
+        except Exception:
+            click.secho(f"Backup of {domain} failed", fg="red")
+
+        table.add_row([domain, ts, te, f"{duration}", size, status])
+
+    click.echo(f"Summary: {backup_path}")
+    click.echo(table)
 
 
 def _list_installations() -> tp.List[tp.Tuple[str, str]]:
