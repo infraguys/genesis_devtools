@@ -125,7 +125,13 @@ def get_project_version(
     patch += 1
 
     hexsha = repo.head.commit.hexsha
-    branch = repo.active_branch.name
+
+    try:
+        branch = repo.active_branch.name
+    except Exception:
+        # Detached head
+        branch = None
+
     date = repo.head.commit.committed_date
     date_repr = "{}{:02}{:02}{:02}{:02}{:02}".format(
         time.gmtime(date).tm_year,
