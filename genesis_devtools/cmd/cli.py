@@ -405,19 +405,9 @@ def bakcup_cmd(
     period: c.BackupPeriod,
     oneshot: bool,
 ) -> None:
-    domains = libvirt.list_domains()
-
-    # Check if the specified domains exist
-    if name:
-        if set(name) - set(domains):
-            diff = ", ".join(set(name) - set(domains))
-            raise click.UsageError(f"Domains {diff} not found")
-        domains = name
-
-    domains = list(set(domains))
-
     # Do a single backup and exit
     if oneshot:
+        domains = _domains_for_backup(name, raise_on_domain_absence=True)
         backup_path = utils.backup_path(backup_dir)
         _do_backup(backup_path, domains)
         click.secho("Backup done", fg="green")
@@ -433,6 +423,9 @@ def bakcup_cmd(
 
     next_ts = time.time() + period.timeout
     while True:
+        # Need to refresh the list of domains since it could have changed
+        domains = _domains_for_backup(name)
+
         click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         backup_path = utils.backup_path(backup_dir)
         _do_backup(backup_path, domains)
@@ -487,6 +480,22 @@ def _do_backup(backup_path: str, domains: tp.List[str]) -> None:
 
     click.echo(f"Summary: {backup_path}")
     click.echo(table)
+
+
+def _domains_for_backup(
+    names: tp.List[str] | None = None, raise_on_domain_absence: bool = False
+) -> tp.List[str]:
+    domains = set(libvirt.list_domains())
+    names = set(names or [])
+
+    # Check if the specified domains exist
+    if names:
+        if raise_on_domain_absence and (names - domains):
+            diff = ", ".join(names - domains)
+            raise click.UsageError(f"Domains {diff} not found")
+        domains = names & domains
+
+    return list(domains)
 
 
 def _list_installations() -> tp.List[tp.Tuple[str, str]]:
