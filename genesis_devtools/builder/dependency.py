@@ -78,7 +78,7 @@ class LocalPathDependency(base.AbstractDependency):
 class HttpDependency(base.AbstractDependency):
     """HTTP dependency item."""
 
-    CHUNK_SIZE = 32768
+    CHUNK_SIZE = 65536
 
     def __init__(self, endpoint: str, img_dest: str) -> None:
         super().__init__()

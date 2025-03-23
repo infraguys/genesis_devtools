@@ -33,6 +33,7 @@ file_provisioner_tmpl = """
   }}
   provisioner "shell" {{
     inline = [
+      "sudo mkdir -p {destination_dir}",
       "sudo mv {tmp_destination} {destination}",
     ]
   }}
@@ -141,6 +142,7 @@ class PackerBuilder(base.DummyImageBuilder):
             provisioners.append(
                 file_provisioner_tmpl.format(
                     source=dep.local_path,
+                    destination_dir=os.path.dirname(dep.img_dest),
                     destination=dep.img_dest,
                     tmp_destination=tmp_dest,
                 )
