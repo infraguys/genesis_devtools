@@ -295,3 +295,11 @@ genesis backup -oneshot
 ```
 
 This command will backup the current installation to the specified directory once and exit.
+
+### Compuressed Backup
+
+Run backup of all libvirt domains and store a compressed archive of the backup in the current directory:
+
+```bash
+genesis backup --compress
+```

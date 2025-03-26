@@ -399,17 +399,27 @@ def get_project_version_cmd(element_dir: str) -> None:
     is_flag=True,
     help="Do a backup once and exit",
 )
+@click.option(
+    "-c",
+    "--compress",
+    default=False,
+    type=bool,
+    show_default=True,
+    is_flag=True,
+    help="Compress the backup.",
+)
 def bakcup_cmd(
     name: tp.List[str] | None,
     backup_dir: str,
     period: c.BackupPeriod,
     oneshot: bool,
+    compress: bool,
 ) -> None:
     # Do a single backup and exit
     if oneshot:
         domains = _domains_for_backup(name, raise_on_domain_absence=True)
         backup_path = utils.backup_path(backup_dir)
-        _do_backup(backup_path, domains)
+        _do_backup(backup_path, domains, compress)
         click.secho("Backup done", fg="green")
         return
 
@@ -428,7 +438,7 @@ def bakcup_cmd(
 
         click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         backup_path = utils.backup_path(backup_dir)
-        _do_backup(backup_path, domains)
+        _do_backup(backup_path, domains, compress)
 
         click.secho(
             f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(next_ts))}"
@@ -441,7 +451,9 @@ def bakcup_cmd(
         time.sleep(timeout)
 
 
-def _do_backup(backup_path: str, domains: tp.List[str]) -> None:
+def _do_backup(
+    backup_path: str, domains: tp.List[str], compress: bool = False
+) -> None:
     os.makedirs(backup_path, exist_ok=True)
 
     table = prettytable.PrettyTable()
@@ -480,6 +492,20 @@ def _do_backup(backup_path: str, domains: tp.List[str]) -> None:
 
     click.echo(f"Summary: {backup_path}")
     click.echo(table)
+
+    if not compress:
+        return
+
+    click.echo(f"Compressing {backup_path}")
+    compress_directory = os.path.dirname(backup_path)
+    try:
+        utils.compress_dir(backup_path, compress_directory)
+    except Exception:
+        click.secho(f"Compression of {backup_path} failed", fg="red")
+        return
+
+    click.secho(f"Compression of {backup_path} done", fg="green")
+    shutil.rmtree(backup_path)
 
 
 def _domains_for_backup(

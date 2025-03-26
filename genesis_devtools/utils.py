@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import os
 import time
+import shutil
 import itertools
 import typing as tp
 from importlib.metadata import entry_points
@@ -212,3 +213,24 @@ def human_readable_size(size: int, decimal_places: int = 2):
 def backup_path(backup_dir: str) -> str:
     backup_relative_path = time.strftime("%Y-%m-%d-%H-%M-%S")
     return os.path.join(backup_dir, backup_relative_path)
+
+
+def compress_dir(
+    directory: str, output_dir: str, compression_format: str = "gztar"
+) -> None:
+    """
+    Compresses the specified directory and places the archive in the
+    output directory.
+
+    :param directory: The path to the directory to be compressed.
+    :param output_dir: The path to the directory where the compressed
+                       archive will be placed.
+    """
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Define the base name for the archive (without extension)
+    archive_base_name = os.path.join(output_dir, os.path.basename(directory))
+
+    # Create a zip archive of the directory
+    shutil.make_archive(archive_base_name, compression_format, directory)
