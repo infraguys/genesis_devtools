@@ -65,7 +65,7 @@ build {{
     execute_command = "sudo -S env {{{{ .Vars }}}} {{{{ .Path }}}}"
     script          = "{script}"
     env             = {{
-      EXAMPLE_VARIABLE = "example_value"
+      {envs}
     }}
   }}
 
@@ -159,6 +159,13 @@ class PackerBuilder(base.DummyImageBuilder):
         else:
             developer_keys_prov = ""
 
+        # Prepare envs
+        envs = f'GEN_IMAGE_PROFILE = "{image.profile}"\n'
+        if image.envs:
+            envs += "\n".join(
+                f'{e}="{os.environ.get(e, "")}"' for e in image.envs
+            )
+
         profile = image.profile.replace("_", "-")
         packer_build = packer_build_tmpl.format(
             profile=profile,
@@ -167,6 +174,7 @@ class PackerBuilder(base.DummyImageBuilder):
             script=image.script,
             developer_keys=developer_keys_prov,
             output_directory=self._output_dir,
+            envs=envs,
         )
 
         # Write the packer build file
