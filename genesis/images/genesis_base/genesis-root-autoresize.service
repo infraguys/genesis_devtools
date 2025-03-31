@@ -1,0 +1,18 @@
+[Unit]
+Description=Genesis root autoresize one shot unit
+DefaultDependencies=no
+Conflicts=shutdown.target
+Before=local-fs.target shutdown.target
+
+[Service]
+Type=oneshot
+Restart=on-failure
+TimeoutSec=0
+RestartSec=5s
+TimeoutStopSec=5
+RemainAfterExit=yes
+StandardOutput=journal
+ExecStart=/usr/bin/root_autoresize.sh
+
+[Install]
+WantedBy=multi-user.target

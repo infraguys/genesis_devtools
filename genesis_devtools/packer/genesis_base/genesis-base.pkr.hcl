@@ -75,10 +75,7 @@ source "qemu" "genesis-base" {
 set -ex
 
 # Logs
-sudo rm -fr /var/log/*
-
-# Enable bootstrap scripts
-sudo systemctl enable genesis-bootstrap.service
+sudo find /var/log -type f -maxdepth 3 -delete
 
 # Remove temporary keys
 # Disable removing host keys temporarily
@@ -87,9 +84,6 @@ sudo systemctl enable genesis-bootstrap.service
 # Add developer keys
 sudo mkdir -p /home/ubuntu/.ssh
 [[ -f /tmp/__dev_keys ]] && sudo mv /tmp/__dev_keys /home/ubuntu/.ssh/authorized_keys
-
-# Temporary solution only for development
-echo 'ubuntu:ubuntu' | sudo chpasswd
 
 # Tmp files
 sudo rm -rf /tmp/* /var/tmp/*

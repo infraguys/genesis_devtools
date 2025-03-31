@@ -15,12 +15,14 @@ build:
     - images:
       - name: genesis-base
         format: qcow2
+        envs:
+          - GEN_USER_PASSWD
         
         # OS profile for the image
         profile: ubuntu_24
 
         # Provisioning script
-        script: images/install_genesis_base.sh
+        script: images/genesis_base/install_genesis_base.sh
         
         # Override image build parameters, for instance Packer parameters
         override:

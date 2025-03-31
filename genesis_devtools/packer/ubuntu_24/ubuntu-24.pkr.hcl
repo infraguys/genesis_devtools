@@ -87,7 +87,7 @@ network:
 EOF1
 
 # Logs
-sudo rm -fr /var/log/*
+sudo find /var/log -type f -maxdepth 3 -delete
 
 # Remove temporary keys
 # Disable removing host keys temporarily
@@ -96,9 +96,6 @@ sudo rm -fr /var/log/*
 # Add developer keys
 sudo mkdir -p /home/ubuntu/.ssh
 [[ -f /tmp/__dev_keys ]] && sudo mv /tmp/__dev_keys /home/ubuntu/.ssh/authorized_keys
-
-# Temporary solution only for development
-echo 'ubuntu:ubuntu' | sudo chpasswd
 
 # Tmp files
 sudo rm -rf /tmp/* /var/tmp/*

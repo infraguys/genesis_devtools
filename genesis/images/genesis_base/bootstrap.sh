@@ -18,6 +18,15 @@
 
 WORK_DIR="/var/lib/genesis/bootstrap"
 DONE_PATH="$WORK_DIR/__done"
+BUILD_MAC="52:54:00:12:34:56"
+
+# Ignore image building for bootstrap scripts
+for iface in $(ls /sys/class/net/) ; do
+  if [ "$(cat /sys/class/net/$iface/address)" == "$BUILD_MAC" ] ; then
+    echo "In the image build process, skip bootstrap scripts"
+    exit 0
+  fi
+done
 
 
 for EXECUTABLE in $(ls $WORK_DIR/scripts/ | sort)
