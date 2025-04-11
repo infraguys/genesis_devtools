@@ -22,6 +22,7 @@ import typing as tp
 import tempfile
 import ipaddress
 
+import yaml
 import click
 import prettytable
 
@@ -30,7 +31,9 @@ from genesis_devtools import utils
 from genesis_devtools.logger import ClickLogger
 from genesis_devtools.builder.builder import SimpleBuilder
 from genesis_devtools.builder.packer import PackerBuilder
-from genesis_devtools import libvirt
+from genesis_devtools.infra.libvirt import libvirt
+from genesis_devtools.stand import models as stand_models
+from genesis_devtools.infra.driver import libvirt as libvirt_infra
 
 
 BOOTSTRAP_TAG = "bootstrap"
@@ -187,6 +190,13 @@ def build_cmd(
     help="Launch mode for start element, core or custom configuration",
 )
 @click.option(
+    "-s",
+    "--stand-spec",
+    default=None,
+    type=click.Path(exists=True),
+    help="Additional stand specification for core mode.",
+)
+@click.option(
     "--cidr",
     default="192.168.4.0/22",
     help="Network CIDR",
@@ -197,14 +207,6 @@ def build_cmd(
     "--bridge",
     default=None,
     help="Name of the linux bridge, it will be created if not set.",
-)
-@click.option(
-    "--dhcp",
-    default=False,
-    type=bool,
-    show_default=True,
-    is_flag=True,
-    help="Enable DHCP on 'network' network type",
 )
 @click.option(
     "-f",
@@ -229,9 +231,9 @@ def bootstrap_cmd(
     memory: int,
     name: str,
     launch_mode: LaunchModeType,
+    stand_spec: str | None,
     cidr: ipaddress.IPv4Network,
     bridge: str | None,
-    dhcp: bool,
     force: bool,
     no_wait: bool,
 ) -> None:
@@ -241,79 +243,47 @@ def bootstrap_cmd(
     if image_path and not os.path.isabs(image_path):
         image_path = os.path.abspath(image_path)
 
-    logger = ClickLogger()
-
-    # Modify network paramters based on the launch mode
+    # DEPRECATED(akremenetsky): The 'element' mode is deprecated
     if launch_mode == "element":
-        bridge, dhcp = None, True
-        logger.info("Starting genesis bootstrap in 'element' mode")
-    elif launch_mode == "core":
-        bridge, dhcp, cidr = None, False, GC_CIDR
-        logger.info("Starting genesis bootstrap in 'core' mode")
-    else:
-        # Custom launch mode, nothing to do
-        logger.info("Starting genesis bootstrap in 'custom' mode")
-
-    # KiB for libvirt
-    memory = memory << 10
-    net_name = utils.installation_net_name(name)
-    bootstrap_domain_name = utils.installation_bootstrap_name(name)
-
-    # Check if the any genesis installation is running
-    has_domain = libvirt.has_domain(bootstrap_domain_name)
-
-    # Don't delete the network if it was created by the user
-    has_net = False if bridge else libvirt.has_net(net_name)
-
-    if has_domain or has_net:
-        if not force:
-            logger.warn(
-                "Genesis installation is already running. Use '--force' flag to "
-                "rerun genesis installation.",
+        if stand_spec is not None:
+            raise click.UsageError(
+                "Stand spec is not supported in 'element' mode"
             )
-            return
 
-        # Delete old genesis installation
-        _delete_installation(name, delete_net=has_net)
-        logger.info("Destroyed old genesis installation")
+        return _bootstrap_element(
+            image_path=image_path,
+            cores=cores,
+            memory=memory,
+            name=name,
+            force=force,
+            no_wait=no_wait,
+            cidr=cidr,
+        )
 
-    # The 'bridge' should be created by the user
-    if not bridge:
-        libvirt.create_nat_network(net_name, cidr, dhcp)
+    if launch_mode == "core":
+        if stand_spec is not None:
+            with open(stand_spec) as f:
+                stand_spec = yaml.safe_load(f)
 
-    libvirt.create_domain(
-        name=bootstrap_domain_name,
-        cores=cores,
-        memory=memory,
-        image=image_path,
-        network=bridge or net_name,
-        net_type="bridge" if bridge else "network",
-    )
-    logger.info("Launched genesis installation. Started VM: " + name)
+        return _bootstrap_core(
+            image_path=image_path,
+            cores=cores,
+            memory=memory,
+            name=name,
+            stand_spec=stand_spec,
+            bridge=bridge,
+            force=force,
+        )
 
-    # Wait for the installation to start
-    if no_wait:
-        return
-
-    if not dhcp:
-        logger.warn("Unable to detect IP address if DHCP is disabled. Bye.")
-        return
-
-    utils.wait_for(
-        lambda: bool(libvirt.get_domain_ip(bootstrap_domain_name)),
-        title=f"Waiting for installation {name}",
-    )
-
-    ip = libvirt.get_domain_ip(bootstrap_domain_name)
-    logger.important(f"The installation {name} is ready at:\nssh ubuntu@{ip}")
+    raise click.UsageError("Unknown launch mode")
 
 
-@main.command("ssh", help="Connect to genesis installation")
+@main.command("ssh", help="Connect to genesis stand/element")
 @click.option(
-    "-i",
-    "--ip-address",
+    "-s",
+    "--stand",
     default=None,
-    help="IP address of installation",
+    help="Stand to connect to",
 )
 @click.option(
     "-u",
@@ -321,20 +291,33 @@ def bootstrap_cmd(
     default="ubuntu",
     help="Default username",
 )
-def conn_cmd(ip_address: tp.Optional[str], username: str) -> None:
-    installations = _list_installations()
+def conn_cmd(stand: str | None, username: str) -> None:
+    logger = ClickLogger()
+    infra = libvirt_infra.LibvirtInfraDriver()
+    stands = infra.list_stands()
 
-    if ip_address is None:
-        if len(installations) == 1:
-            ip_address = installations[0][1]
-        elif len(installations) > 1:
-            raise click.UsageError(
-                "There are multiple genesis installations. "
-                "You must specify IP address of the installation"
-            )
-        else:
-            click.secho("No genesis installation found", fg="yellow")
-            return
+    if len(stands) == 0:
+        logger.warn("No genesis stands found")
+        return
+
+    if len(stands) > 1 and stand is None:
+        logger.warn("Multiple genesis stands found, please specify one")
+        return
+
+    # If the stand is not specified, use the first one
+    for dev_stand in stands:
+        if stand is None:
+            break
+
+        if dev_stand.name == stand:
+            break
+    else:
+        raise click.UsageError("No genesis stand found")
+
+    if dev_stand.network.dhcp:
+        ip_address = libvirt.get_domain_ip(dev_stand.bootstraps[0].name)
+    else:
+        ip_address = dev_stand.network.cidr[2]
 
     os.system(f"ssh {username}@{ip_address}")
 
@@ -344,20 +327,38 @@ def ps_cmd() -> None:
     table = prettytable.PrettyTable()
     table.field_names = [
         "name",
+        "nodes",
         "IP",
     ]
 
-    for name, ip in _list_installations():
-        table.add_row([name, ip])
+    infra = libvirt_infra.LibvirtInfraDriver()
+
+    for stand in infra.list_stands():
+        if stand.network.dhcp:
+            ip = libvirt.get_domain_ip(stand.bootstraps[0].name)
+        else:
+            ip = stand.network.cidr[2]
+
+        nodes = len(stand.bootstraps) + len(stand.baremetals)
+        table.add_row([stand.name, nodes, ip])
 
     click.echo("Genesis installations:")
     click.echo(table)
 
 
-@main.command("delete", help="Delete the genesis installation")
+@main.command("delete", help="Delete the genesis stand/element")
 @click.argument("name", type=str)
 def delete_cmd(name: str) -> None:
-    return _delete_installation(name)
+    infra = libvirt_infra.LibvirtInfraDriver()
+
+    # Check if the target stand already exists
+    for stand in infra.list_stands():
+        if stand.name == name:
+            break
+    else:
+        raise click.UsageError(f"Stand {name} not found")
+
+    infra.delete_stand(stand)
 
 
 @main.command("get-version", help="Return the version of the project")
@@ -524,38 +525,143 @@ def _domains_for_backup(
     return list(domains)
 
 
-def _list_installations() -> tp.List[tp.Tuple[str, str]]:
-    installations = []
-
-    # Each bootstrap is a separate installation
-    for domain in libvirt.list_domains():
-        if BOOTSTRAP_TAG in domain:
-            installation = utils.installation_name_from_bootstrap(domain)
-            ip = libvirt.get_domain_ip(domain)
-            installations.append((installation, str(ip)))
-    return installations
-
-
-def _delete_installation(name: str, delete_net: bool = True) -> None:
+def _bootstrap_element(
+    image_path: tp.Optional[str],
+    cores: int,
+    memory: int,
+    name: str,
+    cidr: ipaddress.IPv4Network,
+    force: bool,
+    no_wait: bool,
+) -> None:
     logger = ClickLogger()
-    destroyed = False
 
     net_name = utils.installation_net_name(name)
+    default_stand_network = stand_models.Network(
+        name=net_name,
+        cidr=cidr,
+        managed_network=True,
+        dhcp=True,
+    )
 
-    # Multiple stands will be supported in the future
-    # bootstrap_domain_name = utils.installation_bootstrap_name(name)
-    genesis_domains = libvirt.list_domains(c.GENESIS_META_TAG)
-    for domain in genesis_domains:
-        logger.info(f"Found genesis domain: {domain}")
-        libvirt.destroy_domain(domain)
-        destroyed = True
+    bootstrap_domain_name = utils.installation_bootstrap_name(name)
 
-    if delete_net and libvirt.has_net(net_name):
-        libvirt.destroy_net(net_name)
-        destroyed = True
+    # Single bootstrap stand
+    dev_stand = stand_models.Stand.single_bootstrap_stand(
+        name=name,
+        image=image_path,
+        cores=cores,
+        memory=memory,
+        network=default_stand_network,
+        bootstrap_name=bootstrap_domain_name,
+    )
 
-    if not destroyed:
-        logger.warn("Genesis installation not found")
+    if not dev_stand.is_valid():
+        logger.error(f"Invalid stand for element")
         return
 
-    logger.important(f"Destroyed genesis installation: {name}")
+    infra = libvirt_infra.LibvirtInfraDriver()
+
+    # Check if the target stand already exists
+    for stand in infra.list_stands():
+        if stand.name != dev_stand.name:
+            continue
+
+        # Without `force` flag, unable to proceed with the installation
+        if not force:
+            logger.warn(
+                f"Genesis element {dev_stand.name} is already running. "
+                "Use '--force' flag to forcely rerun genesis element.",
+            )
+            return
+
+        infra.delete_stand(stand)
+        logger.info(f"Destroyed old genesis element: {dev_stand.name}")
+
+    infra.create_stand(dev_stand)
+    logger.info(f"Launched genesis element {name}")
+
+    # Wait for the installation to start
+    if no_wait:
+        return
+
+    utils.wait_for(
+        lambda: bool(libvirt.get_domain_ip(bootstrap_domain_name)),
+        title=f"Waiting for element {name}",
+    )
+
+    ip = libvirt.get_domain_ip(bootstrap_domain_name)
+    logger.important(f"The element {name} is ready at:\nssh ubuntu@{ip}")
+
+
+def _bootstrap_core(
+    image_path: tp.Optional[str],
+    cores: int,
+    memory: int,
+    name: str,
+    stand_spec: tp.Dict[str, tp.Any] | None,
+    bridge: str | None,
+    force: bool,
+) -> None:
+    logger = ClickLogger()
+    logger.info("Starting genesis bootstrap in 'core' mode")
+
+    net_name = utils.installation_net_name(name)
+    default_stand_network = stand_models.Network(
+        name=bridge if bridge else net_name,
+        cidr=ipaddress.IPv4Network(GC_CIDR),
+        managed_network=False if bridge else True,
+    )
+
+    # Single bootstrap stand
+    if stand_spec is None:
+        bootstrap_domain_name = utils.installation_bootstrap_name(name)
+
+        dev_stand = stand_models.Stand.single_bootstrap_stand(
+            name=name,
+            image=image_path,
+            cores=cores,
+            memory=memory,
+            network=default_stand_network,
+            bootstrap_name=bootstrap_domain_name,
+        )
+    else:
+        dev_stand = stand_models.Stand.from_spec(stand_spec)
+        if dev_stand.network.is_dummy:
+            dev_stand.network = default_stand_network
+
+        # Assign the image to bootstraps if it wasn't specified
+        # in the specification.
+        for b in dev_stand.bootstraps:
+            if b.image is None:
+                b.image = image_path
+
+    if not dev_stand.is_valid():
+        logger.error(f"Invalid stand {dev_stand} from spec {stand_spec}")
+        return
+
+    infra = libvirt_infra.LibvirtInfraDriver()
+
+    # Check if the target stand already exists
+    for stand in infra.list_stands():
+        if stand.name != dev_stand.name:
+            continue
+
+        # Without `force` flag, unable to proceed with the installation
+        if not force:
+            logger.warn(
+                f"Genesis installation {dev_stand.name} is already running. "
+                "Use '--force' flag to forcely rerun genesis installation.",
+            )
+            return
+
+        infra.delete_stand(stand)
+        logger.info(f"Destroyed old genesis installation: {dev_stand.name}")
+
+    infra.create_stand(dev_stand)
+    logger.info("Launched genesis installation")
+
+    cidr = dev_stand.network.cidr
+    logger.important(
+        f"The stand {name} will be ready " f"soon at:\nssh ubuntu@{cidr[2]}",
+    )

@@ -17,18 +17,22 @@ from __future__ import annotations
 
 import os
 import re
-import typing as tp
 import tempfile
 import subprocess
 import ipaddress
+import typing as tp
+import uuid as sys_uuid
 
 from genesis_devtools import constants as c
+from genesis_devtools.infra.libvirt import constants as vc
 
 domain_template = """
 <domain type="kvm">
   <name>{name}</name>
+  <uuid>{uuid}</uuid>
   <metadata>
     <genesis:genesis xmlns:genesis="https://github.com/infraguys">
+      {meta_tags}
     </genesis:genesis>
   </metadata>
   <memory>{memory}</memory>
@@ -36,7 +40,7 @@ domain_template = """
   <vcpu>{cores}</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <boot dev="hd"/>
+    {boot}
   </os>
   <features>
     <acpi/>
@@ -55,11 +59,7 @@ domain_template = """
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type="file" device="disk">
-      <driver name="qemu" type="{image_format}"/>
-      <source file="{image}"/>
-      <target dev="vda" bus="virtio"/>
-    </disk>
+    {disks}
     <controller type="usb" model="qemu-xhci" ports="5"/>
     <controller type="pci" model="pcie-root"/>
     <controller type="pci" model="pcie-root-port"/>
@@ -129,6 +129,15 @@ bridge_iface_template = """
 """
 
 
+disk_template = """
+    <disk type="file" device="disk">
+      <driver name="qemu" type="{image_format}"/>
+      <source file="{image}"/>
+      <target dev="{device}" bus="virtio"/>
+    </disk>
+"""
+
+
 def list_domains(
     meta_tag: str | None = None, state: c.DomainState = "all"
 ) -> tp.List[str]:
@@ -150,6 +159,30 @@ def list_domains(
         out = out.decode().strip()
         if meta_tag in out:
             domains.append(name)
+
+    return domains
+
+
+def list_xml_domains(
+    meta_tag: str | None = None, state: c.DomainState = "all"
+) -> tp.List[str]:
+    """List all domains."""
+    out = subprocess.check_output(
+        f"sudo virsh list --{state} --name", shell=True
+    )
+    out = out.decode().strip()
+    names = [o for o in out.split("\n") if o]
+
+    # FIXME(akremenetsky): Need more optimization here
+    # Find all domains with the corresponding meta tag
+    domains = []
+    for name in names:
+        out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+        out = out.decode().strip()
+        if meta_tag and meta_tag in out:
+            domains.append(out)
+        elif not meta_tag:
+            domains.append(out)
 
     return domains
 
@@ -216,22 +249,53 @@ def create_domain(
     name: str,
     cores: str,
     memory: int,
-    image: str,
     network: str,
     net_type: str = "network",
     pool: str = c.LIBVIRT_DEF_POOL_PATH,
+    image: str | None = None,
+    disks: tp.Collection[int] = (),
+    meta_tags: tp.Collection[str] = (),
+    boot: vc.BootMode = "hd",
 ):
-    # Copy the image to a pool
-    image_name = os.path.basename(image)
-    pool_image_path = os.path.join(pool, image_name)
-    image_format = "qcow2" if image_name.endswith("qcow2") else "raw"
+    uuid = str(sys_uuid.uuid4())
+    disks_xml = ""
+    disk_paths = []
 
-    # TODO: Need default user pool
-    if not os.path.exists(pool_image_path):
+    # Use image if it is provided or create empty disk if it is not
+    if image is not None:
+        image_name = os.path.basename(image)
+        pool_image_path = os.path.join(pool, image_name)
+        image_format = "qcow2" if image_name.endswith("qcow2") else "raw"
+        disks_xml = disk_template.format(
+            device="vda",
+            image=pool_image_path,
+            image_format=image_format,
+        )
+        # Copy the image to the pool and delete the old one
         subprocess.run(
             f"sudo rm -f {pool_image_path}; sudo cp {image} {pool_image_path}",
             shell=True,
             check=True,
+        )
+    elif disks:
+        for i, disk in enumerate(disks):
+            disk_name = f"{uuid}-{i}.qcow2"
+            disk_path = os.path.join(pool, disk_name)
+            disk_paths.append(disk_path)
+            subprocess.run(
+                f"sudo qemu-img create -f qcow2 {disk_path} {disk}G"
+                " 2>&1 >/dev/null",
+                shell=True,
+                check=True,
+            )
+            disks_xml += disk_template.format(
+                device=f"vd{chr(ord('a') + i)}",
+                image=disk_path,
+                image_format="qcow2",
+            )
+    else:
+        raise ValueError(
+            "Either image or disks must be provided to create a domain"
         )
 
     if net_type == "network":
@@ -239,13 +303,23 @@ def create_domain(
     else:
         network_iface = bridge_iface_template.format(network=network)
 
+    meta_tags_xml = "\n\t\t".join(tag for tag in meta_tags)
+
+    if boot == "hd":
+        boot = f'<boot dev="{boot}"/>'
+    else:
+        boot = f'<boot dev="network"/><boot dev="hd"/>'
+
+    memory <<= 10
     domain = domain_template.format(
         name=name,
         cores=cores,
         memory=memory,
-        image=pool_image_path,
         net_iface=network_iface,
-        image_format=image_format,
+        disks=disks_xml,
+        uuid=uuid,
+        meta_tags=meta_tags_xml,
+        boot=boot,
     )
 
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -253,14 +327,21 @@ def create_domain(
         with open(domain_path, "w") as f:
             f.write(domain)
 
-        subprocess.run(
-            f"sudo virsh define {domain_path} 1>/dev/null",
-            shell=True,
-            check=True,
-        )
-        subprocess.run(
-            f"sudo virsh start {name} 1>/dev/null", shell=True, check=True
-        )
+        try:
+            subprocess.run(
+                f"sudo virsh define {domain_path} 1>/dev/null",
+                shell=True,
+                check=True,
+            )
+            subprocess.run(
+                f"sudo virsh start {name} 1>/dev/null", shell=True, check=True
+            )
+        except Exception:
+            # Unable to create domain, delete disks
+            for disk_path in disk_paths:
+                subprocess.run(
+                    f"sudo rm -f {disk_path}", shell=True, check=True
+                )
 
 
 def get_domain_ip(name: str) -> tp.Optional[str]:

@@ -1,0 +1,11 @@
+name: dev-andromeda
+bootstraps:
+  - memory: 2048
+    cores: 2
+baremetals:
+  - name: node-aplha
+    memory: 2048
+    cores: 2
+  - name: node-beta
+    memory: 2048
+    cores: 2

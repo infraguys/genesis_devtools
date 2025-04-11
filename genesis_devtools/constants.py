@@ -22,7 +22,6 @@ DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"
 DEF_GEN_OUTPUT_DIR_NAME = "output"
 RC_BRANCHES = ("master", "main")
-GENESIS_META_TAG = "genesis:genesis"
 
 # ENV vars
 ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
@@ -33,6 +32,7 @@ ImageFormatType = tp.Literal["raw", "qcow2"]
 NetType = tp.Literal["network", "bridge"]
 VersionSuffixType = tp.Literal["latest", "none", "element"]
 DomainState = tp.Literal["all", "inactive"]
+NodeType = tp.Literal["bootstrap", "baremetal"]
 
 
 class BackupPeriod(str, enum.Enum):
