@@ -217,6 +217,18 @@ To delete genesis installation, run the `genesis delete` command. For instance,
 genesis delete genesis-core
 ```
 
+### Stand specification
+
+For more complicated cases when you need to start an installation with several nodes (that are treated as baremetal nodes) you may use `stand specification`. The stand specification is a YAML file describes the genesis installation. it specifies how many bootstrap nodes, how many baremetal nodes, their characteristics and other parameters. For instance, it may look like this:
+
+[Small stand](data/stands/stand-small.yaml)
+
+Use option `--stand-spec` or `-s` for the `bootstrap` command to specify file with stand description. For instance,
+
+```sh
+genesis bootstrap -i output/genesis-core.raw -f -m core -s data/stands/stand-small.yaml
+```
+
 ## Versions
 
 Semver is used for project versioning. There are three types of versions:
