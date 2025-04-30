@@ -487,3 +487,11 @@ def backup_domain(name: str, backup_path: str) -> None:
             shell=True,
             check=True,
         )
+
+
+def resume_domain(name: str) -> None:
+    subprocess.run(
+        f"sudo virsh resume {name}  1>/dev/null",
+        shell=True,
+        check=True,
+    )

@@ -31,7 +31,7 @@ ImageProfileType = tp.Literal["ubuntu_24", "genesis_base"]
 ImageFormatType = tp.Literal["raw", "qcow2"]
 NetType = tp.Literal["network", "bridge"]
 VersionSuffixType = tp.Literal["latest", "none", "element"]
-DomainState = tp.Literal["all", "inactive"]
+DomainState = tp.Literal["all", "inactive", "state-paused"]
 NodeType = tp.Literal["bootstrap", "baremetal"]
 
 

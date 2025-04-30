@@ -28,6 +28,7 @@ import prettytable
 
 import genesis_devtools.constants as c
 from genesis_devtools import utils
+from genesis_devtools import backup
 from genesis_devtools.logger import ClickLogger
 from genesis_devtools.builder.builder import SimpleBuilder
 from genesis_devtools.builder.packer import PackerBuilder
@@ -393,6 +394,17 @@ def get_project_version_cmd(element_dir: str) -> None:
     help="the regularity of backups",
 )
 @click.option(
+    "-o",
+    "--offset",
+    default=None,
+    type=click.Choice([p for p in c.BackupPeriod]),
+    show_default=True,
+    help=(
+        "The time offset of the first backup. If not provided, "
+        "the same value as the period will be used"
+    ),
+)
+@click.option(
     "--oneshot",
     default=False,
     type=bool,
@@ -409,28 +421,55 @@ def get_project_version_cmd(element_dir: str) -> None:
     is_flag=True,
     help="Compress the backup.",
 )
+@click.option(
+    "-s",
+    "--min-free-space",
+    default=50,
+    type=int,
+    show_default=True,
+    help=(
+        "Free disk space shouldn't be lower than this threshold. "
+        "If the space becomes lower, the backup process is stopped. "
+        "The value is in GB."
+    ),
+)
+@click.option(
+    "-r",
+    "--rotate",
+    default=5,
+    type=int,
+    show_default=True,
+    help=(
+        "Maximum number of backups to keep. The oldest backups are deleted. "
+        "`0` means no rotation."
+    ),
+)
 def bakcup_cmd(
     name: tp.List[str] | None,
     backup_dir: str,
     period: c.BackupPeriod,
+    offset: c.BackupPeriod | None,
     oneshot: bool,
     compress: bool,
+    min_free_space: int,
+    rotate: int,
 ) -> None:
     # Do a single backup and exit
     if oneshot:
         domains = _domains_for_backup(name, raise_on_domain_absence=True)
         backup_path = utils.backup_path(backup_dir)
-        _do_backup(backup_path, domains, compress)
-        click.secho("Backup done", fg="green")
+        backup.backup(backup_path, domains, compress, min_free_space)
         return
+
+    offset = offset or period
 
     # Do periodic backups
     click.secho(f"Current time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
-    ts = time.time() + period.timeout
+    ts = time.time() + offset.timeout
     click.secho(
         f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
     )
-    time.sleep(period.timeout)
+    time.sleep(offset.timeout)
 
     next_ts = time.time() + period.timeout
     while True:
@@ -439,74 +478,20 @@ def bakcup_cmd(
 
         click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         backup_path = utils.backup_path(backup_dir)
-        _do_backup(backup_path, domains, compress)
 
+        backup.backup(backup_path, domains, compress, min_free_space)
         click.secho(
             f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(next_ts))}"
         )
+
+        # Rotate old backups
+        backup.rotate(backup_dir, rotate)
 
         timeout = next_ts - time.time()
         timeout = 0 if timeout < 0 else timeout
         next_ts += period.timeout
 
         time.sleep(timeout)
-
-
-def _do_backup(
-    backup_path: str, domains: tp.List[str], compress: bool = False
-) -> None:
-    os.makedirs(backup_path, exist_ok=True)
-
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "domain",
-        "time start",
-        "time end",
-        "duration (s)",
-        "size",
-        "status",
-    ]
-
-    for domain in domains:
-        domain_backup_path = os.path.join(backup_path, domain)
-        os.makedirs(domain_backup_path, exist_ok=True)
-        start, end = time.monotonic(), str(None)
-        ts, te = time.strftime("%Y-%m-%d %H:%M:%S"), str(None)
-        status = "failed"
-        duration = str(None)
-        size = str(None)
-
-        try:
-            libvirt.backup_domain(domain, domain_backup_path)
-            end = time.monotonic()
-            te = time.strftime("%Y-%m-%d %H:%M:%S")
-            status = "success"
-            duration = f"{end - start:.2f}"
-            size = utils.human_readable_size(
-                utils.get_directory_size(domain_backup_path)
-            )
-            click.secho(f"Backup of {domain} done ({duration} s)", fg="green")
-        except Exception:
-            click.secho(f"Backup of {domain} failed", fg="red")
-
-        table.add_row([domain, ts, te, f"{duration}", size, status])
-
-    click.echo(f"Summary: {backup_path}")
-    click.echo(table)
-
-    if not compress:
-        return
-
-    click.echo(f"Compressing {backup_path}")
-    compress_directory = os.path.dirname(backup_path)
-    try:
-        utils.compress_dir(backup_path, compress_directory)
-    except Exception:
-        click.secho(f"Compression of {backup_path} failed", fg="red")
-        return
-
-    click.secho(f"Compression of {backup_path} done", fg="green")
-    shutil.rmtree(backup_path)
 
 
 def _domains_for_backup(

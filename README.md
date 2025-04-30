@@ -315,3 +315,19 @@ Run backup of all libvirt domains and store a compressed archive of the backup i
 ```bash
 genesis backup --compress
 ```
+
+### Rotation
+
+For the periodic backup, you can set the number of backups to keep(rotation number). The default value is 5. Use the `--rotate` option to set the number of backups to keep:
+
+```bash
+genesis backup --rotate 10
+```
+
+### Prevent disk overflow
+
+Backups can take a lot of disk space and it can be a reason to crash the whole system if a disk will be full. To prevent such a situation you can set a threshold for disk space that should be free. If during a backup process this threshold will be reached, the backup process will stop. Use the `--min-free-space` option to set the threshold in GB.
+
+```bash
+genesis backup --min-free-space 50
+``` 
