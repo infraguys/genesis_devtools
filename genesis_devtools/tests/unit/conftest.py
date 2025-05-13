@@ -87,3 +87,23 @@ build:
 """
     cfg = yaml.safe_load(fixture)
     return cfg["build"]
+
+
+@pytest.fixture
+def build_env_config() -> tp.Dict[str, tp.Any]:
+    fixture = """
+build:
+  deps:
+    - dst: /opt/genesis_devtools
+      optional: false
+      path:
+        env: PATH_FROM_ENV
+  elements:
+    - images:
+      - name: genesis-core
+        format: raw
+        profile: ubuntu_24
+        script: images/install.sh
+"""
+    cfg = yaml.safe_load(fixture)
+    return cfg["build"]

@@ -75,6 +75,82 @@ class LocalPathDependency(base.AbstractDependency):
         return cls(path, img_dest)
 
 
+class LocalEnvPathDependency(base.AbstractDependency):
+    """Local path dependency item."""
+
+    def __init__(
+        self,
+        env_path: str,
+        img_dest: str,
+        work_dir: str,
+        optional: bool = False,
+    ) -> None:
+        super().__init__()
+        self._env_path = env_path
+        self._img_dest = img_dest
+        self._optional = optional
+        self._work_dir = work_dir
+        self._local_path = None
+        self._path = None
+
+    @property
+    def img_dest(self) -> str | None:
+        """Destination for the image."""
+        return self._img_dest
+
+    @property
+    def local_path(self) -> str | None:
+        """Local path to the dependency."""
+        return self._local_path
+
+    def fetch(self, output_dir: str) -> None:
+        """Fetch the dependency."""
+        path = os.environ.get(self._env_path)
+        if not path or not os.path.exists(path):
+            if not self._optional:
+                raise ValueError(
+                    f"Environment variable {self._env_path} not found"
+                )
+            return
+
+        self._path = path
+
+        if not os.path.isabs(path):
+            path = os.path.join(self._work_dir, path)
+
+        if os.path.isdir(path):
+            name = os.path.basename(path)
+            shutil.copytree(path, os.path.join(output_dir, name))
+            self._local_path = os.path.join(output_dir, name)
+        else:
+            shutil.copy(path, output_dir)
+            self._local_path = os.path.join(output_dir, os.path.basename(path))
+
+    def __str__(self):
+        return f"Local path -> {self._path}"
+
+    @classmethod
+    def from_config(
+        cls, dep_config: tp.Dict[str, tp.Any], work_dir: str
+    ) -> "LocalEnvPathDependency":
+        """Create a dependency item from configuration."""
+        if "path" not in dep_config or "env" not in dep_config["path"]:
+            raise ValueError(
+                "Environment variable not found in dependency configuration"
+            )
+
+        env_path = dep_config["path"]["env"]
+        optional = dep_config.get("optional", False)
+        img_dest = dep_config["dst"]
+
+        return cls(
+            env_path=env_path,
+            img_dest=img_dest,
+            optional=optional,
+            work_dir=work_dir,
+        )
+
+
 class HttpDependency(base.AbstractDependency):
     """HTTP dependency item."""
 
@@ -115,7 +191,7 @@ class HttpDependency(base.AbstractDependency):
     @classmethod
     def from_config(
         cls, dep_config: tp.Dict[str, tp.Any], work_dir: str
-    ) -> "LocalPathDependency":
+    ) -> "HttpDependency":
         """Create a dependency item from configuration."""
         if "http" not in dep_config or "src" not in dep_config["http"]:
             raise ValueError("URL not found in dependency configuration")
@@ -170,7 +246,7 @@ class GitDependency(base.AbstractDependency):
     @classmethod
     def from_config(
         cls, dep_config: tp.Dict[str, tp.Any], work_dir: str
-    ) -> "LocalPathDependency":
+    ) -> "GitDependency":
         """Create a dependency item from configuration."""
         if "git" not in dep_config or "src" not in dep_config["git"]:
             raise ValueError(

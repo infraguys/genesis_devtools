@@ -113,3 +113,36 @@ class TestDependency:
             assert os.path.exists("/tmp/___deps_dir/genesis_templates")
         finally:
             shutil.rmtree("/tmp/___deps_dir")
+
+    def test_env_path_from_config(
+        self, build_env_config: tp.Dict[str, tp.Any]
+    ) -> None:
+        work_dir = "/tmp/work_dir"
+        dep = deps.LocalEnvPathDependency.from_config(
+            build_env_config["deps"][0],
+            work_dir,
+        )
+
+        assert dep.img_dest == "/opt/genesis_devtools"
+        assert dep._env_path == "PATH_FROM_ENV"
+        assert dep.local_path is None
+
+    def test_env_path_fetch(
+        self, build_env_config: tp.Dict[str, tp.Any]
+    ) -> None:
+        os.makedirs("/tmp/genesis_core_test_dir", exist_ok=True)
+        os.environ["PATH_FROM_ENV"] = "/tmp/genesis_core_test_dir"
+
+        dep = deps.LocalEnvPathDependency.from_config(
+            build_env_config["deps"][0],
+            "/tmp",
+        )
+
+        os.makedirs("/tmp/___deps_dir", exist_ok=True)
+        dep.fetch("/tmp/___deps_dir")
+
+        try:
+            assert os.path.exists("/tmp/___deps_dir/genesis_core_test_dir")
+        finally:
+            shutil.rmtree("/tmp/genesis_core_test_dir")
+            shutil.rmtree("/tmp/___deps_dir")

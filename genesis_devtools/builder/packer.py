@@ -136,6 +136,13 @@ class PackerBuilder(base.DummyImageBuilder):
         # Data provisioners
         provisioners = []
         for i, dep in enumerate(deps):
+            if not dep.local_path:
+                self._logger.warn(
+                    f"Dependency {dep.img_dest} has no local path "
+                    "and will be skipped"
+                )
+                continue
+
             tmp_dest = os.path.join(
                 "/tmp/", os.path.basename(dep.img_dest) + f"_{i}"
             )
