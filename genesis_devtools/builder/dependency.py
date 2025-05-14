@@ -48,6 +48,10 @@ class LocalPathDependency(base.AbstractDependency):
         """Fetch the dependency."""
         path = self._path
         if os.path.isdir(path):
+            # Remove trailing slash
+            if path.endswith("/"):
+                path = path[:-1]
+
             name = os.path.basename(path)
             shutil.copytree(path, os.path.join(output_dir, name))
             self._local_path = os.path.join(output_dir, name)
@@ -119,6 +123,10 @@ class LocalEnvPathDependency(base.AbstractDependency):
             path = os.path.join(self._work_dir, path)
 
         if os.path.isdir(path):
+            # Remove trailing slash
+            if path.endswith("/"):
+                path = path[:-1]
+
             name = os.path.basename(path)
             shutil.copytree(path, os.path.join(output_dir, name))
             self._local_path = os.path.join(output_dir, name)
@@ -127,7 +135,7 @@ class LocalEnvPathDependency(base.AbstractDependency):
             self._local_path = os.path.join(output_dir, os.path.basename(path))
 
     def __str__(self):
-        return f"Local path -> {self._path}"
+        return f"Local path from env -> {self._env_path}"
 
     @classmethod
     def from_config(
