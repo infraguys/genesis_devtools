@@ -86,8 +86,6 @@ def main() -> None:
 @click.option(
     "-f",
     "--force",
-    default=False,
-    type=bool,
     show_default=True,
     is_flag=True,
     help="Rebuild if the output already exists",
