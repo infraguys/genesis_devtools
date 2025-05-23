@@ -31,8 +31,8 @@ class Image:
     profile: c.ImageProfileType = "ubuntu_24"
     format: c.ImageFormatType = "raw"
     name: str | None = None
-    envs: tp.List[str] | None = None
-    override: tp.Dict[str, tp.Any] | None = None
+    envs: list[str] | None = None
+    override: dict[str, tp.Any] | None = None
 
     @classmethod
     def from_config(

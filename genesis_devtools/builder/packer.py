@@ -123,6 +123,23 @@ class PackerBuilder(base.DummyImageBuilder):
         self._logger = logger or DummyLogger()
         self._output_dir = output_dir
 
+    def _resolve_envs(self, envs: list[str]) -> str:
+        if len(envs) == 0:
+            return ""
+
+        result = []
+
+        for env in envs:
+            # Check if there a default value for the env
+            if "=" in env:
+                name, value = tuple(e.strip() for e in env.split("="))
+            else:
+                name, value = env.strip(), ""
+
+            result.append(f'{name}="{os.environ.get(name, value)}"')
+
+        return "\n".join(result)
+
     def pre_build(
         self,
         image_dir: str,
@@ -169,9 +186,7 @@ class PackerBuilder(base.DummyImageBuilder):
         # Prepare envs
         envs = f'GEN_IMAGE_PROFILE = "{image.profile}"\n'
         if image.envs:
-            envs += "\n".join(
-                f'{e}="{os.environ.get(e, "")}"' for e in image.envs
-            )
+            envs += self._resolve_envs(image.envs)
 
         profile = image.profile.replace("_", "-")
         packer_build = packer_build_tmpl.format(
