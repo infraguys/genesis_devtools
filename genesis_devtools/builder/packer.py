@@ -90,7 +90,7 @@ class PackerVariable(tp.NamedTuple):
         return self.var_tmpl.format(**data)
 
     @classmethod
-    def variable_file_content(cls, overrides: tp.Dict[str, tp.Any]) -> str:
+    def variable_file_content(cls, overrides: dict[str, tp.Any]) -> str:
         if not overrides:
             return ""
 
@@ -116,12 +116,9 @@ class PackerBuilder(base.DummyImageBuilder):
     Packer image builder that uses Packer tools to build images.
     """
 
-    def __init__(
-        self, output_dir: str, logger: AbstractLogger | None = None
-    ) -> None:
+    def __init__(self, logger: AbstractLogger | None = None) -> None:
         super().__init__()
         self._logger = logger or DummyLogger()
-        self._output_dir = output_dir
 
     def _resolve_envs(self, envs: list[str]) -> str:
         if len(envs) == 0:
@@ -144,8 +141,9 @@ class PackerBuilder(base.DummyImageBuilder):
         self,
         image_dir: str,
         image: base.Image,
-        deps: tp.List[base.AbstractDependency],
+        deps: list[base.AbstractDependency],
         developer_keys: str | None = None,
+        output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> None:
         """Actions to prepare the environment for building the image."""
 
@@ -195,7 +193,7 @@ class PackerBuilder(base.DummyImageBuilder):
             file_provisioners="\n".join(provisioners),
             script=image.script,
             developer_keys=developer_keys_prov,
-            output_directory=self._output_dir,
+            output_directory=output_dir,
             envs=envs,
         )
 

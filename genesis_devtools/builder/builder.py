@@ -17,9 +17,12 @@ from __future__ import annotations
 
 import typing as tp
 import tempfile
+import shutil
+import os
 
 from genesis_devtools.builder import base
 from genesis_devtools.logger import AbstractLogger, DummyLogger
+from genesis_devtools import constants as c
 
 
 class SimpleBuilder:
@@ -35,6 +38,7 @@ class SimpleBuilder:
         elements: tp.List[base.Element],
         image_builder: base.AbstractImageBuilder,
         logger: tp.Optional[AbstractLogger] = None,
+        images_output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> None:
         super().__init__()
         self._deps = deps
@@ -42,6 +46,44 @@ class SimpleBuilder:
         self._image_builder = image_builder
         self._work_dir = work_dir
         self._logger = logger or DummyLogger()
+        self._images_output_dir = images_output_dir
+
+    def _build_image(
+        self,
+        img: base.Image,
+        build_dir: str | None,
+        output_dir: str,
+        developer_keys: str,
+    ) -> None:
+        # The build_dir is used only for debugging purposes to observe
+        # the content of the image. In production, the image is built
+        # in a temporary directory.
+        if build_dir is not None:
+            self._image_builder.run(
+                build_dir,
+                img,
+                self._deps,
+                developer_keys,
+                output_dir,
+            )
+        else:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                self._image_builder.run(
+                    temp_dir,
+                    img,
+                    self._deps,
+                    developer_keys,
+                    output_dir,
+                )
+
+        # Move the image to the final location
+        if not os.path.exists(self._images_output_dir):
+            os.makedirs(self._images_output_dir)
+
+        shutil.move(
+            os.path.join(output_dir, f"{img.name}.{img.format}"),
+            self._images_output_dir,
+        )
 
     def fetch_dependency(self, deps_dir: str) -> None:
         """Fetch common dependencies for elements."""
@@ -63,19 +105,15 @@ class SimpleBuilder:
             for img in e.images:
                 if build_suffix:
                     img.name = f"{img.name}.{build_suffix}"
+                tmp_img_output = f"_tmp_{img.name}-output"
 
-                # The build_dir is used only for debugging purposes to observe
-                # the content of the image. In production, the image is built
-                # in a temporary directory.
-                if build_dir is not None:
-                    self._image_builder.run(
-                        build_dir, img, self._deps, developer_keys
+                try:
+                    self._build_image(
+                        img, build_dir, tmp_img_output, developer_keys
                     )
-                else:
-                    with tempfile.TemporaryDirectory() as temp_dir:
-                        self._image_builder.run(
-                            temp_dir, img, self._deps, developer_keys
-                        )
+                finally:
+                    if os.path.exists(tmp_img_output):
+                        shutil.rmtree(tmp_img_output)
 
     @classmethod
     def from_config(
@@ -84,6 +122,7 @@ class SimpleBuilder:
         build_config: tp.Dict[str, tp.Any],
         image_builder: base.AbstractImageBuilder,
         logger: tp.Optional[AbstractLogger] = None,
+        images_output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> "SimpleBuilder":
         """Create a builder from configuration."""
         # Prepare dependencies entries but do not fetch them
@@ -107,4 +146,6 @@ class SimpleBuilder:
         if not elements:
             raise ValueError("No elements found in configuration")
 
-        return cls(work_dir, deps, elements, image_builder, logger)
+        return cls(
+            work_dir, deps, elements, image_builder, logger, images_output_dir
+        )

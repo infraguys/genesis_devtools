@@ -131,6 +131,7 @@ class AbstractImageBuilder(abc.ABC):
         image: Image,
         deps: tp.List[AbstractDependency],
         developer_keys: tp.Optional[str] = None,
+        output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> None:
         """Actions to prepare the environment for building the image."""
 
@@ -157,9 +158,10 @@ class AbstractImageBuilder(abc.ABC):
         image: Image,
         deps: tp.List[AbstractDependency],
         developer_keys: tp.Optional[str] = None,
+        output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> None:
         """Run the image builder."""
-        self.pre_build(image_dir, image, deps, developer_keys)
+        self.pre_build(image_dir, image, deps, developer_keys, output_dir)
         self.build(image_dir, image, developer_keys)
         self.post_build(image_dir, image)
 
@@ -176,6 +178,7 @@ class DummyImageBuilder(AbstractImageBuilder):
         image: Image,
         deps: tp.List[AbstractDependency],
         developer_keys: tp.Optional[str] = None,
+        output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> None:
         """Actions to prepare the environment for building the image."""
         return None

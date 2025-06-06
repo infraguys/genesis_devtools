@@ -133,7 +133,7 @@ def build_cmd(
         return
 
     logger = ClickLogger()
-    packer_image_builder = PackerBuilder(output_dir, logger)
+    packer_image_builder = PackerBuilder(logger)
 
     # Path where genesis.yaml configuration file is located
     work_dir = os.path.abspath(
@@ -147,7 +147,7 @@ def build_cmd(
 
     for _, build in builds.items():
         builder = SimpleBuilder.from_config(
-            work_dir, build, packer_image_builder, logger
+            work_dir, build, packer_image_builder, logger, output_dir
         )
         with tempfile.TemporaryDirectory() as temp_dir:
             builder.fetch_dependency(deps_dir or temp_dir)
@@ -210,8 +210,6 @@ def build_cmd(
 @click.option(
     "-f",
     "--force",
-    default=False,
-    type=bool,
     show_default=True,
     is_flag=True,
     help="Rebuild if the output already exists",
