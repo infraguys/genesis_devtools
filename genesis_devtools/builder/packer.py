@@ -127,8 +127,13 @@ class PackerBuilder(base.DummyImageBuilder):
         result = []
 
         for env in envs:
+            # Check if the env is a wildcard
+            if env.endswith("*"):
+                for _env in (e for e in os.environ if e.startswith(env[:-1])):
+                    result.append(f'{_env}="{os.environ[_env]}"')
+                continue
             # Check if there a default value for the env
-            if "=" in env:
+            elif "=" in env:
                 name, value = tuple(e.strip() for e in env.split("="))
             else:
                 name, value = env.strip(), ""
