@@ -385,7 +385,7 @@ def get_project_version_cmd(element_dir: str) -> None:
     "-p",
     "--period",
     default=c.BackupPeriod.D1.value,
-    type=click.Choice([p for p in c.BackupPeriod]),
+    type=click.Choice([p.value for p in c.BackupPeriod]),
     show_default=True,
     help="the regularity of backups",
 )
@@ -393,7 +393,7 @@ def get_project_version_cmd(element_dir: str) -> None:
     "-o",
     "--offset",
     default=None,
-    type=click.Choice([p for p in c.BackupPeriod]),
+    type=click.Choice([p.value for p in c.BackupPeriod]),
     show_default=True,
     help=(
         "The time offset of the first backup. If not provided, "
