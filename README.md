@@ -308,12 +308,31 @@ genesis backup -oneshot
 
 This command will backup the current installation to the specified directory once and exit.
 
-### Compuressed Backup
+### Compressed Backup
 
 Run backup of all libvirt domains and store a compressed archive of the backup in the current directory:
 
 ```bash
 genesis backup --compress
+```
+
+### Encrypted Backup
+
+Run backup of all libvirt domains and store an encrypted archive of the backup in the current directory:
+
+NOTE: It works only with `--compress` flag
+
+You need to set the environment variables `GEN_DEV_BACKUP_KEY` and `GEN_DEV_BACKUP_IV` to encrypt the backup. The key and IV must be greater or equal to 6 bytes and less or equal to 16 bytes.
+```bash
+export GEN_DEV_BACKUP_KEY=secret_key
+export GEN_DEV_BACKUP_IV=secret_iv
+
+genesis backup --compress --encrypt
+```
+
+For decryption, use the `genesis backup-decrypt` command.
+```bash
+genesis backup-decrypt backup.tar.gz.encrypted
 ```
 
 ### Rotation

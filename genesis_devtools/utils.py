@@ -24,6 +24,10 @@ from importlib.metadata import entry_points
 import yaml
 
 import git
+from cryptography.hazmat.primitives import ciphers
+from cryptography.hazmat.primitives.ciphers import modes as cipher_models
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat import backends as crypto_back
 
 import genesis_devtools.constants as c
 
@@ -234,3 +238,89 @@ def compress_dir(
 
     # Create a zip archive of the directory
     shutil.make_archive(archive_base_name, compression_format, directory)
+
+
+def encrypt_file(
+    path: str,
+    key: bytes,
+    iv: bytes,
+    chunk_size_kb: int = 128,
+    extension: str = c.ENCRYPTED_EXTENSION,
+) -> None:
+    # Ensure that the key and iv are the correct lengths
+    # for AES (16 bytes for AES-128)
+    if len(key) != 16 or len(iv) != 16:
+        raise ValueError("Key and IV must be 16 bytes long")
+
+    # Create a cipher object
+    cipher = ciphers.Cipher(
+        algorithms.AES(key),
+        cipher_models.CFB(iv),
+        backend=crypto_back.default_backend(),
+    )
+    chunk_size = chunk_size_kb << 10
+    encrypted_path = path + extension
+
+    # Open the input file and the temporary output file
+    try:
+        with open(path, "rb") as infile, open(encrypted_path, "wb") as outfile:
+            # Create an encryptor object
+            encryptor = cipher.encryptor()
+
+            # Read the file in chunks and write the encrypted
+            # data to the temp file
+            while True:
+                chunk = infile.read(chunk_size)
+                if len(chunk) == 0:
+                    break
+                outfile.write(encryptor.update(chunk))
+            outfile.write(encryptor.finalize())
+    except Exception as e:
+        os.remove(encrypted_path)
+        raise e
+
+
+def decrypt_file(
+    path: str,
+    key: bytes,
+    iv: bytes,
+    chunk_size_kb: int = 128,
+    extension: str = c.ENCRYPTED_EXTENSION,
+) -> None:
+    # Ensure that the key and iv are the correct lengths
+    # for AES (16 bytes for AES-128)
+    if len(key) != 16 or len(iv) != 16:
+        raise ValueError("Key and IV must be 16 bytes long")
+
+    # Create a cipher object
+    cipher = ciphers.Cipher(
+        algorithms.AES(key),
+        cipher_models.CFB(iv),
+        backend=crypto_back.default_backend(),
+    )
+    chunk_size = chunk_size_kb << 10
+    plain_path = path[: -len(extension)] if path.endswith(extension) else path
+    tmp_path = plain_path + ".tmp"
+
+    # Open the encrypted file and the temporary output file
+    try:
+        with open(path, "rb") as infile, open(tmp_path, "wb") as outfile:
+            # Create a decryptor object
+            decryptor = cipher.decryptor()
+
+            # Read the file in chunks and write the decrypted data to the temp file
+            while True:
+                chunk = infile.read(chunk_size)
+                if len(chunk) == 0:
+                    break
+                outfile.write(decryptor.update(chunk))
+            outfile.write(decryptor.finalize())
+    except Exception as e:
+        os.remove(tmp_path)
+        raise e
+
+    # Replace the encrypted file with the decrypted temp file
+    if plain_path == path:
+        os.replace(tmp_path, plain_path)
+    else:
+        shutil.move(tmp_path, plain_path)

@@ -411,11 +411,21 @@ def get_project_version_cmd(element_dir: str) -> None:
 @click.option(
     "-c",
     "--compress",
-    default=False,
-    type=bool,
     show_default=True,
     is_flag=True,
     help="Compress the backup.",
+)
+@click.option(
+    "-e",
+    "--encrypt",
+    show_default=True,
+    is_flag=True,
+    help=(
+        "Encrypt the backup. Works only with the compress flag. "
+        "Use environment variable to specify the encryption key "
+        "and the initialization vector: "
+        "GEN_DEV_BACKUP_KEY and GEN_DEV_BACKUP_IV"
+    ),
 )
 @click.option(
     "-s",
@@ -447,14 +457,42 @@ def bakcup_cmd(
     offset: c.BackupPeriod | None,
     oneshot: bool,
     compress: bool,
+    encrypt: bool,
     min_free_space: int,
     rotate: int,
 ) -> None:
+    if not compress and encrypt:
+        raise click.UsageError(
+            "The encrypt flag can be used only with the compress flag."
+        )
+
+    # Need to specify encryption key and initialization vector via
+    # environment variables.
+    if encrypt:
+        try:
+            backup.EnctryptionCreds.validate_env()
+        except ValueError:
+            raise click.UsageError(
+                (
+                    "Define environment variables GEN_DEV_BACKUP_KEY "
+                    "and GEN_DEV_BACKUP_IV. "
+                    "Key and IV must be greater or equal than "
+                    f"{backup.EnctryptionCreds.MIN_LEN} bytes and less or "
+                    f"equal to {backup.EnctryptionCreds.LEN} bytes."
+                )
+            )
+
+        encryption = backup.EnctryptionCreds.from_env()
+    else:
+        encryption = None
+
     # Do a single backup and exit
     if oneshot:
         domains = _domains_for_backup(name, raise_on_domain_absence=True)
         backup_path = utils.backup_path(backup_dir)
-        backup.backup(backup_path, domains, compress, min_free_space)
+        backup.backup(
+            backup_path, domains, compress, encryption, min_free_space
+        )
         return
 
     offset = offset or period
@@ -475,7 +513,9 @@ def bakcup_cmd(
         click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         backup_path = utils.backup_path(backup_dir)
 
-        backup.backup(backup_path, domains, compress, min_free_space)
+        backup.backup(
+            backup_path, domains, compress, encryption, min_free_space
+        )
         click.secho(
             f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(next_ts))}"
         )
@@ -488,6 +528,35 @@ def bakcup_cmd(
         next_ts += period.timeout
 
         time.sleep(timeout)
+
+
+@main.command("backup-decrypt", help="Decrypt a backup file")
+@click.argument("path", type=click.Path(exists=True))
+def bakcup_decrypt_cmd(path: str) -> None:
+    # Need to specify encryption key and initialization vector via
+    # environment variables.
+
+    try:
+        backup.EnctryptionCreds.validate_env()
+    except ValueError:
+        raise click.UsageError(
+            (
+                "Define environment variables GEN_DEV_BACKUP_KEY "
+                "and GEN_DEV_BACKUP_IV. "
+                "Key and IV must be greater or equal than "
+                f"{backup.EnctryptionCreds.MIN_LEN} bytes and less or "
+                f"equal to {backup.EnctryptionCreds.LEN} bytes."
+            )
+        )
+
+    encryption = backup.EnctryptionCreds.from_env()
+
+    utils.decrypt_file(
+        path,
+        encryption.key,
+        encryption.iv,
+    )
+    click.secho(f"The {path} file has been decrypted.", fg="green")
 
 
 def _domains_for_backup(

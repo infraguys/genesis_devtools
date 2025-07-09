@@ -29,8 +29,57 @@ from genesis_devtools import utils
 from genesis_devtools.infra.libvirt import libvirt
 
 
+class EnctryptionCreds(tp.NamedTuple):
+    LEN = 16
+    MIN_LEN = 6
+
+    key: bytes
+    iv: bytes
+
+    @classmethod
+    def validate_env(cls):
+        if not os.environ.get("GEN_DEV_BACKUP_KEY") or not os.environ.get(
+            "GEN_DEV_BACKUP_IV"
+        ):
+            raise ValueError(
+                (
+                    "Define environment variables GEN_DEV_BACKUP_KEY "
+                    "and GEN_DEV_BACKUP_IV."
+                )
+            )
+
+        key = os.environ["GEN_DEV_BACKUP_KEY"]
+        iv = os.environ["GEN_DEV_BACKUP_IV"]
+
+        if (
+            cls.MIN_LEN <= len(key) < cls.LEN
+            and cls.MIN_LEN <= len(iv) < cls.LEN
+        ):
+            return
+
+        raise ValueError(
+            f"Key and IV must be greater or equal than {cls.MIN_LEN} "
+            f"bytes and less or equal to {cls.LEN} bytes."
+        )
+
+    @classmethod
+    def from_env(cls):
+        key = os.environ["GEN_DEV_BACKUP_KEY"]
+        iv = os.environ["GEN_DEV_BACKUP_IV"]
+        key = key + "0" * (cls.LEN - len(key))
+        iv = iv + "0" * (cls.LEN - len(iv))
+
+        return cls(
+            key=key.encode(),
+            iv=iv.encode(),
+        )
+
+
 def _do_backup(
-    backup_path: str, domains: tp.List[str], compress: bool = False
+    backup_path: str,
+    domains: tp.List[str],
+    compress: bool = False,
+    encryption: EnctryptionCreds | None = None,
 ) -> None:
     os.makedirs(backup_path, exist_ok=True)
 
@@ -75,19 +124,35 @@ def _do_backup(
         return
 
     click.echo(f"Compressing {backup_path}")
+    compressed_backup_path = f"{backup_path}.tar.gz"
     compress_directory = os.path.dirname(backup_path)
     try:
         utils.compress_dir(backup_path, compress_directory)
     except Exception:
         click.secho(f"Compression of {backup_path} failed", fg="red")
-        compressed_backup_path = f"{backup_path}.tar.gz"
-
         if os.path.exists(compressed_backup_path):
             os.remove(compressed_backup_path)
         return
 
     click.secho(f"Compression of {backup_path} done", fg="green")
-    shutil.rmtree(backup_path)
+
+    if not encryption:
+        shutil.rmtree(backup_path)
+        return
+
+    click.echo(f"Encrypting {compressed_backup_path}")
+    try:
+        utils.encrypt_file(
+            compressed_backup_path, encryption.key, encryption.iv
+        )
+    except Exception:
+        click.secho(f"Encryption of {compressed_backup_path} failed", fg="red")
+        return
+    finally:
+        shutil.rmtree(backup_path)
+
+    os.remove(compressed_backup_path)
+    click.secho(f"Encryption of {compressed_backup_path} done", fg="green")
 
 
 def _terminate_backup_process(backup_process: mp.Process) -> None:
@@ -115,6 +180,7 @@ def backup(
     backup_path: str,
     domains: tp.List[str],
     compress: bool = False,
+    encryption: EnctryptionCreds | None = None,
     min_free_disk_space_gb: int = 50,
 ) -> None:
     if not os.path.exists(backup_path):
@@ -134,7 +200,9 @@ def backup(
     # Run the actual backup process in another process.
     # The current process will track the free disk space.
     backup_process = mp.Process(
-        target=_do_backup, args=(backup_path, domains, compress), daemon=True
+        target=_do_backup,
+        args=(backup_path, domains, compress, encryption),
+        daemon=True,
     )
     backup_process.start()
 
