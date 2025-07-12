@@ -216,8 +216,6 @@ def build_cmd(
 )
 @click.option(
     "--no-wait",
-    default=False,
-    type=bool,
     show_default=True,
     is_flag=True,
     help="Cancel waiting for the installation to start",
@@ -402,8 +400,6 @@ def get_project_version_cmd(element_dir: str) -> None:
 )
 @click.option(
     "--oneshot",
-    default=False,
-    type=bool,
     show_default=True,
     is_flag=True,
     help="Do a backup once and exit",
