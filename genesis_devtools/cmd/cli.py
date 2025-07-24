@@ -449,8 +449,8 @@ def get_project_version_cmd(element_dir: str) -> None:
 def bakcup_cmd(
     name: tp.List[str] | None,
     backup_dir: str,
-    period: c.BackupPeriod,
-    offset: c.BackupPeriod | None,
+    period: str,
+    offset: str | None,
     oneshot: bool,
     compress: bool,
     encrypt: bool,
@@ -461,6 +461,10 @@ def bakcup_cmd(
         raise click.UsageError(
             "The encrypt flag can be used only with the compress flag."
         )
+
+    period = c.BackupPeriod(period)
+    if offset:
+        offset = c.BackupPeriod(offset)
 
     # Need to specify encryption key and initialization vector via
     # environment variables.
