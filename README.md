@@ -335,6 +335,10 @@ For decryption, use the `genesis backup-decrypt` command.
 genesis backup-decrypt backup.tar.gz.encrypted
 ```
 
+### Restore backups
+
+Look at the wiki page [restore backups](https://github.com/infraguys/genesis_devtools/wiki/Backups#restore-backup) for information on how to restore backups.
+
 ### Rotation
 
 For the periodic backup, you can set the number of backups to keep(rotation number). The default value is 5. Use the `--rotate` option to set the number of backups to keep:
