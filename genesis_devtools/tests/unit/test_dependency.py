@@ -16,6 +16,8 @@
 import os
 import shutil
 import typing as tp
+import tempfile
+import pytest
 
 from genesis_devtools.builder import dependency as deps
 
@@ -146,3 +148,181 @@ class TestDependency:
         finally:
             shutil.rmtree("/tmp/genesis_core_test_dir")
             shutil.rmtree("/tmp/___deps_dir")
+
+    def _run_local_path_dep_fetch(
+        self,
+        src_dir: str,
+        target_dir: str,
+        files: tp.List[str],
+        exclude: tp.List[str],
+        dep_config_base: tp.Dict[str, tp.Any],
+    ) -> str:
+        """
+        Function helper for exclude tests set
+        Creates temporary file structures, runs LocalPathDependency.fetch.
+        and return path out.
+        """
+        # Creating all folders and files
+
+        for file_path in files:
+            full_path = os.path.join(src_dir, file_path)
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+            with open(full_path, "w") as f:
+                f.write(f"content of {file_path}")
+
+        # Create a target folder
+        os.makedirs(target_dir, exist_ok=True)
+
+        # Add exclude
+        dep_config = dict(dep_config_base)
+        dep_config["exclude"] = exclude
+
+        dep = deps.LocalPathDependency.from_config(dep_config, "/tmp")
+        dep.fetch(target_dir)
+
+        return os.path.join(target_dir, os.path.basename(src_dir))
+
+    def test_exclude_dir_root_lvl(self):
+        # Exclude the build file from root
+        src_dir = "/tmp/genesis_core_test_dir"
+        target_dir = "/tmp/deps_test"
+        base_dep_config = {
+            "dst": "/opt/genesis_core",
+            "path": {"src": src_dir},
+        }
+
+        base_target = self._run_local_path_dep_fetch(
+            src_dir,
+            target_dir,
+            files=[
+                "my_project/build",
+                "build",
+                "README.md",
+            ],
+            exclude=["build"],
+            dep_config_base=base_dep_config,
+        )
+
+        try:
+            assert not os.path.exists(os.path.join(base_target, "build"))
+            assert os.path.exists(
+                os.path.join(base_target, "my_project/build")
+            )
+            assert os.path.exists(os.path.join(base_target, "README.md"))
+
+        finally:
+            shutil.rmtree(src_dir)
+            shutil.rmtree(target_dir)
+
+    def test_exclude_dir_root_lvl_with_file_inside(self):
+        src_dir = "/tmp/genesis_core_test_dir"
+        target_dir = "/tmp/deps_test"
+        base_dep_config = {
+            "dst": "/opt/genesis_core",
+            "path": {"src": src_dir},
+        }
+
+        base_target = self._run_local_path_dep_fetch(
+            src_dir,
+            target_dir,
+            files=[
+                "my_project/build",
+                "build/main.so",
+                "README.md",
+            ],
+            exclude=["build"],
+            dep_config_base=base_dep_config,
+        )
+
+        try:
+            assert not os.path.exists(os.path.join(base_target, "build"))
+            assert not os.path.exists(
+                os.path.join(base_target, "build/main.so")
+            )
+            assert os.path.exists(
+                os.path.join(base_target, "my_project/build")
+            )
+            assert os.path.exists(os.path.join(base_target, "README.md"))
+
+        finally:
+            shutil.rmtree(src_dir)
+            shutil.rmtree(target_dir)
+
+    def test_exclude_nested_folder(self):
+        src_dir = "/tmp/genesis_core_test_dir"
+        target_dir = "/tmp/deps_test"
+        base_dep_config = {
+            "dst": "/opt/genesis_core",
+            "path": {"src": src_dir},
+        }
+
+        base_target = self._run_local_path_dep_fetch(
+            src_dir,
+            target_dir,
+            files=[
+                "my_project/build",
+                "build/main.so",
+                "README.md",
+            ],
+            exclude=["my_project/build"],
+            dep_config_base=base_dep_config,
+        )
+
+        try:
+            assert os.path.exists(os.path.join(base_target, "my_project"))
+            assert not os.path.exists(
+                os.path.join(base_target, "my_project/build")
+            )
+            assert os.path.exists(os.path.join(base_target, "build"))
+            assert os.path.exists(os.path.join(base_target, "build/main.so"))
+            assert os.path.exists(os.path.join(base_target, "README.md"))
+
+        finally:
+            shutil.rmtree(src_dir)
+            shutil.rmtree(target_dir)
+
+        def test_exclude_wildcards(self):
+            src_dir = "/tmp/genesis_core_test_dir"
+            target_dir = "/tmp/deps_test"
+            base_dep_config = {
+                "dst": "/opt/genesis_core",
+                "path": {"src": src_dir},
+            }
+
+            base_target = self._run_local_path_dep_fetch(
+                src_dir,
+                target_dir,
+                files=[
+                    "my_project/build/file1.txt",
+                    "my_project/build/file2.txt",
+                    "my_project/build/file3.txt",
+                    "my_project/build/e1.txt",
+                    "build/main.so",
+                    "README.md",
+                ],
+                exclude=["my_project/build/file*"],
+                dep_config_base=base_dep_config,
+            )
+
+            try:
+                assert not os.path.exists(
+                    os.path.join(base_target, "my_project/build/file1.txt")
+                )
+                assert not os.path.exists(
+                    os.path.join(base_target, "my_project/build/file2.txt")
+                )
+                assert not os.path.exists(
+                    os.path.join(base_target, "my_project/build/file3.txt")
+                )
+                assert os.path.exists(
+                    os.path.join(base_target, "my_project/build/e1.txt")
+                )
+                assert os.path.exists(os.path.join(base_target, "build"))
+                assert os.path.exists(
+                    os.path.join(base_target, "build/main.so")
+                )
+                assert os.path.exists(os.path.join(base_target, "README.md"))
+
+            finally:
+                shutil.rmtree(src_dir)
+                shutil.rmtree(target_dir)
