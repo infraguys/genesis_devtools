@@ -19,6 +19,7 @@ import typing as tp
 import tempfile
 import shutil
 import os
+import gzip
 
 from genesis_devtools.builder import base
 from genesis_devtools.logger import AbstractLogger, DummyLogger
@@ -80,10 +81,23 @@ class SimpleBuilder:
         if not os.path.exists(self._images_output_dir):
             os.makedirs(self._images_output_dir)
 
-        shutil.move(
-            os.path.join(output_dir, f"{img.name}.{img.format}"),
-            self._images_output_dir,
-        )
+        # Determine source path to move. If gzip was requested,
+        # compress RAW -> GZ first.
+        if img.format == "gz":
+            self._logger.info(f"Compressing {img.name} to {img.name}.raw.gz")
+            # Source RAW image produced by Packer
+            raw_src = os.path.join(output_dir, f"{img.name}.raw")
+            gz_tgt = os.path.join(
+                self._images_output_dir, f"{img.name}.raw.gz"
+            )
+            # Compress using standard library (gzip uses zlib) with level 5
+            with open(raw_src, "rb") as f_in, gzip.open(
+                gz_tgt, "wb", compresslevel=5
+            ) as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        else:
+            src_path = os.path.join(output_dir, f"{img.name}.{img.format}")
+            shutil.move(src_path, self._images_output_dir)
 
     def fetch_dependency(self, deps_dir: str) -> None:
         """Fetch common dependencies for elements."""

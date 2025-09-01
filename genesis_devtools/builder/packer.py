@@ -216,7 +216,11 @@ class PackerBuilder(base.DummyImageBuilder):
         override = image.override or {}
 
         # Enrich with the image format
-        override["img_format"] = image.format
+        # If compressed gzip is requested, we build a RAW image first
+        # and compress it afterwards in the SimpleBuilder.
+        override["img_format"] = (
+            "raw" if image.format == "gz" else image.format
+        )
 
         # Write the packer variables
         variables = PackerVariable.variable_file_content(override)
