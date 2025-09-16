@@ -364,6 +364,18 @@ def get_project_version_cmd(element_dir: str) -> None:
     logger.important(version)
 
 
+def _start_validation_type(start: str | None) -> time.struct_time | None:
+    if start is None:
+        return None
+
+    try:
+        return time.strptime(start, "%H:%M:%S")
+    except ValueError:
+        raise click.UsageError(
+            "Invalid '--start' format. Use HH:MM:SS, e.g., 16:00:00"
+        )
+
+
 @main.command("backup", help="Backup the current installation")
 @click.option(
     "-n",
@@ -396,6 +408,16 @@ def get_project_version_cmd(element_dir: str) -> None:
     help=(
         "The time offset of the first backup. If not provided, "
         "the same value as the period will be used"
+    ),
+)
+@click.option(
+    "--start",
+    default=None,
+    type=_start_validation_type,
+    help=(
+        "Time of day to start backup in format HH:MM:SS. "
+        "Cannot be used together with --offset. If provided, "
+        "period must be >= 1d."
     ),
 )
 @click.option(
@@ -451,6 +473,7 @@ def bakcup_cmd(
     backup_dir: str,
     period: str,
     offset: str | None,
+    start: time.struct_time | None,
     oneshot: bool,
     compress: bool,
     encrypt: bool,
@@ -495,17 +518,54 @@ def bakcup_cmd(
         )
         return
 
-    offset = offset or period
-
     # Do periodic backups
     click.secho(f"Current time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
-    ts = time.time() + offset.timeout
-    click.secho(
-        f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
-    )
-    time.sleep(offset.timeout)
 
+    # The `start` option validation
+    if start is None:
+        # Default behavior: use offset (or period if offset not provided)
+        offset = offset or period
+        ts = time.time() + offset.timeout
+        click.secho(
+            "Next backup at: "
+            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
+        )
+        time.sleep(offset.timeout)
+    else:
+        # Validate mutually exclusive options: --start and --offset
+        if offset is not None:
+            raise click.UsageError(
+                "Options '--start' and '--offset' cannot be used together. "
+                "Choose one. By default, --offset is used."
+            )
+
+        # If --start is specified, period must be at least daily
+        if period.timeout < c.BackupPeriod.D1.timeout:
+            raise click.UsageError(
+                "The '--start' option requires the period to be at "
+                "least 1 day (1d)."
+            )
+
+        start_sec = start.tm_hour * 3600 + start.tm_min * 60 + start.tm_sec
+        now_ts = time.time()
+        now = time.localtime(now_ts)
+        now_sec = now.tm_hour * 3600 + now.tm_min * 60 + now.tm_sec
+
+        if now_sec < start_sec:
+            delta = start_sec - now_sec
+        else:
+            delta = 24 * 3600 - now_sec + start_sec
+
+        ts = now_ts + delta
+        click.secho(
+            f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
+        )
+        time.sleep(delta)
+
+    # Next runs happen every 'period' seconds from the aligned start
     next_ts = time.time() + period.timeout
+
+    # Do periodic backups
     while True:
         # Need to refresh the list of domains since it could have changed
         domains = _domains_for_backup(name)
