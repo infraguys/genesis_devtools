@@ -446,6 +446,11 @@ def destroy_net(name: str) -> None:
         pass
 
 
+def domain_xml(name: str) -> str:
+    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    return out.decode().strip()
+
+
 def backup_domain(name: str, backup_path: str) -> None:
     disks = get_domain_disks(name)
 
@@ -487,6 +492,33 @@ def backup_domain(name: str, backup_path: str) -> None:
             shell=True,
             check=True,
         )
+
+
+def create_snapshot(domain: str, snap_name: str = "snapshot") -> None:
+    # Create a snapshot
+    subprocess.check_output(
+        f"sudo virsh snapshot-create-as {domain} {snap_name} "
+        "--disk-only --quiesce --atomic 1>/dev/null",
+        shell=True,
+    )
+
+
+def delete_snapshot(domain: str, snap_name: str = "snapshot") -> None:
+    subprocess.check_output(
+        f"sudo virsh snapshot-delete {domain} {snap_name} "
+        "--metadata 1>/dev/null",
+        shell=True,
+    )
+
+
+def merge_disk_snapshot(
+    domain: str, device: str, disk_path: str, snapshot_path: str
+) -> None:
+    subprocess.check_output(
+        f"sudo virsh blockcommit --domain {domain} {device} --top "
+        f"{snapshot_path} --base {disk_path} --wait --pivot 1>/dev/null",
+        shell=True,
+    )
 
 
 def resume_domain(name: str) -> None:

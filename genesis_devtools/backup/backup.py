@@ -27,9 +27,10 @@ import prettytable
 
 from genesis_devtools import utils
 from genesis_devtools.infra.libvirt import libvirt
+from genesis_devtools import constants as c
 
 
-class EnctryptionCreds(tp.NamedTuple):
+class EncryptionCreds(tp.NamedTuple):
     LEN = 16
     MIN_LEN = 6
 
@@ -52,8 +53,8 @@ class EnctryptionCreds(tp.NamedTuple):
         iv = os.environ["GEN_DEV_BACKUP_IV"]
 
         if (
-            cls.MIN_LEN <= len(key) < cls.LEN
-            and cls.MIN_LEN <= len(iv) < cls.LEN
+            cls.MIN_LEN <= len(key) <= cls.LEN
+            and cls.MIN_LEN <= len(iv) <= cls.LEN
         ):
             return
 
@@ -79,7 +80,7 @@ def _do_backup(
     backup_path: str,
     domains: tp.List[str],
     compress: bool = False,
-    encryption: EnctryptionCreds | None = None,
+    encryption: EncryptionCreds | None = None,
 ) -> None:
     os.makedirs(backup_path, exist_ok=True)
 
@@ -180,7 +181,7 @@ def backup(
     backup_path: str,
     domains: tp.List[str],
     compress: bool = False,
-    encryption: EnctryptionCreds | None = None,
+    encryption: EncryptionCreds | None = None,
     min_free_disk_space_gb: int = 50,
 ) -> None:
     if not os.path.exists(backup_path):
@@ -189,7 +190,7 @@ def backup(
     # TODO(akremenetsky): Do check if the potential backup size is
     # less than the free disk space
 
-    free_gb = shutil.disk_usage(backup_path).free >> 30
+    free_gb = shutil.disk_usage(backup_path).free >> c.GB_SHIFT
     if free_gb < min_free_disk_space_gb:
         click.secho(
             f"Unable to start backup due to low disk space {free_gb} GB",
@@ -207,14 +208,14 @@ def backup(
     backup_process.start()
 
     # Track the minimum free disk space
-    # The this threshold is reached, the backup process is stopped
+    # If this threshold is reached, the backup process is stopped
     while True:
         backup_process.join(3)
         if backup_process.exitcode is not None:
             break
 
         # Track disk space
-        free_gb = shutil.disk_usage(backup_path).free >> 30
+        free_gb = shutil.disk_usage(backup_path).free >> c.GB_SHIFT
         if free_gb < min_free_disk_space_gb:
             _terminate_backup_process(backup_process)
 

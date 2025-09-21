@@ -28,7 +28,9 @@ import prettytable
 
 import genesis_devtools.constants as c
 from genesis_devtools import utils
-from genesis_devtools import backup
+from genesis_devtools.backup import base as backup_base
+from genesis_devtools.backup import local as backup_local
+from genesis_devtools.backup import s3 as backup_s3
 from genesis_devtools.logger import ClickLogger
 from genesis_devtools.builder.builder import SimpleBuilder
 from genesis_devtools.builder.packer import PackerBuilder
@@ -378,6 +380,12 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
 
 @main.command("backup", help="Backup the current installation")
 @click.option(
+    "--config",
+    default=None,
+    type=click.Path(),
+    help="Path to the backuper configuration file",
+)
+@click.option(
     "-n",
     "--name",
     default=None,
@@ -468,7 +476,8 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
         "`0` means no rotation."
     ),
 )
-def bakcup_cmd(
+def backup_cmd(
+    config: str | None,
     name: tp.List[str] | None,
     backup_dir: str,
     period: str,
@@ -480,42 +489,43 @@ def bakcup_cmd(
     min_free_space: int,
     rotate: int,
 ) -> None:
-    if not compress and encrypt:
-        raise click.UsageError(
-            "The encrypt flag can be used only with the compress flag."
-        )
-
     period = c.BackupPeriod(period)
     if offset:
         offset = c.BackupPeriod(offset)
+
+    # Default local backuper if no config is provided
+    if config is None:
+        backuper = backup_local.LocalQcowBackuper(
+            backup_dir=backup_dir,
+            min_free_disk_space_gb=min_free_space,
+        )
+    else:
+        backuper = utils.load_driver(config)
 
     # Need to specify encryption key and initialization vector via
     # environment variables.
     if encrypt:
         try:
-            backup.EnctryptionCreds.validate_env()
+            backup_base.EncryptionCreds.validate_env()
         except ValueError:
             raise click.UsageError(
                 (
                     "Define environment variables GEN_DEV_BACKUP_KEY "
                     "and GEN_DEV_BACKUP_IV. "
                     "Key and IV must be greater or equal than "
-                    f"{backup.EnctryptionCreds.MIN_LEN} bytes and less or "
-                    f"equal to {backup.EnctryptionCreds.LEN} bytes."
+                    f"{backup_base.EncryptionCreds.MIN_LEN} bytes and less "
+                    f"or equal to {backup_base.EncryptionCreds.LEN} bytes."
                 )
             )
 
-        encryption = backup.EnctryptionCreds.from_env()
+        encryption = backup_base.EncryptionCreds.from_env()
     else:
         encryption = None
 
     # Do a single backup and exit
     if oneshot:
         domains = _domains_for_backup(name, raise_on_domain_absence=True)
-        backup_path = utils.backup_path(backup_dir)
-        backup.backup(
-            backup_path, domains, compress, encryption, min_free_space
-        )
+        backuper.backup(domains, compress, encryption)
         return
 
     # Do periodic backups
@@ -571,17 +581,14 @@ def bakcup_cmd(
         domains = _domains_for_backup(name)
 
         click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
-        backup_path = utils.backup_path(backup_dir)
-
-        backup.backup(
-            backup_path, domains, compress, encryption, min_free_space
-        )
+        backuper.backup(domains, compress, encryption)
         click.secho(
-            f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(next_ts))}"
+            "Next backup at: "
+            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(next_ts))}"
         )
 
         # Rotate old backups
-        backup.rotate(backup_dir, rotate)
+        backuper.rotate(rotate)
 
         timeout = next_ts - time.time()
         timeout = 0 if timeout < 0 else timeout
@@ -597,19 +604,30 @@ def bakcup_decrypt_cmd(path: str) -> None:
     # environment variables.
 
     try:
-        backup.EnctryptionCreds.validate_env()
+        backup_base.EncryptionCreds.validate_env()
     except ValueError:
         raise click.UsageError(
             (
                 "Define environment variables GEN_DEV_BACKUP_KEY "
                 "and GEN_DEV_BACKUP_IV. "
                 "Key and IV must be greater or equal than "
-                f"{backup.EnctryptionCreds.MIN_LEN} bytes and less or "
-                f"equal to {backup.EnctryptionCreds.LEN} bytes."
+                f"{backup_base.EncryptionCreds.MIN_LEN} bytes and less or "
+                f"equal to {backup_base.EncryptionCreds.LEN} bytes."
             )
         )
 
-    encryption = backup.EnctryptionCreds.from_env()
+    encryption = backup_base.EncryptionCreds.from_env()
+
+    if os.path.isdir(path):
+        for file in os.listdir(path):
+            _path = os.path.join(path, file)
+            utils.decrypt_file(
+                _path,
+                encryption.key,
+                encryption.iv,
+            )
+            click.secho(f"The {_path} file has been decrypted.", fg="green")
+        return
 
     utils.decrypt_file(
         path,

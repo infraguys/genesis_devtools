@@ -1,0 +1,7 @@
+driver:
+    S3QcowBackuper:
+        endpoint_url: ""
+        access_key: ""
+        secret_key: ""
+        bucket_name: ""
+        host: "localhost"
