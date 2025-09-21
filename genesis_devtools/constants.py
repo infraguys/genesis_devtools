@@ -23,6 +23,8 @@ DEF_GEN_WORK_DIR_NAME = "genesis"
 DEF_GEN_OUTPUT_DIR_NAME = "output"
 RC_BRANCHES = ("master", "main")
 ENCRYPTED_EXTENSION = ".encrypted"
+EP_BACKUP_DRIVERS = "genesis_devtools.backup.drivers"
+GB_SHIFT = 30
 
 # ENV vars
 ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"

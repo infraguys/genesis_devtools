@@ -1,0 +1,4 @@
+driver:
+    LocalQcowBackuper:
+        backup_dir: ~/.genesis/backups
+        min_free_disk_space_gb: 10

@@ -15,15 +15,16 @@
 #    under the License.
 from __future__ import annotations
 
+import io
 import os
 import time
 import shutil
 import itertools
 import typing as tp
 from importlib.metadata import entry_points
-import yaml
 
 import git
+import yaml
 from cryptography.hazmat.primitives import ciphers
 from cryptography.hazmat.primitives.ciphers import modes as cipher_models
 from cryptography.hazmat.primitives.ciphers import algorithms
@@ -39,6 +40,24 @@ def load_from_entry_point(group: str, name: str) -> tp.Any:
             return ep.load()
 
     raise RuntimeError(f"No class '{name}' found in entry points {group}")
+
+
+def load_driver(config_file: str, group: str = c.EP_BACKUP_DRIVERS) -> tp.Any:
+    """Load driver from configuration file."""
+    if not os.path.exists(config_file):
+        raise FileNotFoundError(f"Configuration file {config_file} not found")
+
+    with open(config_file, "r") as f:
+        config = yaml.safe_load(f)
+
+    driver = config.get("driver")
+    if driver is None:
+        raise ValueError("Driver not specified in the configuration file")
+    driver_name = tuple(driver.keys())[0]
+    driver_class = load_from_entry_point(group, driver_name)
+
+    params = driver.get(driver_name, {})
+    return driver_class(**params)
 
 
 def get_genesis_config(
@@ -324,3 +343,66 @@ def decrypt_file(
         os.replace(tmp_path, plain_path)
     else:
         shutil.move(tmp_path, plain_path)
+
+
+class ReaderEncryptorIO(io.BytesIO):
+    def __init__(
+        self,
+        file: tp.IO[bytes],
+        key: bytes,
+        iv: bytes,
+        chunk_size_kb: int = 128,
+    ) -> None:
+        # Ensure that the key and iv are the correct lengths
+        # for AES (16 bytes for AES-128)
+        if len(key) != 16 or len(iv) != 16:
+            raise ValueError("Key and IV must be 16 bytes long")
+
+        self._file = file
+        self._cipher = ciphers.Cipher(
+            algorithms.AES(key),
+            cipher_models.CFB(iv),
+            backend=crypto_back.default_backend(),
+        )
+
+        self._encryptor = self._cipher.encryptor()
+        self._chunk_size = chunk_size_kb << 10
+
+    def tell(self) -> int:
+        return self._file.tell()
+
+    def read(self, size: int = -1) -> bytes:
+        if size == 0:
+            return b""
+
+        if size < 0:
+            return (
+                self._encryptor.update(self._file.read())
+                + self._encryptor.finalize()
+            )
+
+        data = self._file.read(size)
+        if len(data) < size:
+            return self._encryptor.update(data) + self._encryptor.finalize()
+
+        return self._encryptor.update(data)
+
+    def seek(self, offset: int, whence: int = 0) -> int:
+        if offset == 0 and whence == 0:
+            self._encryptor = self._cipher.encryptor()
+
+        return self._file.seek(offset, whence)
+
+    def close(self) -> None:
+        self._file.close()
+
+    def __enter__(self) -> tp.IO[bytes]:
+        return self
+
+    def __exit__(
+        self,
+        exc_type: tp.Type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: tp.Any,
+    ) -> None:
+        self.close()
