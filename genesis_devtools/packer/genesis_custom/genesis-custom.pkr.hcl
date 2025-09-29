@@ -112,6 +112,9 @@ sudo cloud-init clean --log --seed
 # Sync FS
 sudo sync
 
+# Minify orphan space
+sudo fstrim -a
+
 # shutdown machine
 sudo poweroff
 EOF
