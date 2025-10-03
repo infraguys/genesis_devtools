@@ -52,6 +52,7 @@ source "qemu" "genesis-custom" {
   iso_url                   = var.base_image_url
   iso_checksum              = var.base_image_checksum
   accelerator               = "kvm"
+  cpu_model                 = "host"
   boot_wait                 = "5s"
   boot_command              = ["<enter>"]
   cpus                      = var.cpus
