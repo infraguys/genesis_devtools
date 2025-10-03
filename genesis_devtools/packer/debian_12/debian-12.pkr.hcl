@@ -42,6 +42,7 @@ source "qemu" "debian-12" {
   iso_url                   = "https://cdimage.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
   iso_checksum              = "file:https://cdimage.debian.org/images/cloud/bookworm/latest/SHA512SUMS"
   accelerator               = "kvm"
+  cpu_model                 = "host"
   boot_wait                 = "5s"
   boot_command              = ["<enter>"]
   cpus                      = var.cpus

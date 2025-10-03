@@ -42,6 +42,7 @@ source "qemu" "ubuntu-24" {
   iso_url                   = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
   iso_checksum              = "file:https://cloud-images.ubuntu.com/releases/24.04/release/SHA256SUMS"
   accelerator               = "kvm"
+  cpu_model                 = "host"
   boot_wait                 = "5s"
   boot_command              = ["<enter>"]
   cpus                      = var.cpus
