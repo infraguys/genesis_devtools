@@ -222,6 +222,12 @@ def build_cmd(
     is_flag=True,
     help="Cancel waiting for the installation to start",
 )
+@click.option(
+    "--use-image-inplace",
+    show_default=True,
+    is_flag=True,
+    help="Don't copy image, use specified file as is (warning - destructive!)",
+)
 def bootstrap_cmd(
     image_path: tp.Optional[str],
     cores: int,
@@ -233,6 +239,7 @@ def bootstrap_cmd(
     bridge: str | None,
     force: bool,
     no_wait: bool,
+    use_image_inplace: bool,
 ) -> None:
     if image_path is None or not os.path.exists(image_path):
         raise click.UsageError("No image path specified or not found")
@@ -255,6 +262,7 @@ def bootstrap_cmd(
             force=force,
             no_wait=no_wait,
             cidr=cidr,
+            use_image_inplace=use_image_inplace,
         )
 
     if launch_mode == "core":
@@ -270,6 +278,7 @@ def bootstrap_cmd(
             stand_spec=stand_spec,
             bridge=bridge,
             force=force,
+            use_image_inplace=use_image_inplace,
         )
 
     raise click.UsageError("Unknown launch mode")
@@ -661,6 +670,7 @@ def _bootstrap_element(
     cidr: ipaddress.IPv4Network,
     force: bool,
     no_wait: bool,
+    use_image_inplace: bool,
 ) -> None:
     logger = ClickLogger()
 
@@ -678,6 +688,7 @@ def _bootstrap_element(
     dev_stand = stand_models.Stand.single_bootstrap_stand(
         name=name,
         image=image_path,
+        use_image_inplace=use_image_inplace,
         cores=cores,
         memory=memory,
         network=default_stand_network,
@@ -730,6 +741,7 @@ def _bootstrap_core(
     stand_spec: tp.Dict[str, tp.Any] | None,
     bridge: str | None,
     force: bool,
+    use_image_inplace: bool,
 ) -> None:
     logger = ClickLogger()
     logger.info("Starting genesis bootstrap in 'core' mode")
@@ -748,6 +760,7 @@ def _bootstrap_core(
         dev_stand = stand_models.Stand.single_bootstrap_stand(
             name=name,
             image=image_path,
+            use_image_inplace=use_image_inplace,
             cores=cores,
             memory=memory,
             network=default_stand_network,
@@ -763,6 +776,7 @@ def _bootstrap_core(
         for b in dev_stand.bootstraps:
             if b.image is None:
                 b.image = image_path
+                b.use_image_inplace = use_image_inplace
 
     if not dev_stand.is_valid():
         logger.error(f"Invalid stand {dev_stand} from spec {stand_spec}")

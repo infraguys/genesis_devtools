@@ -162,6 +162,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             libvirt.create_domain(
                 name=bootstrap.name,
                 image=bootstrap.image,
+                use_image_inplace=bootstrap.use_image_inplace,
                 cores=bootstrap.cores,
                 memory=bootstrap.memory,
                 network=stand.network.name,
@@ -184,6 +185,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             libvirt.create_domain(
                 name=node.name,
                 image=node.image,
+                use_image_inplace=node.use_image_inplace,
                 cores=node.cores,
                 memory=node.memory,
                 network=stand.network.name,

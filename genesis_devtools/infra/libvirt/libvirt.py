@@ -253,6 +253,7 @@ def create_domain(
     net_type: str = "network",
     pool: str = c.LIBVIRT_DEF_POOL_PATH,
     image: str | None = None,
+    use_image_inplace: bool = False,
     disks: tp.Collection[int] = (),
     meta_tags: tp.Collection[str] = (),
     boot: vc.BootMode = "hd",
@@ -263,19 +264,24 @@ def create_domain(
 
     # Use image if it is provided or create empty disk if it is not
     if image is not None:
+        tgt_image_path = os.path.abspath(image)
         image_name = os.path.basename(image)
-        pool_image_path = os.path.join(pool, image_name)
         image_format = "qcow2" if image_name.endswith("qcow2") else "raw"
+        if not use_image_inplace:
+            tgt_image_path = os.path.join(pool, image_name)
+            # Copy the image to the pool and delete the old one
+            subprocess.run(
+                ["sudo", "rm", "-f", tgt_image_path],
+                check=True,
+            )
+            subprocess.run(
+                ["sudo", "cp", image, tgt_image_path],
+                check=True,
+            )
         disks_xml = disk_template.format(
             device="vda",
-            image=pool_image_path,
+            image=tgt_image_path,
             image_format=image_format,
-        )
-        # Copy the image to the pool and delete the old one
-        subprocess.run(
-            f"sudo rm -f {pool_image_path}; sudo cp {image} {pool_image_path}",
-            shell=True,
-            check=True,
         )
     elif disks:
         for i, disk in enumerate(disks):
