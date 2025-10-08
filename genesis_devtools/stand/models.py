@@ -55,6 +55,7 @@ class Node:
     cores: int = 1
     disks: tp.List[int] = dataclasses.field(default_factory=lambda: [10])
     image: str | None = None
+    use_image_inplace: bool = False
 
     @classmethod
     def from_spec(cls, spec: tp.Dict[str, tp.Any]) -> Node:
@@ -97,6 +98,7 @@ class Stand:
     def single_bootstrap_stand(
         cls,
         image: str,
+        use_image_inplace: bool,
         network: Network,
         cores: int = 1,
         memory: int = 1024,
@@ -110,6 +112,7 @@ class Stand:
                 Bootstrap(
                     name=bootstrap_name,
                     image=image,
+                    use_image_inplace=use_image_inplace,
                     cores=cores,
                     memory=memory,
                 )
