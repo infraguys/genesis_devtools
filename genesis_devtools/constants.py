@@ -24,6 +24,7 @@ DEF_GEN_OUTPUT_DIR_NAME = "output"
 RC_BRANCHES = ("master", "main")
 ENCRYPTED_EXTENSION = ".encrypted"
 EP_BACKUP_DRIVERS = "genesis_devtools.backup.drivers"
+EP_REPO_DRIVERS = "genesis_devtools.repo.drivers"
 GB_SHIFT = 30
 
 # ENV vars
