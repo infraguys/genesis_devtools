@@ -30,9 +30,11 @@ import genesis_devtools.constants as c
 from genesis_devtools import utils
 from genesis_devtools.backup import base as backup_base
 from genesis_devtools.backup import local as backup_local
-from genesis_devtools.backup import s3 as backup_s3
 from genesis_devtools.logger import ClickLogger
-from genesis_devtools.builder.builder import SimpleBuilder
+from genesis_devtools.repo import base as base_repo
+from genesis_devtools.repo import utils as repo_utils
+from genesis_devtools.builder import base as base_builder
+from genesis_devtools.builder import builder as simple_builder
 from genesis_devtools.builder.packer import PackerBuilder
 from genesis_devtools.infra.libvirt import libvirt
 from genesis_devtools.stand import models as stand_models
@@ -68,7 +70,7 @@ def main() -> None:
 )
 @click.option(
     "--output-dir",
-    default=None,
+    default=c.DEF_GEN_OUTPUT_DIR_NAME,
     help="Directory where output artifacts will be stored",
 )
 @click.option(
@@ -92,21 +94,27 @@ def main() -> None:
     is_flag=True,
     help="Rebuild if the output already exists",
 )
+@click.option(
+    "--inventory",
+    show_default=True,
+    is_flag=True,
+    help="Build using the inventory format",
+)
 @click.argument("project_dir", type=click.Path())
 def build_cmd(
     genesis_cfg_file: str,
-    deps_dir: tp.Optional[str],
-    build_dir: tp.Optional[str],
-    output_dir: tp.Optional[str],
-    developer_key_path: tp.Optional[str],
+    deps_dir: str | None,
+    build_dir: str | None,
+    output_dir: str | None,
+    developer_key_path: str | None,
     version_suffix: c.VersionSuffixType,
     force: bool,
     project_dir: str,
+    inventory: bool,
 ) -> None:
     if not project_dir:
         raise click.UsageError("No project directories specified")
 
-    output_dir = output_dir or c.DEF_GEN_OUTPUT_DIR_NAME
     if os.path.exists(output_dir) and not force:
         click.secho(
             f"The '{output_dir}' directory already exists. Use '--force' "
@@ -148,12 +156,65 @@ def build_cmd(
     )
 
     for _, build in builds.items():
-        builder = SimpleBuilder.from_config(
+        builder = simple_builder.SimpleBuilder.from_config(
             work_dir, build, packer_image_builder, logger, output_dir
         )
         with tempfile.TemporaryDirectory() as temp_dir:
             builder.fetch_dependency(deps_dir or temp_dir)
-            builder.build(build_dir, developer_keys, build_suffix)
+            builder.build(build_dir, developer_keys, build_suffix, inventory)
+
+
+@main.command("push", help="Push the element to the repository")
+@click.option(
+    "-c",
+    "--genesis-cfg-file",
+    default=c.DEF_GEN_CFG_FILE_NAME,
+    help="Name of the project configuration file",
+)
+@click.option(
+    "-t",
+    "--target",
+    default=None,
+    help="Target repository to push to",
+)
+@click.option(
+    "-e",
+    "--element-dir",
+    default=c.DEF_GEN_OUTPUT_DIR_NAME,
+    help="Directory where element artifacts are stored",
+    type=click.Path(),
+)
+@click.option(
+    "-f",
+    "--force",
+    show_default=True,
+    is_flag=True,
+    help="Force push even if the element already exists",
+)
+@click.argument("project_dir", type=click.Path(), default=".")
+def push_cmd(
+    genesis_cfg_file: str,
+    target: str | None,
+    force: bool,
+    element_dir: str,
+    project_dir: str,
+) -> None:
+    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
+
+    # Push the element
+    element = base_builder.ElementInventory.load(element_dir)
+    try:
+        driver.push(element)
+    except base_repo.ElementAlreadyExistsError:
+        if force:
+            driver.remove(element)
+            driver.push(element)
+            return
+
+        click.secho(
+            f"Element {element.name} version {element.version} already exists.",
+            fg="red",
+        )
 
 
 @main.command("bootstrap", help="Bootstrap genesis locally")
@@ -282,6 +343,140 @@ def bootstrap_cmd(
         )
 
     raise click.UsageError("Unknown launch mode")
+
+
+@main.group("repo", help="Manager Genesis repository")
+def repository_group():
+    pass
+
+
+@repository_group.command("init", help="Initialize the repository")
+@click.option(
+    "-c",
+    "--genesis-cfg-file",
+    default=c.DEF_GEN_CFG_FILE_NAME,
+    help="Name of the project configuration file",
+)
+@click.option(
+    "-t",
+    "--target",
+    default=None,
+    help="Target repository to push to",
+)
+@click.option(
+    "-f",
+    "--force",
+    show_default=True,
+    is_flag=True,
+    help="Force init even if the repo already exists",
+)
+@click.argument("project_dir", type=click.Path(), default=".")
+def repo_init_cmd(
+    genesis_cfg_file: str,
+    target: str | None,
+    force: bool,
+    project_dir: str,
+) -> None:
+    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
+
+    try:
+        driver.init_repo()
+    except base_repo.RepoAlreadyExistsError:
+        if force:
+            driver.delete_repo()
+            driver.init_repo()
+            return
+
+        click.secho(
+            f"Repository already exists.",
+            fg="red",
+        )
+
+
+@repository_group.command("delete", help="Delete the repository")
+@click.option(
+    "-c",
+    "--genesis-cfg-file",
+    default=c.DEF_GEN_CFG_FILE_NAME,
+    help="Name of the project configuration file",
+)
+@click.option(
+    "-t",
+    "--target",
+    default=None,
+    help="Target repository to push to",
+)
+@click.argument("project_dir", type=click.Path(), default=".")
+def repo_delete_cmd(
+    genesis_cfg_file: str,
+    target: str | None,
+    project_dir: str,
+) -> None:
+    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
+    driver.delete_repo()
+
+
+@repository_group.command("list", help="List the repository")
+@click.option(
+    "-c",
+    "--genesis-cfg-file",
+    default=c.DEF_GEN_CFG_FILE_NAME,
+    help="Name of the project configuration file",
+)
+@click.option(
+    "-t",
+    "--target",
+    default=None,
+    help="Target repository to push to",
+)
+@click.option(
+    "-e",
+    "--element",
+    default=None,
+    help="Element to list",
+)
+@click.argument("project_dir", type=click.Path(), default=".")
+def repo_list_cmd(
+    genesis_cfg_file: str,
+    target: str | None,
+    element: str | None,
+    project_dir: str,
+) -> None:
+    table = prettytable.PrettyTable()
+
+    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
+    try:
+        elements = driver.list()
+    except base_repo.RepoNotFoundError:
+        click.secho("Repository not found", fg="red")
+        return
+
+    if element is not None:
+        if element not in elements:
+            raise click.UsageError(f"Element {element} not found")
+
+        table.field_names = [
+            "version",
+        ]
+
+        for version in sorted(elements[element]):
+            table.add_row([version])
+
+        click.echo(table)
+        return
+
+    table.field_names = [
+        "name",
+        "last version",
+        "versions",
+    ]
+
+    for element in elements:
+        table.add_row(
+            [element, sorted(elements[element])[-1], len(elements[element])]
+        )
+
+    click.echo(table)
 
 
 @main.command("ssh", help="Connect to genesis stand/element")

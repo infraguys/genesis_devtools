@@ -17,6 +17,8 @@ from __future__ import annotations
 
 import abc
 import os
+import json
+import pathlib
 import typing as tp
 import dataclasses
 
@@ -54,8 +56,7 @@ class Element(tp.NamedTuple):
 
     def __str__(self):
         if self.manifest:
-            # TODO: Add implementation where manifest is used.
-            return "<Element manifest=...>"
+            return f"<Element manifest={self.manifest}>"
 
         if self.images and len(self.images) > 0:
             name = ", ".join([f"{i.profile}" for i in self.images])
@@ -71,6 +72,55 @@ class Element(tp.NamedTuple):
         image_configs = element_config.pop("images", [])
         images = [Image.from_config(img, work_dir) for img in image_configs]
         return cls(images=images, **element_config)
+
+
+class ElementInventory(tp.NamedTuple):
+    """Element inventory."""
+
+    file_name = pathlib.Path("inventory.json")
+
+    name: str
+    version: str
+    images: tp.Collection[pathlib.Path] = tuple()
+    manifests: tp.Collection[pathlib.Path] = tuple()
+    configs: tp.Collection[pathlib.Path] = tuple()
+    templates: tp.Collection[pathlib.Path] = tuple()
+    artifacts: tp.Collection[pathlib.Path] = tuple()
+
+    @classmethod
+    def categories(cls) -> tuple[str]:
+        return ("images", "manifests", "configs", "templates", "artifacts")
+
+    def to_dict(self) -> dict[str, tp.Any]:
+        data = {
+            "name": self.name,
+            "version": self.version,
+        }
+        for category in self.categories():
+            data[category] = [str(p) for p in getattr(self, category)]
+        return data
+
+    def save(self, path: pathlib.Path) -> None:
+        """Save the element inventory to a path."""
+        with open(path / self.file_name, "w") as f:
+            json.dump(self.to_dict(), f, indent=2, sort_keys=True)
+
+    @classmethod
+    def load(cls, path: pathlib.Path) -> "ElementInventory":
+        """Create an element inventory from a path."""
+        with open(path / cls.file_name, "r") as f:
+            inventory = json.load(f)
+
+        kwargs = {
+            "name": inventory["name"],
+            "version": inventory["version"],
+        }
+        for category in cls.categories():
+            kwargs[category] = [
+                pathlib.Path(p) for p in inventory.get(category, [])
+            ]
+
+        return cls(**kwargs)
 
 
 class AbstractDependency(abc.ABC):

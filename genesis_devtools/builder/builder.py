@@ -21,6 +21,8 @@ import shutil
 import os
 import gzip
 
+import yaml
+
 from genesis_devtools.builder import base
 from genesis_devtools.logger import AbstractLogger, DummyLogger
 from genesis_devtools import constants as c
@@ -39,7 +41,7 @@ class SimpleBuilder:
         elements: tp.List[base.Element],
         image_builder: base.AbstractImageBuilder,
         logger: tp.Optional[AbstractLogger] = None,
-        images_output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
+        elements_output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> None:
         super().__init__()
         self._deps = deps
@@ -47,7 +49,10 @@ class SimpleBuilder:
         self._image_builder = image_builder
         self._work_dir = work_dir
         self._logger = logger or DummyLogger()
-        self._images_output_dir = images_output_dir
+        self._elements_output_dir = elements_output_dir
+
+        if not os.path.exists(self._elements_output_dir):
+            os.makedirs(self._elements_output_dir)
 
     def _build_image(
         self,
@@ -55,7 +60,17 @@ class SimpleBuilder:
         build_dir: str | None,
         output_dir: str,
         developer_keys: str,
-    ) -> None:
+        inventory_mode: bool = False,
+    ) -> str:
+
+        # Determine images output directory
+        if inventory_mode:
+            images_output_dir = os.path.join(
+                self._elements_output_dir, "images"
+            )
+        else:
+            images_output_dir = self._elements_output_dir
+
         # The build_dir is used only for debugging purposes to observe
         # the content of the image. In production, the image is built
         # in a temporary directory.
@@ -78,8 +93,8 @@ class SimpleBuilder:
                 )
 
         # Move the image to the final location
-        if not os.path.exists(self._images_output_dir):
-            os.makedirs(self._images_output_dir)
+        if not os.path.exists(images_output_dir):
+            os.makedirs(images_output_dir)
 
         # Determine source path to move. If gzip was requested,
         # compress RAW -> GZ first.
@@ -87,17 +102,19 @@ class SimpleBuilder:
             self._logger.info(f"Compressing {img.name} to {img.name}.raw.gz")
             # Source RAW image produced by Packer
             raw_src = os.path.join(output_dir, f"{img.name}.raw")
-            gz_tgt = os.path.join(
-                self._images_output_dir, f"{img.name}.raw.gz"
-            )
+            gz_tgt = os.path.join(images_output_dir, f"{img.name}.raw.gz")
             # Compress using standard library (gzip uses zlib) with level 5
             with open(raw_src, "rb") as f_in, gzip.open(
                 gz_tgt, "wb", compresslevel=5
             ) as f_out:
                 shutil.copyfileobj(f_in, f_out)
+            return os.path.abspath(gz_tgt)
         else:
             src_path = os.path.join(output_dir, f"{img.name}.{img.format}")
-            shutil.move(src_path, self._images_output_dir)
+            shutil.move(src_path, images_output_dir)
+            return os.path.abspath(
+                os.path.join(images_output_dir, f"{img.name}.{img.format}")
+            )
 
     def fetch_dependency(self, deps_dir: str) -> None:
         """Fetch common dependencies for elements."""
@@ -106,28 +123,79 @@ class SimpleBuilder:
             self._logger.info(f"Fetching dependency: {dep}")
             dep.fetch(deps_dir)
 
+    def build_element(
+        self,
+        element: base.Element,
+        build_dir: str | None = None,
+        developer_keys: str | None = None,
+        build_suffix: str = "",
+        inventory_mode: bool = False,
+    ) -> None:
+        """Build an element."""
+        self._logger.info(f"Building element: {element}")
+        image_paths = []
+
+        # Build images
+        for img in element.images:
+            if build_suffix:
+                img.name = f"{img.name}.{build_suffix}"
+            tmp_img_output = f"_tmp_{img.name}-output"
+
+            try:
+                _path = self._build_image(
+                    img,
+                    build_dir,
+                    tmp_img_output,
+                    developer_keys,
+                    inventory_mode,
+                )
+                image_paths.append(_path)
+            finally:
+                if os.path.exists(tmp_img_output):
+                    shutil.rmtree(tmp_img_output)
+
+        # Save files in the inventory format
+        if inventory_mode:
+            if not element.manifest:
+                raise ValueError("Element must have a manifest")
+
+            with open(
+                os.path.join(self._work_dir, element.manifest), "r"
+            ) as f:
+                manifest = yaml.safe_load(f)
+
+            name = manifest["name"]
+            version = manifest["version"]
+
+            # TODO(akremenetsky): This part should be refactored when we
+            # support building of multiple elements.
+            inventory_path = self._elements_output_dir
+
+            inventory = base.ElementInventory(
+                name=name,
+                version=version,
+                images=image_paths,
+                manifests=[
+                    os.path.abspath(
+                        os.path.join(self._work_dir, element.manifest)
+                    )
+                ],
+            )
+            inventory.save(inventory_path)
+
     def build(
         self,
         build_dir: str | None = None,
         developer_keys: str | None = None,
         build_suffix: str = "",
+        inventory_mode: bool = False,
     ) -> None:
         """Build all elements."""
         self._logger.important("Building elements")
         for e in self._elements:
-            self._logger.info(f"Building element: {e}")
-            for img in e.images:
-                if build_suffix:
-                    img.name = f"{img.name}.{build_suffix}"
-                tmp_img_output = f"_tmp_{img.name}-output"
-
-                try:
-                    self._build_image(
-                        img, build_dir, tmp_img_output, developer_keys
-                    )
-                finally:
-                    if os.path.exists(tmp_img_output):
-                        shutil.rmtree(tmp_img_output)
+            self.build_element(
+                e, build_dir, developer_keys, build_suffix, inventory_mode
+            )
 
     @classmethod
     def from_config(
@@ -136,7 +204,7 @@ class SimpleBuilder:
         build_config: tp.Dict[str, tp.Any],
         image_builder: base.AbstractImageBuilder,
         logger: tp.Optional[AbstractLogger] = None,
-        images_output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
+        elements_output_dir: str = c.DEF_GEN_OUTPUT_DIR_NAME,
     ) -> "SimpleBuilder":
         """Create a builder from configuration."""
         # Prepare dependencies entries but do not fetch them
@@ -161,5 +229,10 @@ class SimpleBuilder:
             raise ValueError("No elements found in configuration")
 
         return cls(
-            work_dir, deps, elements, image_builder, logger, images_output_dir
+            work_dir,
+            deps,
+            elements,
+            image_builder,
+            logger,
+            elements_output_dir,
         )
