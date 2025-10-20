@@ -20,6 +20,7 @@ import tempfile
 import shutil
 import os
 import gzip
+import jinja2
 
 import yaml
 
@@ -137,7 +138,7 @@ class SimpleBuilder:
 
         # Build images
         for img in element.images:
-            if build_suffix:
+            if build_suffix and not inventory_mode:
                 img.name = f"{img.name}.{build_suffix}"
             tmp_img_output = f"_tmp_{img.name}-output"
 
@@ -165,21 +166,51 @@ class SimpleBuilder:
                 manifest = yaml.safe_load(f)
 
             name = manifest["name"]
-            version = manifest["version"]
+            version = build_suffix
 
             # TODO(akremenetsky): This part should be refactored when we
             # support building of multiple elements.
             inventory_path = self._elements_output_dir
 
+            manifests_path = os.path.join(inventory_path, "manifests")
+            orig_manifest_path = os.path.join(self._work_dir, element.manifest)
+
+            # Render templated manifests
+            jinja2_extensions = (".jinja2", ".j2")
+            if element.manifest.endswith(jinja2_extensions):
+                # Render Jinja2 manifest
+                with open(orig_manifest_path) as f:
+                    template = jinja2.Template(f.read())
+                rendered_manifest = template.render(
+                    version=version,
+                    name=name,
+                    images=[os.path.basename(p) for p in image_paths],
+                    manifests=[os.path.basename(element.manifest)],
+                )
+
+                # Remove extension from the manifest name
+                manifest_name = ".".join(
+                    os.path.basename(element.manifest).split(".")[:-1]
+                )
+                manifest_path = os.path.join(manifests_path, manifest_name)
+
+                # Save rendered manifest
+                os.makedirs(manifests_path, exist_ok=True)
+                with open(manifest_path, "w") as f:
+                    f.write(rendered_manifest)
+            else:
+                manifest_name = os.path.basename(element.manifest)
+                manifest_path = os.path.join(manifests_path, manifest_name)
+                os.makedirs(manifests_path, exist_ok=True)
+                shutil.copyfile(orig_manifest_path, manifest_path)
+
+            manifests = [os.path.abspath(manifest_path)]
+
             inventory = base.ElementInventory(
                 name=name,
                 version=version,
                 images=image_paths,
-                manifests=[
-                    os.path.abspath(
-                        os.path.join(self._work_dir, element.manifest)
-                    )
-                ],
+                manifests=manifests,
             )
             inventory.save(inventory_path)
 

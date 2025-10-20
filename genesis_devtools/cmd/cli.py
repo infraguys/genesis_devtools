@@ -51,7 +51,20 @@ def main() -> None:
     pass
 
 
-@main.command("build", help="Build Genesis project")
+@main.command(
+    "build",
+    help=(
+        "Build a Genesis element. The command build all images, manifests "
+        "and other artifacts required for the element. The manifest in the "
+        "project may be a raw YAML file or a template using Jinja2 "
+        "templates. For Jinja2 templates, the following variables are "
+        "available: \n\n"
+        "- {{ version }}: version of the element \n\n"
+        "- {{ name }}: name of the element \n\n"
+        "- {{ images }}: list of images \n\n"
+        "- {{ manifests }}: list of manifests \n\n"
+    ),
+)
 @click.option(
     "-c",
     "--genesis-cfg-file",
@@ -114,6 +127,15 @@ def build_cmd(
 ) -> None:
     if not project_dir:
         raise click.UsageError("No project directories specified")
+
+    # Leave 'none' for backward compatibility
+    if version_suffix == "none" and inventory:
+        version_suffix = "element"
+        click.secho(
+            "Inventory mode is not supported for 'none' version suffix, "
+            "using 'element' instead",
+            fg="yellow",
+        )
 
     if os.path.exists(output_dir) and not force:
         click.secho(
