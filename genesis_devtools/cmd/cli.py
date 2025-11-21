@@ -21,6 +21,7 @@ import shutil
 import typing as tp
 import tempfile
 import ipaddress
+import fnmatch
 
 import yaml
 import click
@@ -887,7 +888,8 @@ def _domains_for_backup(
     if names:
         domains &= names
 
-    domains -= exclude_names
+    if exclude_names:
+        domains = {d for d in domains if not any(fnmatch.fnmatch(d, pattern) for pattern in exclude_names)}
 
     return list(domains)
 

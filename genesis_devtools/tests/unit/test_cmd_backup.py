@@ -115,8 +115,8 @@ class TestCmdBackup:
         self
     ) -> None:
         # Arrange
-        all_domains = ["vm1", "vm2", "vm3"]
-        filtered_domains = ["vm1", "vm3"]
+        all_domains = ["vm1", "vm2", "stand-01", "stand-02"]
+        filtered_domains = ["vm1"]
         backuper_mock = MagicMock()
 
         with patch(
@@ -132,7 +132,7 @@ class TestCmdBackup:
             backup_cmd.callback(
                 config=None,
                 name=all_domains,
-                exclude_name=("vm2",),
+                exclude_name=("vm2", "stand-*"),
                 backup_dir="/tmp/backups",
                 period="1d",
                 offset=None,
@@ -150,7 +150,7 @@ class TestCmdBackup:
         )
         load_driver.assert_not_called()
         domains_for_backup.assert_called_once_with(
-            all_domains, ("vm2",), raise_on_domain_absence=True
+            all_domains, ("vm2", "stand-*"), raise_on_domain_absence=True
         )
         backuper_mock.backup.assert_called_once_with(filtered_domains, True, None)
 
