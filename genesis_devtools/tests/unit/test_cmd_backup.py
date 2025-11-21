@@ -44,6 +44,7 @@ class TestCmdBackup:
             backup_cmd.callback(
                 config=None,
                 name=("vm1", "vm2"),
+                exclude_name=None,
                 backup_dir="/tmp/backups",
                 period="1d",
                 offset=None,
@@ -61,7 +62,7 @@ class TestCmdBackup:
         )
         load_driver.assert_not_called()
         domains_for_backup.assert_called_once_with(
-            ("vm1", "vm2"), raise_on_domain_absence=True
+            ("vm1", "vm2"), None, raise_on_domain_absence=True
         )
         backuper_mock.backup.assert_called_once()
         # backup(domains, compress, encryption)
@@ -90,6 +91,7 @@ class TestCmdBackup:
             backup_cmd.callback(
                 config="/path/to/config.yaml",
                 name=("vmX",),
+                exclude_name=None,
                 backup_dir=".",
                 period="1d",
                 offset=None,
@@ -105,9 +107,52 @@ class TestCmdBackup:
         load_driver.assert_called_once_with("/path/to/config.yaml")
         local_backuper_ctor.assert_not_called()
         domains_for_backup.assert_called_once_with(
-            ("vmX",), raise_on_domain_absence=True
+            ("vmX",), None, raise_on_domain_absence=True
         )
         backuper_mock.backup.assert_called_once_with(domains, False, None)
+
+    def test_oneshot_with_exclude_names_filters_domains(
+        self
+    ) -> None:
+        # Arrange
+        all_domains = ["vm1", "vm2", "vm3"]
+        filtered_domains = ["vm1", "vm3"]
+        backuper_mock = MagicMock()
+
+        with patch(
+            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+            return_value=backuper_mock,
+        ) as local_backuper_ctor, patch(
+            "genesis_devtools.cmd.cli._domains_for_backup",
+            return_value=filtered_domains,
+        ) as domains_for_backup, patch(
+            "genesis_devtools.cmd.cli.utils.load_driver"
+        ) as load_driver:
+            # Act
+            backup_cmd.callback(
+                config=None,
+                name=all_domains,
+                exclude_name=("vm2",),
+                backup_dir="/tmp/backups",
+                period="1d",
+                offset=None,
+                start=None,
+                oneshot=True,
+                compress=True,
+                encrypt=False,
+                min_free_space=50,
+                rotate=5,
+            )
+
+        # Assert
+        local_backuper_ctor.assert_called_once_with(
+            backup_dir="/tmp/backups", min_free_disk_space_gb=50
+        )
+        load_driver.assert_not_called()
+        domains_for_backup.assert_called_once_with(
+            all_domains, ("vm2",), raise_on_domain_absence=True
+        )
+        backuper_mock.backup.assert_called_once_with(filtered_domains, True, None)
 
     def test_encrypt_env_missing_raises_usage_error_before_backup(
         self,
@@ -126,6 +171,7 @@ class TestCmdBackup:
                 backup_cmd.callback(
                     config=None,
                     name=(),
+                    exclude_name=None,
                     backup_dir="/tmp/backups",
                     period="1d",
                     offset=None,
@@ -162,6 +208,7 @@ class TestCmdBackup:
             backup_cmd.callback(
                 config=None,
                 name=("vm1",),
+                exclude_name=None,
                 backup_dir="/tmp/backups",
                 period="1d",
                 offset=None,
@@ -215,6 +262,7 @@ class TestCmdBackup:
                 backup_cmd.callback(
                     config=None,
                     name=("vmA",),
+                    exclude_name=None,
                     backup_dir="/tmp/backups",
                     period="1d",
                     offset=None,
@@ -229,5 +277,5 @@ class TestCmdBackup:
         # Assert: waited 60 seconds until start time
         sleep_mock.assert_any_call(60)
         # And then it attempted one backup cycle
-        domains_for_backup.assert_called_with(("vmA",))
+        domains_for_backup.assert_called_with(("vmA",), None)
         backuper_mock.backup.assert_called_once_with(domains, False, None)
