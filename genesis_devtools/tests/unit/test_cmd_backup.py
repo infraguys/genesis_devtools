@@ -111,9 +111,7 @@ class TestCmdBackup:
         )
         backuper_mock.backup.assert_called_once_with(domains, False, None)
 
-    def test_oneshot_with_exclude_names_filters_domains(
-        self
-    ) -> None:
+    def test_oneshot_with_exclude_names_filters_domains(self) -> None:
         # Arrange
         all_domains = ["vm1", "vm2", "stand-01", "stand-02"]
         filtered_domains = ["vm1"]
@@ -152,7 +150,9 @@ class TestCmdBackup:
         domains_for_backup.assert_called_once_with(
             all_domains, ("vm2", "stand-*"), raise_on_domain_absence=True
         )
-        backuper_mock.backup.assert_called_once_with(filtered_domains, True, None)
+        backuper_mock.backup.assert_called_once_with(
+            filtered_domains, True, None
+        )
 
     def test_encrypt_env_missing_raises_usage_error_before_backup(
         self,

@@ -758,7 +758,9 @@ def backup_cmd(
 
     # Do a single backup and exit
     if oneshot:
-        domains = _domains_for_backup(name, exclude_name, raise_on_domain_absence=True)
+        domains = _domains_for_backup(
+            name, exclude_name, raise_on_domain_absence=True
+        )
         backuper.backup(domains, compress, encryption)
         return
 
@@ -889,7 +891,13 @@ def _domains_for_backup(
         domains &= names
 
     if exclude_names:
-        domains = {d for d in domains if not any(fnmatch.fnmatch(d, pattern) for pattern in exclude_names)}
+        domains = {
+            d
+            for d in domains
+            if not any(
+                fnmatch.fnmatch(d, pattern) for pattern in exclude_names
+            )
+        }
 
     return list(domains)
 
