@@ -21,6 +21,7 @@ import shutil
 import typing as tp
 import tempfile
 import ipaddress
+import fnmatch
 
 import yaml
 import click
@@ -702,9 +703,17 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
         "`0` means no rotation."
     ),
 )
+@click.option(
+    "--no",
+    "--exclude-name",
+    "exclude_name",
+    multiple=True,
+    help="Name or pattern of libvirt domains to exclude from backup",
+)
 def backup_cmd(
     config: str | None,
     name: tp.List[str] | None,
+    exclude_name: tp.List[str] | None,
     backup_dir: str,
     period: str,
     offset: str | None,
@@ -718,6 +727,12 @@ def backup_cmd(
     period = c.BackupPeriod(period)
     if offset:
         offset = c.BackupPeriod(offset)
+
+    # Forbid using both include and exclude options
+    if name and exclude_name:
+        raise click.UsageError(
+            "Cannot specify both --name and --no/--exclude-name options at the same time."
+        )
 
     # Default local backuper if no config is provided
     if config is None:
@@ -750,7 +765,9 @@ def backup_cmd(
 
     # Do a single backup and exit
     if oneshot:
-        domains = _domains_for_backup(name, raise_on_domain_absence=True)
+        domains = _domains_for_backup(
+            name, exclude_name, raise_on_domain_absence=True
+        )
         backuper.backup(domains, compress, encryption)
         return
 
@@ -804,7 +821,7 @@ def backup_cmd(
     # Do periodic backups
     while True:
         # Need to refresh the list of domains since it could have changed
-        domains = _domains_for_backup(name)
+        domains = _domains_for_backup(name, exclude_name)
 
         click.secho(f"Backup started at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         backuper.backup(domains, compress, encryption)
@@ -864,17 +881,30 @@ def bakcup_decrypt_cmd(path: str) -> None:
 
 
 def _domains_for_backup(
-    names: tp.List[str] | None = None, raise_on_domain_absence: bool = False
+    names: tp.List[str] | None = None,
+    exclude_names: tp.List[str] | None = None,
+    raise_on_domain_absence: bool = False,
 ) -> tp.List[str]:
     domains = set(libvirt.list_domains())
     names = set(names or [])
+    exclude_names = set(exclude_names or [])
 
     # Check if the specified domains exist
+    if raise_on_domain_absence and (names - domains):
+        diff = ", ".join(names - domains)
+        raise click.UsageError(f"Domains {diff} not found")
+
     if names:
-        if raise_on_domain_absence and (names - domains):
-            diff = ", ".join(names - domains)
-            raise click.UsageError(f"Domains {diff} not found")
-        domains = names & domains
+        domains &= names
+
+    if exclude_names:
+        domains = {
+            d
+            for d in domains
+            if not any(
+                fnmatch.fnmatch(d, pattern) for pattern in exclude_names
+            )
+        }
 
     return list(domains)
 
