@@ -25,10 +25,34 @@ def test_domains_for_backup_exclude_patterns():
         "genesis_devtools.cmd.cli.libvirt.list_domains",
         return_value=all_domains,
     ):
+        # Case 1: exclude multiple exact names
         result = _domains_for_backup(
-            ("vm1", "vm2", "stand-01", "stand-02"),
-            ("vm2", "stand-*"),
+            names=None,
+            exclude_names=("vm1", "vm2"),
             raise_on_domain_absence=True,
         )
+        assert set(result) == {"stand-01", "stand-02"}
 
-    assert set(result) == {"vm1"}
+        # Case 2: exclude exact name and wildcard pattern
+        result = _domains_for_backup(
+            names=None,
+            exclude_names=("vm2", "stand-*"),
+            raise_on_domain_absence=True,
+        )
+        assert set(result) == {"vm1"}
+
+        # Case 3: exclude a pattern that matches nothing
+        result = _domains_for_backup(
+            names=None,
+            exclude_names=("nonexistent-*",),
+            raise_on_domain_absence=True,
+        )
+        assert set(result) == all_domains
+
+        # Case 4: exclude all domains
+        result = _domains_for_backup(
+            names=None,
+            exclude_names=("vm*", "stand-*"),
+            raise_on_domain_absence=True,
+        )
+        assert set(result) == set()
