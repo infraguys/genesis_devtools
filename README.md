@@ -290,10 +290,12 @@ genesis backup -n domain-name
 
 ### Exclude Specific Domains
 
-Run backup periodically for all libvirt domains except the ones you want to skip and store it in the current directory. You can exclude specific domain names or use simple wildcard patterns. For example:
+Use `--exclude-name` (or `--no`) to skip specific domains or patterns. `--name` and `--exclude-name/--no` cannot be used together.
+
+For example:
 
 ```bash
-genesis backup --no domain-foo --no domain-bar --no "domain-stand-*"
+genesis backup --exclude-name domain-foo --exclude-name domain-bar --exclude-name "domain-stand-*"
 ```
 
 ### Custom Periodic Backup
