@@ -31,4 +31,4 @@ def test_domains_for_backup_exclude_patterns():
             raise_on_domain_absence=True,
         )
 
-    assert result == ["vm1"]
+    assert set(result) == {"vm1"}

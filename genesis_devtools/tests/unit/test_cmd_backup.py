@@ -113,7 +113,6 @@ class TestCmdBackup:
 
     def test_oneshot_with_exclude_names_filters_domains(self) -> None:
         # Arrange
-        all_domains = ["vm1", "vm2", "stand-01", "stand-02"]
         filtered_domains = ["vm1"]
         backuper_mock = MagicMock()
 
@@ -129,7 +128,7 @@ class TestCmdBackup:
             # Act
             backup_cmd.callback(
                 config=None,
-                name=all_domains,
+                name=None,
                 exclude_name=("vm2", "stand-*"),
                 backup_dir="/tmp/backups",
                 period="1d",
@@ -148,11 +147,32 @@ class TestCmdBackup:
         )
         load_driver.assert_not_called()
         domains_for_backup.assert_called_once_with(
-            all_domains, ("vm2", "stand-*"), raise_on_domain_absence=True
+            None, ("vm2", "stand-*"), raise_on_domain_absence=True
         )
         backuper_mock.backup.assert_called_once_with(
             filtered_domains, True, None
         )
+
+    def test_oneshot_raises_if_name_and_exclude_name_given(self) -> None:
+        # Act / Assert
+        with pytest.raises(
+            click.UsageError,
+            match="Cannot specify both --name and --no/--exclude-name",
+        ):
+            backup_cmd.callback(
+                config=None,
+                name=("vm1",),
+                exclude_name=("vm2",),
+                backup_dir="/tmp/backups",
+                period="1d",
+                offset=None,
+                start=None,
+                oneshot=True,
+                compress=True,
+                encrypt=False,
+                min_free_space=50,
+                rotate=5,
+            )
 
     def test_encrypt_env_missing_raises_usage_error_before_backup(
         self,

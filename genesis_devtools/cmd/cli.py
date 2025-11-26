@@ -705,6 +705,7 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
 )
 @click.option(
     "--no",
+    "--exclude-name",
     "exclude_name",
     multiple=True,
     help="Name or pattern of libvirt domains to exclude from backup",
@@ -726,6 +727,12 @@ def backup_cmd(
     period = c.BackupPeriod(period)
     if offset:
         offset = c.BackupPeriod(offset)
+
+    # Forbid using both include and exclude options
+    if name and exclude_name:
+        raise click.UsageError(
+            "Cannot specify both --name and --no/--exclude-name options at the same time."
+        )
 
     # Default local backuper if no config is provided
     if config is None:
