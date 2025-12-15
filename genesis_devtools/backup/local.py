@@ -19,9 +19,11 @@ import os
 import typing as tp
 import shutil
 import multiprocessing as mp
+import subprocess
 
 from genesis_devtools.backup import base
 from genesis_devtools.backup import qcow
+from genesis_devtools.backup import zfs as zfs_backup
 from genesis_devtools import logger as logger_base
 from genesis_devtools.infra.libvirt import libvirt
 from genesis_devtools import utils
@@ -281,4 +283,129 @@ class LocalQcowBackuper(qcow.AbstractQcowBackuper):
         raise NotImplementedError()
 
     def restore(self, backup_path: str) -> None:
+        raise NotImplementedError()
+
+
+class LocalZFSBackuper(zfs_backup.AbstractZfsBackuper):
+
+    def __init__(
+        self,
+        backup_dir: str,
+        snapshot_name: str = "backup",
+        logger: logger_base.AbstractLogger | None = None,
+    ) -> None:
+        super().__init__(snapshot_name=snapshot_name, logger=logger)
+        self._backup_dir = backup_dir
+
+    def _save_volume_to_backup(
+        self,
+        volume: str,
+        backup_path: str,
+        encryption: base.EncryptionCreds | None = None,
+    ) -> None:
+        disk_name = os.path.basename(volume) + ".raw"
+        target_path = os.path.join(backup_path, disk_name)
+
+        with open(target_path, "wb") as f:
+            subprocess.run(
+                [
+                    "sudo",
+                    "zfs",
+                    "send",
+                    f"{volume}@{self._snapshot_name}",
+                ],
+                check=True,
+                stdout=f,
+            )
+
+        if encryption:
+            utils.encrypt_file(target_path, encryption.key, encryption.iv)
+            os.remove(target_path)
+            self._logger.info(f"Encryption of {target_path} done")
+
+    def backup_domain_spec(
+        self,
+        domain_spec: str,
+        domain_backup_path: str,
+        domain_filename: str = "domain.xml",
+        encryption: base.EncryptionCreds | None = None,
+    ) -> None:
+        os.makedirs(domain_backup_path, exist_ok=True)
+
+        domain_path = os.path.join(domain_backup_path, domain_filename)
+        with open(domain_path, "w") as f:
+            f.write(domain_spec)
+
+        if encryption:
+            utils.encrypt_file(domain_path, encryption.key, encryption.iv)
+            os.remove(domain_path)
+            self._logger.info(f"Encryption of {domain_backup_path} done")
+
+    def backup_domain_disks(
+        self,
+        volumes: tp.Collection[str],
+        domain_backup_path: str,
+        encryption: base.EncryptionCreds | None = None,
+    ) -> None:
+        os.makedirs(domain_backup_path, exist_ok=True)
+        for volume in volumes:
+            self._save_volume_to_backup(volume, domain_backup_path, encryption)
+
+    def backup(
+        self,
+        domains: tp.Collection[str],
+        compress: bool = False,
+        encryption: base.EncryptionCreds | None = None,
+        **kwargs: tp.Any,
+    ) -> None:
+        backup_path = utils.backup_path(self._backup_dir)
+        os.makedirs(backup_path, exist_ok=True)
+
+        self.backup_domains(backup_path, list(domains), encryption)
+
+        if not compress:
+            return
+
+        self._logger.info(f"Compressing {backup_path}")
+        compressed_backup_path = (
+            f"{backup_path}{qcow.AbstractQcowBackuper.COMPRESS_SUFFIX}"
+        )
+        compress_directory = os.path.dirname(backup_path)
+        try:
+            utils.compress_dir(backup_path, compress_directory)
+        except Exception:
+            self._logger.error(f"Compression of {backup_path} failed")
+            if os.path.exists(compressed_backup_path):
+                os.remove(compressed_backup_path)
+            return
+
+        self._logger.info(f"Compression of {backup_path} done")
+        shutil.rmtree(backup_path)
+
+    def rotate(self, limit: int = 5) -> None:
+        if limit == 0:
+            return
+
+        all_backups = [
+            os.path.join(self._backup_dir, f)
+            for f in os.listdir(self._backup_dir)
+            if qcow.AbstractQcowBackuper._backup_dir_pattern.match(f)
+        ]
+
+        all_backups.sort(key=lambda x: os.path.getctime(x))
+
+        if len(all_backups) > limit:
+            backups_to_remove = all_backups[:-limit]
+            for backup in backups_to_remove:
+                if os.path.isdir(backup):
+                    shutil.rmtree(backup)
+                elif os.path.isfile(backup):
+                    os.remove(backup)
+
+                self._logger.info(f"The backup {backup} was rotated")
+
+    def cleanup(self) -> None:
+        raise NotImplementedError()
+
+    def restore(self, **kwargs: tp.Any) -> None:
         raise NotImplementedError()

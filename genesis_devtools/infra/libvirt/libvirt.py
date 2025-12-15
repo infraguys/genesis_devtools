@@ -376,17 +376,23 @@ def get_domain_disk(name: str) -> str | None:
     out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
     out = out.decode().strip()
 
-    # The simplest implementation, take first disk
-    if disks := re.findall(r"<source file='(.*?)'", out):
+    disks = re.findall(r"<source file='(.*?)'", out) or re.findall(
+        r"<source dev='(.*?)'", out
+    )
+
+    if disks:
         return disks[0]
+
+    return None
 
 
 def get_domain_disks(name: str) -> tp.List[str]:
     out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
     out = out.decode().strip()
 
-    # The simplest implementation, take first disk
-    return re.findall(r"<source file='(.*?)'", out)
+    return re.findall(r"<source file='(.*?)'", out) or re.findall(
+        r"<source dev='(.*?)'", out
+    )
 
 
 def has_domain(name: str) -> bool:

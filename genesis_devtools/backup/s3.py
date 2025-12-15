@@ -17,12 +17,14 @@ from __future__ import annotations
 
 import io
 import os
+import subprocess
 import typing as tp
 
 import boto3
 
 from genesis_devtools.backup import base
 from genesis_devtools.backup import qcow
+from genesis_devtools.backup import zfs as zfs_backup
 from genesis_devtools import logger as logger_base
 from genesis_devtools import utils
 
@@ -136,4 +138,109 @@ class S3QcowBackuper(qcow.AbstractQcowBackuper):
         raise NotImplementedError()
 
     def restore(self, backup_path: str) -> None:
+        raise NotImplementedError()
+
+
+class S3ZFSBackuper(zfs_backup.AbstractZfsBackuper):
+
+    def __init__(
+        self,
+        endpoint_url: str,
+        access_key: str,
+        secret_key: str,
+        host: str,
+        bucket_name: str,
+        snapshot_name: str = "backup",
+        logger: logger_base.AbstractLogger | None = None,
+    ) -> None:
+        super().__init__(snapshot_name=snapshot_name, logger=logger)
+        self._access_key = access_key
+        self._secret_key = secret_key
+        self._host = host
+        self._bucket_name = bucket_name
+        self._endpoint_url = endpoint_url
+
+    def _upload_stream(
+        self,
+        stream: tp.IO,
+        s3_path: str,
+        encryption: base.EncryptionCreds | None = None,
+    ) -> None:
+        s3_client = boto3.client(
+            "s3",
+            endpoint_url=self._endpoint_url,
+            aws_access_key_id=self._access_key,
+            aws_secret_access_key=self._secret_key,
+        )
+
+        if encryption:
+            stream = utils.ReaderEncryptorIO(
+                stream, encryption.key, encryption.iv
+            )
+            s3_path += self.ENCRYPTED_SUFFIX
+        s3_client.upload_fileobj(stream, self._bucket_name, s3_path)
+
+    def backup_domain_spec(
+        self,
+        domain_spec: str,
+        domain_backup_path: str,
+        domain_filename: str = "domain.xml",
+        encryption: base.EncryptionCreds | None = None,
+    ) -> None:
+        self._upload_stream(
+            io.BytesIO(domain_spec.encode("utf-8")),
+            os.path.join(domain_backup_path, domain_filename),
+            encryption,
+        )
+
+    def backup_domain_disks(
+        self,
+        volumes: tp.Collection[str],
+        domain_backup_path: str,
+        encryption: base.EncryptionCreds | None = None,
+    ) -> None:
+        for volume in volumes:
+            disk_name = os.path.basename(volume) + ".raw"
+            s3_path = os.path.join(domain_backup_path, disk_name)
+
+            proc = subprocess.Popen(
+                [
+                    "sudo",
+                    "zfs",
+                    "send",
+                    f"{volume}@{self._snapshot_name}",
+                ],
+                stdout=subprocess.PIPE,
+            )
+
+            assert proc.stdout is not None
+            try:
+                self._upload_stream(proc.stdout, s3_path, encryption)
+            finally:
+                proc.stdout.close()
+                proc.wait()
+                if proc.returncode != 0:
+                    raise subprocess.CalledProcessError(
+                        proc.returncode, proc.args
+                    )
+
+    def backup(
+        self,
+        domains: tp.Collection[str],
+        compress: bool = False,
+        encryption: base.EncryptionCreds | None = None,
+        **kwargs: tp.Any,
+    ) -> None:
+        backup_path = self._host + "/" + utils.backup_path("")
+        self.backup_domains(backup_path, list(domains), encryption)
+
+    def rotate(self, limit: int = 5) -> None:
+        # Nothing to do for rotation right now.
+        # It will be implemented later.
+        pass
+
+    def cleanup(self) -> None:
+        raise NotImplementedError()
+
+    def restore(self, **kwargs: tp.Any) -> None:
         raise NotImplementedError()
