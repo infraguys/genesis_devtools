@@ -131,6 +131,7 @@ class SimpleBuilder:
         developer_keys: str | None = None,
         build_suffix: str = "",
         inventory_mode: bool = False,
+        manifest_vars: dict[str, tp.Any] | None = None,
     ) -> None:
         """Build an element."""
         self._logger.info(f"Building element: {element}")
@@ -165,8 +166,21 @@ class SimpleBuilder:
             ) as f:
                 manifest = yaml.safe_load(f)
 
-            name = manifest["name"]
             version = build_suffix
+
+            if manifest_vars:
+                manifest_vars = manifest_vars.copy()
+            else:
+                manifest_vars = {}
+            manifest_vars["version"] = version
+
+            name = (manifest_vars.get("name") or manifest["name"]).strip()
+
+            if name.startswith("{"):
+                raise ValueError(
+                    "Specify manifest name using --manifest-var name=value"
+                )
+            manifest_vars["name"] = name
 
             # TODO(akremenetsky): This part should be refactored when we
             # support building of multiple elements.
@@ -182,10 +196,9 @@ class SimpleBuilder:
                 with open(orig_manifest_path) as f:
                     template = jinja2.Template(f.read())
                 rendered_manifest = template.render(
-                    version=version,
-                    name=name,
                     images=[os.path.basename(p) for p in image_paths],
                     manifests=[os.path.basename(element.manifest)],
+                    **manifest_vars,
                 )
 
                 # Remove extension from the manifest name
@@ -220,12 +233,18 @@ class SimpleBuilder:
         developer_keys: str | None = None,
         build_suffix: str = "",
         inventory_mode: bool = False,
+        manifest_vars: dict[str, tp.Any] | None = None,
     ) -> None:
         """Build all elements."""
         self._logger.important("Building elements")
         for e in self._elements:
             self.build_element(
-                e, build_dir, developer_keys, build_suffix, inventory_mode
+                e,
+                build_dir,
+                developer_keys,
+                build_suffix,
+                inventory_mode,
+                manifest_vars,
             )
 
     @classmethod

@@ -63,6 +63,8 @@ class TestBuilder:
             "images: \"{{ images | join(',') }}\"\n"
             "metadata:\n"
             '  title: "{{ name }} v{{ version }}"\n'
+            '  meta_foo: "{{ foo }}"\n'
+            '  meta_bar: "{{ bar }}"\n'
         )
         manifest_path.write_text(manifest_content)
 
@@ -85,6 +87,7 @@ class TestBuilder:
             developer_keys=None,
             build_suffix="1.2.3",
             inventory_mode=True,
+            manifest_vars={"foo": "FOO", "bar": "BAR"},
         )
 
         # Assert: rendered manifest exists without the .j2 extension
@@ -96,6 +99,8 @@ class TestBuilder:
         # Variables should be interpolated
         assert 'version: "1.2.3"' in content
         assert 'title: "my-element v1.2.3"' in content
+        assert 'meta_foo: "FOO"' in content
+        assert 'meta_bar: "BAR"' in content
         # images list is empty -> joined string should be empty quotes
         assert 'images: ""' in content
 
