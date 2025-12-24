@@ -52,6 +52,19 @@ def main() -> None:
     pass
 
 
+def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
+    result = {}
+    for var in manifest_vars:
+        if "=" not in var:
+            raise click.UsageError(
+                f"Invalid manifest variable format: '{var}'. "
+                "Expected 'key=value'."
+            )
+        key, value = var.split("=", 1)
+        result[key] = value
+    return result
+
+
 @main.command(
     "build",
     help=(
@@ -59,11 +72,14 @@ def main() -> None:
         "and other artifacts required for the element. The manifest in the "
         "project may be a raw YAML file or a template using Jinja2 "
         "templates. For Jinja2 templates, the following variables are "
-        "available: \n\n"
+        "available by default: \n\n"
         "- {{ version }}: version of the element \n\n"
         "- {{ name }}: name of the element \n\n"
         "- {{ images }}: list of images \n\n"
         "- {{ manifests }}: list of manifests \n\n"
+        "\n\n"
+        "Additional variables can be passed using the --manifest-var "
+        "options."
     ),
 )
 @click.option(
@@ -114,6 +130,15 @@ def main() -> None:
     is_flag=True,
     help="Build using the inventory format",
 )
+@click.option(
+    "--manifest-var",
+    multiple=True,
+    help=(
+        "Additional variables to pass to the manifest template. "
+        "The format is 'key=value'. For example: --manifest-var "
+        "key1=value1 --manifest-var key2=value2"
+    ),
+)
 @click.argument("project_dir", type=click.Path())
 def build_cmd(
     genesis_cfg_file: str,
@@ -125,9 +150,12 @@ def build_cmd(
     force: bool,
     project_dir: str,
     inventory: bool,
+    manifest_var: tuple[str, ...],
 ) -> None:
     if not project_dir:
         raise click.UsageError("No project directories specified")
+
+    manifest_vars = _convert_manifest_vars(manifest_var)
 
     # Leave 'none' for backward compatibility
     if version_suffix == "none" and inventory:
@@ -184,7 +212,13 @@ def build_cmd(
         )
         with tempfile.TemporaryDirectory() as temp_dir:
             builder.fetch_dependency(deps_dir or temp_dir)
-            builder.build(build_dir, developer_keys, build_suffix, inventory)
+            builder.build(
+                build_dir,
+                developer_keys,
+                build_suffix,
+                inventory,
+                manifest_vars,
+            )
 
 
 @main.command("push", help="Push the element to the repository")
