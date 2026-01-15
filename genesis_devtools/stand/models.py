@@ -15,6 +15,7 @@
 #    under the License.
 from __future__ import annotations
 
+import re
 import ipaddress
 import typing as tp
 import dataclasses
@@ -42,7 +43,7 @@ class Network:
         return self.name == "dummy"
 
     @classmethod
-    def from_spec(cls, spec: tp.Dict[str, tp.Any]) -> Network:
+    def from_spec(cls, spec: dict[str, tp.Any]) -> Network:
         spec = spec.copy()
         spec["cidr"] = ipaddress.IPv4Network(spec["cidr"])
         return cls(**spec)
@@ -53,18 +54,20 @@ class Node:
     name: str = "genesis-node"
     memory: int = 1024
     cores: int = 1
-    disks: tp.List[int] = dataclasses.field(default_factory=lambda: [10])
+    disks: list[int] = dataclasses.field(default_factory=lambda: [10])
     image: str | None = None
     use_image_inplace: bool = False
 
     @classmethod
-    def from_spec(cls, spec: tp.Dict[str, tp.Any]) -> Node:
+    def from_spec(cls, spec: dict[str, tp.Any]) -> Node:
         return cls(**spec)
 
 
 @dataclasses.dataclass
 class Bootstrap(Node):
     name: str = "genesis-bootstrap"
+    # Two disks for the bootstrap, one for the root and one for the data
+    disks: list[int] = dataclasses.field(default_factory=lambda: [10, 10])
 
     @classmethod
     def from_node(cls, node: Node) -> Bootstrap:
@@ -72,10 +75,40 @@ class Bootstrap(Node):
 
 
 @dataclasses.dataclass
+class Hypervisor:
+    network_type: str
+    network: str
+    connection_uri: str
+    storage_pool: str = "default"
+    driver: str = "libvirt"
+    machine_prefix: str = "vm-"
+    iface_rom_file: str = "/usr/share/qemu/1af41041.rom"
+
+    @classmethod
+    def from_spec(cls, spec: dict[str, tp.Any]) -> Hypervisor:
+        return cls(**spec)
+
+    def is_valid(self, network: Network) -> bool:
+        match = re.search(r"\b(?:\d{1,3}\.){3}\d{1,3}\b", self.connection_uri)
+        if not match:
+            # Perhaps it's a domain name
+            return True
+
+        ip_str = match.group(0)
+        try:
+            ip = ipaddress.ip_address(ip_str)
+        except ValueError:
+            return False
+
+        return network.cidr.overlaps(ipaddress.ip_network(ip))
+
+
+@dataclasses.dataclass
 class Stand:
     network: Network
-    bootstraps: tp.List[Bootstrap]
-    baremetals: tp.List[Node]
+    bootstraps: list[Bootstrap]
+    baremetals: list[Node]
+    hypervisors: list[Hypervisor] = dataclasses.field(default_factory=list)
     name: str = "dev-stand"
 
     def is_valid(self) -> bool:
@@ -84,6 +117,10 @@ class Stand:
 
         if all(b.image is None for b in self.bootstraps):
             return False
+
+        for h in self.hypervisors:
+            if not h.is_valid(self.network):
+                return False
 
         return True
 
@@ -104,6 +141,7 @@ class Stand:
         memory: int = 1024,
         name: str = "dev-stand",
         bootstrap_name: str = "bootstrap",
+        hypervisors: tp.Collection[Hypervisor] = (),
     ) -> Stand:
         return cls(
             name=name,
@@ -118,6 +156,7 @@ class Stand:
                 )
             ],
             baremetals=[],
+            hypervisors=list(hypervisors),
         )
 
     @classmethod
@@ -127,10 +166,16 @@ class Stand:
         if network is None:
             network = Network.dummy()
 
-        return cls(name=name, bootstraps=[], baremetals=[], network=network)
+        return cls(
+            name=name,
+            bootstraps=[],
+            baremetals=[],
+            network=network,
+            hypervisors=[],
+        )
 
     @classmethod
-    def from_spec(cls, spec: tp.Dict[str, tp.Any]) -> Stand:
+    def from_spec(cls, spec: dict[str, tp.Any]) -> Stand:
         spec = spec.copy()
         bootstraps = [
             Bootstrap.from_spec(b) for b in spec.pop("bootstraps", [])
@@ -146,5 +191,8 @@ class Stand:
             bootstraps=bootstraps,
             baremetals=baremetals,
             network=network,
+            hypervisors=[
+                Hypervisor.from_spec(h) for h in spec.pop("hypervisors", [])
+            ],
             **spec,
         )

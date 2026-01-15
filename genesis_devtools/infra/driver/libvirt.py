@@ -15,13 +15,18 @@
 #    under the License.
 from __future__ import annotations
 
+import os
+import json
 import itertools
 import ipaddress
+import tempfile
 import typing as tp
+import dataclasses
 from xml.dom import minidom
 
 from genesis_devtools.stand import models
 
+from genesis_devtools import utils
 from genesis_devtools.infra.driver import base
 from genesis_devtools.infra.libvirt import libvirt
 from genesis_devtools.infra.libvirt import constants as vc
@@ -113,7 +118,9 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
 
         return list(stands.values())
 
-    def create_stand(self, stand: models.Stand) -> models.Stand:
+    def create_stand(
+        self, stand: models.Stand, **extra_data: tp.Any
+    ) -> models.Stand:
         """Create a new stand."""
         if len(stand.bootstraps) > 1:
             raise NotImplementedError(
@@ -138,6 +145,23 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 cidr=stand.network.cidr,
                 dhcp_enabled=stand.network.dhcp,
             )
+
+        # Prepare config drive for the bootstrap node
+        spec = {
+            "schema_version": 1,
+            "stand": dataclasses.asdict(stand),
+            **extra_data,
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            spec_path = os.path.join(temp_dir, "spec.json")
+            with open(spec_path, "w") as f:
+                json.dump(spec, f, indent=2, sort_keys=True, default=str)
+
+            config_drive_path = os.path.join(
+                "/tmp/genesis-config-drives", "config-drive.iso"
+            )
+            utils.make_iso(temp_dir, config_drive_path)
 
         # Create bootstraps first and set metadata about network in the
         # boostarp domains.
@@ -165,11 +189,13 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 use_image_inplace=bootstrap.use_image_inplace,
                 cores=bootstrap.cores,
                 memory=bootstrap.memory,
+                disks=bootstrap.disks,
                 network=stand.network.name,
                 net_type=(
                     "network" if stand.network.managed_network else "bridge"
                 ),
                 meta_tags=tags,
+                config_drive=config_drive_path,
             )
 
         for node in stand.baremetals:
