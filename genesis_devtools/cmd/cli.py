@@ -317,7 +317,7 @@ def push_cmd(
 )
 @click.option(
     "--cidr",
-    default="192.168.4.0/22",
+    default=GC_CIDR,
     help="Network CIDR",
     show_default=True,
     type=ipaddress.IPv4Network,
@@ -346,6 +346,78 @@ def push_cmd(
     is_flag=True,
     help="Don't copy image, use specified file as is (warning - destructive!)",
 )
+@click.option(
+    "-r",
+    "--repository",
+    default="https://repository.genesis-core.tech/",
+    type=str,
+    help="Default element repository",
+    show_default=True,
+)
+@click.option(
+    "--hyper",
+    show_default=True,
+    is_flag=True,
+    help="Add a default hypervisor to the stand",
+)
+@click.option(
+    "--hyper-connection-uri",
+    default="",
+    type=str,
+    help=(
+        "Connection URI for the hypervisor, "
+        "e.g. 'qemu+tcp://10.0.0.1/system' or "
+        "'qemu+ssh://user@10.0.0.1/system'. If not set, "
+        "the first address of the network(--cidr option) will be used. "
+        "Works only if --hyper option is set."
+    ),
+)
+@click.option(
+    "--hyper-network-type",
+    default="network",
+    type=click.Choice(("bridge", "network")),
+    help=(
+        "Network type for the hypervisor. "
+        "Works only if --hyper option is set."
+    ),
+    show_default=True,
+)
+@click.option(
+    "--hyper-network",
+    default="",
+    type=str,
+    help=(
+        "Network name for the hypervisor. This is a mandatory "
+        "option if the --hyper option is set."
+    ),
+)
+@click.option(
+    "--hyper-storage-pool",
+    default="default",
+    type=str,
+    help=(
+        "Storage pool for the hypervisor. "
+        "Works only if --hyper option is set."
+    ),
+    show_default=True,
+)
+@click.option(
+    "--hyper-machine-prefix",
+    default="vm-",
+    type=str,
+    help=("A prefix for new VMs. Works only if --hyper option is set."),
+    show_default=True,
+)
+@click.option(
+    "--hyper-iface-rom-file",
+    default="/usr/share/qemu/1af41041.rom",
+    type=str,
+    help=(
+        "A path to the custom ROM file of a network interface. "
+        "Works only if --hyper option is set."
+    ),
+    show_default=True,
+)
 def bootstrap_cmd(
     image_path: tp.Optional[str],
     cores: int,
@@ -358,6 +430,14 @@ def bootstrap_cmd(
     force: bool,
     no_wait: bool,
     use_image_inplace: bool,
+    repository: str,
+    hyper: bool,
+    hyper_connection_uri: str,
+    hyper_network_type: str,
+    hyper_network: str,
+    hyper_storage_pool: str,
+    hyper_machine_prefix: str,
+    hyper_iface_rom_file: str,
 ) -> None:
     if image_path is None or not os.path.exists(image_path):
         raise click.UsageError("No image path specified or not found")
@@ -388,15 +468,38 @@ def bootstrap_cmd(
             with open(stand_spec) as f:
                 stand_spec = yaml.safe_load(f)
 
+        hypervisors = []
+
+        # Add a default hypervisor if requested
+        if hyper:
+            if not hyper_network:
+                raise click.UsageError("No network specified for hypervisor")
+
+            if not hyper_connection_uri:
+                hyper_connection_uri = f"qemu+tcp://{cidr[1]}/system"
+
+            hypervisor = stand_models.Hypervisor(
+                network=hyper_network,
+                network_type=hyper_network_type,
+                connection_uri=hyper_connection_uri,
+                storage_pool=hyper_storage_pool,
+                machine_prefix=hyper_machine_prefix,
+                iface_rom_file=hyper_iface_rom_file,
+            )
+            hypervisors.append(hypervisor)
+
         return _bootstrap_core(
             image_path=image_path,
             cores=cores,
             memory=memory,
             name=name,
             stand_spec=stand_spec,
+            cidr=cidr,
             bridge=bridge,
             force=force,
             use_image_inplace=use_image_inplace,
+            repository=repository,
+            hypervisors=hypervisors,
         )
 
     raise click.UsageError("Unknown launch mode")
@@ -1020,9 +1123,12 @@ def _bootstrap_core(
     memory: int,
     name: str,
     stand_spec: tp.Dict[str, tp.Any] | None,
+    cidr: ipaddress.IPv4Network,
     bridge: str | None,
     force: bool,
     use_image_inplace: bool,
+    repository: str,
+    hypervisors: tp.Collection[stand_models.Hypervisor] = (),
 ) -> None:
     logger = ClickLogger()
     logger.info("Starting genesis bootstrap in 'core' mode")
@@ -1030,7 +1136,7 @@ def _bootstrap_core(
     net_name = utils.installation_net_name(name)
     default_stand_network = stand_models.Network(
         name=bridge if bridge else net_name,
-        cidr=ipaddress.IPv4Network(GC_CIDR),
+        cidr=cidr,
         managed_network=False if bridge else True,
     )
 
@@ -1046,6 +1152,7 @@ def _bootstrap_core(
             memory=memory,
             network=default_stand_network,
             bootstrap_name=bootstrap_domain_name,
+            hypervisors=hypervisors,
         )
     else:
         dev_stand = stand_models.Stand.from_spec(stand_spec)
@@ -1081,7 +1188,7 @@ def _bootstrap_core(
         infra.delete_stand(stand)
         logger.info(f"Destroyed old genesis installation: {dev_stand.name}")
 
-    infra.create_stand(dev_stand)
+    infra.create_stand(dev_stand, repository=repository)
     logger.info("Launched genesis installation")
 
     cidr = dev_stand.network.cidr

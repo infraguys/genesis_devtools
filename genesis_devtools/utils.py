@@ -20,6 +20,7 @@ import os
 import time
 import shutil
 import itertools
+import subprocess
 import typing as tp
 from importlib.metadata import entry_points
 
@@ -406,3 +407,27 @@ class ReaderEncryptorIO(io.BytesIO):
         exc_tb: tp.Any,
     ) -> None:
         self.close()
+
+
+def make_iso(src_dir: str, iso_path: str, label: str = "config-drive") -> None:
+    if not os.path.isdir(src_dir):
+        raise ValueError(f"src_dir is not a directory: {src_dir}")
+
+    out_dir = os.path.dirname(iso_path) or "."
+    os.makedirs(out_dir, exist_ok=True)
+
+    tool = shutil.which("genisoimage") or shutil.which("mkisofs")
+    if tool is None:
+        raise RuntimeError("genisoimage/mkisofs not found in PATH")
+
+    proc = subprocess.run(
+        [tool, "-J", "-r", "-V", label, "-o", iso_path, src_dir],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"ISO build failed (rc={proc.returncode}): {proc.stderr.strip()}"
+        )

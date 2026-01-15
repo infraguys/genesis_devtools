@@ -40,6 +40,8 @@ domain_template = """
   <vcpu>{cores}</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
+    <nvram template="/usr/share/OVMF/OVMF_VARS_4M.fd"/>
     {boot}
   </os>
   <features>
@@ -62,6 +64,15 @@ domain_template = """
     {disks}
     <controller type="usb" model="qemu-xhci" ports="5"/>
     <controller type="pci" model="pcie-root"/>
+    <!-- For hotplug devices -->
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
     {net_iface}
     <console type="pty"/>
@@ -134,6 +145,15 @@ disk_template = """
       <driver name="qemu" type="{image_format}"/>
       <source file="{image}"/>
       <target dev="{device}" bus="virtio"/>
+    </disk>
+"""
+
+cdrom_template = """
+    <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw"/>
+      <source file="{config_drive_path}"/>
+      <target dev="sda" bus="sata"/>
+      <readonly/>
     </disk>
 """
 
@@ -257,10 +277,15 @@ def create_domain(
     disks: tp.Collection[int] = (),
     meta_tags: tp.Collection[str] = (),
     boot: vc.BootMode = "hd",
+    config_drive: str | None = None,
 ):
     uuid = str(sys_uuid.uuid4())
     disks_xml = ""
     disk_paths = []
+    index = 0
+
+    if not disks:
+        raise ValueError("At least one disk must be provided")
 
     # Use image if it is provided or create empty disk if it is not
     if image is not None:
@@ -283,25 +308,29 @@ def create_domain(
             image=tgt_image_path,
             image_format=image_format,
         )
-    elif disks:
-        for i, disk in enumerate(disks):
-            disk_name = f"{uuid}-{i}.qcow2"
-            disk_path = os.path.join(pool, disk_name)
-            disk_paths.append(disk_path)
-            subprocess.run(
-                f"sudo qemu-img create -f qcow2 {disk_path} {disk}G"
-                " 2>&1 >/dev/null",
-                shell=True,
-                check=True,
-            )
-            disks_xml += disk_template.format(
-                device=f"vd{chr(ord('a') + i)}",
-                image=disk_path,
-                image_format="qcow2",
-            )
-    else:
-        raise ValueError(
-            "Either image or disks must be provided to create a domain"
+        index += 1
+
+    for i, disk in enumerate(disks[index:], index):
+        disk_name = f"{uuid}-{i}.qcow2"
+        disk_path = os.path.join(pool, disk_name)
+        disk_paths.append(disk_path)
+        subprocess.run(
+            [
+                "sudo",
+                "qemu-img",
+                "create",
+                "-f",
+                "qcow2",
+                disk_path,
+                f"{disk}G",
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+        )
+        disks_xml += disk_template.format(
+            device=f"vd{chr(ord('a') + i)}",
+            image=disk_path,
+            image_format="qcow2",
         )
 
     if net_type == "network":
@@ -315,6 +344,17 @@ def create_domain(
         boot = f'<boot dev="{boot}"/>'
     else:
         boot = f'<boot dev="network"/><boot dev="hd"/>'
+
+    # Copy config drive
+    if config_drive is not None:
+        config_drive_path = os.path.join(pool, f"{uuid}-config-drive.iso")
+        subprocess.run(
+            ["sudo", "cp", config_drive, config_drive_path],
+            check=True,
+        )
+        disks_xml += cdrom_template.format(
+            config_drive_path=config_drive_path,
+        )
 
     memory <<= 10
     domain = domain_template.format(
@@ -414,8 +454,8 @@ def destroy_domain(name: str) -> None:
 
     try:
         subprocess.run(
-            f"sudo virsh undefine {name} 1>/dev/null",
-            shell=True,
+            ["sudo", "virsh", "undefine", "--nvram", name],
+            stdout=subprocess.DEVNULL,
             check=True,
         )
     except subprocess.CalledProcessError:
