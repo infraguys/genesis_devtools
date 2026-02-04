@@ -25,7 +25,6 @@ from genesis_devtools.builder import base
 from genesis_devtools.logger import AbstractLogger, DummyLogger
 from genesis_devtools import constants as c
 
-
 file_provisioner_tmpl = """
   provisioner "file" {{
       source      = "{source}"

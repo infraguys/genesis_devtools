@@ -16,7 +16,6 @@
 
 import typing as tp
 
-
 GENESIS_META_TAG = "genesis:genesis"
 GENESIS_META_NODE_TYPE_TAG = "genesis:node_type"
 GENESIS_META_STAND_TAG = "genesis:stand"
