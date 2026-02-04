@@ -27,6 +27,11 @@ EP_BACKUP_DRIVERS = "genesis_devtools.backup.drivers"
 EP_REPO_DRIVERS = "genesis_devtools.repo.drivers"
 GB_SHIFT = 30
 
+# IAM constants
+DEFAULT_IAM_TTL = 15 * 60
+DEFAULT_IAM_REFRESH_TTL = 60 * 60
+DEFAULT_IAM_SCOPE = "profile"
+
 # ENV vars
 ENV_GEN_DEV_KEYS = "GEN_DEV_KEYS"
 
