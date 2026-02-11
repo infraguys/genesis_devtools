@@ -23,6 +23,7 @@ import ipaddress
 import typing as tp
 import uuid as sys_uuid
 
+from genesis_devtools.stand import models
 from genesis_devtools import constants as c
 from genesis_devtools.infra.libvirt import constants as vc
 
@@ -74,7 +75,7 @@ domain_template = """
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
-    {net_iface}
+    {net_ifaces}
     <console type="pty"/>
     <channel type="unix">
       <source mode="bind"/>
@@ -124,6 +125,14 @@ nat_network_no_dhcp_template = """
 """
 
 
+isolated_network_no_dhcp_template = """
+<network>
+  <name>{name}</name>
+  <domain name="{name}"/>
+</network>
+"""
+
+
 network_iface_template = """
     <interface type="network">
       <source network="{network}"/>
@@ -163,7 +172,7 @@ def list_domains(
 ) -> tp.List[str]:
     """List all domains."""
     out = subprocess.check_output(
-        f"sudo virsh list --{state} --name", shell=True
+        ["sudo", "virsh", "list", f"--{state}", "--name"]
     )
     out = out.decode().strip()
     names = [o for o in out.split("\n") if o]
@@ -175,7 +184,7 @@ def list_domains(
     # Find all domains with the corresponding meta tag
     domains = []
     for name in names:
-        out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+        out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
         out = out.decode().strip()
         if meta_tag in out:
             domains.append(name)
@@ -188,7 +197,7 @@ def list_xml_domains(
 ) -> tp.List[str]:
     """List all domains."""
     out = subprocess.check_output(
-        f"sudo virsh list --{state} --name", shell=True
+        ["sudo", "virsh", "list", f"--{state}", "--name"]
     )
     out = out.decode().strip()
     names = [o for o in out.split("\n") if o]
@@ -197,7 +206,7 @@ def list_xml_domains(
     # Find all domains with the corresponding meta tag
     domains = []
     for name in names:
-        out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+        out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
         out = out.decode().strip()
         if meta_tag and meta_tag in out:
             domains.append(out)
@@ -214,7 +223,7 @@ def is_active_domain(name: str) -> bool:
 def list_nets():
     """List all networks."""
     out = subprocess.check_output(
-        "sudo virsh net-list --all --name", shell=True
+        ["sudo", "virsh", "net-list", "--all", "--name"]
     )
     out = out.decode().strip()
     return out.split("\n")
@@ -223,10 +232,30 @@ def list_nets():
 def list_pool():
     """List all pools."""
     out = subprocess.check_output(
-        "sudo virsh pool-list --all --name", shell=True
+        ["sudo", "virsh", "pool-list", "--all", "--name"]
     )
     out = out.decode().strip()
     return out.split("\n")
+
+
+def define_network(name: str, net_xml: str):
+    with tempfile.TemporaryDirectory() as temp_dir:
+        network_path = os.path.join(temp_dir, f"{name}.xml")
+        with open(network_path, "w") as f:
+            f.write(net_xml)
+
+        subprocess.check_call(
+            ["sudo", "virsh", "net-define", network_path],
+            stdout=subprocess.DEVNULL,
+        )
+        subprocess.check_call(
+            ["sudo", "virsh", "net-start", name],
+            stdout=subprocess.DEVNULL,
+        )
+        subprocess.check_call(
+            ["sudo", "virsh", "net-autostart", name],
+            stdout=subprocess.DEVNULL,
+        )
 
 
 def create_nat_network(
@@ -245,32 +274,20 @@ def create_nat_network(
     else:
         network = nat_network_no_dhcp_template.format(**net_params)
 
-    with tempfile.TemporaryDirectory() as temp_dir:
-        network_path = os.path.join(temp_dir, f"{name}.xml")
-        with open(network_path, "w") as f:
-            f.write(network)
+    define_network(name, network)
 
-        subprocess.run(
-            f"sudo virsh net-define {network_path} 1>/dev/null",
-            shell=True,
-            check=True,
-        )
-        subprocess.run(
-            f"sudo virsh net-start {name} 1>/dev/null", shell=True, check=True
-        )
-        subprocess.run(
-            f"sudo virsh net-autostart {name} 1>/dev/null",
-            shell=True,
-            check=True,
-        )
+
+def create_isolated_network(name: str):
+    net_params = {"name": name}
+    network = isolated_network_no_dhcp_template.format(**net_params)
+    define_network(name, network)
 
 
 def create_domain(
     name: str,
     cores: str,
     memory: int,
-    network: str,
-    net_type: str = "network",
+    networks: tp.Collection[models.Network],
     pool: str = c.LIBVIRT_DEF_POOL_PATH,
     image: str | None = None,
     use_image_inplace: bool = False,
@@ -281,6 +298,7 @@ def create_domain(
 ):
     uuid = str(sys_uuid.uuid4())
     disks_xml = ""
+    ifaces_xml = ""
     disk_paths = []
     index = 0
 
@@ -314,7 +332,7 @@ def create_domain(
         disk_name = f"{uuid}-{i}.qcow2"
         disk_path = os.path.join(pool, disk_name)
         disk_paths.append(disk_path)
-        subprocess.run(
+        subprocess.check_call(
             [
                 "sudo",
                 "qemu-img",
@@ -324,7 +342,6 @@ def create_domain(
                 disk_path,
                 f"{disk}G",
             ],
-            check=True,
             stdout=subprocess.DEVNULL,
         )
         disks_xml += disk_template.format(
@@ -333,10 +350,12 @@ def create_domain(
             image_format="qcow2",
         )
 
-    if net_type == "network":
-        network_iface = network_iface_template.format(network=network)
-    else:
-        network_iface = bridge_iface_template.format(network=network)
+    for network in networks:
+        if network.managed_network:
+            network_iface = network_iface_template.format(network=network.name)
+        else:
+            network_iface = bridge_iface_template.format(network=network.name)
+        ifaces_xml += network_iface
 
     meta_tags_xml = "\n\t\t".join(tag for tag in meta_tags)
 
@@ -351,6 +370,7 @@ def create_domain(
         subprocess.run(
             ["sudo", "cp", config_drive, config_drive_path],
             check=True,
+            stdout=subprocess.DEVNULL,
         )
         disks_xml += cdrom_template.format(
             config_drive_path=config_drive_path,
@@ -361,7 +381,7 @@ def create_domain(
         name=name,
         cores=cores,
         memory=memory,
-        net_iface=network_iface,
+        net_ifaces=ifaces_xml,
         disks=disks_xml,
         uuid=uuid,
         meta_tags=meta_tags_xml,
@@ -374,24 +394,22 @@ def create_domain(
             f.write(domain)
 
         try:
-            subprocess.run(
-                f"sudo virsh define {domain_path} 1>/dev/null",
-                shell=True,
-                check=True,
+            subprocess.check_call(
+                ["sudo", "virsh", "define", domain_path],
+                stdout=subprocess.DEVNULL,
             )
-            subprocess.run(
-                f"sudo virsh start {name} 1>/dev/null", shell=True, check=True
+            subprocess.check_call(
+                ["sudo", "virsh", "start", name],
+                stdout=subprocess.DEVNULL,
             )
         except Exception:
             # Unable to create domain, delete disks
             for disk_path in disk_paths:
-                subprocess.run(
-                    f"sudo rm -f {disk_path}", shell=True, check=True
-                )
+                subprocess.check_call(["sudo", "rm", "-f", disk_path])
 
 
 def get_domain_ip(name: str) -> tp.Optional[str]:
-    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
     out = out.decode().strip()
 
     mac_addresses = re.findall(r"<mac address='(.*?)'", out)
@@ -403,8 +421,7 @@ def get_domain_ip(name: str) -> tp.Optional[str]:
     # Actually it's not right solution but for simplicity keep it.
     for mac, net in zip(mac_addresses, networs):
         out = subprocess.check_output(
-            f"sudo virsh net-dhcp-leases {net}",
-            shell=True,
+            ["sudo", "virsh", "net-dhcp-leases", net],
         )
         out = out.decode().strip()
         for line in out.split("\n"):
@@ -413,7 +430,7 @@ def get_domain_ip(name: str) -> tp.Optional[str]:
 
 
 def get_domain_disk(name: str) -> str | None:
-    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
     out = out.decode().strip()
 
     # The simplest implementation, take first disk
@@ -422,7 +439,7 @@ def get_domain_disk(name: str) -> str | None:
 
 
 def get_domain_disks(name: str) -> tp.List[str]:
-    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
     out = out.decode().strip()
 
     # The simplest implementation, take first disk
@@ -443,10 +460,9 @@ def destroy_domain(name: str) -> None:
 
     if is_active_domain(name):
         try:
-            subprocess.run(
-                f"sudo virsh destroy {name} 1>/dev/null",
-                shell=True,
-                check=True,
+            subprocess.check_call(
+                ["sudo", "virsh", "destroy", name],
+                stdout=subprocess.DEVNULL,
             )
         except subprocess.CalledProcessError:
             # Nothing to do, the domain is already destroyed
@@ -464,28 +480,27 @@ def destroy_domain(name: str) -> None:
 
     # Remove the disk
     for disk_path in domain_disks:
-        subprocess.run(
-            f"sudo rm -f {disk_path} 1>/dev/null", shell=True, check=True
+        subprocess.check_call(
+            ["sudo", "rm", "-f", disk_path],
+            stdout=subprocess.DEVNULL,
         )
 
 
 def destroy_net(name: str) -> None:
     """Delete network."""
     try:
-        subprocess.run(
-            f"sudo virsh net-destroy {name} 1>/dev/null",
-            shell=True,
-            check=True,
+        subprocess.check_call(
+            ["sudo", "virsh", "net-destroy", name],
+            stdout=subprocess.DEVNULL,
         )
     except subprocess.CalledProcessError:
         # Nothing to do, the network is already destroyed
         pass
 
     try:
-        subprocess.run(
-            f"sudo virsh net-undefine {name} 1>/dev/null",
-            shell=True,
-            check=True,
+        subprocess.check_call(
+            ["sudo", "virsh", "net-undefine", name],
+            stdout=subprocess.DEVNULL,
         )
     except subprocess.CalledProcessError:
         # Nothing to do, the network is already undefined
@@ -493,7 +508,7 @@ def destroy_net(name: str) -> None:
 
 
 def domain_xml(name: str) -> str:
-    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
     return out.decode().strip()
 
 
@@ -501,7 +516,7 @@ def backup_domain(name: str, backup_path: str) -> None:
     disks = get_domain_disks(name)
 
     # Save domain xml
-    out = subprocess.check_output(f"sudo virsh dumpxml {name}", shell=True)
+    out = subprocess.check_output(["sudo", "virsh", "dumpxml", name])
     out = out.decode().strip()
 
     with open(os.path.join(backup_path, "domain.xml"), "w") as f:
@@ -512,64 +527,83 @@ def backup_domain(name: str, backup_path: str) -> None:
         for disk in disks:
             disk_name = os.path.basename(disk)
             backup_disk_path = os.path.join(backup_path, disk_name)
-            subprocess.run(
-                f"sudo cp {disk} {backup_disk_path}", shell=True, check=True
-            )
+            subprocess.check_call(["sudo", "cp", disk, backup_disk_path])
         return
 
     # Active domain
     try:
-        subprocess.run(
-            f"sudo virsh suspend {name} 1>/dev/null",
-            shell=True,
-            check=True,
+        subprocess.check_call(
+            ["sudo", "virsh", "suspend", name],
+            stdout=subprocess.DEVNULL,
         )
 
         for disk in disks:
             disk_name = os.path.basename(disk)
             backup_disk_path = os.path.join(backup_path, disk_name)
-            subprocess.run(
-                f"sudo cp {disk} {backup_disk_path}", shell=True, check=True
-            )
+            subprocess.check_call(["sudo", "cp", disk, backup_disk_path])
 
     finally:
-        subprocess.run(
-            f"sudo virsh resume {name}  1>/dev/null",
-            shell=True,
-            check=True,
+        subprocess.check_call(
+            ["sudo", "virsh", "resume", name],
+            stdout=subprocess.DEVNULL,
         )
 
 
 def create_snapshot(domain: str, snap_name: str = "snapshot") -> None:
     # Create a snapshot
-    subprocess.check_output(
-        f"sudo virsh snapshot-create-as {domain} {snap_name} "
-        "--disk-only --quiesce --atomic 1>/dev/null",
-        shell=True,
+    subprocess.check_call(
+        [
+            "sudo",
+            "virsh",
+            "snapshot-create-as",
+            domain,
+            snap_name,
+            "--disk-only",
+            "--quiesce",
+            "--atomic",
+        ],
+        stdout=subprocess.DEVNULL,
     )
 
 
 def delete_snapshot(domain: str, snap_name: str = "snapshot") -> None:
-    subprocess.check_output(
-        f"sudo virsh snapshot-delete {domain} {snap_name} "
-        "--metadata 1>/dev/null",
-        shell=True,
+    subprocess.check_call(
+        [
+            "sudo",
+            "virsh",
+            "snapshot-delete",
+            domain,
+            snap_name,
+            "--metadata",
+        ],
+        stdout=subprocess.DEVNULL,
     )
 
 
 def merge_disk_snapshot(
     domain: str, device: str, disk_path: str, snapshot_path: str
 ) -> None:
-    subprocess.check_output(
-        f"sudo virsh blockcommit --domain {domain} {device} --top "
-        f"{snapshot_path} --base {disk_path} --wait --pivot 1>/dev/null",
-        shell=True,
+    subprocess.check_call(
+        [
+            "sudo",
+            "virsh",
+            "blockcommit",
+            "--domain",
+            domain,
+            device,
+            "--top",
+            snapshot_path,
+            "--base",
+            disk_path,
+            "--wait",
+            "--pivot",
+        ],
+        stdout=subprocess.DEVNULL,
     )
 
 
 def resume_domain(name: str) -> None:
-    subprocess.run(
-        f"sudo virsh resume {name}  1>/dev/null",
-        shell=True,
-        check=True,
+    subprocess.check_call(
+        ["sudo", "virsh", "resume", name],
+        stdout=subprocess.DEVNULL,
     )

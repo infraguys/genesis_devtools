@@ -105,7 +105,12 @@ class Hypervisor:
 
 @dataclasses.dataclass
 class Stand:
+    # Main network of the installation. After bootstrap
+    # procedure a node will be connected to this network.
     network: Network
+    # Network used for the bootstrapping procedure.
+    # It's an isolated private network.
+    boot_network: Network
     bootstraps: list[Bootstrap]
     baremetals: list[Node]
     hypervisors: list[Hypervisor] = dataclasses.field(default_factory=list)
@@ -137,6 +142,7 @@ class Stand:
         image: str,
         use_image_inplace: bool,
         network: Network,
+        boot_network: Network,
         cores: int = 1,
         memory: int = 1024,
         name: str = "dev-stand",
@@ -146,6 +152,7 @@ class Stand:
         return cls(
             name=name,
             network=network,
+            boot_network=boot_network,
             bootstraps=[
                 Bootstrap(
                     name=bootstrap_name,
@@ -161,16 +168,23 @@ class Stand:
 
     @classmethod
     def empty_stand(
-        cls, name: str = "dev-stand", network: Network | None = None
+        cls,
+        name: str = "dev-stand",
+        network: Network | None = None,
+        boot_network: Network | None = None,
     ) -> Stand:
         if network is None:
             network = Network.dummy()
+
+        if boot_network is None:
+            boot_network = Network.dummy()
 
         return cls(
             name=name,
             bootstraps=[],
             baremetals=[],
             network=network,
+            boot_network=boot_network,
             hypervisors=[],
         )
 
@@ -187,10 +201,16 @@ class Stand:
         else:
             network = Network.from_spec(spec.pop("network"))
 
+        if "boot_network" not in spec:
+            boot_network = Network.dummy()
+        else:
+            boot_network = Network.from_spec(spec.pop("boot_network"))
+
         return cls(
             bootstraps=bootstraps,
             baremetals=baremetals,
             network=network,
+            boot_network=boot_network,
             hypervisors=[
                 Hypervisor.from_spec(h) for h in spec.pop("hypervisors", [])
             ],

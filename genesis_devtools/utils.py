@@ -97,6 +97,10 @@ def installation_net_name(name: str) -> str:
     return f"{name}-net"
 
 
+def installation_boot_net_name(name: str) -> str:
+    return f"{name}-boot-net"
+
+
 def installation_bootstrap_name(name: str) -> str:
     return f"{name}-bootstrap"
 
