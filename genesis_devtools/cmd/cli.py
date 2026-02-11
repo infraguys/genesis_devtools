@@ -45,6 +45,7 @@ from genesis_devtools.infra.driver import libvirt as libvirt_infra
 BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
 GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
+GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
 
 
 @click.group(invoke_without_command=True)
@@ -498,14 +499,32 @@ def push_cmd(
 @click.option(
     "--cidr",
     default=GC_CIDR,
-    help="Network CIDR",
+    help="The main network CIDR",
     show_default=True,
     type=ipaddress.IPv4Network,
 )
 @click.option(
     "--bridge",
     default=None,
-    help="Name of the linux bridge, it will be created if not set.",
+    help=(
+        "Name of the linux bridge for the main network, "
+        "it will be created if not set."
+    ),
+)
+@click.option(
+    "--boot-cidr",
+    default=GC_BOOT_CIDR,
+    help="The bootstrap network CIDR",
+    show_default=True,
+    type=ipaddress.IPv4Network,
+)
+@click.option(
+    "--boot-bridge",
+    default=None,
+    help=(
+        "Name of the linux bridge for the bootstrap network, "
+        "it will be created if not set."
+    ),
 )
 @click.option(
     "-f",
@@ -607,6 +626,8 @@ def bootstrap_cmd(
     stand_spec: str | None,
     cidr: ipaddress.IPv4Network,
     bridge: str | None,
+    boot_cidr: ipaddress.IPv4Network,
+    boot_bridge: str | None,
     force: bool,
     no_wait: bool,
     use_image_inplace: bool,
@@ -676,6 +697,8 @@ def bootstrap_cmd(
             stand_spec=stand_spec,
             cidr=cidr,
             bridge=bridge,
+            boot_cidr=boot_cidr,
+            boot_bridge=boot_bridge,
             force=force,
             use_image_inplace=use_image_inplace,
             repository=repository,
@@ -1305,6 +1328,8 @@ def _bootstrap_core(
     stand_spec: tp.Dict[str, tp.Any] | None,
     cidr: ipaddress.IPv4Network,
     bridge: str | None,
+    boot_cidr: ipaddress.IPv4Network,
+    boot_bridge: str | None,
     force: bool,
     use_image_inplace: bool,
     repository: str,
@@ -1314,10 +1339,16 @@ def _bootstrap_core(
     logger.info("Starting genesis bootstrap in 'core' mode")
 
     net_name = utils.installation_net_name(name)
-    default_stand_network = stand_models.Network(
+    default_stand_main_network = stand_models.Network(
         name=bridge if bridge else net_name,
         cidr=cidr,
         managed_network=False if bridge else True,
+    )
+    boot_net_name = utils.installation_boot_net_name(name)
+    default_stand_boot_network = stand_models.Network(
+        name=boot_bridge if boot_bridge else boot_net_name,
+        cidr=boot_cidr,
+        managed_network=False if boot_bridge else True,
     )
 
     # Single bootstrap stand
@@ -1330,14 +1361,18 @@ def _bootstrap_core(
             use_image_inplace=use_image_inplace,
             cores=cores,
             memory=memory,
-            network=default_stand_network,
+            network=default_stand_main_network,
+            boot_network=default_stand_boot_network,
             bootstrap_name=bootstrap_domain_name,
             hypervisors=hypervisors,
         )
     else:
         dev_stand = stand_models.Stand.from_spec(stand_spec)
         if dev_stand.network.is_dummy:
-            dev_stand.network = default_stand_network
+            dev_stand.network = default_stand_main_network
+
+        if dev_stand.boot_network.is_dummy:
+            dev_stand.boot_network = default_stand_boot_network
 
         # Assign the image to bootstraps if it wasn't specified
         # in the specification.
@@ -1368,8 +1403,13 @@ def _bootstrap_core(
         infra.delete_stand(stand)
         logger.info(f"Destroyed old genesis installation: {dev_stand.name}")
 
-    infra.create_stand(dev_stand, repository=repository)
-    logger.info("Launched genesis installation")
+    try:
+        infra.create_stand(dev_stand, repository=repository)
+        logger.info("Launched genesis installation")
+    except Exception:
+        infra.delete_stand(dev_stand)
+        logger.error(f"Failed to launch genesis installation {dev_stand.name}")
+        raise
 
     cidr = dev_stand.network.cidr
     logger.important(
