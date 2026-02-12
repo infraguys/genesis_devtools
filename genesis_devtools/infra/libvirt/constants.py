@@ -23,5 +23,6 @@ GENESIS_META_CPU_TAG = "genesis:vcpu"
 GENESIS_META_MEM_TAG = "genesis:mem"
 GENESIS_META_IMAGE_TAG = "genesis:image"
 GENESIS_META_NET_TAG = "genesis:network"
+GENESIS_META_BOOT_NET_TAG = "genesis:boot_network"
 
 BootMode = tp.Literal["hd", "network"]

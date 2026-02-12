@@ -70,6 +70,24 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             name=name, cidr=cidr, managed_network=managed_network, dhcp=dhcp
         )
 
+    def _extract_boot_net_from_bootstrap(
+        self, bootstrap: minidom.Document
+    ) -> models.Network:
+        try:
+            net = bootstrap.getElementsByTagName(vc.GENESIS_META_BOOT_NET_TAG)[
+                0
+            ]
+        except Exception:
+            return models.Network.dummy()
+
+        name = net.firstChild.nodeValue
+        cidr = ipaddress.IPv4Network(net.getAttribute("cidr"))
+        managed_network = bool(int(net.getAttribute("managed_network")))
+        dhcp = bool(int(net.getAttribute("dhcp")))
+        return models.Network(
+            name=name, cidr=cidr, managed_network=managed_network, dhcp=dhcp
+        )
+
     def _domain2bootstrap(self, domain: minidom.Document) -> models.Bootstrap:
         node = self._domain2node(domain)
         return models.Bootstrap.from_node(node)
@@ -111,6 +129,9 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             if node_type == "bootstrap":
                 stand.bootstraps.append(self._domain2bootstrap(domain))
                 stand.network = self._extract_net_from_bootstrap(domain)
+                stand.boot_network = self._extract_boot_net_from_bootstrap(
+                    domain
+                )
             elif node_type == "baremetal":
                 stand.baremetals.append(self._domain2node(domain))
             else:
@@ -136,9 +157,19 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
         ):
             raise ValueError(f"Some domain in stand {stand} already exists")
 
-        if stand.network.managed_network and libvirt.has_net(stand.network):
-            raise ValueError(f"Network {stand.network} already exists")
+        if stand.network.managed_network and libvirt.has_net(
+            stand.network.name
+        ):
+            raise ValueError(f"Network {stand.network.name} already exists")
 
+        if stand.boot_network.managed_network and libvirt.has_net(
+            stand.boot_network.name
+        ):
+            raise ValueError(
+                f"Network {stand.boot_network.name} already exists"
+            )
+
+        # Main network for ordinary communication
         if stand.network.managed_network:
             libvirt.create_nat_network(
                 name=stand.network.name,
@@ -146,9 +177,15 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 dhcp_enabled=stand.network.dhcp,
             )
 
+        # Isolated network for bootstrap procedure
+        if stand.boot_network.managed_network:
+            libvirt.create_isolated_network(
+                name=stand.boot_network.name,
+            )
+
         # Prepare config drive for the bootstrap node
         spec = {
-            "schema_version": 1,
+            "schema_version": 2,
             "stand": dataclasses.asdict(stand),
             **extra_data,
         }
@@ -181,6 +218,17 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                         "dhcp": int(stand.network.dhcp),
                     },
                 ),
+                self._tag(
+                    vc.GENESIS_META_BOOT_NET_TAG,
+                    stand.boot_network.name,
+                    {
+                        "cidr": str(stand.boot_network.cidr),
+                        "managed_network": int(
+                            stand.boot_network.managed_network
+                        ),
+                        "dhcp": int(stand.boot_network.dhcp),
+                    },
+                ),
             )
 
             libvirt.create_domain(
@@ -190,10 +238,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 cores=bootstrap.cores,
                 memory=bootstrap.memory,
                 disks=bootstrap.disks,
-                network=stand.network.name,
-                net_type=(
-                    "network" if stand.network.managed_network else "bridge"
-                ),
+                networks=(stand.network, stand.boot_network),
                 meta_tags=tags,
                 config_drive=config_drive_path,
             )
@@ -214,10 +259,8 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 use_image_inplace=node.use_image_inplace,
                 cores=node.cores,
                 memory=node.memory,
-                network=stand.network.name,
-                net_type=(
-                    "network" if stand.network.managed_network else "bridge"
-                ),
+                # Put new node to the boot network
+                networks=(stand.boot_network,),
                 meta_tags=tags,
                 disks=node.disks,
                 boot="network",
@@ -226,7 +269,9 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
     def delete_stand(self, stand: models.Stand) -> None:
         """Delete the stand."""
         for node in itertools.chain(stand.bootstraps, stand.baremetals):
-            libvirt.destroy_domain(node.name)
+            if libvirt.has_domain(node.name):
+                libvirt.destroy_domain(node.name)
 
-        if stand.network.managed_network:
-            libvirt.destroy_net(stand.network.name)
+        for net in (stand.network.name, stand.boot_network.name):
+            if libvirt.has_net(net):
+                libvirt.destroy_net(net)
