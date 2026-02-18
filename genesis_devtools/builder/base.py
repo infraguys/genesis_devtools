@@ -37,9 +37,7 @@ class Image:
     override: dict[str, tp.Any] | None = None
 
     @classmethod
-    def from_config(
-        cls, image_config: tp.Dict[str, tp.Any], work_dir: str
-    ) -> "Image":
+    def from_config(cls, image_config: tp.Dict[str, tp.Any], work_dir: str) -> "Image":
         """Create an image from configuration."""
         script = image_config.pop("script")
         if not os.path.isabs(script):
@@ -116,9 +114,7 @@ class ElementInventory(tp.NamedTuple):
             "version": inventory["version"],
         }
         for category in cls.categories():
-            kwargs[category] = [
-                pathlib.Path(p) for p in inventory.get(category, [])
-            ]
+            kwargs[category] = [pathlib.Path(p) for p in inventory.get(category, [])]
 
         return cls(**kwargs)
 

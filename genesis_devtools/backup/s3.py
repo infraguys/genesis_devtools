@@ -28,7 +28,6 @@ from genesis_devtools import utils
 
 
 class S3QcowBackuper(qcow.AbstractQcowBackuper):
-
     def __init__(
         self,
         endpoint_url: str,
@@ -62,9 +61,7 @@ class S3QcowBackuper(qcow.AbstractQcowBackuper):
         )
 
         if encryption:
-            stream = utils.ReaderEncryptorIO(
-                stream, encryption.key, encryption.iv
-            )
+            stream = utils.ReaderEncryptorIO(stream, encryption.key, encryption.iv)
             s3_path += self.ENCRYPTED_SUFFIX
         s3_client.upload_fileobj(stream, self._bucket_name, s3_path)
 

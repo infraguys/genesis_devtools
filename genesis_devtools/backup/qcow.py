@@ -30,7 +30,6 @@ from genesis_devtools import utils
 
 
 class AbstractQcowBackuper(base.AbstractBackuper):
-
     COMPRESS_SUFFIX = ".tar.gz"
     ENCRYPTED_SUFFIX = ".encrypted"
 
@@ -97,9 +96,7 @@ class AbstractQcowBackuper(base.AbstractBackuper):
                 for i, disk in enumerate(disks):
                     device = "vd" + chr(ord("a") + i)
                     snapshot_path = self._snapshot_path(disk)
-                    libvirt.merge_disk_snapshot(
-                        domain, device, disk, snapshot_path
-                    )
+                    libvirt.merge_disk_snapshot(domain, device, disk, snapshot_path)
 
                 # Copy snapshot
                 self.backup_domain_snapshot(
