@@ -29,7 +29,6 @@ from genesis_devtools import constants as c
 
 
 class LocalQcowBackuper(qcow.AbstractQcowBackuper):
-
     def __init__(
         self,
         backup_dir: str,
@@ -99,9 +98,7 @@ class LocalQcowBackuper(qcow.AbstractQcowBackuper):
         snapshot_backup_path = os.path.join(
             domain_backup_path, os.path.basename(snapshot_path)
         )
-        self._save_file_to_backup(
-            snapshot_path, snapshot_backup_path, encryption
-        )
+        self._save_file_to_backup(snapshot_path, snapshot_backup_path, encryption)
 
     def _do_backup(
         self,
@@ -166,15 +163,12 @@ class LocalQcowBackuper(qcow.AbstractQcowBackuper):
             if os.path.exists(snapshot_path):
                 # Find the original disk
                 for disk_format in ("raw", "qcow2"):
-                    disk_path = (
-                        ".".join(disks[0].split(".")[:-1]) + disk_format
-                    )
+                    disk_path = ".".join(disks[0].split(".")[:-1]) + disk_format
                     if os.path.exists(disk_path):
                         break
                 else:
                     self._logger.error(
-                        "The original disk hasn't been found for domain "
-                        f"{domain}"
+                        f"The original disk hasn't been found for domain {domain}"
                     )
                     continue
 
@@ -184,8 +178,7 @@ class LocalQcowBackuper(qcow.AbstractQcowBackuper):
                     libvirt.delete_snapshot(domain, self._snapshot_name)
                 except Exception:
                     self._logger.error(
-                        f"Failed to merge snapshot {snapshot_path} "
-                        f"for domain {domain}"
+                        f"Failed to merge snapshot {snapshot_path} for domain {domain}"
                     )
 
     def backup(

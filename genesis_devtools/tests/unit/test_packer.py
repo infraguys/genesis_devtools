@@ -18,7 +18,6 @@ from genesis_devtools.builder import packer
 
 
 class TestPackerVariable:
-
     def test_packer_var_int(self) -> None:
         var = packer.PackerVariable(name="cpus", value=1)
         assert var.render() == "cpus = 1"

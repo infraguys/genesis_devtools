@@ -55,9 +55,7 @@ class LocalPathDependency(base.AbstractDependency):
         for pattern in self._exclude:
             pattern = pattern.lstrip("/")
             for name in names:
-                rel_path = os.path.relpath(
-                    os.path.join(dirpath, name), self._path
-                )
+                rel_path = os.path.relpath(os.path.join(dirpath, name), self._path)
                 if fnmatch.fnmatch(rel_path, pattern):
                     ignored.add(name)
         return list(ignored)
@@ -72,9 +70,7 @@ class LocalPathDependency(base.AbstractDependency):
                 path = path[:-1]
             name = os.path.basename(path)
             ignore_func = self._ignore_func if self._exclude else None
-            shutil.copytree(
-                path, os.path.join(output_dir, name), ignore=ignore_func
-            )
+            shutil.copytree(path, os.path.join(output_dir, name), ignore=ignore_func)
             self._local_path = os.path.join(output_dir, name)
         else:
             shutil.copy(path, output_dir)
@@ -134,9 +130,7 @@ class LocalEnvPathDependency(base.AbstractDependency):
         path = os.environ.get(self._env_path)
         if not path or not os.path.exists(path):
             if not self._optional:
-                raise ValueError(
-                    f"Environment variable {self._env_path} not found"
-                )
+                raise ValueError(f"Environment variable {self._env_path} not found")
             return
 
         self._path = path
@@ -235,9 +229,7 @@ class HttpDependency(base.AbstractDependency):
 class GitDependency(base.AbstractDependency):
     """Git dependency item."""
 
-    def __init__(
-        self, repo_url: str, img_dest: str, branch: str | None = None
-    ) -> None:
+    def __init__(self, repo_url: str, img_dest: str, branch: str | None = None) -> None:
         super().__init__()
         self._repo_url = repo_url
         self._branch = branch
@@ -280,8 +272,7 @@ class GitDependency(base.AbstractDependency):
         """Create a dependency item from configuration."""
         if "git" not in dep_config or "src" not in dep_config["git"]:
             raise ValueError(
-                "Git source not found in dependency "
-                f"configuration: {dep_config}"
+                f"Git source not found in dependency configuration: {dep_config}"
             )
 
         repo_url = dep_config["git"]["src"]

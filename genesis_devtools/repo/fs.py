@@ -40,9 +40,7 @@ class FSRepoDriver(base.AbstractRepoDriver):
             os.makedirs(os.path.join(dst, name), exist_ok=True)
             for artifact in artifacts:
                 artifact_name = os.path.basename(artifact)
-                shutil.copyfile(
-                    artifact, os.path.join(dst, name, artifact_name)
-                )
+                shutil.copyfile(artifact, os.path.join(dst, name, artifact_name))
                 self._logger.info(f"Pushed {artifact_name} to {dst}")
 
             self._logger.info(f"Finished pushing {name}")
@@ -51,9 +49,7 @@ class FSRepoDriver(base.AbstractRepoDriver):
     def elements_path(self) -> str:
         return os.path.join(self._repo_path, "genesis-elements")
 
-    def elements_inventory_path(
-        self, element: builder_base.ElementInventory
-    ) -> str:
+    def elements_inventory_path(self, element: builder_base.ElementInventory) -> str:
         """Get the base path for elements in the repository."""
         return os.path.join(
             self.elements_path, element.name, element.version, "inventory.json"
@@ -88,9 +84,7 @@ class FSRepoDriver(base.AbstractRepoDriver):
 
     def push(self, element: builder_base.ElementInventory) -> None:
         """Push the element to the repo."""
-        element_path = os.path.join(
-            self.elements_path, element.name, element.version
-        )
+        element_path = os.path.join(self.elements_path, element.name, element.version)
         if os.path.exists(element_path):
             raise base.ElementAlreadyExistsError(
                 f"Element {element.name} version {element.version} already exists."
@@ -106,16 +100,13 @@ class FSRepoDriver(base.AbstractRepoDriver):
         spec = element.to_dict()
         for category in element.categories():
             spec[category] = [
-                os.path.basename(artifact)
-                for artifact in getattr(element, category)
+                os.path.basename(artifact) for artifact in getattr(element, category)
             ]
 
         with open(self.elements_inventory_path(element), "w") as f:
             json.dump(spec, f, indent=2)
 
-    def pull(
-        self, element: builder_base.ElementInventory, dst_path: str
-    ) -> None:
+    def pull(self, element: builder_base.ElementInventory, dst_path: str) -> None:
         """Pull the element from the repo."""
         # Pull all artifacts
         shutil.copytree(
@@ -136,9 +127,7 @@ class FSRepoDriver(base.AbstractRepoDriver):
 
     def remove(self, element: builder_base.ElementInventory) -> None:
         """Remove the element from the repo."""
-        element_path = os.path.join(
-            self.elements_path, element.name, element.version
-        )
+        element_path = os.path.join(self.elements_path, element.name, element.version)
         if os.path.exists(element_path):
             shutil.rmtree(element_path)
         self._logger.info(f"Removed {element.name} version {element.version}")

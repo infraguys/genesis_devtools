@@ -66,9 +66,7 @@ class SimpleBuilder:
 
         # Determine images output directory
         if inventory_mode:
-            images_output_dir = os.path.join(
-                self._elements_output_dir, "images"
-            )
+            images_output_dir = os.path.join(self._elements_output_dir, "images")
         else:
             images_output_dir = self._elements_output_dir
 
@@ -161,9 +159,7 @@ class SimpleBuilder:
             if not element.manifest:
                 raise ValueError("Element must have a manifest")
 
-            with open(
-                os.path.join(self._work_dir, element.manifest), "r"
-            ) as f:
+            with open(os.path.join(self._work_dir, element.manifest), "r") as f:
                 manifest = yaml.safe_load(f)
 
             version = build_suffix
@@ -263,16 +259,13 @@ class SimpleBuilder:
         for dep in dep_configs:
             dep_item = base.AbstractDependency.find_dependency(dep, work_dir)
             if dep_item is None:
-                raise ValueError(
-                    f"Unable to handle dependency: {dep}. Unknown type."
-                )
+                raise ValueError(f"Unable to handle dependency: {dep}. Unknown type.")
             deps.append(dep_item)
 
         # Prepare elements
         element_configs = build_config.get(cls.ELEMENT_KEY, [])
         elements = [
-            base.Element.from_config(elem, work_dir)
-            for elem in element_configs
+            base.Element.from_config(elem, work_dir) for elem in element_configs
         ]
 
         if not elements:
