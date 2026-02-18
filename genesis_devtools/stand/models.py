@@ -191,9 +191,7 @@ class Stand:
     @classmethod
     def from_spec(cls, spec: dict[str, tp.Any]) -> Stand:
         spec = spec.copy()
-        bootstraps = [
-            Bootstrap.from_spec(b) for b in spec.pop("bootstraps", [])
-        ]
+        bootstraps = [Bootstrap.from_spec(b) for b in spec.pop("bootstraps", [])]
         baremetals = [Node.from_spec(n) for n in spec.pop("baremetals", [])]
 
         if "network" not in spec:
@@ -211,8 +209,6 @@ class Stand:
             baremetals=baremetals,
             network=network,
             boot_network=boot_network,
-            hypervisors=[
-                Hypervisor.from_spec(h) for h in spec.pop("hypervisors", [])
-            ],
+            hypervisors=[Hypervisor.from_spec(h) for h in spec.pop("hypervisors", [])],
             **spec,
         )

@@ -74,9 +74,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
         self, bootstrap: minidom.Document
     ) -> models.Network:
         try:
-            net = bootstrap.getElementsByTagName(vc.GENESIS_META_BOOT_NET_TAG)[
-                0
-            ]
+            net = bootstrap.getElementsByTagName(vc.GENESIS_META_BOOT_NET_TAG)[0]
         except Exception:
             return models.Network.dummy()
 
@@ -129,9 +127,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             if node_type == "bootstrap":
                 stand.bootstraps.append(self._domain2bootstrap(domain))
                 stand.network = self._extract_net_from_bootstrap(domain)
-                stand.boot_network = self._extract_boot_net_from_bootstrap(
-                    domain
-                )
+                stand.boot_network = self._extract_boot_net_from_bootstrap(domain)
             elif node_type == "baremetal":
                 stand.baremetals.append(self._domain2node(domain))
             else:
@@ -139,14 +135,10 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
 
         return list(stands.values())
 
-    def create_stand(
-        self, stand: models.Stand, **extra_data: tp.Any
-    ) -> models.Stand:
+    def create_stand(self, stand: models.Stand, **extra_data: tp.Any) -> models.Stand:
         """Create a new stand."""
         if len(stand.bootstraps) > 1:
-            raise NotImplementedError(
-                "Multiple bootstraps are not supported yet"
-            )
+            raise NotImplementedError("Multiple bootstraps are not supported yet")
 
         if not stand.is_valid():
             raise ValueError(f"Stand {stand} is invalid!")
@@ -157,17 +149,13 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
         ):
             raise ValueError(f"Some domain in stand {stand} already exists")
 
-        if stand.network.managed_network and libvirt.has_net(
-            stand.network.name
-        ):
+        if stand.network.managed_network and libvirt.has_net(stand.network.name):
             raise ValueError(f"Network {stand.network.name} already exists")
 
         if stand.boot_network.managed_network and libvirt.has_net(
             stand.boot_network.name
         ):
-            raise ValueError(
-                f"Network {stand.boot_network.name} already exists"
-            )
+            raise ValueError(f"Network {stand.boot_network.name} already exists")
 
         # Main network for ordinary communication
         if stand.network.managed_network:
@@ -223,9 +211,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                     stand.boot_network.name,
                     {
                         "cidr": str(stand.boot_network.cidr),
-                        "managed_network": int(
-                            stand.boot_network.managed_network
-                        ),
+                        "managed_network": int(stand.boot_network.managed_network),
                         "dhcp": int(stand.boot_network.dhcp),
                     },
                 ),

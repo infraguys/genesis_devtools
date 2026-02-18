@@ -42,10 +42,7 @@ class EncryptionCreds(tp.NamedTuple):
         key = os.environ["GEN_DEV_BACKUP_KEY"]
         iv = os.environ["GEN_DEV_BACKUP_IV"]
 
-        if (
-            cls.MIN_LEN <= len(key) <= cls.LEN
-            and cls.MIN_LEN <= len(iv) <= cls.LEN
-        ):
+        if cls.MIN_LEN <= len(key) <= cls.LEN and cls.MIN_LEN <= len(iv) <= cls.LEN:
             return
 
         raise ValueError(

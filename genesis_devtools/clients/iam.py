@@ -38,7 +38,7 @@ class TokenFileNotFoundError(exceptions.DevToolsException):
     pass
 
 
-@dataclasses.dataclass(frozen=True, slots=True)
+@dataclasses.dataclass(frozen=True)
 class Token:
     url: str
     project_id: str
@@ -49,9 +49,7 @@ class Token:
 
     @staticmethod
     def file_path(project_dir: str) -> str:
-        return os.path.join(
-            os.path.abspath(project_dir), ".genesis", "auth.json"
-        )
+        return os.path.join(os.path.abspath(project_dir), ".genesis", "auth.json")
 
     @classmethod
     def exists(cls, project_dir: str) -> bool:
@@ -80,9 +78,7 @@ class Token:
         auth_dir = os.path.dirname(auth_file)
 
         if os.path.exists(auth_file) and not force:
-            raise TokenFileAlreadyExistsError(
-                f"Token file already exists: {auth_file}"
-            )
+            raise TokenFileAlreadyExistsError(f"Token file already exists: {auth_file}")
 
         os.makedirs(auth_dir, exist_ok=True)
         with open(auth_file, "w") as f:
