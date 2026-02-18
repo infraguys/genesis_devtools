@@ -58,9 +58,7 @@ def auth_group() -> None:
     pass
 
 
-@auth_group.command(
-    "login", help="Authenticate in IAM and store tokens locally"
-)
+@auth_group.command("login", help="Authenticate in IAM and store tokens locally")
 @click.option(
     "--iam-client-endpoint",
     required=True,
@@ -208,9 +206,7 @@ def auth_me_cmd(project_dir: str) -> None:
     help="OAuth scope (optional)",
 )
 @click.argument("project_dir", type=click.Path())
-def auth_refresh_cmd(
-    ttl: int | None, scope: str | None, project_dir: str
-) -> None:
+def auth_refresh_cmd(ttl: int | None, scope: str | None, project_dir: str) -> None:
     project_dir = os.path.abspath(project_dir)
 
     try:
@@ -238,8 +234,7 @@ def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
     for var in manifest_vars:
         if "=" not in var:
             raise click.UsageError(
-                f"Invalid manifest variable format: '{var}'. "
-                "Expected 'key=value'."
+                f"Invalid manifest variable format: '{var}'. Expected 'key=value'."
             )
         key, value = var.split("=", 1)
         result[key] = value
@@ -378,14 +373,10 @@ def build_cmd(
     packer_image_builder = PackerBuilder(logger)
 
     # Path where genesis.yaml configuration file is located
-    work_dir = os.path.abspath(
-        os.path.join(project_dir, c.DEF_GEN_WORK_DIR_NAME)
-    )
+    work_dir = os.path.abspath(os.path.join(project_dir, c.DEF_GEN_WORK_DIR_NAME))
 
     # Prepare a build suffix
-    build_suffix = utils.get_version_suffix(
-        version_suffix, project_dir=project_dir
-    )
+    build_suffix = utils.get_version_suffix(version_suffix, project_dir=project_dir)
 
     for _, build in builds.items():
         builder = simple_builder.SimpleBuilder.from_config(
@@ -507,8 +498,7 @@ def push_cmd(
     "--bridge",
     default=None,
     help=(
-        "Name of the linux bridge for the main network, "
-        "it will be created if not set."
+        "Name of the linux bridge for the main network, it will be created if not set."
     ),
 )
 @click.option(
@@ -575,10 +565,7 @@ def push_cmd(
     "--hyper-network-type",
     default="network",
     type=click.Choice(("bridge", "network")),
-    help=(
-        "Network type for the hypervisor. "
-        "Works only if --hyper option is set."
-    ),
+    help=("Network type for the hypervisor. Works only if --hyper option is set."),
     show_default=True,
 )
 @click.option(
@@ -594,10 +581,7 @@ def push_cmd(
     "--hyper-storage-pool",
     default="default",
     type=str,
-    help=(
-        "Storage pool for the hypervisor. "
-        "Works only if --hyper option is set."
-    ),
+    help=("Storage pool for the hypervisor. Works only if --hyper option is set."),
     show_default=True,
 )
 @click.option(
@@ -649,9 +633,7 @@ def bootstrap_cmd(
     # DEPRECATED(akremenetsky): The 'element' mode is deprecated
     if launch_mode == "element":
         if stand_spec is not None:
-            raise click.UsageError(
-                "Stand spec is not supported in 'element' mode"
-            )
+            raise click.UsageError("Stand spec is not supported in 'element' mode")
 
         return _bootstrap_element(
             image_path=image_path,
@@ -751,7 +733,7 @@ def repo_init_cmd(
             return
 
         click.secho(
-            f"Repository already exists.",
+            "Repository already exists.",
             fg="red",
         )
 
@@ -835,9 +817,7 @@ def repo_list_cmd(
     ]
 
     for element in elements:
-        table.add_row(
-            [element, sorted(elements[element])[-1], len(elements[element])]
-        )
+        table.add_row([element, sorted(elements[element])[-1], len(elements[element])])
 
     click.echo(table)
 
@@ -940,9 +920,7 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
     try:
         return time.strptime(start, "%H:%M:%S")
     except ValueError:
-        raise click.UsageError(
-            "Invalid '--start' format. Use HH:MM:SS, e.g., 16:00:00"
-        )
+        raise click.UsageError("Invalid '--start' format. Use HH:MM:SS, e.g., 16:00:00")
 
 
 @main.command("backup", help="Backup the current installation")
@@ -1105,9 +1083,7 @@ def backup_cmd(
 
     # Do a single backup and exit
     if oneshot:
-        domains = _domains_for_backup(
-            name, exclude_name, raise_on_domain_absence=True
-        )
+        domains = _domains_for_backup(name, exclude_name, raise_on_domain_absence=True)
         backuper.backup(domains, compress, encryption)
         return
 
@@ -1120,8 +1096,7 @@ def backup_cmd(
         offset = offset or period
         ts = time.time() + offset.timeout
         click.secho(
-            "Next backup at: "
-            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
+            f"Next backup at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))}"
         )
         time.sleep(offset.timeout)
     else:
@@ -1135,8 +1110,7 @@ def backup_cmd(
         # If --start is specified, period must be at least daily
         if period.timeout < c.BackupPeriod.D1.timeout:
             raise click.UsageError(
-                "The '--start' option requires the period to be at "
-                "least 1 day (1d)."
+                "The '--start' option requires the period to be at least 1 day (1d)."
             )
 
         start_sec = start.tm_hour * 3600 + start.tm_min * 60 + start.tm_sec
@@ -1241,9 +1215,7 @@ def _domains_for_backup(
         domains = {
             d
             for d in domains
-            if not any(
-                fnmatch.fnmatch(d, pattern) for pattern in exclude_names
-            )
+            if not any(fnmatch.fnmatch(d, pattern) for pattern in exclude_names)
         }
 
     return list(domains)
@@ -1283,7 +1255,7 @@ def _bootstrap_element(
     )
 
     if not dev_stand.is_valid():
-        logger.error(f"Invalid stand for element")
+        logger.error("Invalid stand for element")
         return
 
     infra = libvirt_infra.LibvirtInfraDriver()
@@ -1413,5 +1385,5 @@ def _bootstrap_core(
 
     cidr = dev_stand.network.cidr
     logger.important(
-        f"The stand {name} will be ready " f"soon at:\nssh ubuntu@{cidr[2]}",
+        f"The stand {name} will be ready soon at:\nssh ubuntu@{cidr[2]}",
     )

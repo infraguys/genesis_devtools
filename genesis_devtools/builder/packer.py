@@ -19,7 +19,8 @@ import os
 import subprocess
 import typing as tp
 import shutil
-from importlib.resources import files
+
+import importlib.resources as resources
 
 from genesis_devtools.builder import base
 from genesis_devtools.logger import AbstractLogger, DummyLogger
@@ -100,11 +101,20 @@ class PackerVariable(tp.NamedTuple):
         return "\n".join([v.render() for v in variables])
 
 
-def _get_profile_files(base: str) -> str:
+def _get_profile_files(base: str) -> list[tp.Any]:
     """Get base files for the image."""
     profile_files = []
-    for bfile in files(f"{c.PKG_NAME}.packer.{base}").iterdir():
-        profile_files.append(bfile)
+    try:
+        # Для Python 3.9+
+        files = resources.files(f"{c.PKG_NAME}.packer.{base}")
+        for bfile in files.iterdir():
+            profile_files.append(bfile)
+    except AttributeError:
+        # Для Python 3.8 и ниже
+        with resources.path(f"{c.PKG_NAME}.packer.{base}", "") as path:
+            for item in path.iterdir():
+                if item.is_file():
+                    profile_files.append(item)
 
     return profile_files
 
@@ -157,14 +167,11 @@ class PackerBuilder(base.DummyImageBuilder):
         for i, dep in enumerate(deps):
             if not dep.local_path:
                 self._logger.warn(
-                    f"Dependency {dep.img_dest} has no local path "
-                    "and will be skipped"
+                    f"Dependency {dep.img_dest} has no local path and will be skipped"
                 )
                 continue
 
-            tmp_dest = os.path.join(
-                "/tmp/", os.path.basename(dep.img_dest) + f"_{i}"
-            )
+            tmp_dest = os.path.join("/tmp/", os.path.basename(dep.img_dest) + f"_{i}")
             provisioners.append(
                 file_provisioner_tmpl.format(
                     source=dep.local_path,
@@ -179,9 +186,7 @@ class PackerBuilder(base.DummyImageBuilder):
             dev_key_path = os.path.join(image_dir, "__dev_keys")
             with open(dev_key_path, "w") as f:
                 f.write(developer_keys)
-            developer_keys_prov = dev_keys_provisioner_tmpl.format(
-                source=dev_key_path
-            )
+            developer_keys_prov = dev_keys_provisioner_tmpl.format(source=dev_key_path)
         else:
             developer_keys_prov = ""
 
@@ -217,15 +222,11 @@ class PackerBuilder(base.DummyImageBuilder):
         # Enrich with the image format
         # If compressed gzip is requested, we build a RAW image first
         # and compress it afterwards in the SimpleBuilder.
-        override["img_format"] = (
-            "raw" if image.format == "gz" else image.format
-        )
+        override["img_format"] = "raw" if image.format == "gz" else image.format
 
         # Write the packer variables
         variables = PackerVariable.variable_file_content(override)
-        with open(
-            os.path.join(image_dir, "overrides.auto.pkrvars.hcl"), "w"
-        ) as f:
+        with open(os.path.join(image_dir, "overrides.auto.pkrvars.hcl"), "w") as f:
             f.write(variables)
 
         subprocess.run(["packer", "init", image_dir], check=True)
@@ -238,6 +239,4 @@ class PackerBuilder(base.DummyImageBuilder):
     ) -> None:
         """Actions to build the image."""
         self._logger.important(f"Build image: {image.name}")
-        subprocess.run(
-            ["packer", "build", "-parallel-builds=1", image_dir], check=True
-        )
+        subprocess.run(["packer", "build", "-parallel-builds=1", image_dir], check=True)

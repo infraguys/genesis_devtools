@@ -22,7 +22,6 @@ from genesis_devtools.builder import base
 
 
 class TestBuilder:
-
     def test_fetch_dependency(self, simple_builder: SimpleBuilder) -> None:
         deps_dir = "/tmp/deps_dir"
         simple_builder.fetch_dependency(deps_dir)

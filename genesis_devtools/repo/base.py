@@ -64,9 +64,7 @@ class AbstractRepoDriver(abc.ABC):
         """Push the element to the repo."""
 
     @abc.abstractmethod
-    def pull(
-        self, element: builder_base.ElementInventory, dst_path: str
-    ) -> None:
+    def pull(self, element: builder_base.ElementInventory, dst_path: str) -> None:
         """Pull the element from the repo."""
 
     @abc.abstractmethod

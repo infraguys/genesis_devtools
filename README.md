@@ -21,6 +21,9 @@ Install packages
 ```sh
 sudo apt update
 sudo apt install qemu-kvm qemu-utils libvirt-daemon-system libvirt-dev mkisofs
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source "$HOME"/.local/bin/env
+uv tool install tox --with tox-uv
 ```
 
 Add user to group
@@ -45,15 +48,11 @@ To install the `genesis-devtools` package, follow these steps:
     cd genesis_devtools
     ```
 
-3. Install the required dependencies:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-4. Install the package using pip:
-    ```sh
-    pip install .
-    ```
+3. Initialize virtual environment:
+   ```bash
+   tox -e develop
+   source .tox/develop/bin/activate
+   ```
 
 # Quickstart
 
@@ -109,9 +108,7 @@ For every genesis project the directory `genesis` should exist in the project ro
 ├── my_project
 │   └── main.py
 ├── project_settings.json
-├── requirements.txt
-├── setup.cfg
-├── setup.py
+├── pyproject.toml
 └── README.md
 ```
 
@@ -125,9 +122,7 @@ The project should be extended as follows:
 │   └── genesis.yaml
 ├── README.md
 ├── project_settings.json
-├── requirements.txt
-├── setup.cfg
-├── setup.py
+├── pyproject.toml
 └── README.md
 ```
 

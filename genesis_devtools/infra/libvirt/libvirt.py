@@ -171,9 +171,7 @@ def list_domains(
     meta_tag: str | None = None, state: c.DomainState = "all"
 ) -> tp.List[str]:
     """List all domains."""
-    out = subprocess.check_output(
-        ["sudo", "virsh", "list", f"--{state}", "--name"]
-    )
+    out = subprocess.check_output(["sudo", "virsh", "list", f"--{state}", "--name"])
     out = out.decode().strip()
     names = [o for o in out.split("\n") if o]
 
@@ -196,9 +194,7 @@ def list_xml_domains(
     meta_tag: str | None = None, state: c.DomainState = "all"
 ) -> tp.List[str]:
     """List all domains."""
-    out = subprocess.check_output(
-        ["sudo", "virsh", "list", f"--{state}", "--name"]
-    )
+    out = subprocess.check_output(["sudo", "virsh", "list", f"--{state}", "--name"])
     out = out.decode().strip()
     names = [o for o in out.split("\n") if o]
 
@@ -222,18 +218,14 @@ def is_active_domain(name: str) -> bool:
 
 def list_nets():
     """List all networks."""
-    out = subprocess.check_output(
-        ["sudo", "virsh", "net-list", "--all", "--name"]
-    )
+    out = subprocess.check_output(["sudo", "virsh", "net-list", "--all", "--name"])
     out = out.decode().strip()
     return out.split("\n")
 
 
 def list_pool():
     """List all pools."""
-    out = subprocess.check_output(
-        ["sudo", "virsh", "pool-list", "--all", "--name"]
-    )
+    out = subprocess.check_output(["sudo", "virsh", "pool-list", "--all", "--name"])
     out = out.decode().strip()
     return out.split("\n")
 
@@ -362,7 +354,7 @@ def create_domain(
     if boot == "hd":
         boot = f'<boot dev="{boot}"/>'
     else:
-        boot = f'<boot dev="network"/><boot dev="hd"/>'
+        boot = '<boot dev="network"/><boot dev="hd"/>'
 
     # Copy config drive
     if config_drive is not None:

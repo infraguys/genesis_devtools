@@ -13,12 +13,11 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+
 from __future__ import annotations
 
 import os
 import json
-import tempfile
-import shutil
 import pathlib
 import requests
 
@@ -59,9 +58,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
         """Get the base path for elements in the repository."""
         return f"{self._base_url}/genesis-elements"
 
-    def elements_inventory_path(
-        self, element: builder_base.ElementInventory
-    ) -> str:
+    def elements_inventory_path(self, element: builder_base.ElementInventory) -> str:
         """Get the base path for elements in the repository."""
         return (
             f"{self._base_url}/genesis-elements"
@@ -178,8 +175,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
         response = self._session.head(self.elements_inventory_path(element))
         if response.status_code == 200:
             raise base.ElementAlreadyExistsError(
-                f"Element {element.name} version {element.version} "
-                "already exists."
+                f"Element {element.name} version {element.version} already exists."
             )
 
         for category in element.categories():
@@ -187,8 +183,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
                 for artifact in artifacts:
                     self._upload_file(
                         artifact,
-                        f"{element_url}/{category}/"
-                        f"{os.path.basename(artifact)}",
+                        f"{element_url}/{category}/{os.path.basename(artifact)}",
                     )
                     self._logger.info(
                         f"Uploaded {os.path.basename(artifact)} to "
@@ -198,8 +193,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
         spec = element.to_dict()
         for category in element.categories():
             spec[category] = [
-                os.path.basename(artifact)
-                for artifact in getattr(element, category)
+                os.path.basename(artifact) for artifact in getattr(element, category)
             ]
 
         # Upload the inventory file
@@ -211,9 +205,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
 
         self._logger.info(f"Pushed {element.name} version {element.version}")
 
-    def pull(
-        self, element: builder_base.ElementInventory, dst_path: str
-    ) -> None:
+    def pull(self, element: builder_base.ElementInventory, dst_path: str) -> None:
         """Pull the element from the repo."""
         if not os.path.exists(dst_path):
             raise FileNotFoundError(f"Path {dst_path} does not exist.")
@@ -229,14 +221,10 @@ class NginxRepoDriver(base.AbstractRepoDriver):
 
         # Download inventory file first
         inventory_path = os.path.join(dst_path, "inventory.json")
-        self._download_file(
-            self.elements_inventory_path(element), inventory_path
-        )
+        self._download_file(self.elements_inventory_path(element), inventory_path)
 
         # Load inventory to get the list of files
-        loaded_element = builder_base.ElementInventory.load(
-            pathlib.Path(dst_path)
-        )
+        loaded_element = builder_base.ElementInventory.load(pathlib.Path(dst_path))
 
         # Download all artifacts
         for category in loaded_element.categories():
@@ -259,8 +247,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
                         if e.response.status_code != 404:
                             raise
                         self._logger.warn(
-                            f"File {artifact_name} not found in "
-                            "remote repository"
+                            f"File {artifact_name} not found in remote repository"
                         )
 
         self._logger.info(f"Pulled {element.name} version {element.version}")
@@ -296,14 +283,11 @@ class NginxRepoDriver(base.AbstractRepoDriver):
             # Try to delete the version directory
             self._delete_remote(element_url)
 
-            self._logger.info(
-                f"Removed {element.name} version {element.version}"
-            )
+            self._logger.info(f"Removed {element.name} version {element.version}")
         except requests.HTTPError as e:
             if e.response.status_code == 404:
                 self._logger.warning(
-                    f"Element {element.name} version {element.version} "
-                    "not found"
+                    f"Element {element.name} version {element.version} not found"
                 )
             else:
                 raise
@@ -316,9 +300,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
         # Check if repo exists
         response = self._session.head(meta_url)
         if response.status_code != 200:
-            raise base.RepoNotFoundError(
-                f"Repo at {self._base_url} not found."
-            )
+            raise base.RepoNotFoundError(f"Repo at {self._base_url} not found.")
 
         try:
             # Get list of element names
@@ -335,7 +317,5 @@ class NginxRepoDriver(base.AbstractRepoDriver):
             return result
         except requests.HTTPError as e:
             if e.response.status_code == 404:
-                raise base.RepoNotFoundError(
-                    f"Repo at {self._base_url} not found."
-                )
+                raise base.RepoNotFoundError(f"Repo at {self._base_url} not found.")
             raise

@@ -13,20 +13,16 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+
 import os
 import shutil
 import typing as tp
-import tempfile
-import pytest
 
 from genesis_devtools.builder import dependency as deps
 
 
 class TestDependency:
-
-    def test_local_path_from_config(
-        self, build_config: tp.Dict[str, tp.Any]
-    ) -> None:
+    def test_local_path_from_config(self, build_config: tp.Dict[str, tp.Any]) -> None:
         work_dir = "/tmp/work_dir"
         dep = deps.LocalPathDependency.from_config(
             build_config["deps"][0],
@@ -37,9 +33,7 @@ class TestDependency:
         assert dep._path == "/tmp/genesis_core_test_dir"
         assert dep.local_path is None
 
-    def test_local_path_fetch(
-        self, build_config: tp.Dict[str, tp.Any]
-    ) -> None:
+    def test_local_path_fetch(self, build_config: tp.Dict[str, tp.Any]) -> None:
         os.makedirs("/tmp/genesis_core_test_dir", exist_ok=True)
 
         dep = deps.LocalPathDependency.from_config(
@@ -56,9 +50,7 @@ class TestDependency:
             shutil.rmtree("/tmp/genesis_core_test_dir")
             shutil.rmtree("/tmp/___deps_dir")
 
-    def test_http_from_config(
-        self, build_config: tp.Dict[str, tp.Any]
-    ) -> None:
+    def test_http_from_config(self, build_config: tp.Dict[str, tp.Any]) -> None:
         work_dir = "/tmp/work_dir"
         dep = deps.HttpDependency.from_config(
             build_config["deps"][1],
@@ -86,9 +78,7 @@ class TestDependency:
         finally:
             shutil.rmtree("/tmp/___deps_dir")
 
-    def test_git_from_config(
-        self, build_git_config: tp.Dict[str, tp.Any]
-    ) -> None:
+    def test_git_from_config(self, build_git_config: tp.Dict[str, tp.Any]) -> None:
         work_dir = "/tmp/work_dir"
         dep = deps.GitDependency.from_config(
             build_git_config["deps"][0],
@@ -96,10 +86,7 @@ class TestDependency:
         )
 
         assert dep.img_dest == "/opt/genesis_templates"
-        assert (
-            dep._repo_url
-            == "https://github.com/infraguys/genesis_templates.git"
-        )
+        assert dep._repo_url == "https://github.com/infraguys/genesis_templates.git"
         assert dep.local_path is None
 
     def test_git_fetch(self, build_git_config: tp.Dict[str, tp.Any]) -> None:
@@ -116,9 +103,7 @@ class TestDependency:
         finally:
             shutil.rmtree("/tmp/___deps_dir")
 
-    def test_env_path_from_config(
-        self, build_env_config: tp.Dict[str, tp.Any]
-    ) -> None:
+    def test_env_path_from_config(self, build_env_config: tp.Dict[str, tp.Any]) -> None:
         work_dir = "/tmp/work_dir"
         dep = deps.LocalEnvPathDependency.from_config(
             build_env_config["deps"][0],
@@ -129,9 +114,7 @@ class TestDependency:
         assert dep._env_path == "PATH_FROM_ENV"
         assert dep.local_path is None
 
-    def test_env_path_fetch(
-        self, build_env_config: tp.Dict[str, tp.Any]
-    ) -> None:
+    def test_env_path_fetch(self, build_env_config: tp.Dict[str, tp.Any]) -> None:
         os.makedirs("/tmp/genesis_core_test_dir", exist_ok=True)
         os.environ["PATH_FROM_ENV"] = "/tmp/genesis_core_test_dir"
 
@@ -205,9 +188,7 @@ class TestDependency:
 
         try:
             assert not os.path.exists(os.path.join(base_target, "build"))
-            assert os.path.exists(
-                os.path.join(base_target, "my_project/build")
-            )
+            assert os.path.exists(os.path.join(base_target, "my_project/build"))
             assert os.path.exists(os.path.join(base_target, "README.md"))
 
         finally:
@@ -236,12 +217,8 @@ class TestDependency:
 
         try:
             assert not os.path.exists(os.path.join(base_target, "build"))
-            assert not os.path.exists(
-                os.path.join(base_target, "build/main.so")
-            )
-            assert os.path.exists(
-                os.path.join(base_target, "my_project/build")
-            )
+            assert not os.path.exists(os.path.join(base_target, "build/main.so"))
+            assert os.path.exists(os.path.join(base_target, "my_project/build"))
             assert os.path.exists(os.path.join(base_target, "README.md"))
 
         finally:
@@ -270,9 +247,7 @@ class TestDependency:
 
         try:
             assert os.path.exists(os.path.join(base_target, "my_project"))
-            assert not os.path.exists(
-                os.path.join(base_target, "my_project/build")
-            )
+            assert not os.path.exists(os.path.join(base_target, "my_project/build"))
             assert os.path.exists(os.path.join(base_target, "build"))
             assert os.path.exists(os.path.join(base_target, "build/main.so"))
             assert os.path.exists(os.path.join(base_target, "README.md"))
@@ -318,9 +293,7 @@ class TestDependency:
                     os.path.join(base_target, "my_project/build/e1.txt")
                 )
                 assert os.path.exists(os.path.join(base_target, "build"))
-                assert os.path.exists(
-                    os.path.join(base_target, "build/main.so")
-                )
+                assert os.path.exists(os.path.join(base_target, "build/main.so"))
                 assert os.path.exists(os.path.join(base_target, "README.md"))
 
             finally:

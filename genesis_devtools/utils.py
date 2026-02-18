@@ -208,9 +208,7 @@ def get_version_suffix(version_type: c.VersionSuffixType, **kwargs) -> str:
         return ""
     elif version_type == "element":
         if "project_dir" not in kwargs:
-            raise ValueError(
-                "project_dir is required for element version type"
-            )
+            raise ValueError("project_dir is required for element version type")
         project_dir = kwargs["project_dir"]
         return get_project_version(project_dir)
 
@@ -382,8 +380,7 @@ class ReaderEncryptorIO(io.BytesIO):
 
         if size < 0:
             return (
-                self._encryptor.update(self._file.read())
-                + self._encryptor.finalize()
+                self._encryptor.update(self._file.read()) + self._encryptor.finalize()
             )
 
         data = self._file.read(size)
