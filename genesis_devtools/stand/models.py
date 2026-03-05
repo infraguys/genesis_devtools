@@ -19,6 +19,35 @@ import re
 import ipaddress
 import typing as tp
 import dataclasses
+import uuid
+import random
+
+
+@dataclasses.dataclass
+class Port:
+    mac: str
+    ip: ipaddress.IPv4Address | None = None
+
+    @classmethod
+    def from_spec(cls, spec: dict[str, tp.Any]) -> Port:
+        spec = spec.copy()
+        spec["ip"] = (
+            ipaddress.IPv4Address(spec["ip"]) if spec["ip"] is not None else None
+        )
+        return cls(**spec)
+
+    @classmethod
+    def gen_mac(cls) -> str:
+        return (
+            "52:54:00:"
+            f"{random.randint(0, 255):02x}:"
+            f"{random.randint(0, 255):02x}:"
+            f"{random.randint(0, 255):02x}"
+        )
+
+    @classmethod
+    def port_with_random_mac(cls) -> Port:
+        return cls(mac=cls.gen_mac(), ip=None)
 
 
 @dataclasses.dataclass
@@ -50,16 +79,34 @@ class Network:
 
 
 @dataclasses.dataclass
+class Disk:
+    size: int
+    label: str = ""
+
+    def uuid(self, node_uuid: uuid.UUID) -> uuid.UUID:
+        return uuid.uuid5(node_uuid, self.label)
+
+    @classmethod
+    def from_spec(cls, spec: dict[str, tp.Any]) -> Disk:
+        return cls(**spec)
+
+
+@dataclasses.dataclass
 class Node:
+    uuid: uuid.UUID = dataclasses.field(default_factory=uuid.uuid4)
     name: str = "genesis-node"
     memory: int = 1024
     cores: int = 1
-    disks: list[int] = dataclasses.field(default_factory=lambda: [10])
+    disks: list[Disk] = dataclasses.field(default_factory=lambda: [Disk(size=10)])
     image: str | None = None
-    use_image_inplace: bool = False
+    image_uri: str | None = None
+    ports: list[Port] = dataclasses.field(default_factory=list)
 
     @classmethod
     def from_spec(cls, spec: dict[str, tp.Any]) -> Node:
+        spec = spec.copy()
+        spec["disks"] = [Disk.from_spec(d) for d in spec.pop("disks", [])]
+        spec["ports"] = [Port.from_spec(p) for p in spec.pop("ports", [])]
         return cls(**spec)
 
 
@@ -67,7 +114,12 @@ class Node:
 class Bootstrap(Node):
     name: str = "genesis-bootstrap"
     # Two disks for the bootstrap, one for the root and one for the data
-    disks: list[int] = dataclasses.field(default_factory=lambda: [10, 10])
+    disks: list[Disk] = dataclasses.field(
+        default_factory=lambda: [
+            Disk(size=10, label="root-volume"),
+            Disk(size=10, label="data"),
+        ]
+    )
 
     @classmethod
     def from_node(cls, node: Node) -> Bootstrap:
@@ -140,7 +192,8 @@ class Stand:
     def single_bootstrap_stand(
         cls,
         image: str,
-        use_image_inplace: bool,
+        image_uri: str,
+        core_ip: ipaddress.IPv4Address,
         network: Network,
         boot_network: Network,
         cores: int = 1,
@@ -149,6 +202,10 @@ class Stand:
         bootstrap_name: str = "bootstrap",
         hypervisors: tp.Collection[Hypervisor] = (),
     ) -> Stand:
+        ports = [
+            Port(mac=Port.gen_mac(), ip=core_ip),
+            Port(mac=Port.gen_mac()),
+        ]
         return cls(
             name=name,
             network=network,
@@ -157,9 +214,10 @@ class Stand:
                 Bootstrap(
                     name=bootstrap_name,
                     image=image,
-                    use_image_inplace=use_image_inplace,
+                    image_uri=image_uri,
                     cores=cores,
                     memory=memory,
+                    ports=ports,
                 )
             ],
             baremetals=[],

@@ -106,7 +106,10 @@ class ElementInventory(tp.NamedTuple):
     @classmethod
     def load(cls, path: pathlib.Path) -> "ElementInventory":
         """Create an element inventory from a path."""
-        with open(path / cls.file_name, "r") as f:
+        if path.is_dir():
+            path = path / cls.file_name
+
+        with open(path, "r") as f:
             inventory = json.load(f)
 
         kwargs = {
