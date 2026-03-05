@@ -74,3 +74,35 @@ class BackupPeriod(str, enum.Enum):
             self.D7: 60 * 60 * 24 * 7,
         }
         return timeouts[self]
+
+
+class Profile(str, enum.Enum):
+    DEVELOP = "develop"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+    LEGACY = "legacy"
+
+    @property
+    def ram(self) -> int:
+        """Return memory in Mb based on current element in enum."""
+        memory = {
+            self.DEVELOP: 1024,
+            self.SMALL: 2048,
+            self.MEDIUM: 8192,
+            self.LARGE: 16384,
+            self.LEGACY: 4096,
+        }
+        return memory[self]
+
+    @property
+    def cores(self) -> int:
+        """Return CPU cores based on current element in enum."""
+        cores = {
+            self.DEVELOP: 1,
+            self.SMALL: 2,
+            self.MEDIUM: 4,
+            self.LARGE: 8,
+            self.LEGACY: 2,
+        }
+        return cores[self]
