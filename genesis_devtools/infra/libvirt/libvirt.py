@@ -18,14 +18,18 @@ from __future__ import annotations
 import os
 import re
 import tempfile
+import itertools
 import subprocess
 import ipaddress
 import typing as tp
 import uuid as sys_uuid
+from xml.etree import ElementTree as ET
 
 from genesis_devtools.stand import models
 from genesis_devtools import constants as c
 from genesis_devtools.infra.libvirt import constants as vc
+
+CONFIG_DRIVES_DIR = "/var/lib/genesis/config-drives"
 
 domain_template = """
 <domain type="kvm">
@@ -136,6 +140,7 @@ isolated_network_no_dhcp_template = """
 network_iface_template = """
     <interface type="network">
       <source network="{network}"/>
+      <mac address="{mac}"/>
       <model type="virtio"/>
     </interface>
 """
@@ -144,15 +149,23 @@ network_iface_template = """
 bridge_iface_template = """
     <interface type="bridge">
       <source bridge="{network}"/>
+      <mac address="{mac}"/>
       <model type="virtio"/>
     </interface>
 """
 
-
-disk_template = """
+disk_file_template = """
     <disk type="file" device="disk">
-      <driver name="qemu" type="{image_format}"/>
+      <driver name="qemu" type="qcow2"/>
       <source file="{image}"/>
+      <target dev="{device}" bus="virtio"/>
+    </disk>
+"""
+
+disk_zfs_dev_template = """
+    <disk type="block" device="disk">
+      <driver name="qemu" type="raw" discard="unmap"/>
+      <source dev="{image}"/>
       <target dev="{device}" bus="virtio"/>
     </disk>
 """
@@ -276,19 +289,20 @@ def create_isolated_network(name: str):
 
 
 def create_domain(
+    uuid: sys_uuid.UUID,
     name: str,
     cores: str,
     memory: int,
     networks: tp.Collection[models.Network],
-    pool: str = c.LIBVIRT_DEF_POOL_PATH,
+    ports: tp.Collection[models.Port],
+    pool: str,
     image: str | None = None,
-    use_image_inplace: bool = False,
-    disks: tp.Collection[int] = (),
+    disks: tp.Collection[models.Disk] = (),
     meta_tags: tp.Collection[str] = (),
     boot: vc.BootMode = "hd",
     config_drive: str | None = None,
+    start: bool = True,
 ):
-    uuid = str(sys_uuid.uuid4())
     disks_xml = ""
     ifaces_xml = ""
     disk_paths = []
@@ -297,56 +311,47 @@ def create_domain(
     if not disks:
         raise ValueError("At least one disk must be provided")
 
+    pool_info = get_pool_info(pool)
+    pool_path = pool_info["path"]
+    img_format, img_suffix, disk_template = (
+        ("qcow2", ".qcow2", disk_file_template)
+        if pool_info["type"] == "dir"
+        else ("raw", "", disk_zfs_dev_template)
+    )
+
     # Use image if it is provided or create empty disk if it is not
     if image is not None:
-        tgt_image_path = os.path.abspath(image)
-        image_name = os.path.basename(image)
-        image_format = "qcow2" if image_name.endswith("qcow2") else "raw"
-        if not use_image_inplace:
-            tgt_image_path = os.path.join(pool, image_name)
-            # Copy the image to the pool and delete the old one
-            subprocess.run(
-                ["sudo", "rm", "-f", tgt_image_path],
-                check=True,
-            )
-            subprocess.run(
-                ["sudo", "cp", image, tgt_image_path],
-                check=True,
-            )
+        image_name = f"{disks[0].uuid(uuid)}{img_suffix}"
+        tgt_image_path = os.path.join(pool_path, image_name)
+        delete_volume(pool, image_name)
+        create_volume(
+            pool, image_name, disks[0].size, source_path=image, fmt=img_format
+        )
         disks_xml = disk_template.format(
             device="vda",
             image=tgt_image_path,
-            image_format=image_format,
         )
         index += 1
 
     for i, disk in enumerate(disks[index:], index):
-        disk_name = f"{uuid}-{i}.qcow2"
-        disk_path = os.path.join(pool, disk_name)
+        disk_name = f"{disk.uuid(uuid)}{img_suffix}"
+        disk_path = os.path.join(pool_path, disk_name)
         disk_paths.append(disk_path)
-        subprocess.check_call(
-            [
-                "sudo",
-                "qemu-img",
-                "create",
-                "-f",
-                "qcow2",
-                disk_path,
-                f"{disk}G",
-            ],
-            stdout=subprocess.DEVNULL,
-        )
+        create_volume(pool, disk_name, disk.size, fmt=img_format)
         disks_xml += disk_template.format(
             device=f"vd{chr(ord('a') + i)}",
             image=disk_path,
-            image_format="qcow2",
         )
 
-    for network in networks:
+    for network, port in itertools.zip_longest(networks, ports):
+        if not network:
+            continue
+
+        mac = port.mac if port else models.Port.gen_mac()
         if network.managed_network:
-            network_iface = network_iface_template.format(network=network.name)
+            network_iface = network_iface_template.format(network=network.name, mac=mac)
         else:
-            network_iface = bridge_iface_template.format(network=network.name)
+            network_iface = bridge_iface_template.format(network=network.name, mac=mac)
         ifaces_xml += network_iface
 
     meta_tags_xml = "\n\t\t".join(tag for tag in meta_tags)
@@ -358,10 +363,13 @@ def create_domain(
 
     # Copy config drive
     if config_drive is not None:
-        config_drive_path = os.path.join(pool, f"{uuid}-config-drive.iso")
-        subprocess.run(
+        subprocess.check_call(
+            ["sudo", "mkdir", "-p", CONFIG_DRIVES_DIR],
+            stdout=subprocess.DEVNULL,
+        )
+        config_drive_path = os.path.join(CONFIG_DRIVES_DIR, f"{name}-config-drive.iso")
+        subprocess.check_call(
             ["sudo", "cp", config_drive, config_drive_path],
-            check=True,
             stdout=subprocess.DEVNULL,
         )
         disks_xml += cdrom_template.format(
@@ -391,9 +399,14 @@ def create_domain(
                 stdout=subprocess.DEVNULL,
             )
             subprocess.check_call(
-                ["sudo", "virsh", "start", name],
+                ["sudo", "virsh", "autostart", name],
                 stdout=subprocess.DEVNULL,
             )
+            if start:
+                subprocess.check_call(
+                    ["sudo", "virsh", "start", name],
+                    stdout=subprocess.DEVNULL,
+                )
         except Exception:
             # Unable to create domain, delete disks
             for disk_path in disk_paths:
@@ -599,3 +612,85 @@ def resume_domain(name: str) -> None:
         ["sudo", "virsh", "resume", name],
         stdout=subprocess.DEVNULL,
     )
+
+
+def get_pool_info(pool: str) -> dict[str, int | str]:
+    out = subprocess.check_output(["sudo", "virsh", "pool-dumpxml", pool])
+    xml_str = out.decode().strip()
+    xml = ET.fromstring(xml_str)
+
+    def _find_int(tag: str) -> int:
+        elem = xml.find(tag)
+        if elem is None or elem.text is None:
+            raise ValueError(f"Unable to find '{tag}' in pool xml")
+        return int(elem.text)
+
+    path_elem = xml.find("./target/path")
+    if path_elem is None or path_elem.text is None:
+        raise ValueError("Unable to find 'target/path' in pool xml")
+
+    return {
+        "capacity": _find_int("capacity"),
+        "allocation": _find_int("allocation"),
+        "available": _find_int("available"),
+        "path": path_elem.text,
+        "type": xml.get("type"),
+    }
+
+
+def create_volume(
+    pool: str,
+    name: str,
+    size_gb: int,
+    fmt: str = "qcow2",
+    source_path: str | None = None,
+) -> None:
+    args = [
+        "sudo",
+        "virsh",
+        "vol-create-as",
+        pool,
+        name,
+        f"{size_gb}G",
+        "--allocation",
+        "0",
+        "--format",
+        fmt,
+    ]
+    subprocess.check_call(args, stdout=subprocess.DEVNULL)
+
+    if source_path is not None:
+        subprocess.check_call(
+            ["sudo", "virsh", "vol-upload", "--pool", pool, name, source_path],
+            stdout=subprocess.DEVNULL,
+        )
+
+
+def update_volume(
+    pool: str,
+    name: str,
+    size_gb: int | None = None,
+    source_path: str | None = None,
+) -> None:
+    if size_gb is not None:
+        subprocess.check_call(
+            ["sudo", "virsh", "vol-resize", "--pool", pool, name, f"{size_gb}G"],
+            stdout=subprocess.DEVNULL,
+        )
+
+    if source_path is not None:
+        subprocess.check_call(
+            ["sudo", "virsh", "vol-upload", "--pool", pool, name, source_path],
+            stdout=subprocess.DEVNULL,
+        )
+
+
+def delete_volume(pool: str, name: str) -> None:
+    try:
+        subprocess.check_call(
+            ["sudo", "virsh", "vol-delete", "--pool", pool, name],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError:
+        pass

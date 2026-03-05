@@ -20,8 +20,10 @@ import time
 import shutil
 import typing as tp
 import tempfile
+import secrets
 import ipaddress
 import fnmatch
+import pathlib
 
 import yaml
 import click
@@ -446,24 +448,36 @@ def push_cmd(
         )
 
 
+def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
+    """Get image URI from manifest file."""
+    if not os.path.exists(manifest_path):
+        raise click.UsageError(f"Manifest file {manifest_path} does not exist")
+
+    with open(manifest_path, "r") as f:
+        manifest = yaml.safe_load(f)
+
+    # Determine image URI from manifest
+    try:
+        return manifest["resources"]["$core.compute.sets"]["core_set"]["disk_spec"][
+            "disks"
+        ][0]["image"]
+    except (KeyError, IndexError):
+        click.secho("Failed to get image URI from manifest", fg="red")
+        raise
+
+
 @main.command("bootstrap", help="Bootstrap genesis locally")
 @click.option(
     "-i",
-    "--image-path",
-    default=None,
-    help="Path to the genesis image",
+    "--inventory",
+    help="Path to the genesis inventory file or directory with inventory.json",
 )
 @click.option(
-    "--cores",
-    default=2,
+    "--profile",
+    default=c.Profile.SMALL.value,
     show_default=True,
-    help="Number of cores for the bootstrap VM",
-)
-@click.option(
-    "--memory",
-    default=4096,
-    show_default=True,
-    help="Memory in Mb for the bootstrap VM",
+    help="Profile for the installation.",
+    type=click.Choice([p.value for p in c.Profile]),
 )
 @click.option(
     "--name",
@@ -493,6 +507,16 @@ def push_cmd(
     help="The main network CIDR",
     show_default=True,
     type=ipaddress.IPv4Network,
+)
+@click.option(
+    "--core-ip",
+    default=None,
+    help=(
+        "The IP address for the core VM. If `None` is provided, "
+        "second IP address from the main network will be used."
+    ),
+    show_default=True,
+    type=ipaddress.IPv4Address,
 )
 @click.option(
     "--bridge",
@@ -530,12 +554,6 @@ def push_cmd(
     help="Cancel waiting for the installation to start",
 )
 @click.option(
-    "--use-image-inplace",
-    show_default=True,
-    is_flag=True,
-    help="Don't copy image, use specified file as is (warning - destructive!)",
-)
-@click.option(
     "-r",
     "--repository",
     default="https://repository.genesis-core.tech/",
@@ -544,10 +562,24 @@ def push_cmd(
     show_default=True,
 )
 @click.option(
-    "--hyper",
+    "--admin-password",
+    default=None,
+    type=str,
+    help=(
+        "A password for the admin user in. If not provided, "
+        "the password will be generated."
+    ),
     show_default=True,
-    is_flag=True,
-    help="Add a default hypervisor to the stand",
+)
+@click.option(
+    "--save-admin-password-file",
+    default=None,
+    type=str,
+    help=(
+        "If the option is specified the admin password is saved "
+        "to the file. Otherwise it's printed to the console."
+    ),
+    show_default=True,
 )
 @click.option(
     "--hyper-connection-uri",
@@ -558,74 +590,88 @@ def push_cmd(
         "e.g. 'qemu+tcp://10.0.0.1/system' or "
         "'qemu+ssh://user@10.0.0.1/system'. If not set, "
         "the first address of the network(--cidr option) will be used. "
-        "Works only if --hyper option is set."
-    ),
-)
-@click.option(
-    "--hyper-network-type",
-    default="network",
-    type=click.Choice(("bridge", "network")),
-    help=("Network type for the hypervisor. Works only if --hyper option is set."),
-    show_default=True,
-)
-@click.option(
-    "--hyper-network",
-    default="",
-    type=str,
-    help=(
-        "Network name for the hypervisor. This is a mandatory "
-        "option if the --hyper option is set."
     ),
 )
 @click.option(
     "--hyper-storage-pool",
     default="default",
     type=str,
-    help=("Storage pool for the hypervisor. Works only if --hyper option is set."),
+    help="Storage pool for the hypervisor.",
     show_default=True,
 )
 @click.option(
     "--hyper-machine-prefix",
     default="vm-",
     type=str,
-    help=("A prefix for new VMs. Works only if --hyper option is set."),
+    help="A prefix for new VMs.",
     show_default=True,
 )
 @click.option(
     "--hyper-iface-rom-file",
     default="/usr/share/qemu/1af41041.rom",
     type=str,
-    help=(
-        "A path to the custom ROM file of a network interface. "
-        "Works only if --hyper option is set."
-    ),
+    help="A path to the custom ROM file of a network interface.",
     show_default=True,
 )
+@click.option(
+    "--no-start",
+    show_default=True,
+    is_flag=True,
+    help="Do not start the stand after creation",
+)
 def bootstrap_cmd(
-    image_path: tp.Optional[str],
-    cores: int,
-    memory: int,
+    inventory: str,
+    profile: str,
     name: str,
     launch_mode: LaunchModeType,
     stand_spec: str | None,
     cidr: ipaddress.IPv4Network,
+    core_ip: ipaddress.IPv4Address | None,
     bridge: str | None,
     boot_cidr: ipaddress.IPv4Network,
     boot_bridge: str | None,
     force: bool,
     no_wait: bool,
-    use_image_inplace: bool,
     repository: str,
-    hyper: bool,
+    admin_password: str | None,
+    save_admin_password_file: str | None,
     hyper_connection_uri: str,
-    hyper_network_type: str,
-    hyper_network: str,
     hyper_storage_pool: str,
     hyper_machine_prefix: str,
     hyper_iface_rom_file: str,
+    no_start: bool,
 ) -> None:
-    if image_path is None or not os.path.exists(image_path):
-        raise click.UsageError("No image path specified or not found")
+    if not inventory or not os.path.exists(inventory):
+        raise click.UsageError("No inventory specified or not found")
+
+    profile = c.Profile[profile.upper()]
+
+    # Determine the IP address for the core VM
+    if core_ip is None:
+        core_ip = cidr[2]
+
+    if core_ip not in cidr:
+        raise click.UsageError("Core IP is not in the main network")
+
+    # Generate admin password if not provided
+    admin_password = admin_password or secrets.token_urlsafe(16)
+
+    # Load inventory and get image path and image URI.
+    inventory = base_builder.ElementInventory.load(pathlib.Path(inventory))
+
+    if not inventory.images:
+        raise click.UsageError("No images found in the inventory")
+
+    if not inventory.manifests:
+        raise click.UsageError("No manifests found in the inventory")
+
+    # NOTE(akremenetsky): The core element has one image and manifest at the moment
+    image_path = str(inventory.images[0])
+    manifest_path = str(inventory.manifests[0])
+    image_uri = _get_core_image_uri_from_manifest(manifest_path)
+
+    if launch_mode not in ("element", "core"):
+        raise click.UsageError(f"Unknown launch mode {launch_mode}")
 
     if image_path and not os.path.isabs(image_path):
         image_path = os.path.abspath(image_path)
@@ -637,57 +683,64 @@ def bootstrap_cmd(
 
         return _bootstrap_element(
             image_path=image_path,
-            cores=cores,
-            memory=memory,
+            cores=profile.cores,
+            memory=profile.ram,
             name=name,
             force=force,
             no_wait=no_wait,
             cidr=cidr,
-            use_image_inplace=use_image_inplace,
         )
 
-    if launch_mode == "core":
-        if stand_spec is not None:
-            with open(stand_spec) as f:
-                stand_spec = yaml.safe_load(f)
+    if stand_spec is not None:
+        with open(stand_spec) as f:
+            stand_spec = yaml.safe_load(f)
 
-        hypervisors = []
+    net_name = utils.installation_net_name(name)
+    stand_main_network = stand_models.Network(
+        name=bridge if bridge else net_name,
+        cidr=cidr,
+        managed_network=False if bridge else True,
+    )
+    boot_net_name = utils.installation_boot_net_name(name)
+    stand_boot_network = stand_models.Network(
+        name=boot_bridge if boot_bridge else boot_net_name,
+        cidr=boot_cidr,
+        managed_network=False if boot_bridge else True,
+    )
 
-        # Add a default hypervisor if requested
-        if hyper:
-            if not hyper_network:
-                raise click.UsageError("No network specified for hypervisor")
+    hypervisors = []
 
-            if not hyper_connection_uri:
-                hyper_connection_uri = f"qemu+tcp://{cidr[1]}/system"
+    if not hyper_connection_uri:
+        hyper_connection_uri = f"qemu+tcp://{cidr[1]}/system"
 
-            hypervisor = stand_models.Hypervisor(
-                network=hyper_network,
-                network_type=hyper_network_type,
-                connection_uri=hyper_connection_uri,
-                storage_pool=hyper_storage_pool,
-                machine_prefix=hyper_machine_prefix,
-                iface_rom_file=hyper_iface_rom_file,
-            )
-            hypervisors.append(hypervisor)
+    # Single hypervisor at bootstrap time is supported at the moment
+    hypervisor = stand_models.Hypervisor(
+        network=stand_main_network.name,
+        network_type="bridge" if bridge else "network",
+        connection_uri=hyper_connection_uri,
+        storage_pool=hyper_storage_pool,
+        machine_prefix=hyper_machine_prefix,
+        iface_rom_file=hyper_iface_rom_file,
+    )
+    hypervisors.append(hypervisor)
 
-        return _bootstrap_core(
-            image_path=image_path,
-            cores=cores,
-            memory=memory,
-            name=name,
-            stand_spec=stand_spec,
-            cidr=cidr,
-            bridge=bridge,
-            boot_cidr=boot_cidr,
-            boot_bridge=boot_bridge,
-            force=force,
-            use_image_inplace=use_image_inplace,
-            repository=repository,
-            hypervisors=hypervisors,
-        )
-
-    raise click.UsageError("Unknown launch mode")
+    return _bootstrap_core(
+        image_path=image_path,
+        image_uri=image_uri,
+        profile=profile,
+        name=name,
+        stand_spec=stand_spec,
+        stand_main_network=stand_main_network,
+        stand_boot_network=stand_boot_network,
+        force=force,
+        core_ip=core_ip,
+        repository=repository,
+        admin_password=admin_password,
+        save_admin_password_file=save_admin_password_file,
+        manifest_path=manifest_path,
+        hypervisors=hypervisors,
+        no_start=no_start,
+    )
 
 
 @main.group("repo", help="Manager Genesis repository")
@@ -1229,7 +1282,6 @@ def _bootstrap_element(
     cidr: ipaddress.IPv4Network,
     force: bool,
     no_wait: bool,
-    use_image_inplace: bool,
 ) -> None:
     logger = ClickLogger()
 
@@ -1247,7 +1299,6 @@ def _bootstrap_element(
     dev_stand = stand_models.Stand.single_bootstrap_stand(
         name=name,
         image=image_path,
-        use_image_inplace=use_image_inplace,
         cores=cores,
         memory=memory,
         network=default_stand_network,
@@ -1293,65 +1344,57 @@ def _bootstrap_element(
 
 
 def _bootstrap_core(
-    image_path: tp.Optional[str],
-    cores: int,
-    memory: int,
+    image_path: str | None,
+    image_uri: str | None,
+    profile: c.Profile,
     name: str,
     stand_spec: tp.Dict[str, tp.Any] | None,
-    cidr: ipaddress.IPv4Network,
-    bridge: str | None,
-    boot_cidr: ipaddress.IPv4Network,
-    boot_bridge: str | None,
+    stand_main_network: stand_models.Network,
+    stand_boot_network: stand_models.Network,
     force: bool,
-    use_image_inplace: bool,
+    core_ip: ipaddress.IPv4Address,
     repository: str,
-    hypervisors: tp.Collection[stand_models.Hypervisor] = (),
+    admin_password: str,
+    save_admin_password_file: str | None,
+    manifest_path: str,
+    hypervisors: tp.Collection[stand_models.Hypervisor],
+    no_start: bool,
 ) -> None:
     logger = ClickLogger()
     logger.info("Starting genesis bootstrap in 'core' mode")
 
-    net_name = utils.installation_net_name(name)
-    default_stand_main_network = stand_models.Network(
-        name=bridge if bridge else net_name,
-        cidr=cidr,
-        managed_network=False if bridge else True,
-    )
-    boot_net_name = utils.installation_boot_net_name(name)
-    default_stand_boot_network = stand_models.Network(
-        name=boot_bridge if boot_bridge else boot_net_name,
-        cidr=boot_cidr,
-        managed_network=False if boot_bridge else True,
-    )
+    if not hypervisors:
+        logger.error("No hypervisors provided")
+        return
 
     # Single bootstrap stand
     if stand_spec is None:
         bootstrap_domain_name = utils.installation_bootstrap_name(name)
-
         dev_stand = stand_models.Stand.single_bootstrap_stand(
             name=name,
             image=image_path,
-            use_image_inplace=use_image_inplace,
-            cores=cores,
-            memory=memory,
-            network=default_stand_main_network,
-            boot_network=default_stand_boot_network,
+            image_uri=image_uri,
+            cores=profile.cores,
+            memory=profile.ram,
+            core_ip=core_ip,
+            network=stand_main_network,
+            boot_network=stand_boot_network,
             bootstrap_name=bootstrap_domain_name,
             hypervisors=hypervisors,
         )
     else:
         dev_stand = stand_models.Stand.from_spec(stand_spec)
         if dev_stand.network.is_dummy:
-            dev_stand.network = default_stand_main_network
+            dev_stand.network = stand_main_network
 
         if dev_stand.boot_network.is_dummy:
-            dev_stand.boot_network = default_stand_boot_network
+            dev_stand.boot_network = stand_boot_network
 
         # Assign the image to bootstraps if it wasn't specified
         # in the specification.
         for b in dev_stand.bootstraps:
             if b.image is None:
                 b.image = image_path
-                b.use_image_inplace = use_image_inplace
 
     if not dev_stand.is_valid():
         logger.error(f"Invalid stand {dev_stand} from spec {stand_spec}")
@@ -1376,14 +1419,56 @@ def _bootstrap_core(
         logger.info(f"Destroyed old genesis installation: {dev_stand.name}")
 
     try:
-        infra.create_stand(dev_stand, repository=repository)
-        logger.info("Launched genesis installation")
+        infra.create_stand(
+            dev_stand,
+            manifest_path=manifest_path,
+            no_start=no_start,
+            repository=repository,
+            admin_password=admin_password,
+            profile=profile.value,
+        )
+        logger.info(f"Launched genesis installation in `{profile.value}` profile")
+
+        if save_admin_password_file:
+            # Basic security check to prevent path traversal.
+            if ".." in pathlib.Path(save_admin_password_file).parts:
+                logger.error(
+                    "Invalid password file path (contains '..'). Skipping save."
+                )
+            else:
+                try:
+                    # Ensure parent directory exists.
+                    pathlib.Path(save_admin_password_file).parent.mkdir(
+                        parents=True, exist_ok=True
+                    )
+                    # Use exclusive creation ('x' mode) to prevent race conditions
+                    # and accidental overwrites.
+                    with open(save_admin_password_file, "x") as f:
+                        f.write(admin_password)
+                    logger.info(f"Admin password saved to {save_admin_password_file}")
+                except FileExistsError:
+                    logger.warn(
+                        f"Admin password file {save_admin_password_file} "
+                        "already exists. Skipping saving the password."
+                    )
+                except OSError as e:
+                    logger.error(
+                        "Failed to save admin password to "
+                        f"{save_admin_password_file}: {e}"
+                    )
+        else:
+            logger.important(f"Admin password: {admin_password}")
     except Exception:
         infra.delete_stand(dev_stand)
         logger.error(f"Failed to launch genesis installation {dev_stand.name}")
         raise
 
     cidr = dev_stand.network.cidr
-    logger.important(
-        f"The stand {name} will be ready soon at:\nssh ubuntu@{cidr[2]}",
-    )
+    if not no_start:
+        logger.important(
+            f"The stand {name} will be ready soon at:\nssh ubuntu@{cidr[2]}",
+        )
+    else:
+        logger.info(
+            f"The stand {name} is created but not started. You can start it manually."
+        )

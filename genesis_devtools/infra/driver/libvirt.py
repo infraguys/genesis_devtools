@@ -20,6 +20,7 @@ import json
 import itertools
 import ipaddress
 import tempfile
+import shutil
 import typing as tp
 import dataclasses
 from xml.dom import minidom
@@ -135,7 +136,13 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
 
         return list(stands.values())
 
-    def create_stand(self, stand: models.Stand, **extra_data: tp.Any) -> models.Stand:
+    def create_stand(
+        self,
+        stand: models.Stand,
+        manifest_path: str,
+        no_start: bool,
+        **extra_data: tp.Any,
+    ) -> models.Stand:
         """Create a new stand."""
         if len(stand.bootstraps) > 1:
             raise NotImplementedError("Multiple bootstraps are not supported yet")
@@ -179,6 +186,11 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
         }
 
         with tempfile.TemporaryDirectory() as temp_dir:
+            # Copy the original manifest to the config drive
+            manifest_name = os.path.basename(manifest_path)
+            shutil.copy(manifest_path, os.path.join(temp_dir, manifest_name))
+
+            # Prepare and copy installation specification to the config drive
             spec_path = os.path.join(temp_dir, "spec.json")
             with open(spec_path, "w") as f:
                 json.dump(spec, f, indent=2, sort_keys=True, default=str)
@@ -188,6 +200,11 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             )
             utils.make_iso(temp_dir, config_drive_path)
 
+        # It's fine to use the first hypervisor at the moment since
+        # we support only one hypervisor per stand at start time.
+        prefix = spec["stand"]["hypervisors"][0]["machine_prefix"]
+        storage_pool = spec["stand"]["hypervisors"][0]["storage_pool"]
+
         # Create bootstraps first and set metadata about network in the
         # boostarp domains.
         for bootstrap in stand.bootstraps:
@@ -195,7 +212,9 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 self._tag(vc.GENESIS_META_STAND_TAG, stand.name),
                 self._tag(vc.GENESIS_META_CPU_TAG, bootstrap.cores),
                 self._tag(vc.GENESIS_META_MEM_TAG, bootstrap.memory),
-                self._tag(vc.GENESIS_META_IMAGE_TAG, bootstrap.image),
+                self._tag(
+                    vc.GENESIS_META_IMAGE_TAG, fields={"uri": bootstrap.image_uri}
+                ),
                 self._tag(vc.GENESIS_META_NODE_TYPE_TAG, "bootstrap"),
                 self._tag(
                     vc.GENESIS_META_NET_TAG,
@@ -218,15 +237,18 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             )
 
             libvirt.create_domain(
-                name=bootstrap.name,
+                uuid=bootstrap.uuid,
+                name=f"{prefix}{str(bootstrap.uuid)[:8]}-{bootstrap.name}",
                 image=bootstrap.image,
-                use_image_inplace=bootstrap.use_image_inplace,
                 cores=bootstrap.cores,
                 memory=bootstrap.memory,
                 disks=bootstrap.disks,
                 networks=(stand.network, stand.boot_network),
+                ports=bootstrap.ports,
                 meta_tags=tags,
                 config_drive=config_drive_path,
+                pool=storage_pool,
+                start=not no_start,
             )
 
         for node in stand.baremetals:
@@ -240,9 +262,9 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
             # TODO(akremenetsky): Remove bootstrap nodes
             # if something goes wrong
             libvirt.create_domain(
-                name=node.name,
+                uuid=node.uuid,
+                name=f"{prefix}{str(node.uuid)[:8]}-{node.name}",
                 image=node.image,
-                use_image_inplace=node.use_image_inplace,
                 cores=node.cores,
                 memory=node.memory,
                 # Put new node to the boot network
@@ -250,6 +272,8 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
                 meta_tags=tags,
                 disks=node.disks,
                 boot="network",
+                pool=storage_pool,
+                start=not no_start,
             )
 
     def delete_stand(self, stand: models.Stand) -> None:

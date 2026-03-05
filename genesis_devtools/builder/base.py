@@ -29,20 +29,51 @@ from genesis_devtools import constants as c
 class Image:
     """Image representation."""
 
+    ENV_IMG_PREFIX = "GEN_IMG_FORMAT"
+    DEF_IMG_FORMAT = "raw"
+
     script: str
     profile: c.ImageProfileType = "ubuntu_24"
-    format: c.ImageFormatType = "raw"
+    format: c.ImageFormatType = DEF_IMG_FORMAT
     name: str | None = None
     envs: list[str] | None = None
     override: dict[str, tp.Any] | None = None
 
     @classmethod
-    def from_config(cls, image_config: tp.Dict[str, tp.Any], work_dir: str) -> "Image":
+    def from_config(cls, image_config: dict[str, tp.Any], work_dir: str) -> "Image":
         """Create an image from configuration."""
+        image_config = image_config.copy()
         script = image_config.pop("script")
         if not os.path.isabs(script):
             script = os.path.join(work_dir, script)
-        return cls(script=script, **image_config)
+
+        # Determine the image format
+        img_format = image_config.pop("format")
+        if img_format.startswith(cls.ENV_IMG_PREFIX):
+            format_def = None
+
+            # Handle case if there is a default value
+            if "=" in img_format:
+                img_format, format_def = [i.strip() for i in img_format.split("=", 1)]
+
+            try:
+                img_format = os.environ[img_format]
+            except KeyError:
+                if not format_def:
+                    raise ValueError(
+                        f"Image format {img_format} is not found in the environment "
+                        f"and no default value is provided"
+                    )
+                img_format = format_def
+
+        # Validate the image format
+        if img_format not in c.ImageFormatType.__args__:
+            raise ValueError(
+                f"Invalid image format: {img_format}, "
+                f"expected one of {c.ImageFormatType.__args__}"
+            )
+
+        return cls(script=script, format=img_format, **image_config)
 
 
 class Element(tp.NamedTuple):
@@ -106,7 +137,10 @@ class ElementInventory(tp.NamedTuple):
     @classmethod
     def load(cls, path: pathlib.Path) -> "ElementInventory":
         """Create an element inventory from a path."""
-        with open(path / cls.file_name, "r") as f:
+        if path.is_dir():
+            path = path / cls.file_name
+
+        with open(path, "r") as f:
             inventory = json.load(f)
 
         kwargs = {
