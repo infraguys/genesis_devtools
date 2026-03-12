@@ -433,7 +433,7 @@ def push_cmd(
     driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
 
     # Push the element
-    element = base_builder.ElementInventory.load(element_dir)
+    element = base_builder.ElementInventory.load(pathlib.Path(element_dir))
     try:
         driver.push(element)
     except base_repo.ElementAlreadyExistsError:
