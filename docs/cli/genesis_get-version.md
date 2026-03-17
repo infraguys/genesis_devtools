@@ -1,5 +1,5 @@
 
-# get-version
+# genesis_get-version
 
 Return the version of the project
 
@@ -11,13 +11,13 @@ Usage: genesis get-version [OPTIONS] ELEMENT_DIR
 
 ## Options
 
-*   `element_dir` (REQUIRED):
-    * Type: <click.types.Path object at 0x7cb005ed7080>
+* `element_dir` (REQUIRED):
+    * Type: path
     * Default: `sentinel.unset`
     * Usage: `element_dir`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

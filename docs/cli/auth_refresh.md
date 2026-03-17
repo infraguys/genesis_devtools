@@ -1,5 +1,5 @@
 
-# refresh
+# auth_refresh
 
 Refresh stored token using refresh token
 
@@ -11,27 +11,27 @@ Usage: genesis auth refresh [OPTIONS] PROJECT_DIR
 
 ## Options
 
-*   `ttl`:
-    * Type: INT
+* `ttl`:
+    * Type: integer
     * Default: `none`
     * Usage: `--ttl`
 
   Access token lifetime in seconds (optional)
 
-*   `scope`:
-    * Type: STRING
+* `scope`:
+    * Type: text
     * Default: `none`
     * Usage: `--scope`
 
   OAuth scope (optional)
 
-*   `project_dir` (REQUIRED):
-    * Type: <click.types.Path object at 0x7cb005f399d0>
+* `project_dir` (REQUIRED):
+    * Type: path
     * Default: `sentinel.unset`
     * Usage: `project_dir`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

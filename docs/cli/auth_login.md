@@ -1,5 +1,5 @@
 
-# login
+# auth_login
 
 Authenticate in IAM and store tokens locally
 
@@ -11,70 +11,70 @@ Usage: genesis auth login [OPTIONS] PROJECT_DIR
 
 ## Options
 
-*   `iam_client_endpoint` (REQUIRED):
-    * Type: STRING
+* `iam_client_endpoint` (REQUIRED):
+    * Type: text
     * Default: `sentinel.unset`
     * Usage: `--iam-client-endpoint`
 
   Full URL of the IAM client
 
-*   `project_id` (REQUIRED):
-    * Type: STRING
+* `project_id` (REQUIRED):
+    * Type: text
     * Default: `sentinel.unset`
     * Usage: `--project-id`
 
   Project ID for IAM authentication
 
-*   `client_id`:
-    * Type: STRING
+* `client_id`:
+    * Type: text
     * Default: `none`
     * Usage: `--client-id`
 
   OAuth client id (optional)
 
-*   `client_secret`:
-    * Type: STRING
+* `client_secret`:
+    * Type: text
     * Default: `none`
     * Usage: `--client-secret`
 
   OAuth client secret (optional)
 
-*   `scope`:
-    * Type: STRING
+* `scope`:
+    * Type: text
     * Default: `profile`
     * Usage: `--scope`
 
   OAuth scope
 
-*   `ttl`:
-    * Type: INT
+* `ttl`:
+    * Type: integer
     * Default: `900`
     * Usage: `--ttl`
 
   Access token lifetime in seconds
 
-*   `refresh_ttl`:
-    * Type: INT
+* `refresh_ttl`:
+    * Type: integer
     * Default: `3600`
     * Usage: `--refresh-ttl`
 
   Refresh token lifetime in seconds
 
-*   `force`:
-    *   Type: BOOL
-    *   Default: `false`
-    *   Usage: `-f
+* `force`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-f
 --force`
 
   Overwrite existing auth file
 
-*   `project_dir` (REQUIRED):
-    * Type: <click.types.Path object at 0x7cb005f39c10>
+* `project_dir` (REQUIRED):
+    * Type: path
     * Default: `sentinel.unset`
     * Usage: `project_dir`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

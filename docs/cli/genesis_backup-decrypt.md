@@ -1,5 +1,5 @@
 
-# backup-decrypt
+# genesis_backup-decrypt
 
 Decrypt a backup file
 
@@ -11,13 +11,13 @@ Usage: genesis backup-decrypt [OPTIONS] PATH
 
 ## Options
 
-*   `path` (REQUIRED):
-    * Type: Path
+* `path` (REQUIRED):
+    * Type: path
     * Default: `sentinel.unset`
     * Usage: `path`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

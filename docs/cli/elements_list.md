@@ -1,18 +1,18 @@
 
-# ps
+# elements_list
 
-List of running genesis installation
+List elements
 
 ## Usage
 
 ```console
-Usage: genesis ps [OPTIONS]
+Usage: genesis elements list [OPTIONS]
 ```
 
 ## Options
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 
@@ -21,9 +21,9 @@ Usage: genesis ps [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis ps [OPTIONS]
+Usage: genesis elements list [OPTIONS]
 
-  List of running genesis installation
+  List elements
 
 Options:
   --help  Show this message and exit.

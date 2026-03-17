@@ -43,6 +43,10 @@ VersionSuffixType = tp.Literal["latest", "none", "element"]
 DomainState = tp.Literal["all", "inactive", "state-paused"]
 NodeType = tp.Literal["bootstrap", "baremetal"]
 
+ENV_FILE_FORMAT = tp.Literal["json", "env"]
+MANIFEST_COLLECTION = "/v1/em/manifests/"
+ELEMENT_COLLECTION = "/v1/em/elements/"
+
 
 class BackupPeriod(str, enum.Enum):
     M1 = "1m"

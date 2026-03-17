@@ -17,7 +17,6 @@
 import os
 
 
-
 def get_project_path() -> str:
     # Repository path
     return os.sep.join(__file__.split(os.sep)[:-3])

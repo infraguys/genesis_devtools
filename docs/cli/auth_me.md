@@ -1,5 +1,5 @@
 
-# me
+# auth_me
 
 Validate stored token and show user info
 
@@ -11,13 +11,13 @@ Usage: genesis auth me [OPTIONS] PROJECT_DIR
 
 ## Options
 
-*   `project_dir` (REQUIRED):
-    * Type: <click.types.Path object at 0x7cb005ed70e0>
+* `project_dir` (REQUIRED):
+    * Type: path
     * Default: `sentinel.unset`
     * Usage: `project_dir`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

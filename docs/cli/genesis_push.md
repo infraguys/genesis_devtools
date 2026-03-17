@@ -1,5 +1,5 @@
 
-# push
+# genesis_push
 
 Push the element to the repository
 
@@ -11,45 +11,45 @@ Usage: genesis push [OPTIONS] [PROJECT_DIR]
 
 ## Options
 
-*   `genesis_cfg_file`:
-    *   Type: STRING
-    *   Default: `genesis.yaml`
-    *   Usage: `-c
+* `genesis_cfg_file`:
+    * Type: text
+    * Default: `genesis.yaml`
+    * Usage: `-c
 --genesis-cfg-file`
 
   Name of the project configuration file
 
-*   `target`:
-    *   Type: STRING
-    *   Default: `none`
-    *   Usage: `-t
+* `target`:
+    * Type: text
+    * Default: `none`
+    * Usage: `-t
 --target`
 
   Target repository to push to
 
-*   `element_dir`:
-    *   Type: <click.types.Path object at 0x7cb005f39ca0>
-    *   Default: `output`
-    *   Usage: `-e
+* `element_dir`:
+    * Type: path
+    * Default: `output`
+    * Usage: `-e
 --element-dir`
 
   Directory where element artifacts are stored
 
-*   `force`:
-    *   Type: BOOL
-    *   Default: `false`
-    *   Usage: `-f
+* `force`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-f
 --force`
 
   Force push even if the element already exists
 
-*   `project_dir`:
-    * Type: <click.types.Path object at 0x7cb005f39f10>
+* `project_dir`:
+    * Type: path
     * Default: `.`
     * Usage: `project_dir`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

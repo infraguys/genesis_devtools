@@ -79,11 +79,15 @@ def dump_helper(base_command):
                 "required": getattr(opt, "required", None),
                 "default": getattr(opt, "default", None),
                 "help": getattr(opt, "help", None),
-                "type": getattr(t, "name", str(t)) if (t := getattr(opt, "type", None)) else "None",
+                "type": getattr(t, "name", str(t))
+                if (t := getattr(opt, "type", None))
+                else "None",
             }
             for opt in helpdct.get("params", [])
         }
-        full_command = f"{command.name or parent}"
+        full_command = command.name
+        if parent:
+            full_command = f"{parent}_{full_command}"
         md_template = md_base_template.format(
             command_name=full_command,
             description=command.help,
