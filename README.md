@@ -2,8 +2,6 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/genesis-devtools)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/genesis-devtools)
 
-
-
 # Genesis Dev Tools
 
 The tools to manager life cycle of genesis projects
@@ -11,6 +9,7 @@ The tools to manager life cycle of genesis projects
 # Requirements
 
 Before you can install and use genesis tools you need to install several requirements:
+
 - [packer](https://www.packer.io/)
 - [libvirt](https://libvirt.org/)
 - [qemu](https://www.qemu.org/)
@@ -18,6 +17,7 @@ Before you can install and use genesis tools you need to install several require
 ## Ubuntu
 
 Install packages
+
 ```sh
 sudo apt update
 sudo apt install qemu-kvm qemu-utils libvirt-daemon-system libvirt-dev mkisofs
@@ -27,6 +27,7 @@ uv tool install tox --with tox-uv
 ```
 
 Add user to group
+
 ```sh
 sudo adduser $USER libvirt
 sudo adduser $USER kvm
@@ -38,17 +39,20 @@ Install packer like described in [this article](https://yandex.cloud/ru/docs/tut
 
 To install the `genesis-devtools` package, follow these steps:
 
-1. Clone the repository:
+1.  Clone the repository:
+
     ```sh
     git clone https://github.com/infraguys/genesis_devtools.git
     ```
 
-2. Navigate to the project directory:
+2.  Navigate to the project directory:
+
     ```sh
     cd genesis_devtools
     ```
 
-3. Initialize virtual environment:
+3.  Initialize virtual environment:
+
    ```bash
    tox -e develop
    source .tox/develop/bin/activate
@@ -57,20 +61,25 @@ To install the `genesis-devtools` package, follow these steps:
 # Quickstart
 
 ## Build
+
 Firstly you need to build the genesis project. Navigate to your project directory and run the genesis build command, specifying the path to your project root directory as an argument. This will build the project according to the configuration defined in the `genesis.yaml` file.
 
 Here are some examples of how to use the build command:
+
 ```sh
 genesis build /path/to/my/project
 ```
 
 There are some useful options for the genesis build command.
+
 - Build a Genesis project with a custom developer key path:
+
 ```sh
 genesis build -i /path/to/my/developer/key /path/to/my/project
 ```
 
 - Build a Genesis project with the --force option to rebuild if the output already exists:
+
 ```sh
 genesis build -f /path/to/my/project
 ```
@@ -88,11 +97,13 @@ One of the key options for the bootstrap command is `--launch-mode`, which allow
 - `custom`: This mode allows you to launch the installation with a custom configuration.
 
 Here are some examples of how to use the `--launch-mode` option:
+
 ```sh+
 genesis bootstrap -i output/genesis-element.raw
 ```
 
 Launch the installation in `core` mode:
+
 ```sh
 genesis bootstrap -i output/genesis-core.raw -m core
 ```
@@ -176,6 +187,7 @@ build:
 The `genesis build` command builds the project. The build process is described in the `build` section of the `genesis.yaml` file. The mandatory argument is path to the project root directory.
 
 Build a Genesis project.
+
 ```sh
 genesis build my_project
 ```
@@ -196,6 +208,7 @@ genesis bootstrap output/genesis-core.raw
 This command will create and boot a virtual machine with the specified genesis image `output/genesis-core.raw`. The default name of the installation is `genesis-core`. For detailed information about the `genesis bootstrap` command run `genesis bootstrap --help`.
 
 To connect to the genesis installation, run the `genesis ssh` command. For instance,
+
 ```sh
 genesis ssh
 ```
@@ -227,6 +240,7 @@ genesis bootstrap -i output/genesis-core.raw -f -m core -s data/stands/stand-sma
 ## Versions
 
 Semver is used for project versioning. There are three types of versions:
+
 - stable version - format `X.Y.Z`
 - release candidate version - format `X.Y.Z-rc+YYYYMMDDHHMMSS.commit_hash[:8]`
 - development version - format `X.Y.Z-dev+YYYYMMDDHHMMSS.commit_hash[:8]`
@@ -328,6 +342,7 @@ Run backup of all libvirt domains and store an encrypted archive of the backup i
 NOTE: It works only with `--compress` flag
 
 You need to set the environment variables `GEN_DEV_BACKUP_KEY` and `GEN_DEV_BACKUP_IV` to encrypt the backup. The key and IV must be greater or equal to 6 bytes and less or equal to 16 bytes.
+
 ```bash
 export GEN_DEV_BACKUP_KEY=secret_key
 export GEN_DEV_BACKUP_IV=secret_iv
@@ -336,6 +351,7 @@ genesis backup --compress --encrypt
 ```
 
 For decryption, use the `genesis backup-decrypt` command.
+
 ```bash
 genesis backup-decrypt backup.tar.gz.encrypted
 ```
@@ -358,4 +374,4 @@ Backups can take a lot of disk space and it can be a reason to crash the whole s
 
 ```bash
 genesis backup --min-free-space 50
-``` 
+```

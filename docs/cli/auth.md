@@ -1,0 +1,35 @@
+
+# auth
+
+Authenticate and manage IAM token
+
+## Usage
+
+```console
+Usage: genesis auth [OPTIONS] COMMAND [ARGS]...
+```
+
+## Options
+
+*   `help`:
+    * Type: BOOL
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis auth [OPTIONS] COMMAND [ARGS]...
+
+  Authenticate and manage IAM token
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  login    Authenticate in IAM and store tokens locally
+  me       Validate stored token and show user info
+  refresh  Refresh stored token using refresh token
+```
