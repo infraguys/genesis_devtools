@@ -62,6 +62,10 @@ ruff = [
 shellcheck = [
     "shellcheck-py",
 ]
+docs = [
+    "mkdocs-material==9.1.0",
+    "mkdocs-glightbox",
+]
 
 [tool.ruff]
 exclude = [
@@ -122,7 +126,7 @@ line-ending = "auto"
 where = ["."]
 
 [project.scripts]
-genesis = "genesis_devtools.cmd.cli:main"
+genesis = "genesis_devtools.cmd.cli:genesis"
 
 [project.entry-points."genesis_devtools.backup.drivers"]
 LocalQcowBackuper = "genesis_devtools.backup.local:LocalQcowBackuper"

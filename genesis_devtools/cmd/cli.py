@@ -50,12 +50,12 @@ GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
 GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
 
 
-@click.group(invoke_without_command=True)
-def main() -> None:
+@click.group(invoke_without_command=True, help="Genesis DevTools")
+def genesis() -> None:
     pass
 
 
-@main.group("auth", help="Authenticate and manage IAM token")
+@genesis.group("auth", help="Authenticate and manage IAM token")
 def auth_group() -> None:
     pass
 
@@ -243,7 +243,7 @@ def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
     return result
 
 
-@main.command(
+@genesis.command(
     "build",
     help=(
         "Build a Genesis element. The command build all images, manifests "
@@ -395,7 +395,7 @@ def build_cmd(
             )
 
 
-@main.command("push", help="Push the element to the repository")
+@genesis.command("push", help="Push the element to the repository")
 @click.option(
     "-c",
     "--genesis-cfg-file",
@@ -466,7 +466,7 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
         raise
 
 
-@main.command("bootstrap", help="Bootstrap genesis locally")
+@genesis.command("bootstrap", help="Bootstrap genesis locally")
 @click.option(
     "-i",
     "--inventory",
@@ -513,7 +513,7 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
     default=None,
     help=(
         "The IP address for the core VM. If `None` is provided, "
-        "second IP address from the main network will be used."
+        "second IP address from the genesis network will be used."
     ),
     show_default=True,
     type=ipaddress.IPv4Address,
@@ -522,7 +522,7 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
     "--bridge",
     default=None,
     help=(
-        "Name of the linux bridge for the main network, it will be created if not set."
+        "Name of the linux bridge for the genesis network, it will be created if not set."
     ),
 )
 @click.option(
@@ -651,7 +651,7 @@ def bootstrap_cmd(
         core_ip = cidr[2]
 
     if core_ip not in cidr:
-        raise click.UsageError("Core IP is not in the main network")
+        raise click.UsageError("Core IP is not in the genesis network")
 
     # Generate admin password if not provided
     admin_password = admin_password or secrets.token_urlsafe(16)
@@ -696,7 +696,7 @@ def bootstrap_cmd(
             stand_spec = yaml.safe_load(f)
 
     net_name = utils.installation_net_name(name)
-    stand_main_network = stand_models.Network(
+    stand_genesis_network = stand_models.Network(
         name=bridge if bridge else net_name,
         cidr=cidr,
         managed_network=False if bridge else True,
@@ -715,7 +715,7 @@ def bootstrap_cmd(
 
     # Single hypervisor at bootstrap time is supported at the moment
     hypervisor = stand_models.Hypervisor(
-        network=stand_main_network.name,
+        network=stand_genesis_network.name,
         network_type="bridge" if bridge else "network",
         connection_uri=hyper_connection_uri,
         storage_pool=hyper_storage_pool,
@@ -730,7 +730,7 @@ def bootstrap_cmd(
         profile=profile,
         name=name,
         stand_spec=stand_spec,
-        stand_main_network=stand_main_network,
+        stand_genesis_network=stand_genesis_network,
         stand_boot_network=stand_boot_network,
         force=force,
         core_ip=core_ip,
@@ -743,7 +743,7 @@ def bootstrap_cmd(
     )
 
 
-@main.group("repo", help="Manager Genesis repository")
+@genesis.group("repo", help="Manager Genesis repository")
 def repository_group():
     pass
 
@@ -875,7 +875,7 @@ def repo_list_cmd(
     click.echo(table)
 
 
-@main.command("ssh", help="Connect to genesis stand/element")
+@genesis.command("ssh", help="Connect to genesis stand/element")
 @click.option(
     "-s",
     "--stand",
@@ -919,7 +919,7 @@ def conn_cmd(stand: str | None, username: str) -> None:
     os.system(f"ssh {username}@{ip_address}")
 
 
-@main.command("ps", help="List of running genesis installation")
+@genesis.command("ps", help="List of running genesis installation")
 def ps_cmd() -> None:
     table = prettytable.PrettyTable()
     table.field_names = [
@@ -943,7 +943,7 @@ def ps_cmd() -> None:
     click.echo(table)
 
 
-@main.command("delete", help="Delete the genesis stand/element")
+@genesis.command("delete", help="Delete the genesis stand/element")
 @click.argument("name", type=str)
 def delete_cmd(name: str) -> None:
     infra = libvirt_infra.LibvirtInfraDriver()
@@ -958,7 +958,7 @@ def delete_cmd(name: str) -> None:
     infra.delete_stand(stand)
 
 
-@main.command("get-version", help="Return the version of the project")
+@genesis.command("get-version", help="Return the version of the project")
 @click.argument("element_dir", type=click.Path())
 def get_project_version_cmd(element_dir: str) -> None:
     logger = ClickLogger()
@@ -976,7 +976,7 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
         raise click.UsageError("Invalid '--start' format. Use HH:MM:SS, e.g., 16:00:00")
 
 
-@main.command("backup", help="Backup the current installation")
+@genesis.command("backup", help="Backup the current installation")
 @click.option(
     "--config",
     default=None,
@@ -988,7 +988,7 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
     "--name",
     default=None,
     multiple=True,
-    help="Name of the libvirt domain, if not provided, all will be backed up",
+    help="Name of the libvirt domains, if not provided, all will be backed up",
 )
 @click.option(
     "-d",
@@ -1207,9 +1207,9 @@ def backup_cmd(
         time.sleep(timeout)
 
 
-@main.command("backup-decrypt", help="Decrypt a backup file")
+@genesis.command("backup-decrypt", help="Decrypt a backup file")
 @click.argument("path", type=click.Path(exists=True))
-def bakcup_decrypt_cmd(path: str) -> None:
+def backup_decrypt_cmd(path: str) -> None:
     # Need to specify encryption key and initialization vector via
     # environment variables.
 
@@ -1247,6 +1247,14 @@ def bakcup_decrypt_cmd(path: str) -> None:
     click.secho(f"The {path} file has been decrypted.", fg="green")
 
 
+@genesis.command(help="tool for creating docs files for cli commands", hidden=True)
+def dumphelp() -> None:
+    from genesis_devtools.common.md_click import dump_helper  # type: ignore
+
+    dump_helper(genesis)
+    return None
+
+
 def _domains_for_backup(
     names: tp.List[str] | None = None,
     exclude_names: tp.List[str] | None = None,
@@ -1259,7 +1267,7 @@ def _domains_for_backup(
     # Check if the specified domains exist
     if raise_on_domain_absence and (names - domains):
         diff = ", ".join(names - domains)
-        raise click.UsageError(f"Domains {diff} not found")
+        raise click.UsageError(f"domains {diff} not found")
 
     if names:
         domains &= names
@@ -1293,7 +1301,7 @@ def _bootstrap_element(
         dhcp=True,
     )
 
-    bootstrap_domain_name = utils.installation_bootstrap_name(name)
+    bootstrap_domains_name = utils.installation_bootstrap_name(name)
 
     # Single bootstrap stand
     dev_stand = stand_models.Stand.single_bootstrap_stand(
@@ -1302,7 +1310,7 @@ def _bootstrap_element(
         cores=cores,
         memory=memory,
         network=default_stand_network,
-        bootstrap_name=bootstrap_domain_name,
+        bootstrap_name=bootstrap_domains_name,
     )
 
     if not dev_stand.is_valid():
@@ -1335,11 +1343,11 @@ def _bootstrap_element(
         return
 
     utils.wait_for(
-        lambda: bool(libvirt.get_domain_ip(bootstrap_domain_name)),
+        lambda: bool(libvirt.get_domain_ip(bootstrap_domains_name)),
         title=f"Waiting for element {name}",
     )
 
-    ip = libvirt.get_domain_ip(bootstrap_domain_name)
+    ip = libvirt.get_domain_ip(bootstrap_domains_name)
     logger.important(f"The element {name} is ready at:\nssh ubuntu@{ip}")
 
 
@@ -1349,7 +1357,7 @@ def _bootstrap_core(
     profile: c.Profile,
     name: str,
     stand_spec: tp.Dict[str, tp.Any] | None,
-    stand_main_network: stand_models.Network,
+    stand_genesis_network: stand_models.Network,
     stand_boot_network: stand_models.Network,
     force: bool,
     core_ip: ipaddress.IPv4Address,
@@ -1369,7 +1377,7 @@ def _bootstrap_core(
 
     # Single bootstrap stand
     if stand_spec is None:
-        bootstrap_domain_name = utils.installation_bootstrap_name(name)
+        bootstrap_domains_name = utils.installation_bootstrap_name(name)
         dev_stand = stand_models.Stand.single_bootstrap_stand(
             name=name,
             image=image_path,
@@ -1377,15 +1385,15 @@ def _bootstrap_core(
             cores=profile.cores,
             memory=profile.ram,
             core_ip=core_ip,
-            network=stand_main_network,
+            network=stand_genesis_network,
             boot_network=stand_boot_network,
-            bootstrap_name=bootstrap_domain_name,
+            bootstrap_name=bootstrap_domains_name,
             hypervisors=hypervisors,
         )
     else:
         dev_stand = stand_models.Stand.from_spec(stand_spec)
         if dev_stand.network.is_dummy:
-            dev_stand.network = stand_main_network
+            dev_stand.network = stand_genesis_network
 
         if dev_stand.boot_network.is_dummy:
             dev_stand.boot_network = stand_boot_network
@@ -1472,3 +1480,6 @@ def _bootstrap_core(
         logger.info(
             f"The stand {name} is created but not started. You can start it manually."
         )
+
+if __name__ == "__main__":
+    genesis()

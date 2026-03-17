@@ -117,8 +117,8 @@ class ElementInventory(tp.NamedTuple):
     artifacts: tp.Collection[pathlib.Path] = tuple()
 
     @classmethod
-    def categories(cls) -> tuple[str]:
-        return ("images", "manifests", "configs", "templates", "artifacts")
+    def categories(cls) -> tuple[str, str, str, str, str]:
+        return "images", "manifests", "configs", "templates", "artifacts"
 
     def to_dict(self) -> dict[str, tp.Any]:
         data = {
