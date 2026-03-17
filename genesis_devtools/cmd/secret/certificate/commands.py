@@ -83,9 +83,7 @@ def delete_certificate_cmd(
     certificate_lib.delete_certificate(client, uuid)
 
 
-@certificates_group.command(
-    "add", help="Add a new certificate to the Genesis installation"
-)
+@certificates_group.command("add", help="Add a new certificate to the Genesis installation")
 @click.pass_context
 @click.option(
     "-u",
