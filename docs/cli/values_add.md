@@ -43,6 +43,13 @@ Usage: genesis values add [OPTIONS]
 
   Description of the value
 
+* `var`:
+    * Type: text
+    * Default: `none`
+    * Usage: `--var`
+
+  UUID of a variable the value belongs to
+
 * `value`:
     * Type: text
     * Default: ``
@@ -71,6 +78,7 @@ Options:
                           [required]
   -n, --name TEXT         Name of the value
   -D, --description TEXT  Description of the value
+  --var TEXT              UUID of a variable the value belongs to
   -V, --value TEXT        value
   --help                  Show this message and exit.
 ```

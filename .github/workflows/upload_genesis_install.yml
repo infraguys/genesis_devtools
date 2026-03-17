@@ -26,4 +26,4 @@ jobs:
       run: |
         set -eux
         
-        curl -fsSL https://repository.genesis-core.tech/install.sh | sudo sh     
+        curl -fsSL https://repository.genesis-core.tech/install.sh | sh     

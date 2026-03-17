@@ -61,6 +61,10 @@ from genesis_devtools.cmd.iam.project import commands as project_commands
 from genesis_devtools.cmd.iam.role import commands as role_commands
 from genesis_devtools.cmd.iam.role_binding import commands as role_binding_commands
 
+from genesis_devtools.cmd.secret.certificate import commands as certificate_commands
+from genesis_devtools.cmd.secret.passwords import commands as password_commands
+from genesis_devtools.cmd.secret.rsa_keys import commands as rsa_keys_commands
+from genesis_devtools.cmd.secret.ssh_keys import commands as ssh_keys_commands
 
 from genesis_devtools.cmd.hypervisors import commands as hypervisors_commands
 from genesis_devtools.cmd.manifests import commands as manifests_commands
@@ -1426,6 +1430,25 @@ def hello() -> None:
     click.echo(msg)
 
 
+@genesis.command("autocomplete_help", help="Display a autocomplete help")
+def autocomplete_help() -> None:
+    msg = """
+To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
+
+# bash
+
+- Add content from `https://github.com/infraguys/genesis_devtools/blob/master/etc/.genesis-complete.bash` to your `~/.bashrc` file
+- Restart your shell
+
+# zsh
+
+- Save `https://github.com/infraguys/genesis_devtools/blob/master/etc/.genesis-complete.zsh` somewhere, for example `~/.genesis-complete.zsh` 
+- Source the file `. ~/.genesis-complete.zsh` in your `~/.zshrc`
+- Restart your shell
+"""
+    click.echo(msg)
+
+
 genesis.add_command(iam_commands.auth_group)  # noqa
 genesis.add_command(client_commands.clients_group)  # noqa
 genesis.add_command(idp_commands.idps_group)  # noqa
@@ -1435,6 +1458,11 @@ genesis.add_command(permission_binding_commands.permission_bindings_group)  # no
 genesis.add_command(project_commands.projects_group)  # noqa
 genesis.add_command(role_commands.roles_group)  # noqa
 genesis.add_command(role_binding_commands.role_bindings_group)  # noqa
+
+genesis.add_command(certificate_commands.certificates_group)  # noqa
+genesis.add_command(password_commands.passwords_group)  # noqa
+genesis.add_command(rsa_keys_commands.rsa_keys_group)  # noqa
+genesis.add_command(ssh_keys_commands.ssh_keys_group)  # noqa
 
 genesis.add_command(hypervisors_commands.hypervisors_group)  # noqa
 genesis.add_command(manifests_commands.manifests_group)  # noqa

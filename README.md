@@ -18,9 +18,16 @@ To install the `genesis-devtools` binary, follow this step:
 
 To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
 
-1a. Add content from `etc/.genesis-complete.bash` to your `~/.bashrc` file:
-1b. Or add content from `etc/.genesis-complete.zsh` to your `~/.zshrc` file:
-2. Restart your shell.
+## bash
+
+- Add content from `etc/.genesis-complete.bash` to your `~/.bashrc` file
+- Restart your shell
+
+## zsh
+
+- Save `etc/.genesis-complete.zsh` somewhere, for example `~/.genesis-complete.zsh`
+- Source the file `. ~/.genesis-complete.zsh` in your `~/.zshrc`
+- Restart your shell
 
 # Requirements
 
