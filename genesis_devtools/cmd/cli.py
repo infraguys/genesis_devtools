@@ -64,6 +64,7 @@ from genesis_devtools.cmd.iam.role_binding import commands as role_binding_comma
 
 from genesis_devtools.cmd.hypervisors import commands as hypervisors_commands
 from genesis_devtools.cmd.manifests import commands as manifests_commands
+from genesis_devtools.cmd.initialization import commands as initialization_commands
 from genesis_devtools.cmd.nodes import commands as nodes_commands
 from genesis_devtools.cmd.configs import commands as configs_commands
 from genesis_devtools.cmd.elements import commands as elements_commands
@@ -1447,6 +1448,10 @@ genesis.add_command(services_commands.services_group)  # noqa
 genesis.add_command(user_commands.users_group)  # noqa
 genesis.add_command(values_commands.values_group)  # noqa
 genesis.add_command(vars_commands.variables_group)  # noqa
+
+
+# Initialization
+genesis.add_command(initialization_commands.init_cmd)
 
 
 if __name__ == "__main__":
