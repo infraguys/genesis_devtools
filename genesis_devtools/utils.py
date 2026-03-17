@@ -432,3 +432,8 @@ def make_iso(src_dir: str, iso_path: str, label: str = "config-drive") -> None:
         raise RuntimeError(
             f"ISO build failed (rc={proc.returncode}): {proc.stderr.strip()}"
         )
+
+
+def current_dir_name() -> str:
+    """Returns the name of the current working directory."""
+    return os.path.basename(os.getcwd())

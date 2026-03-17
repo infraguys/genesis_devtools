@@ -26,6 +26,7 @@ from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.clients import value as value_lib
 from genesis_devtools.common import utils
+from genesis_devtools import constants as c
 
 
 @click.group("values", help="Manage values in the Genesis installation")
@@ -115,6 +116,12 @@ def delete_value_cmd(
     help="Description of the value",
 )
 @click.option(
+    "--var",
+    type=str,
+    default=None,
+    help="UUID of a variable the value belongs to",
+)
+@click.option(
     "-V",
     "--value",
     type=click.STRING,
@@ -127,21 +134,30 @@ def add_value_cmd(
     project_id: sys_uuid.UUID,
     name: str,
     description: str,
+    var: str | None,
     value: str,
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
     if uuid is None:
         uuid = sys_uuid.uuid4()
-    value_resp = value_lib.add_value(
-        client,
-        {
-            "uuid": str(uuid),
-            "project_id": str(project_id),
-            "name": name,
-            "description": description,
-            "value": _convert_to_nearest_type(value),
-        },
-    )
+
+    data = {
+        "uuid": str(uuid),
+        "project_id": str(project_id),
+        "name": name,
+        "description": description,
+        "value": _convert_to_nearest_type(value),
+    }
+
+    # Validate variable UUID if provided
+    if var:
+        try:
+            sys_uuid.UUID(var)
+        except ValueError:
+            raise click.ClickException(f"Variable {var} is not a valid UUID")
+        data["variable"] = f"{c.VARIABLE_COLLECTION}{var}"
+
+    value_resp = value_lib.add_value(client, data)
     _print_values([value_resp])
 
 

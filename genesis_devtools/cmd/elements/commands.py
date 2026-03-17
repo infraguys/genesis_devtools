@@ -160,6 +160,32 @@ def show_element_ips(ctx: click.Context, name: str) -> None:
         click.echo(node_lib.get_node_ip(node))
 
 
+def _apply_with_cleanup(
+    client: http_client.CollectionBaseClient,
+    manifest_data: dict[str, tp.Any],
+    apply_func: tp.Callable[[http_client.CollectionBaseClient, str], None],
+) -> dict[str, tp.Any]:
+    """Apply a manifest and clean up old versions on success."""
+
+    found_manifest_uuids = [
+        sys_uuid.UUID(item["uuid"])
+        for item in manifests_lib.list_manifests(client, name=manifest_data["name"])
+    ]
+    manifest_data = manifests_lib.add_manifest(client, manifest_data)
+    manifest_uuid = sys_uuid.UUID(manifest_data["uuid"])
+
+    try:
+        apply_func(client, manifest_data["uuid"])
+    except Exception:
+        manifests_lib.delete_manifest(client, manifest_uuid)
+        raise
+
+    for manifest_uuid in found_manifest_uuids:
+        manifests_lib.delete_manifest(client, manifest_uuid)
+
+    return manifest_data
+
+
 def upgrade_manifest(
     client: http_client.CollectionBaseClient,
     repository: str,
@@ -194,8 +220,7 @@ def upgrade_manifest(
 
     # Install element if no requirements
     if not requirements:
-        manifest = manifests_lib.add_manifest(client, manifest)
-        apply_func(client, manifest["uuid"])
+        manifest = _apply_with_cleanup(client, manifest, apply_func)
         return manifest
 
     # Resolve dependencies
@@ -230,8 +255,7 @@ def upgrade_manifest(
         # sleep.
         time.sleep(3)
 
-    manifest = manifests_lib.add_manifest(client, manifest)
-    apply_func(client, manifest["uuid"])
+    manifest = _apply_with_cleanup(client, manifest, apply_func)
     return manifest
 
 
@@ -239,7 +263,7 @@ def upgrade_manifest(
 @click.option(
     "-r",
     "--repository",
-    default="http://10.20.0.1:8080/genesis-manifests/",
+    default="http://10.20.0.1:8080/genesis-elements/",
     show_default=True,
     help="Repository endpoint",
 )

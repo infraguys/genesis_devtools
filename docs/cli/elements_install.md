@@ -13,7 +13,7 @@ Usage: genesis elements install [OPTIONS] PATH_OR_NAME
 
 * `repository`:
     * Type: text
-    * Default: `http://10.20.0.1:8080/genesis-manifests/`
+    * Default: `http://10.20.0.1:8080/genesis-elements/`
     * Usage: `-r
 --repository`
 
@@ -40,6 +40,6 @@ Usage: genesis elements install [OPTIONS] PATH_OR_NAME
 
 Options:
   -r, --repository TEXT  Repository endpoint  [default:
-                         http://10.20.0.1:8080/genesis-manifests/]
+                         http://10.20.0.1:8080/genesis-elements/]
   --help                 Show this message and exit.
 ```

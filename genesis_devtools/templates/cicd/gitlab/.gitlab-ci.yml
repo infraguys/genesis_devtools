@@ -1,0 +1,42 @@
+include:
+  - project: '{{ gitlab_templates_repo }}'
+    file:
+      - /templates/.build-element-v1-template.yml
+      - /templates/.deploy-element-v1-template.yml
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_COMMIT_TAG
+    - if: $CI_MERGE_REQUEST_IID
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  variables:
+    DEV_KEYS: "$PL_DEV_KEYS"
+  extends:
+    - .build-element-v1
+  tags:
+    - {{ gitlab_runner_tag }}
+  when: manual
+
+{% for installation in functions.csv_list(gitlab_genesis_installations) %}
+{{ installation }}:deploy:
+  stage: deploy
+  variables:
+    INSTALLATION: "{{ installation }}"
+    REPOSITORY: "$PL_REPOSITORY"
+  extends:
+    - .deploy-element-v1
+  tags:
+    - {{ gitlab_runner_tag }}
+  needs:
+    - job: build
+      artifacts: true
+  when: {{ gitlab_deploy_mode }}
+{% endfor %}
