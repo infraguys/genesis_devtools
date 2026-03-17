@@ -39,19 +39,19 @@ Install packer like described in [this article](https://yandex.cloud/ru/docs/tut
 
 To install the `genesis-devtools` package, follow these steps:
 
-1.  Clone the repository:
+1. Clone the repository:
 
     ```sh
     git clone https://github.com/infraguys/genesis_devtools.git
     ```
 
-2.  Navigate to the project directory:
+2. Navigate to the project directory:
 
     ```sh
     cd genesis_devtools
     ```
 
-3.  Initialize virtual environment:
+3. Initialize virtual environment:
 
    ```bash
    tox -e develop

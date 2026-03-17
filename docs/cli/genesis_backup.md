@@ -1,5 +1,5 @@
 
-# backup
+# genesis_backup
 
 Backup the current installation
 
@@ -11,101 +11,101 @@ Usage: genesis backup [OPTIONS]
 
 ## Options
 
-*   `config`:
-    * Type: <click.types.Path object at 0x7cb005f3af60>
+* `config`:
+    * Type: path
     * Default: `none`
     * Usage: `--config`
 
   Path to the backuper configuration file
 
-*   `name`:
-    *   Type: STRING
-    *   Default: `none`
-    *   Usage: `-n
+* `name`:
+    * Type: text
+    * Default: `none`
+    * Usage: `-n
 --name`
 
-  Name of the libvirt domain, if not provided, all will be backed up
+  Name of the libvirt domains, if not provided, all will be backed up
 
-*   `backup_dir`:
-    *   Type: <click.types.Path object at 0x7cb005f3afc0>
-    *   Default: `.`
-    *   Usage: `-d
+* `backup_dir`:
+    * Type: path
+    * Default: `.`
+    * Usage: `-d
 --backup-dir`
 
   Directory where backups will be stored
 
-*   `period`:
-    *   Type: Choice(['1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1d', '3d', '7d'])
-    *   Default: `1d`
-    *   Usage: `-p
+* `period`:
+    * Type: choice
+    * Default: `1d`
+    * Usage: `-p
 --period`
 
   the regularity of backups
 
-*   `offset`:
-    *   Type: Choice(['1m', '5m', '15m', '30m', '1h', '3h', '6h', '12h', '1d', '3d', '7d'])
-    *   Default: `none`
-    *   Usage: `-o
+* `offset`:
+    * Type: choice
+    * Default: `none`
+    * Usage: `-o
 --offset`
 
   The time offset of the first backup. If not provided, the same value as the period will be used
 
-*   `start`:
-    * Type: <click.types.FuncParamType object at 0x7cb005f3b560>
+* `start`:
+    * Type: _start_validation_type
     * Default: `none`
     * Usage: `--start`
 
   Time of day to start backup in format HH:MM:SS. Cannot be used together with --offset. If provided, period must be >= 1d.
 
-*   `oneshot`:
-    * Type: BOOL
+* `oneshot`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--oneshot`
 
   Do a backup once and exit
 
-*   `compress`:
-    *   Type: BOOL
-    *   Default: `false`
-    *   Usage: `-c
+* `compress`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-c
 --compress`
 
   Compress the backup.
 
-*   `encrypt`:
-    *   Type: BOOL
-    *   Default: `false`
-    *   Usage: `-e
+* `encrypt`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-e
 --encrypt`
 
   Encrypt the backup. Works only with the compress flag. Use environment variable to specify the encryption key and the initialization vector: GEN_DEV_BACKUP_KEY and GEN_DEV_BACKUP_IV
 
-*   `min_free_space`:
-    *   Type: INT
-    *   Default: `50`
-    *   Usage: `-s
+* `min_free_space`:
+    * Type: integer
+    * Default: `50`
+    * Usage: `-s
 --min-free-space`
 
   Free disk space shouldn't be lower than this threshold. If the space becomes lower, the backup process is stopped. The value is in GB.
 
-*   `rotate`:
-    *   Type: INT
-    *   Default: `5`
-    *   Usage: `-r
+* `rotate`:
+    * Type: integer
+    * Default: `5`
+    * Usage: `-r
 --rotate`
 
   Maximum number of backups to keep. The oldest backups are deleted. `0` means no rotation.
 
-*   `exclude_name`:
-    *   Type: STRING
-    *   Default: `sentinel.unset`
-    *   Usage: `--no
+* `exclude_name`:
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `--no
 --exclude-name`
 
   Name or pattern of libvirt domains to exclude from backup
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 
@@ -120,8 +120,8 @@ Usage: genesis backup [OPTIONS]
 
 Options:
   --config PATH                   Path to the backuper configuration file
-  -n, --name TEXT                 Name of the libvirt domain, if not
-                                  provided, all will be backed up
+  -n, --name TEXT                 Name of the libvirt domains, if not provided,
+                                  all will be backed up
   -d, --backup-dir PATH           Directory where backups will be stored
   -p, --period [1m|5m|15m|30m|1h|3h|6h|12h|1d|3d|7d]
                                   the regularity of backups  [default: 1d]
@@ -146,7 +146,7 @@ Options:
   -r, --rotate INTEGER            Maximum number of backups to keep. The oldest
                                   backups are deleted. `0` means no rotation.
                                   [default: 5]
-  --no, --exclude-name TEXT       Name or pattern of libvirt domains to
-                                  exclude from backup
+  --no, --exclude-name TEXT       Name or pattern of libvirt domains to exclude
+                                  from backup
   --help                          Show this message and exit.
 ```

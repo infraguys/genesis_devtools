@@ -1,23 +1,23 @@
 
-# delete
+# elements_show
 
-Delete the genesis stand/element
+Show element general information
 
 ## Usage
 
 ```console
-Usage: genesis delete [OPTIONS] NAME
+Usage: genesis elements show [OPTIONS] NAME
 ```
 
 ## Options
 
-*   `name` (REQUIRED):
-    * Type: STRING
+* `name` (REQUIRED):
+    * Type: text
     * Default: `sentinel.unset`
     * Usage: `name`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 
@@ -26,9 +26,9 @@ Usage: genesis delete [OPTIONS] NAME
 ## CLI Help
 
 ```console
-Usage: genesis delete [OPTIONS] NAME
+Usage: genesis elements show [OPTIONS] NAME
 
-  Delete the genesis stand/element
+  Show element general information
 
 Options:
   --help  Show this message and exit.

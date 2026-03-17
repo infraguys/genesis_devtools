@@ -31,6 +31,7 @@ plugins:
         - en
         - ru
   - glightbox
+  - include_dir_to_nav
 
 extra:
   repo_icon: github
@@ -72,21 +73,4 @@ markdown_extensions:
       alternate_style: true
 
 nav:
-  - cli:
-    - cli/auth.md
-    - cli/backup.md
-    - cli/backup-decrypt.md
-    - cli/bootstrap.md
-    - cli/build.md
-    - cli/delete.md
-    - cli/genesis.md
-    - cli/get-version.md
-    - cli/init.md
-    - cli/list.md
-    - cli/login.md
-    - cli/me.md
-    - cli/ps.md
-    - cli/push.md
-    - cli/refresh.md
-    - cli/repo.md
-    - cli/ssh.md
+  - cli

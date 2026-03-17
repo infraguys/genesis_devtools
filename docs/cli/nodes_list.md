@@ -1,0 +1,39 @@
+
+# nodes_list
+
+List nodes
+
+## Usage
+
+```console
+Usage: genesis nodes list [OPTIONS]
+```
+
+## Options
+
+* `project_id`:
+    * Type: text
+    * Default: `none`
+    * Usage: `-P
+--project-id`
+
+  Filter nodes by project
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis nodes list [OPTIONS]
+
+  List nodes
+
+Options:
+  -P, --project-id TEXT  Filter nodes by project
+  --help                 Show this message and exit.
+```

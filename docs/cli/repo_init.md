@@ -1,5 +1,5 @@
 
-# init
+# repo_init
 
 Initialize the repository
 
@@ -11,37 +11,37 @@ Usage: genesis repo init [OPTIONS] [PROJECT_DIR]
 
 ## Options
 
-*   `genesis_cfg_file`:
-    *   Type: STRING
-    *   Default: `genesis.yaml`
-    *   Usage: `-c
+* `genesis_cfg_file`:
+    * Type: text
+    * Default: `genesis.yaml`
+    * Usage: `-c
 --genesis-cfg-file`
 
   Name of the project configuration file
 
-*   `target`:
-    *   Type: STRING
-    *   Default: `none`
-    *   Usage: `-t
+* `target`:
+    * Type: text
+    * Default: `none`
+    * Usage: `-t
 --target`
 
   Target repository to push to
 
-*   `force`:
-    *   Type: BOOL
-    *   Default: `false`
-    *   Usage: `-f
+* `force`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-f
 --force`
 
   Force init even if the repo already exists
 
-*   `project_dir`:
-    * Type: <click.types.Path object at 0x7cb005f3a540>
+* `project_dir`:
+    * Type: path
     * Default: `.`
     * Usage: `project_dir`
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

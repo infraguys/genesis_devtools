@@ -1,5 +1,5 @@
 
-# ssh
+# genesis_ssh
 
 Connect to genesis stand/element
 
@@ -11,24 +11,24 @@ Usage: genesis ssh [OPTIONS]
 
 ## Options
 
-*   `stand`:
-    *   Type: STRING
-    *   Default: `none`
-    *   Usage: `-s
+* `stand`:
+    * Type: text
+    * Default: `none`
+    * Usage: `-s
 --stand`
 
   Stand to connect to
 
-*   `username`:
-    *   Type: STRING
-    *   Default: `ubuntu`
-    *   Usage: `-u
+* `username`:
+    * Type: text
+    * Default: `ubuntu`
+    * Usage: `-u
 --username`
 
   Default username
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

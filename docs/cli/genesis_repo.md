@@ -1,5 +1,5 @@
 
-# repo
+# genesis_repo
 
 Manager Genesis repository
 
@@ -11,8 +11,8 @@ Usage: genesis repo [OPTIONS] COMMAND [ARGS]...
 
 ## Options
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

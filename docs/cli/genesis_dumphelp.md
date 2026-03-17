@@ -1,5 +1,5 @@
 
-# dumphelp
+# genesis_dumphelp
 
 tool for creating docs files for cli commands
 
@@ -11,8 +11,8 @@ Usage: genesis dumphelp [OPTIONS]
 
 ## Options
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

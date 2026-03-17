@@ -24,10 +24,13 @@ import secrets
 import ipaddress
 import fnmatch
 import pathlib
+import uuid as sys_uuid
 
 import yaml
 import click
 import prettytable
+
+from gcl_sdk.clients.http import base as http_client
 
 import genesis_devtools.constants as c
 from genesis_devtools.clients import iam as iam_client
@@ -44,15 +47,121 @@ from genesis_devtools.infra.libvirt import libvirt
 from genesis_devtools.stand import models as stand_models
 from genesis_devtools.infra.driver import libvirt as libvirt_infra
 
+from genesis_devtools.cmd.nodes import commands as nodes_commands
+from genesis_devtools.cmd.configs import commands as configs_commands
+from genesis_devtools.cmd.elements import commands as elements_commands
+
 BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
 GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
 GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
 
 
+class CmdContext(tp.NamedTuple):
+    client: http_client.CollectionBaseClient
+
+
 @click.group(invoke_without_command=True, help="Genesis DevTools")
-def genesis() -> None:
-    pass
+@click.option(
+    "--config",
+    default=os.path.expanduser("~/.genesis/genesisctl.yaml"),
+    show_default=True,
+    type=click.Path(exists=False, dir_okay=False),
+    help="Path to YAML config file",
+)
+@click.option(
+    "-e",
+    "--endpoint",
+    default="http://localhost:11010",
+    show_default=True,
+    help="Genesis API endpoint",
+)
+@click.option(
+    "-u",
+    "--user",
+    default=None,
+    help="Client user name",
+)
+@click.option(
+    "-p",
+    "--password",
+    default=None,
+    help="Password for the client user",
+)
+@click.option(
+    "-P",
+    "--project-id",
+    default=None,
+    type=click.UUID,
+    help="Project ID for the client user",
+)
+@click.pass_context
+def genesis(
+    ctx: click.Context,
+    config: str,
+    endpoint: str,
+    user: str | None,
+    password: str | None,
+    project_id: sys_uuid.UUID | None,
+) -> None:
+    # Load configuration from file (if exists)
+    cfg_path = os.path.expanduser(config) if config else None
+    cfg: dict = {}
+    if cfg_path and os.path.exists(cfg_path):
+        try:
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                loaded = yaml.safe_load(f) or {}
+        except OSError as e:
+            raise click.ClickException(f"Could not read config file '{cfg_path}': {e}")
+        except yaml.YAMLError as e:
+            raise click.ClickException(f"Error parsing YAML file '{cfg_path}': {e}")
+
+        if not isinstance(loaded, dict):
+            raise click.ClickException("Config file must contain a YAML mapping")
+        cfg = loaded
+
+    # Determine parameter sources to respect CLI priority over config
+    ps = ctx.get_parameter_source
+
+    def _get_final_value(param_name: str, cli_value: tp.Any) -> tp.Any:
+        if ps(param_name) == click.core.ParameterSource.COMMANDLINE:
+            return cli_value
+        return cfg.get(param_name, cli_value)
+
+    final_endpoint = _get_final_value("endpoint", endpoint)
+    final_user = _get_final_value("user", user)
+    final_password = _get_final_value("password", password)
+
+    # Project ID
+    final_project_id = None
+    if ps("project_id") == click.core.ParameterSource.COMMANDLINE:
+        final_project_id = project_id
+    else:
+        if cfg_project := cfg.get("project_id"):
+            try:
+                final_project_id = sys_uuid.UUID(str(cfg_project))
+            except (ValueError, AttributeError) as exc:
+                raise click.ClickException(
+                    f"Invalid project_id in config: {cfg_project}"
+                ) from exc
+
+    # Prepare a client
+    if final_project_id is not None:
+        scope = http_client.CoreIamAuthenticator.project_scope(final_project_id)
+    else:
+        scope = None
+
+    auth = http_client.CoreIamAuthenticator(
+        base_url=final_endpoint,
+        username=final_user,
+        password=final_password,
+        scope=scope,
+    )
+    client = http_client.CollectionBaseClient(
+        base_url=final_endpoint,
+        auth=auth,
+    )
+    ctx.obj = CmdContext(client)
 
 
 @genesis.group("auth", help="Authenticate and manage IAM token")
@@ -513,7 +622,7 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
     default=None,
     help=(
         "The IP address for the core VM. If `None` is provided, "
-        "second IP address from the genesis network will be used."
+        "second IP address from the main network will be used."
     ),
     show_default=True,
     type=ipaddress.IPv4Address,
@@ -522,7 +631,7 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
     "--bridge",
     default=None,
     help=(
-        "Name of the linux bridge for the genesis network, it will be created if not set."
+        "Name of the linux bridge for the main network, it will be created if not set."
     ),
 )
 @click.option(
@@ -651,7 +760,7 @@ def bootstrap_cmd(
         core_ip = cidr[2]
 
     if core_ip not in cidr:
-        raise click.UsageError("Core IP is not in the genesis network")
+        raise click.UsageError("Core IP is not in the main network")
 
     # Generate admin password if not provided
     admin_password = admin_password or secrets.token_urlsafe(16)
@@ -696,7 +805,7 @@ def bootstrap_cmd(
             stand_spec = yaml.safe_load(f)
 
     net_name = utils.installation_net_name(name)
-    stand_genesis_network = stand_models.Network(
+    stand_main_network = stand_models.Network(
         name=bridge if bridge else net_name,
         cidr=cidr,
         managed_network=False if bridge else True,
@@ -715,7 +824,7 @@ def bootstrap_cmd(
 
     # Single hypervisor at bootstrap time is supported at the moment
     hypervisor = stand_models.Hypervisor(
-        network=stand_genesis_network.name,
+        network=stand_main_network.name,
         network_type="bridge" if bridge else "network",
         connection_uri=hyper_connection_uri,
         storage_pool=hyper_storage_pool,
@@ -730,7 +839,7 @@ def bootstrap_cmd(
         profile=profile,
         name=name,
         stand_spec=stand_spec,
-        stand_genesis_network=stand_genesis_network,
+        stand_main_network=stand_main_network,
         stand_boot_network=stand_boot_network,
         force=force,
         core_ip=core_ip,
@@ -988,7 +1097,7 @@ def _start_validation_type(start: str | None) -> time.struct_time | None:
     "--name",
     default=None,
     multiple=True,
-    help="Name of the libvirt domains, if not provided, all will be backed up",
+    help="Name of the libvirt domain, if not provided, all will be backed up",
 )
 @click.option(
     "-d",
@@ -1267,7 +1376,7 @@ def _domains_for_backup(
     # Check if the specified domains exist
     if raise_on_domain_absence and (names - domains):
         diff = ", ".join(names - domains)
-        raise click.UsageError(f"domains {diff} not found")
+        raise click.UsageError(f"Domains {diff} not found")
 
     if names:
         domains &= names
@@ -1301,7 +1410,7 @@ def _bootstrap_element(
         dhcp=True,
     )
 
-    bootstrap_domains_name = utils.installation_bootstrap_name(name)
+    bootstrap_domain_name = utils.installation_bootstrap_name(name)
 
     # Single bootstrap stand
     dev_stand = stand_models.Stand.single_bootstrap_stand(
@@ -1310,7 +1419,7 @@ def _bootstrap_element(
         cores=cores,
         memory=memory,
         network=default_stand_network,
-        bootstrap_name=bootstrap_domains_name,
+        bootstrap_name=bootstrap_domain_name,
     )
 
     if not dev_stand.is_valid():
@@ -1343,11 +1452,11 @@ def _bootstrap_element(
         return
 
     utils.wait_for(
-        lambda: bool(libvirt.get_domain_ip(bootstrap_domains_name)),
+        lambda: bool(libvirt.get_domain_ip(bootstrap_domain_name)),
         title=f"Waiting for element {name}",
     )
 
-    ip = libvirt.get_domain_ip(bootstrap_domains_name)
+    ip = libvirt.get_domain_ip(bootstrap_domain_name)
     logger.important(f"The element {name} is ready at:\nssh ubuntu@{ip}")
 
 
@@ -1357,7 +1466,7 @@ def _bootstrap_core(
     profile: c.Profile,
     name: str,
     stand_spec: tp.Dict[str, tp.Any] | None,
-    stand_genesis_network: stand_models.Network,
+    stand_main_network: stand_models.Network,
     stand_boot_network: stand_models.Network,
     force: bool,
     core_ip: ipaddress.IPv4Address,
@@ -1377,7 +1486,7 @@ def _bootstrap_core(
 
     # Single bootstrap stand
     if stand_spec is None:
-        bootstrap_domains_name = utils.installation_bootstrap_name(name)
+        bootstrap_domain_name = utils.installation_bootstrap_name(name)
         dev_stand = stand_models.Stand.single_bootstrap_stand(
             name=name,
             image=image_path,
@@ -1385,15 +1494,15 @@ def _bootstrap_core(
             cores=profile.cores,
             memory=profile.ram,
             core_ip=core_ip,
-            network=stand_genesis_network,
+            network=stand_main_network,
             boot_network=stand_boot_network,
-            bootstrap_name=bootstrap_domains_name,
+            bootstrap_name=bootstrap_domain_name,
             hypervisors=hypervisors,
         )
     else:
         dev_stand = stand_models.Stand.from_spec(stand_spec)
         if dev_stand.network.is_dummy:
-            dev_stand.network = stand_genesis_network
+            dev_stand.network = stand_main_network
 
         if dev_stand.boot_network.is_dummy:
             dev_stand.boot_network = stand_boot_network
@@ -1480,6 +1589,11 @@ def _bootstrap_core(
         logger.info(
             f"The stand {name} is created but not started. You can start it manually."
         )
+
+
+genesis.add_command(nodes_commands.nodes_group)
+genesis.add_command(configs_commands.configs_group)
+genesis.add_command(elements_commands.elements_group)
 
 if __name__ == "__main__":
     genesis()

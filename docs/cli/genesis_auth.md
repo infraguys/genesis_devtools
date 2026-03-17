@@ -1,5 +1,5 @@
 
-# auth
+# genesis_auth
 
 Authenticate and manage IAM token
 
@@ -11,8 +11,8 @@ Usage: genesis auth [OPTIONS] COMMAND [ARGS]...
 
 ## Options
 
-*   `help`:
-    * Type: BOOL
+* `help`:
+    * Type: boolean
     * Default: `false`
     * Usage: `--help`
 

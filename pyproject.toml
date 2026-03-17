@@ -25,6 +25,7 @@ dependencies = [
     "prettytable>=3.7.0,<4.0.0",  # MIT
     "GitPython>=3.1.30,<4.0.0",
     "bazooka>=1.0.0,<2.0.0",  # Apache-2.0
+    "gcl_sdk>=1.0.0,<3.0.0",  # Apache-2.0
     "cryptography>=45.0.5,<47.0.0",  # BSD-3
     "boto3>=1.37.0,<2.0.0",  # Apache-2.0
     "Jinja2>=3.1.5,<4.0.0",  # BSD License (BSD-3-Clause)
@@ -65,6 +66,10 @@ shellcheck = [
 docs = [
     "mkdocs-material==9.1.0",
     "mkdocs-glightbox",
+    "mkdocs-include-dir-to-nav",
+]
+bin = [
+    "pyinstaller",
 ]
 
 [tool.ruff]
