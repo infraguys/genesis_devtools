@@ -73,4 +73,5 @@ markdown_extensions:
       alternate_style: true
 
 nav:
-  - cli
+  - Software: index.md
+  - Cli: cli
