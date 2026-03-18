@@ -24,7 +24,7 @@ Usage: genesis backup [OPTIONS]
     * Usage: `-n
 --name`
 
-  Name of the libvirt domains, if not provided, all will be backed up
+  Name of the libvirt domain, if not provided, all will be backed up
 
 * `backup_dir`:
     * Type: path
@@ -120,7 +120,7 @@ Usage: genesis backup [OPTIONS]
 
 Options:
   --config PATH                   Path to the backuper configuration file
-  -n, --name TEXT                 Name of the libvirt domains, if not provided,
+  -n, --name TEXT                 Name of the libvirt domain, if not provided,
                                   all will be backed up
   -d, --backup-dir PATH           Directory where backups will be stored
   -p, --period [1m|5m|15m|30m|1h|3h|6h|12h|1d|3d|7d]

@@ -88,4 +88,5 @@ Commands:
   push            Push the element to the repository
   repo            Manager Genesis repository
   ssh             Connect to genesis stand/element
+  version         Prints the genesis_devtools version
 ```

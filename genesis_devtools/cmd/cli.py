@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import os
+import requests
 import time
 import shutil
 import typing as tp
@@ -1589,6 +1590,40 @@ def _bootstrap_core(
         logger.info(
             f"The stand {name} is created but not started. You can start it manually."
         )
+
+
+def check_latest_version() -> None:
+    """Check for the latest version on GitHub and warn if newer version exists."""
+    try:
+        response = requests.get(f"{c.GITHUB_RELEASES_URL}/latest", timeout=5)
+        response.raise_for_status()
+        latest_tag = response.json()["tag_name"]
+
+        from genesis_devtools import version as genesis_version
+
+        # Сравниваем версии
+        from packaging import version
+
+        if version.parse(latest_tag) > version.parse(genesis_version.version_info):
+            click.secho(
+                f"New version available: {latest_tag}. (current: {genesis_version.version_info}) "
+                f"Download from: {c.GITHUB_RELEASES_URL}",
+                fg="yellow",
+            )
+    except Exception as e:
+        click.secho(f"Failed to check for the latest version on GitHub: {e}", fg="red")
+
+
+@genesis.command(help=f"Prints the {c.PKG_NAME} version")
+def version() -> None:
+    from genesis_devtools import version
+
+    click.echo(version.version_info)
+
+
+@genesis.command(help="Check for the latest version on GitHub", hidden=True)
+def latest() -> None:
+    check_latest_version()
 
 
 genesis.add_command(nodes_commands.nodes_group)

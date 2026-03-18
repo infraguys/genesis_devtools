@@ -1,0 +1,30 @@
+
+# genesis_version
+
+Prints the genesis_devtools version
+
+## Usage
+
+```console
+Usage: genesis version [OPTIONS]
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis version [OPTIONS]
+
+  Prints the genesis_devtools version
+
+Options:
+  --help  Show this message and exit.
+```
