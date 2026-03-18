@@ -224,7 +224,7 @@ genesis delete genesis-core
 
 ### Stand specification
 
-For more complicated cases when you need to start an installation with several nodes (that are treated as baremetal nodes) you may use `stand specification`. The stand specification is a YAML file describes the genesis installation. it specifies how many bootstrap nodes, how many baremetal nodes, their characteristics and other parameters. For instance, it may look like this:
+For more complicated cases when you need to start an installation with several nodes (that are treated as baremetal nodes) you may use `stand specification`. The stand specification is a YAML file that describes the genesis installation. It specifies how many bootstrap nodes, how many baremetal nodes, their characteristics and other parameters. For instance, it may look like this:
 
 [Small stand](data/stands/stand-small.yaml)
 
