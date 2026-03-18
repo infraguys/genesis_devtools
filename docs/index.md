@@ -194,7 +194,7 @@ This will build the Genesis project in the `my_project` directory using the defa
 After build the project output artifacts will be stored in the `output` directory.
 For detailed information about the `genesis build` command run `genesis build --help`.
 
-## Manager Genesis installation locally
+## Manage Genesis installation locally
 
 To bootstrap genesis installation locally, run the `genesis bootstrap` command. The mandatory argument is path to the genesis image. For instance,
 
