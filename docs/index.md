@@ -4,7 +4,7 @@
 
 # Genesis Dev Tools
 
-The tools to manager life cycle of genesis projects
+The tools to manage life cycle of genesis projects
 
 # Requirements
 
