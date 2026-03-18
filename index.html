@@ -1,0 +1,1108 @@
+<!DOCTYPE html><html lang="ru" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/">
+      
+      
+      
+        <link rel="next" href="cli/auth_login/">
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.0">
+    
+    
+      
+        <title>genesis_devtools</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.402914a4.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#genesis-dev-tools" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
+    <a href="." title="genesis_devtools" class="md-header__button md-logo" aria-label="genesis_devtools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            genesis_devtools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Software
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"></path></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent="" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"></path></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Поиск">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/infraguys/genesis_devtools" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    genesis_devtools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Навигация" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="genesis_devtools" class="md-nav__button md-logo" aria-label="genesis_devtools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+
+    </a>
+    genesis_devtools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/infraguys/genesis_devtools" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    genesis_devtools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Software
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2">
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          Cli
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Cli
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix="">
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/auth_login/" class="md-nav__link">
+        auth_login
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/auth_me/" class="md-nav__link">
+        auth_me
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/auth_refresh/" class="md-nav__link">
+        auth_refresh
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/configs_add-from-env/" class="md-nav__link">
+        configs_add-from-env
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/configs_delete/" class="md-nav__link">
+        configs_delete
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/configs_list/" class="md-nav__link">
+        configs_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/elements_install/" class="md-nav__link">
+        elements_install
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/elements_list/" class="md-nav__link">
+        elements_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/elements_show/" class="md-nav__link">
+        elements_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/elements_uninstall/" class="md-nav__link">
+        elements_uninstall
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/elements_update/" class="md-nav__link">
+        elements_update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis/" class="md-nav__link">
+        genesis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_auth/" class="md-nav__link">
+        genesis_auth
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_backup-decrypt/" class="md-nav__link">
+        genesis_backup-decrypt
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_backup/" class="md-nav__link">
+        genesis_backup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_bootstrap/" class="md-nav__link">
+        genesis_bootstrap
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_build/" class="md-nav__link">
+        genesis_build
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_configs/" class="md-nav__link">
+        genesis_configs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_delete/" class="md-nav__link">
+        genesis_delete
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_dumphelp/" class="md-nav__link">
+        genesis_dumphelp
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_elements/" class="md-nav__link">
+        genesis_elements
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_get-version/" class="md-nav__link">
+        genesis_get-version
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_latest/" class="md-nav__link">
+        genesis_latest
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_nodes/" class="md-nav__link">
+        genesis_nodes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_ps/" class="md-nav__link">
+        genesis_ps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_push/" class="md-nav__link">
+        genesis_push
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_repo/" class="md-nav__link">
+        genesis_repo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_ssh/" class="md-nav__link">
+        genesis_ssh
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/genesis_version/" class="md-nav__link">
+        genesis_version
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/nodes_add-or-update/" class="md-nav__link">
+        nodes_add-or-update
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/nodes_add/" class="md-nav__link">
+        nodes_add
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/nodes_delete/" class="md-nav__link">
+        nodes_delete
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/nodes_list/" class="md-nav__link">
+        nodes_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/repo_delete/" class="md-nav__link">
+        repo_delete
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/repo_init/" class="md-nav__link">
+        repo_init
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cli/repo_list/" class="md-nav__link">
+        repo_list
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="https://github.com/infraguys/genesis_devtools/actions/workflows/tests.yml/badge.svg" data-desc-position="bottom"><img alt="Tests workflow" src="https://github.com/infraguys/genesis_devtools/actions/workflows/tests.yml/badge.svg"></a>
+<a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="https://img.shields.io/pypi/pyversions/genesis-devtools" data-desc-position="bottom"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/genesis-devtools"></a>
+<a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="https://img.shields.io/pypi/dm/genesis-devtools" data-desc-position="bottom"><img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/genesis-devtools"></a></p>
+<h1 id="genesis-dev-tools">Genesis Dev Tools<a class="headerlink" href="#genesis-dev-tools" title="Permanent link">#</a></h1>
+<p>The tools to manage life cycle of genesis projects</p>
+<h1 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">#</a></h1>
+<p>Before you can install and use genesis tools you need to install several requirements:</p>
+<ul>
+<li><a href="https://www.packer.io/">packer</a></li>
+<li><a href="https://libvirt.org/">libvirt</a></li>
+<li><a href="https://www.qemu.org/">qemu</a></li>
+</ul>
+<h2 id="ubuntu">Ubuntu<a class="headerlink" href="#ubuntu" title="Permanent link">#</a></h2>
+<p>Install packages</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>qemu-kvm<span class="w"> </span>qemu-utils<span class="w"> </span>libvirt-daemon-system<span class="w"> </span>libvirt-dev<span class="w"> </span>mkisofs
+curl<span class="w"> </span>-LsSf<span class="w"> </span>https://astral.sh/uv/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+<span class="nb">source</span><span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">"</span>/.local/bin/env
+uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>tox<span class="w"> </span>--with<span class="w"> </span>tox-uv
+</code></pre></div>
+<p>Add user to group</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>adduser<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>libvirt
+sudo<span class="w"> </span>adduser<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>kvm
+</code></pre></div>
+<p>Install packer like described in <a href="https://yandex.cloud/ru/docs/tutorials/infrastructure-management/packer-quickstart#from-y-mirror">this article</a></p>
+<h1 id="install">Install<a class="headerlink" href="#install" title="Permanent link">#</a></h1>
+<p>To install the <code>genesis-devtools</code> package, follow these steps:</p>
+<ol>
+<li>
+<p>Clone the repository:</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/infraguys/genesis_devtools.git
+</code></pre></div>
+</li>
+<li>
+<p>Navigate to the project directory:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>genesis_devtools
+</code></pre></div>
+</li>
+<li>
+<p>Initialize virtual environment:</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code>tox<span class="w"> </span>-e<span class="w"> </span>develop
+<span class="nb">source</span><span class="w"> </span>.tox/develop/bin/activate
+</code></pre></div>
+<h1 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">#</a></h1>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">#</a></h2>
+<p>Firstly you need to build the genesis project. Navigate to your project directory and run the genesis build command, specifying the path to your project root directory as an argument. This will build the project according to the configuration defined in the <code>genesis.yaml</code> file.</p>
+<p>Here are some examples of how to use the build command:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>build<span class="w"> </span>/path/to/my/project
+</code></pre></div>
+<p>There are some useful options for the genesis build command.</p>
+<ul>
+<li>Build a Genesis project with a custom developer key path:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>build<span class="w"> </span>-i<span class="w"> </span>/path/to/my/developer/key<span class="w"> </span>/path/to/my/project
+</code></pre></div>
+<ul>
+<li>Build a Genesis project with the --force option to rebuild if the output already exists:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>build<span class="w"> </span>-f<span class="w"> </span>/path/to/my/project
+</code></pre></div>
+<p>Look at the <code>genesis build --help</code> command for more options.</p>
+<h2 id="bootstrap">Bootstrap<a class="headerlink" href="#bootstrap" title="Permanent link">#</a></h2>
+<p>To bootstrap a Genesis installation locally, use the genesis bootstrap command. This command creates and boots a virtual machine with the specified Genesis image.</p>
+<p>One of the key options for the bootstrap command is <code>--launch-mode</code>, which allows you to specify the launch mode for the application. There are three available modes:</p>
+<ul>
+<li><code>element</code>: This is the default mode, which launches the installation as a single element.</li>
+<li><code>core</code>: This mode launches the installation as a core.</li>
+<li><code>custom</code>: This mode allows you to launch the installation with a custom configuration.</li>
+</ul>
+<p>Here are some examples of how to use the <code>--launch-mode</code> option:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>bootstrap<span class="w"> </span>-i<span class="w"> </span>output/genesis-element.raw
+</code></pre></div>
+<p>Launch the installation in <code>core</code> mode:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>bootstrap<span class="w"> </span>-i<span class="w"> </span>output/genesis-core.raw<span class="w"> </span>-m<span class="w"> </span>core
+</code></pre></div>
+<h1 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h1>
+<p>The package provides a command line interface for building genesis projects, managing genesis installations and covers many other useful aspects. To use the command line interface, run the <code>genesis</code> command from the command line. For full documentation about CLI commands, run <code>genesis --help</code>.</p>
+<p>For every genesis project the directory <code>genesis</code> should exist in the project root. The project configuration file should be named <code>genesis.yaml</code> in this directory. For example my project structure looks like this:</p>
+<div class="highlight"><pre><span></span><code>.
+├──<span class="w"> </span>my_project
+│<span class="w">   </span>└──<span class="w"> </span>main.py
+├──<span class="w"> </span>project_settings.json
+├──<span class="w"> </span>pyproject.toml
+└──<span class="w"> </span>README.md
+</code></pre></div>
+<p>The project should be extended as follows:</p>
+<p>.
+├── my_project
+│   └── main.py
+├── genesis
+│   └── genesis.yaml
+├── project_settings.json
+├── pyproject.toml
+└── README.md</p>
+<h2 id="genesis-configuration-file">Genesis configuration file<a class="headerlink" href="#genesis-configuration-file" title="Permanent link">#</a></h2>
+<p>The <code>genesis.yaml</code> file contains the configuration for the genesis project. It should be placed in the <code>genesis</code> directory. It consists of several sections such as build, deploy, etc.</p>
+<p>Example of the <code>genesis.yaml</code> file:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Build section. It describes the build process of the project.</span>
+<span class="nt">build</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Dependencies of the project</span>
+<span class="w">  </span><span class="c1"># This section is used to specify build dependencies</span>
+<span class="w">  </span><span class="c1"># for the project</span>
+<span class="w">  </span><span class="nt">deps</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># Target path in the image</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">dst</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/opt/genesis_core</span>
+<span class="w">      </span><span class="c1"># Local path of the build machine</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../../genesis_core</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1"># This section describes elements of the project.</span>
+<span class="w">  </span><span class="c1"># Images, artifacts and manifests for every element. </span>
+<span class="w">  </span><span class="nt">elements</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># List of images in the element</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">images</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">genesis-core</span>
+<span class="w">        </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">raw</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1"># OS profile for the image</span>
+<span class="w">        </span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu_24</span>
+
+<span class="w">        </span><span class="c1"># Provisioning script</span>
+<span class="w">        </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">images/install.sh</span>
+
+<span class="w">        </span><span class="c1"># Override image build parameters, for instance Packer parameters</span>
+<span class="w">        </span><span class="nt">override</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">disk_size</span><span class="p">:</span><span class="w"> </span><span class="s">"10G"</span>
+
+<span class="w">      </span><span class="nt">manifest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manifests/genesis-core.yaml</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="c1"># List of artifacts in the element</span>
+<span class="w">      </span><span class="nt">artifacts</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configs/my-config.yaml</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">templates/my-template.yaml</span>
+</code></pre></div>
+<h2 id="build-project">Build project<a class="headerlink" href="#build-project" title="Permanent link">#</a></h2>
+<p>The <code>genesis build</code> command builds the project. The build process is described in the <code>build</code> section of the <code>genesis.yaml</code> file. The mandatory argument is path to the project root directory.</p>
+<p>Build a Genesis project.</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>build<span class="w"> </span>my_project
+</code></pre></div>
+<p>This will build the Genesis project in the <code>my_project</code> directory using the default configuration file will be located in <code>my_project/genesis/genesis.yaml</code>.</p>
+<p>After build the project output artifacts will be stored in the <code>output</code> directory.
+For detailed information about the <code>genesis build</code> command run <code>genesis build --help</code>.</p>
+<h2 id="manage-genesis-installation-locally">Manage Genesis installation locally<a class="headerlink" href="#manage-genesis-installation-locally" title="Permanent link">#</a></h2>
+<p>To bootstrap genesis installation locally, run the <code>genesis bootstrap</code> command. The mandatory argument is path to the genesis image. For instance,</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>bootstrap<span class="w"> </span>output/genesis-core.raw
+</code></pre></div>
+<p>This command will create and boot a virtual machine with the specified genesis image <code>output/genesis-core.raw</code>. The default name of the installation is <code>genesis-core</code>. For detailed information about the <code>genesis bootstrap</code> command run <code>genesis bootstrap --help</code>.</p>
+<p>To connect to the genesis installation, run the <code>genesis ssh</code> command. For instance,</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>ssh
+</code></pre></div>
+<p>To list genesis installations, run the <code>genesis ps</code> command. For instance,</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>ps
+</code></pre></div>
+<p>To delete genesis installation, run the <code>genesis delete</code> command. For instance,</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>delete<span class="w"> </span>genesis-core
+</code></pre></div>
+<h3 id="stand-specification">Stand specification<a class="headerlink" href="#stand-specification" title="Permanent link">#</a></h3>
+<p>For more complicated cases when you need to start an installation with several nodes (that are treated as baremetal nodes) you may use <code>stand specification</code>. The stand specification is a YAML file that describes the genesis installation. It specifies how many bootstrap nodes, how many baremetal nodes, their characteristics and other parameters. For instance, it may look like this:</p>
+<p><a href="data/stands/stand-small.yaml">Small stand</a></p>
+<p>Use option <code>--stand-spec</code> or <code>-s</code> for the <code>bootstrap</code> command to specify file with stand description. For instance,</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>bootstrap<span class="w"> </span>-i<span class="w"> </span>output/genesis-core.raw<span class="w"> </span>-f<span class="w"> </span>-m<span class="w"> </span>core<span class="w"> </span>-s<span class="w"> </span>data/stands/stand-small.yaml
+</code></pre></div>
+<h2 id="versions">Versions<a class="headerlink" href="#versions" title="Permanent link">#</a></h2>
+<p>Semver is used for project versioning. There are three types of versions:</p>
+<ul>
+<li>stable version - format <code>X.Y.Z</code></li>
+<li>release candidate version - format <code>X.Y.Z-rc+YYYYMMDDHHMMSS.commit_hash[:8]</code></li>
+<li>development version - format <code>X.Y.Z-dev+YYYYMMDDHHMMSS.commit_hash[:8]</code></li>
+</ul>
+<p>Stable version looks like <code>1.0.0</code>, only three digits. Release candidate version looks like <code>0.0.1-rc+20250224092842.e11604e9</code>. Development version looks like <code>0.0.1-dev+20250223180245.fb195339</code>.</p>
+<p>To get project version, run the <code>genesis get-version</code> with path to the project root directory as an argument to the command. For instance,</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>get-version<span class="w"> </span>/path/to/my_project
+</code></pre></div>
+<h2 id="backups">Backups<a class="headerlink" href="#backups" title="Permanent link">#</a></h2>
+<p>The <code>backup</code> command is used to backup the current installation. This guide provides a brief overview of the command and its usage, along with several examples to get you started.</p>
+<p>The basic syntax of the <code>backup</code> command is as follows:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>-d<span class="w"> </span>/path/to/backup/directory
+</code></pre></div>
+<p>Run the above command to backup the current installation to the specified directory. The command will create a subdirectory for each domain and copy its disks to the specified directory. The backup will repeat every 24 hours by default.</p>
+<p>To configure period of backup, run the following command:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>-d<span class="w"> </span>/path/to/backup/directory<span class="w"> </span>-p<span class="w"> </span>1h
+</code></pre></div>
+<p>The above command will backup the current installation to the specified directory every hour.</p>
+<p>There is an option to do a backup once and exit:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>-d<span class="w"> </span>/path/to/backup/directory<span class="w"> </span>-oneshot
+</code></pre></div>
+<p>The above command will backup the current installation to the specified directory once and exit.</p>
+<h3 id="basic-backup">Basic Backup<a class="headerlink" href="#basic-backup" title="Permanent link">#</a></h3>
+<p>Run backup periodically of all libvirt domains and store it in the current directory:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup
+</code></pre></div>
+<h3 id="backup-specific-domain">Backup Specific Domain<a class="headerlink" href="#backup-specific-domain" title="Permanent link">#</a></h3>
+<p>Run backup periodically of a specific libvirt domain and store it in the current directory:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>-n<span class="w"> </span>domain-name
+</code></pre></div>
+<h3 id="exclude-specific-domains">Exclude Specific Domains<a class="headerlink" href="#exclude-specific-domains" title="Permanent link">#</a></h3>
+<p>Use <code>--exclude-name</code> (or <code>--no</code>) to skip specific domains or patterns. <code>--name</code> and <code>--exclude-name/--no</code> cannot be used together.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>--exclude-name<span class="w"> </span>domain-foo<span class="w"> </span>--exclude-name<span class="w"> </span>domain-bar<span class="w"> </span>--exclude-name<span class="w"> </span><span class="s2">"domain-stand-*"</span>
+</code></pre></div>
+<h3 id="custom-periodic-backup">Custom Periodic Backup<a class="headerlink" href="#custom-periodic-backup" title="Permanent link">#</a></h3>
+<p>Run backup periodically of all libvirt domains and store it in the current directory:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>-p<span class="w"> </span>1h
+</code></pre></div>
+<p>Available periods are: <code>1m</code>, <code>5m</code>, <code>15m</code>, <code>30m</code>, <code>1h</code>, <code>3h</code>, <code>6h</code>, <code>12h</code>, <code>1d</code>, <code>3d</code>, <code>7d</code></p>
+<h3 id="oneshot-backup">OneShot Backup<a class="headerlink" href="#oneshot-backup" title="Permanent link">#</a></h3>
+<p>Run backup of all libvirt domains and store it in the current directory:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>-oneshot
+</code></pre></div>
+<p>This command will backup the current installation to the specified directory once and exit.</p>
+<h3 id="compressed-backup">Compressed Backup<a class="headerlink" href="#compressed-backup" title="Permanent link">#</a></h3>
+<p>Run backup of all libvirt domains and store a compressed archive of the backup in the current directory:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>--compress
+</code></pre></div>
+<h3 id="encrypted-backup">Encrypted Backup<a class="headerlink" href="#encrypted-backup" title="Permanent link">#</a></h3>
+<p>Run backup of all libvirt domains and store an encrypted archive of the backup in the current directory:</p>
+<p>NOTE: It works only with <code>--compress</code> flag</p>
+<p>You need to set the environment variables <code>GEN_DEV_BACKUP_KEY</code> and <code>GEN_DEV_BACKUP_IV</code> to encrypt the backup. The key and IV must be greater or equal to 6 bytes and less or equal to 16 bytes.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">GEN_DEV_BACKUP_KEY</span><span class="o">=</span>secret_key
+<span class="nb">export</span><span class="w"> </span><span class="nv">GEN_DEV_BACKUP_IV</span><span class="o">=</span>secret_iv
+
+genesis<span class="w"> </span>backup<span class="w"> </span>--compress<span class="w"> </span>--encrypt
+</code></pre></div>
+<p>For decryption, use the <code>genesis backup-decrypt</code> command.</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup-decrypt<span class="w"> </span>backup.tar.gz.encrypted
+</code></pre></div>
+<h3 id="restore-backups">Restore backups<a class="headerlink" href="#restore-backups" title="Permanent link">#</a></h3>
+<p>Look at the wiki page <a href="https://github.com/infraguys/genesis_devtools/wiki/Backups#restore-backup">restore backups</a> for information on how to restore backups.</p>
+<h3 id="rotation">Rotation<a class="headerlink" href="#rotation" title="Permanent link">#</a></h3>
+<p>For the periodic backup, you can set the number of backups to keep (rotation number). The default value is 5. Use the <code>--rotate</code> option to set the number of backups to keep:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>--rotate<span class="w"> </span><span class="m">10</span>
+</code></pre></div>
+<h3 id="prevent-disk-overflow">Prevent disk overflow<a class="headerlink" href="#prevent-disk-overflow" title="Permanent link">#</a></h3>
+<p>Backups can take a lot of disk space and it can be a reason to crash the whole system if a disk will be full. To prevent such a situation you can set a threshold for disk space that should be free. If during a backup process this threshold will be reached, the backup process will stop. Use the <code>--min-free-space</code> option to set the threshold in GB.</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>backup<span class="w"> </span>--min-free-space<span class="w"> </span><span class="m">50</span>
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["search.suggest", "search.highlight", "toc.integrate", "content.code.copy"], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.ce72ebac.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
