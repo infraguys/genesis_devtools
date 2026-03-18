@@ -359,7 +359,7 @@ Look at the wiki page [restore backups](https://github.com/infraguys/genesis_dev
 
 ### Rotation
 
-For the periodic backup, you can set the number of backups to keep(rotation number). The default value is 5. Use the `--rotate` option to set the number of backups to keep:
+For the periodic backup, you can set the number of backups to keep (rotation number). The default value is 5. Use the `--rotate` option to set the number of backups to keep:
 
 ```bash
 genesis backup --rotate 10
