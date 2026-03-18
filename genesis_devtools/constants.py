@@ -17,6 +17,7 @@ import enum
 import typing as tp
 
 PKG_NAME = "genesis_devtools"
+GITHUB_RELEASES_URL = f"https://api.github.com/repos/infraguys/{PKG_NAME}/releases"
 LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
 DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"

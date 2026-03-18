@@ -61,14 +61,14 @@ Usage: genesis bootstrap [OPTIONS]
     * Default: `none`
     * Usage: `--core-ip`
 
-  The IP address for the core VM. If `None` is provided, second IP address from the genesis network will be used.
+  The IP address for the core VM. If `None` is provided, second IP address from the main network will be used.
 
 * `bridge`:
     * Type: text
     * Default: `none`
     * Usage: `--bridge`
 
-  Name of the linux bridge for the genesis network, it will be created if not set.
+  Name of the linux bridge for the main network, it will be created if not set.
 
 * `boot_cidr`:
     * Type: IPv4Network
@@ -183,10 +183,10 @@ Options:
   -s, --stand-spec PATH           Additional stand specification for core mode.
   --cidr IPV4NETWORK              The main network CIDR  [default: 10.20.0.0/22]
   --core-ip IPV4ADDRESS           The IP address for the core VM. If `None` is
-                                  provided, second IP address from the genesis
+                                  provided, second IP address from the main
                                   network will be used.
-  --bridge TEXT                   Name of the linux bridge for the genesis
-                                  network, it will be created if not set.
+  --bridge TEXT                   Name of the linux bridge for the main network,
+                                  it will be created if not set.
   --boot-cidr IPV4NETWORK         The bootstrap network CIDR  [default:
                                   10.30.0.0/24]
   --boot-bridge TEXT              Name of the linux bridge for the bootstrap

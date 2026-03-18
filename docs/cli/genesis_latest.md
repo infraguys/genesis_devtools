@@ -1,0 +1,30 @@
+
+# genesis_latest
+
+Check for the latest version on GitHub
+
+## Usage
+
+```console
+Usage: genesis latest [OPTIONS]
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis latest [OPTIONS]
+
+  Check for the latest version on GitHub
+
+Options:
+  --help  Show this message and exit.
+```
