@@ -175,7 +175,7 @@ build:
       
       # List of artifacts in the element
       artifacts:
-        - configs/my-cofig.yaml
+        - configs/my-config.yaml
         - templates/my-template.yaml
 ```
 
