@@ -125,17 +125,14 @@ For every genesis project the directory `genesis` should exist in the project ro
 
 The project should be extended as follows:
 
-```sh
 .
 ├── my_project
 │   └── main.py
 ├── genesis
 │   └── genesis.yaml
-├── README.md
 ├── project_settings.json
 ├── pyproject.toml
 └── README.md
-```
 
 ## Genesis configuration file
 
