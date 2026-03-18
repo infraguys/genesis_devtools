@@ -98,7 +98,7 @@ One of the key options for the bootstrap command is `--launch-mode`, which allow
 
 Here are some examples of how to use the `--launch-mode` option:
 
-```sh+
+```sh
 genesis bootstrap -i output/genesis-element.raw
 ```
 
