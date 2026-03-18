@@ -110,7 +110,7 @@ genesis bootstrap -i output/genesis-core.raw -m core
 
 # Usage
 
-The package provides a command line interface for building genesis projects, managing genesis installations and cover many other useful aspects. To use the command line interface, run the `genesis` command from the command line. For full documentation about CLI commands, run `genesis --help`.
+The package provides a command line interface for building genesis projects, managing genesis installations and covers many other useful aspects. To use the command line interface, run the `genesis` command from the command line. For full documentation about CLI commands, run `genesis --help`.
 
 For every genesis project the directory `genesis` should exist in the project root. The project configuration file should be named `genesis.yaml` in this directory. For example my project structure looks like this:
 
