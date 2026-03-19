@@ -1,0 +1,35 @@
+
+# values_show
+
+Show value
+
+## Usage
+
+```console
+Usage: genesis values show [OPTIONS] UUID
+```
+
+## Options
+
+* `uuid` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `uuid`
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis values show [OPTIONS] UUID
+
+  Show value
+
+Options:
+  --help  Show this message and exit.
+```

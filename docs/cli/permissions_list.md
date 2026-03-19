@@ -1,0 +1,30 @@
+
+# permissions_list
+
+List permissions
+
+## Usage
+
+```console
+Usage: genesis permissions list [OPTIONS]
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis permissions list [OPTIONS]
+
+  List permissions
+
+Options:
+  --help  Show this message and exit.
+```

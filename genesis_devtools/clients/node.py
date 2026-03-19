@@ -24,21 +24,15 @@ import click
 from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
 
+from genesis_devtools import constants as c
 from genesis_devtools import logger
-
-NODE_COLLECTION = "/v1/compute/nodes/"
 
 
 def list_nodes(
     client: http_client.CollectionBaseClient,
-    project_id: str | None,
+    **filters,
 ) -> list[dict[str, tp.Any]]:
-    params = {}
-    if project_id is not None:
-        params["project_id"] = project_id
-
-    nodes = client.filter(NODE_COLLECTION, **params)
-    return nodes
+    return client.filter(c.NODE_COLLECTION, **filters)
 
 
 def add_node(
@@ -75,7 +69,7 @@ def add_node(
     # TODO(akremenetsky): Check the image exists
 
     try:
-        node = client.create(NODE_COLLECTION, data=data)
+        node = client.create(c.NODE_COLLECTION, data=data)
     except bazooka_exc.ConflictError:
         raise click.ClickException(f"Node with UUID {uuid} already exists")
 
@@ -86,7 +80,7 @@ def add_node(
     while node["status"] != "ACTIVE":
         log.info(f"Waiting for node to be ready. Status: {node['status']}")
         time.sleep(2)
-        node = client.get(NODE_COLLECTION, uuid=uuid)
+        node = client.get(c.NODE_COLLECTION, uuid=uuid)
 
     return node
 
@@ -120,7 +114,7 @@ def add_or_update_node(
 
     # If UUID is provided, check if the node exists
     try:
-        client.get(NODE_COLLECTION, uuid=uuid)
+        client.get(c.NODE_COLLECTION, uuid=uuid)
     except bazooka_exc.NotFoundError:
         return add_node(
             client,
@@ -148,7 +142,7 @@ def add_or_update_node(
         },
     }
 
-    return client.update(NODE_COLLECTION, uuid=uuid, **data)
+    return client.update(c.NODE_COLLECTION, uuid=uuid, **data)
 
 
 def delete_node(
@@ -160,5 +154,5 @@ def delete_node(
 
     log = logger.ClickLogger()
 
-    client.delete(NODE_COLLECTION, uuid=uuid)
+    client.delete(c.NODE_COLLECTION, uuid=uuid)
     log.important(f"Deleted node {uuid}")

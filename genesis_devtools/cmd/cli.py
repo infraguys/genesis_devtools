@@ -15,6 +15,7 @@
 #    under the License.
 from __future__ import annotations
 
+import cowsay
 import os
 import requests
 import time
@@ -34,7 +35,6 @@ import prettytable
 from gcl_sdk.clients.http import base as http_client
 
 import genesis_devtools.constants as c
-from genesis_devtools.clients import iam as iam_client
 from genesis_devtools import utils
 from genesis_devtools.backup import base as backup_base
 from genesis_devtools.backup import local as backup_local
@@ -48,9 +48,29 @@ from genesis_devtools.infra.libvirt import libvirt
 from genesis_devtools.stand import models as stand_models
 from genesis_devtools.infra.driver import libvirt as libvirt_infra
 
+from genesis_devtools.cmd.iam.auth import commands as iam_commands
+from genesis_devtools.cmd.iam.client import commands as client_commands
+from genesis_devtools.cmd.iam.idp import commands as idp_commands
+from genesis_devtools.cmd.iam.organization import commands as organization_commands
+from genesis_devtools.cmd.iam.permission import commands as permission_commands
+from genesis_devtools.cmd.iam.permission_binding import (
+    commands as permission_binding_commands,
+)
+from genesis_devtools.cmd.iam.project import commands as project_commands
+from genesis_devtools.cmd.iam.role import commands as role_commands
+from genesis_devtools.cmd.iam.role_binding import commands as role_binding_commands
+
+
+from genesis_devtools.cmd.hypervisors import commands as hypervisors_commands
+from genesis_devtools.cmd.manifests import commands as manifests_commands
 from genesis_devtools.cmd.nodes import commands as nodes_commands
 from genesis_devtools.cmd.configs import commands as configs_commands
 from genesis_devtools.cmd.elements import commands as elements_commands
+from genesis_devtools.cmd.profiles import commands as profiles_commands
+from genesis_devtools.cmd.repo import commands as repo_commands
+from genesis_devtools.cmd.iam.user import commands as user_commands
+from genesis_devtools.cmd.values import commands as values_commands
+from genesis_devtools.cmd.vars import commands as vars_commands
 
 BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
@@ -62,7 +82,10 @@ class CmdContext(tp.NamedTuple):
     client: http_client.CollectionBaseClient
 
 
-@click.group(invoke_without_command=True, help="Genesis DevTools")
+@click.group(
+    invoke_without_command=True,
+    help="Provides all the necessary tools for work with Genesis Platform",
+)
 @click.option(
     "--config",
     default=os.path.expanduser("~/.genesis/genesisctl.yaml"),
@@ -129,6 +152,10 @@ def genesis(
             return cli_value
         return cfg.get(param_name, cli_value)
 
+    if cfg.get("check_updates", False) and should_check_version():
+        check_latest_version()
+        save_last_check_time()
+
     final_endpoint = _get_final_value("endpoint", endpoint)
     final_user = _get_final_value("user", user)
     final_password = _get_final_value("password", password)
@@ -163,182 +190,6 @@ def genesis(
         auth=auth,
     )
     ctx.obj = CmdContext(client)
-
-
-@genesis.group("auth", help="Authenticate and manage IAM token")
-def auth_group() -> None:
-    pass
-
-
-@auth_group.command("login", help="Authenticate in IAM and store tokens locally")
-@click.option(
-    "--iam-client-endpoint",
-    required=True,
-    type=str,
-    help="Full URL of the IAM client",
-)
-@click.option(
-    "--project-id",
-    required=True,
-    type=str,
-    help="Project ID for IAM authentication",
-)
-@click.option(
-    "--client-id",
-    default=None,
-    type=str,
-    help="OAuth client id (optional)",
-)
-@click.option(
-    "--client-secret",
-    default=None,
-    type=str,
-    help="OAuth client secret (optional)",
-)
-@click.option(
-    "--scope",
-    default="profile",
-    type=str,
-    show_default=True,
-    help="OAuth scope",
-)
-@click.option(
-    "--ttl",
-    default=15 * 60,
-    type=int,
-    show_default=True,
-    help="Access token lifetime in seconds",
-)
-@click.option(
-    "--refresh-ttl",
-    default=60 * 60,
-    type=int,
-    show_default=True,
-    help="Refresh token lifetime in seconds",
-)
-@click.option(
-    "-f",
-    "--force",
-    show_default=True,
-    is_flag=True,
-    help="Overwrite existing auth file",
-)
-@click.argument("project_dir", type=click.Path())
-def auth_login_cmd(
-    iam_client_endpoint: str,
-    project_id: str,
-    client_id: str | None,
-    client_secret: str | None,
-    scope: str,
-    ttl: int,
-    refresh_ttl: int,
-    force: bool,
-    project_dir: str,
-) -> None:
-    project_dir = os.path.abspath(project_dir)
-
-    auth_dir = os.path.join(project_dir, ".genesis")
-    auth_file = os.path.join(auth_dir, "auth.json")
-
-    login = click.prompt("Login", type=str)
-    password = click.prompt("Password", type=str, hide_input=True)
-
-    client = iam_client.IAMClient(
-        iam_client_endpoint=iam_client_endpoint,
-        project_id=project_id,
-        client_id=client_id,
-        client_secret=client_secret,
-        scope=scope,
-        ttl=ttl,
-        refresh_ttl=refresh_ttl,
-    )
-
-    try:
-        token = client.get_token_by_password(login, password)
-        token.save(project_dir, force=force)
-    except iam_client.TokenFileAlreadyExistsError:
-        click.secho(
-            f"Auth file '{auth_file}' already exists. Use '--force' to overwrite.",
-            fg="yellow",
-        )
-        return
-    except iam_client.IAMClientError as exc:
-        raise click.ClickException(str(exc))
-
-    click.secho(f"Auth data saved to '{auth_file}'", fg="green")
-
-
-@auth_group.command("me", help="Validate stored token and show user info")
-@click.argument("project_dir", type=click.Path())
-def auth_me_cmd(project_dir: str) -> None:
-    project_dir = os.path.abspath(project_dir)
-
-    try:
-        token = iam_client.Token.load(project_dir)
-    except iam_client.TokenFileNotFoundError as exc:
-        raise click.ClickException(str(exc))
-
-    client = iam_client.IAMClient(
-        iam_client_endpoint=token.url,
-        project_id=token.project_id,
-    )
-
-    try:
-        me_data = client.me(token)
-    except iam_client.IAMClientError as exc:
-        raise click.ClickException(str(exc))
-
-    user = me_data.get("user") or {}
-    orgs = me_data.get("organization") or []
-    org = orgs[0] if orgs else {}
-
-    table = prettytable.PrettyTable()
-    table.field_names = ["field", "value"]
-    table.add_row(["uuid", user.get("uuid")])
-    table.add_row(["username", user.get("username")])
-    table.add_row(["name", user.get("name")])
-    table.add_row(["email", user.get("email")])
-    table.add_row(["status", user.get("status")])
-    table.add_row(["organization", org.get("name")])
-
-    click.echo(table)
-
-
-@auth_group.command("refresh", help="Refresh stored token using refresh token")
-@click.option(
-    "--ttl",
-    default=None,
-    type=int,
-    help="Access token lifetime in seconds (optional)",
-)
-@click.option(
-    "--scope",
-    default=None,
-    type=str,
-    help="OAuth scope (optional)",
-)
-@click.argument("project_dir", type=click.Path())
-def auth_refresh_cmd(ttl: int | None, scope: str | None, project_dir: str) -> None:
-    project_dir = os.path.abspath(project_dir)
-
-    try:
-        token = iam_client.Token.load(project_dir)
-    except iam_client.TokenFileNotFoundError as exc:
-        raise click.ClickException(str(exc))
-
-    client = iam_client.IAMClient(
-        iam_client_endpoint=token.url,
-        project_id=token.project_id,
-    )
-
-    try:
-        new_token = client.refresh(token, ttl=ttl, scope=scope)
-        new_token.save(project_dir, force=True)
-    except iam_client.IAMClientError as exc:
-        raise click.ClickException(str(exc))
-
-    auth_file = iam_client.Token.file_path(project_dir)
-    click.secho(f"Auth data saved to '{auth_file}'", fg="green")
 
 
 def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
@@ -851,138 +702,6 @@ def bootstrap_cmd(
         hypervisors=hypervisors,
         no_start=no_start,
     )
-
-
-@genesis.group("repo", help="Manager Genesis repository")
-def repository_group():
-    pass
-
-
-@repository_group.command("init", help="Initialize the repository")
-@click.option(
-    "-c",
-    "--genesis-cfg-file",
-    default=c.DEF_GEN_CFG_FILE_NAME,
-    help="Name of the project configuration file",
-)
-@click.option(
-    "-t",
-    "--target",
-    default=None,
-    help="Target repository to push to",
-)
-@click.option(
-    "-f",
-    "--force",
-    show_default=True,
-    is_flag=True,
-    help="Force init even if the repo already exists",
-)
-@click.argument("project_dir", type=click.Path(), default=".")
-def repo_init_cmd(
-    genesis_cfg_file: str,
-    target: str | None,
-    force: bool,
-    project_dir: str,
-) -> None:
-    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
-
-    try:
-        driver.init_repo()
-    except base_repo.RepoAlreadyExistsError:
-        if force:
-            driver.delete_repo()
-            driver.init_repo()
-            return
-
-        click.secho(
-            "Repository already exists.",
-            fg="red",
-        )
-
-
-@repository_group.command("delete", help="Delete the repository")
-@click.option(
-    "-c",
-    "--genesis-cfg-file",
-    default=c.DEF_GEN_CFG_FILE_NAME,
-    help="Name of the project configuration file",
-)
-@click.option(
-    "-t",
-    "--target",
-    default=None,
-    help="Target repository to push to",
-)
-@click.argument("project_dir", type=click.Path(), default=".")
-def repo_delete_cmd(
-    genesis_cfg_file: str,
-    target: str | None,
-    project_dir: str,
-) -> None:
-    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
-    driver.delete_repo()
-
-
-@repository_group.command("list", help="List the repository")
-@click.option(
-    "-c",
-    "--genesis-cfg-file",
-    default=c.DEF_GEN_CFG_FILE_NAME,
-    help="Name of the project configuration file",
-)
-@click.option(
-    "-t",
-    "--target",
-    default=None,
-    help="Target repository to push to",
-)
-@click.option(
-    "-e",
-    "--element",
-    default=None,
-    help="Element to list",
-)
-@click.argument("project_dir", type=click.Path(), default=".")
-def repo_list_cmd(
-    genesis_cfg_file: str,
-    target: str | None,
-    element: str | None,
-    project_dir: str,
-) -> None:
-    table = prettytable.PrettyTable()
-
-    driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
-    try:
-        elements = driver.list()
-    except base_repo.RepoNotFoundError:
-        click.secho("Repository not found", fg="red")
-        return
-
-    if element is not None:
-        if element not in elements:
-            raise click.UsageError(f"Element {element} not found")
-
-        table.field_names = [
-            "version",
-        ]
-
-        for version in sorted(elements[element]):
-            table.add_row([version])
-
-        click.echo(table)
-        return
-
-    table.field_names = [
-        "name",
-        "last version",
-        "versions",
-    ]
-
-    for element in elements:
-        table.add_row([element, sorted(elements[element])[-1], len(elements[element])])
-
-    click.echo(table)
 
 
 @genesis.command("ssh", help="Connect to genesis stand/element")
@@ -1595,7 +1314,7 @@ def _bootstrap_core(
 def check_latest_version() -> None:
     """Check for the latest version on GitHub and warn if newer version exists."""
     try:
-        response = requests.get(f"{c.GITHUB_RELEASES_URL}/latest", timeout=5)
+        response = requests.get(f"{c.GITHUB_RELEASES_URL}/latest", timeout=1)
         response.raise_for_status()
         latest_tag = response.json()["tag_name"]
 
@@ -1614,6 +1333,40 @@ def check_latest_version() -> None:
         click.secho(f"Failed to check for the latest version on GitHub: {e}", fg="red")
 
 
+def should_check_version():
+    """Check if we should perform a version check."""
+    try:
+        # Check if file exists and is not empty
+        if not os.path.exists(c.LAST_CHECK_FILE):
+            return True
+
+        # Read the last check time
+        with open(c.LAST_CHECK_FILE, "r") as f:
+            content = f.read().strip()
+            if not content:
+                return True
+
+            last_check = float(content)
+
+        # Check if enough time has passed
+        if time.time() - last_check > c.UPDATE_CHECK_INTERVAL:
+            return True
+        return False
+    except Exception:
+        return True  # Default to checking if we can't read the file
+
+
+def save_last_check_time():
+    """Save the current timestamp to the version check file."""
+    try:
+        os.makedirs(os.path.dirname(c.LAST_CHECK_FILE), exist_ok=True)
+        with open(c.LAST_CHECK_FILE, "w") as f:
+            f.write(str(time.time()))
+    except Exception:
+        # Silently ignore write errors
+        pass
+
+
 @genesis.command(help=f"Prints the {c.PKG_NAME} version")
 def version() -> None:
     from genesis_devtools import version
@@ -1621,14 +1374,37 @@ def version() -> None:
     click.echo(version.version_info)
 
 
-@genesis.command(help="Check for the latest version on GitHub", hidden=True)
+@genesis.command(help="Check for the latest version on GitHub")
 def latest() -> None:
     check_latest_version()
 
 
-genesis.add_command(nodes_commands.nodes_group)
-genesis.add_command(configs_commands.configs_group)
-genesis.add_command(elements_commands.elements_group)
+@genesis.command("cowsay", help="Display a cow message")
+def cowsay_cmd() -> None:
+    cowsay.cow("I am genesis-cli")
+
+
+genesis.add_command(iam_commands.auth_group)  # noqa
+genesis.add_command(client_commands.clients_group)  # noqa
+genesis.add_command(idp_commands.idps_group)  # noqa
+genesis.add_command(organization_commands.organizations_group)  # noqa
+genesis.add_command(permission_commands.permissions_group)  # noqa
+genesis.add_command(permission_binding_commands.permission_bindings_group)  # noqa
+genesis.add_command(project_commands.projects_group)  # noqa
+genesis.add_command(role_commands.roles_group)  # noqa
+genesis.add_command(role_binding_commands.role_bindings_group)  # noqa
+
+genesis.add_command(hypervisors_commands.hypervisors_group)  # noqa
+genesis.add_command(manifests_commands.manifests_group)  # noqa
+genesis.add_command(nodes_commands.nodes_group)  # noqa
+genesis.add_command(configs_commands.configs_group)  # noqa
+genesis.add_command(elements_commands.elements_group)  # noqa
+genesis.add_command(profiles_commands.profiles_group)  # noqa
+genesis.add_command(repo_commands.repository_group)  # noqa
+genesis.add_command(user_commands.users_group)  # noqa
+genesis.add_command(values_commands.values_group)  # noqa
+genesis.add_command(vars_commands.variables_group)  # noqa
+
 
 if __name__ == "__main__":
     genesis()

@@ -1,0 +1,30 @@
+
+# projects_list
+
+List projects
+
+## Usage
+
+```console
+Usage: genesis projects list [OPTIONS]
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis projects list [OPTIONS]
+
+  List projects
+
+Options:
+  --help  Show this message and exit.
+```

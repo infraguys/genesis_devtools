@@ -1,0 +1,35 @@
+
+# genesis_clients
+
+Manager clients in the Genesis installation
+
+## Usage
+
+```console
+Usage: genesis clients [OPTIONS] COMMAND [ARGS]...
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis clients [OPTIONS] COMMAND [ARGS]...
+
+  Manager clients in the Genesis installation
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  delete  Delete client
+  list    List clients
+  show    Show client
+```

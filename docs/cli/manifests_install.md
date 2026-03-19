@@ -1,19 +1,19 @@
 
-# elements_install
+# manifests_install
 
-Install element from a manifest (YAML file)
+Install manifest from a manifest (YAML file)
 
 ## Usage
 
 ```console
-Usage: genesis elements install [OPTIONS] PATH_OR_NAME
+Usage: genesis manifests install [OPTIONS] PATH_OR_NAME
 ```
 
 ## Options
 
 * `repository`:
     * Type: text
-    * Default: `http://10.20.0.1:8080/genesis-elements/`
+    * Default: `http://10.20.0.1:8080/genesis-manifests/`
     * Usage: `-r
 --repository`
 
@@ -34,12 +34,12 @@ Usage: genesis elements install [OPTIONS] PATH_OR_NAME
 ## CLI Help
 
 ```console
-Usage: genesis elements install [OPTIONS] PATH_OR_NAME
+Usage: genesis manifests install [OPTIONS] PATH_OR_NAME
 
-  Install element from a manifest (YAML file)
+  Install manifest from a manifest (YAML file)
 
 Options:
   -r, --repository TEXT  Repository endpoint  [default:
-                         http://10.20.0.1:8080/genesis-elements/]
+                         http://10.20.0.1:8080/genesis-manifests/]
   --help                 Show this message and exit.
 ```

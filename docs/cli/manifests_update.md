@@ -1,12 +1,12 @@
 
-# elements_update
+# manifests_update
 
-Update element from a YAML file
+Update manifest from a YAML file
 
 ## Usage
 
 ```console
-Usage: genesis elements update [OPTIONS] PATH_OR_NAME
+Usage: genesis manifests update [OPTIONS] PATH_OR_NAME
 ```
 
 ## Options
@@ -34,9 +34,9 @@ Usage: genesis elements update [OPTIONS] PATH_OR_NAME
 ## CLI Help
 
 ```console
-Usage: genesis elements update [OPTIONS] PATH_OR_NAME
+Usage: genesis manifests update [OPTIONS] PATH_OR_NAME
 
-  Update element from a YAML file
+  Update manifest from a YAML file
 
 Options:
   -r, --repository TEXT  Repository endpoint  [default:

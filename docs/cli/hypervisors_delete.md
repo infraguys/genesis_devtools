@@ -1,0 +1,39 @@
+
+# hypervisors_delete
+
+Delete hypervisor
+
+## Usage
+
+```console
+Usage: genesis hypervisors delete [OPTIONS]
+```
+
+## Options
+
+* `uuid`:
+    * Type: uuid
+    * Default: `none`
+    * Usage: `-u
+--uuid`
+
+  hypervisor UUID
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis hypervisors delete [OPTIONS]
+
+  Delete hypervisor
+
+Options:
+  -u, --uuid UUID  hypervisor UUID
+  --help           Show this message and exit.
+```

@@ -29,9 +29,6 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  install    Install element from a manifest (YAML file)
-  list       List elements
-  show       Show element general information
-  uninstall  Uninstall element by UUID, path or name
-  update     Update element from a YAML file
+  list  List elements
+  show  Show element general information
 ```

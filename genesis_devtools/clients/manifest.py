@@ -26,7 +26,7 @@ from gcl_sdk.clients.http import base as http_client
 from genesis_devtools import constants as c
 
 
-def list_manifest(
+def list_manifests(
     client: http_client.CollectionBaseClient, **filters
 ) -> list[dict[str, tp.Any]]:
     return client.filter(c.MANIFEST_COLLECTION, **filters)
@@ -40,7 +40,7 @@ def get_manifest_uuid(
     if "uuid" not in manifest:
         if "name" not in manifest:
             raise click.ClickException("Manifest must have a name")
-        manifests = list_manifest(client, name=manifest["name"])
+        manifests = list_manifests(client, name=manifest["name"])
 
         if not manifests:
             raise click.ClickException(f"Manifest '{manifest['name']}' not found")
@@ -114,14 +114,14 @@ def install_manifest(
         raise click.ClickException(f"Manifest with UUID {uuid} already installed")
 
 
-def apply_manifest(
+def upgrade_manifest(
     client: http_client.CollectionBaseClient,
     uuid: sys_uuid.UUID,
 ) -> None:
     try:
         client.do_action(c.MANIFEST_COLLECTION, uuid=uuid, name="upgrade", invoke=True)
     except bazooka_exc.NotFoundError:
-        raise click.ClickException(f"Manifest with UUID {uuid} is not installed")
+        raise click.ClickException(f"Manifest with UUID {uuid} not found")
 
 
 def uninstall_manifest(
