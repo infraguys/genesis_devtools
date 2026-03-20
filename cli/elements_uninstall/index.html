@@ -5,20 +5,20 @@
       
       
       
-        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/roles_delete/">
+        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/elements_uninstall/">
       
       
-        <link rel="prev" href="../role_bindings_show/">
+        <link rel="prev" href="../elements_show/">
       
       
-        <link rel="next" href="../roles_list/">
+        <link rel="next" href="../elements_update/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.0">
     
     
       
-        <title>roles_delete - genesis_devtools</title>
+        <title>elements_uninstall - genesis_devtools</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#roles_delete" class="md-skip">
+        <a href="#elements_uninstall" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              roles_delete
+              elements_uninstall
             
           </span>
         </div>
@@ -459,11 +459,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../elements_uninstall/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          elements_uninstall
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         elements_uninstall
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-help" class="md-nav__link">
+    CLI Help
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1481,66 +1536,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          roles_delete
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../roles_delete/" class="md-nav__link">
         roles_delete
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Содержание раздела
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-help" class="md-nav__link">
-    CLI Help
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1780,24 +1780,24 @@
   
 
 
-<h1 id="roles_delete">roles_delete<a class="headerlink" href="#roles_delete" title="Permanent link">#</a></h1>
-<p>Delete role</p>
+<h1 id="elements_uninstall">elements_uninstall<a class="headerlink" href="#elements_uninstall" title="Permanent link">#</a></h1>
+<p>Uninstall manifest by UUID, path or name</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis roles delete [OPTIONS]</span>
+<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME</span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
-<li><code>uuid</code>:<ul>
-<li>Type: uuid</li>
-<li>Default: <code>none</code></li>
-<li>Usage: <code>-u
---uuid</code></li>
+<li>
+<p><code>path_uuid_name</code> (REQUIRED):</p>
+<ul>
+<li>Type: text</li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>path_uuid_name</code></li>
 </ul>
 </li>
-</ul>
-<p>role UUID</p>
+<li>
+<p><code>help</code>:</p>
 <ul>
-<li><code>help</code>:<ul>
 <li>Type: boolean</li>
 <li>Default: <code>false</code></li>
 <li>Usage: <code>--help</code></li>
@@ -1806,13 +1806,12 @@
 </ul>
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis roles delete [OPTIONS]</span>
+<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME</span>
 
-<span class="go">  Delete role</span>
+<span class="go">  Uninstall manifest by UUID, path or name</span>
 
 <span class="go">Options:</span>
-<span class="go">  -u, --uuid UUID  role UUID</span>
-<span class="go">  --help           Show this message and exit.</span>
+<span class="go">  --help  Show this message and exit.</span>
 </code></pre></div>
 
 

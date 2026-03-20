@@ -41,11 +41,23 @@
          <lastmod>2026-03-20</lastmod>
     </url>
     <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/elements_install/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_list/</loc>
          <lastmod>2026-03-20</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_show/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/elements_uninstall/</loc>
+         <lastmod>2026-03-20</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/elements_update/</loc>
          <lastmod>2026-03-20</lastmod>
     </url>
     <url>
