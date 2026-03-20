@@ -29,9 +29,6 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  install    Install manifest from a manifest (YAML file)
-  list       List manifests
-  show       Show manifest general information
-  uninstall  Uninstall manifest by UUID, path or name
-  update     Update manifest from a YAML file
+  list  List manifests
+  show  Show manifest general information
 ```

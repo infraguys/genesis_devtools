@@ -55,9 +55,7 @@ def show_hypervisor(
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
     if not utils.is_valid_uuid(uuid):
-        hypervisors = hypervisor_lib.list_hypervisors(
-            client, hypervisorname=uuid
-        )
+        hypervisors = hypervisor_lib.list_hypervisors(client, hypervisorname=uuid)
         if hypervisors:
             uuid = hypervisors[0]["uuid"]
         else:
