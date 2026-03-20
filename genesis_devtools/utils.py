@@ -25,7 +25,6 @@ import typing as tp
 from importlib.metadata import entry_points
 
 import git
-from semver import Version
 import yaml
 from cryptography.hazmat.primitives import ciphers
 from cryptography.hazmat.primitives.ciphers import modes as cipher_models
@@ -179,10 +178,6 @@ def get_project_version(
         prefix = "dev"
 
     return f"{major}.{minor}.{patch}-{prefix}+{date_repr}.{hexsha[:8]}"
-
-
-def get_semver(vers: str) -> "Version":
-    return Version.parse(vers)
 
 
 def wait_for(
