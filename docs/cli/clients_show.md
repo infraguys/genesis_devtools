@@ -1,0 +1,35 @@
+
+# clients_show
+
+Show client
+
+## Usage
+
+```console
+Usage: genesis clients show [OPTIONS] UUID
+```
+
+## Options
+
+* `uuid` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `uuid`
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis clients show [OPTIONS] UUID
+
+  Show client
+
+Options:
+  --help  Show this message and exit.
+```

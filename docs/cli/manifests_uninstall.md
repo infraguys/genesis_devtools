@@ -1,12 +1,12 @@
 
-# elements_uninstall
+# manifests_uninstall
 
-Uninstall element by UUID, path or name
+Uninstall manifest by UUID, path or name
 
 ## Usage
 
 ```console
-Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME
+Usage: genesis manifests uninstall [OPTIONS] PATH_UUID_NAME
 ```
 
 ## Options
@@ -26,9 +26,9 @@ Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME
 ## CLI Help
 
 ```console
-Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME
+Usage: genesis manifests uninstall [OPTIONS] PATH_UUID_NAME
 
-  Uninstall element by UUID, path or name
+  Uninstall manifest by UUID, path or name
 
 Options:
   --help  Show this message and exit.

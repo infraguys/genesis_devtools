@@ -14,6 +14,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 import enum
+import os
 import typing as tp
 
 PKG_NAME = "genesis_devtools"
@@ -45,8 +46,32 @@ DomainState = tp.Literal["all", "inactive", "state-paused"]
 NodeType = tp.Literal["bootstrap", "baremetal"]
 
 ENV_FILE_FORMAT = tp.Literal["json", "env"]
+
 MANIFEST_COLLECTION = "/v1/em/manifests/"
 ELEMENT_COLLECTION = "/v1/em/elements/"
+
+PROFILE_COLLECTION = "/v1/vs/profiles/"
+VALUE_COLLECTION = "/v1/vs/values/"
+VARIABLE_COLLECTION = "/v1/vs/variables/"
+
+NODE_COLLECTION = "/v1/compute/nodes/"
+HYPERVISOR_COLLECTION = "/v1/compute/hypervisors/"
+
+USER_COLLECTION = "/v1/iam/users/"
+IDP_COLLECTION = "/v1/iam/idp/"
+CLIENT_COLLECTION = "/v1/iam/clients/"
+ORGANIZATION_COLLECTION = "/v1/iam/organizations/"
+PROJECT_COLLECTION = "/v1/iam/projects/"
+ROLE_COLLECTION = "/v1/iam/roles/"
+PERMISSION_COLLECTION = "/v1/iam/permissions/"
+ROLE_BINDING_COLLECTION = "/v1/iam/role_bindings/"
+PERMISSION_BINDING_COLLECTION = "/v1/iam/permission_bindings/"
+
+# Cli
+CONFIG_DIR = "~/.genesis"
+CONFIG_FILE = f"{CONFIG_DIR}/genesisctl.yaml"
+LAST_CHECK_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.last_version_check")
+UPDATE_CHECK_INTERVAL = 60 * 60  # 1 hour in seconds
 
 
 class BackupPeriod(str, enum.Enum):

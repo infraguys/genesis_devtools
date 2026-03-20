@@ -15,6 +15,16 @@
 #    under the License.
 
 import os
+import typing as tp
+import uuid
+
+
+def is_valid_uuid(uuid_to_test: tp.Any, version: int = 4) -> bool:
+    try:
+        uuid.UUID(uuid_to_test, version=version)
+        return True
+    except (ValueError, AttributeError):
+        return False
 
 
 def get_project_path() -> str:

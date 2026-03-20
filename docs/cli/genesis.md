@@ -1,7 +1,7 @@
 
 # genesis
 
-Genesis DevTools
+Provides all the necessary tools for work with Genesis Platform
 
 ## Usage
 
@@ -62,7 +62,7 @@ Usage: genesis [OPTIONS] COMMAND [ARGS]...
 ```console
 Usage: genesis [OPTIONS] COMMAND [ARGS]...
 
-  Genesis DevTools
+  Provides all the necessary tools for work with Genesis Platform
 
 Options:
   --config FILE          Path to YAML config file  [default:
@@ -74,19 +74,35 @@ Options:
   --help                 Show this message and exit.
 
 Commands:
-  auth            Authenticate and manage IAM token
-  backup          Backup the current installation
-  backup-decrypt  Decrypt a backup file
-  bootstrap       Bootstrap genesis locally
-  build           Build a Genesis element.
-  configs         Manager configs in the Genesis installation
-  delete          Delete the genesis stand/element
-  elements        Manage elements in the Genesis installation
-  get-version     Return the version of the project
-  nodes           Manager nodes in the Genesis installation
-  ps              List of running genesis installation
-  push            Push the element to the repository
-  repo            Manager Genesis repository
-  ssh             Connect to genesis stand/element
-  version         Prints the genesis_devtools version
+  auth                 Authenticate and manage IAM token
+  backup               Backup the current installation
+  backup-decrypt       Decrypt a backup file
+  bootstrap            Bootstrap genesis locally
+  build                Build a Genesis element.
+  clients              Manager clients in the Genesis installation
+  configs              Manager configs in the Genesis installation
+  cowsay               Display a cow message
+  delete               Delete the genesis stand/element
+  elements             Manage elements in the Genesis installation
+  get-version          Return the version of the project
+  hypervisors          Manager hypervisors in the Genesis installation
+  idps                 Manager idps in the Genesis installation
+  latest               Check for the latest version on GitHub
+  manifests            Manage manifests in the Genesis installation
+  nodes                Manager nodes in the Genesis installation
+  organizations        Manager organizations in the Genesis installation
+  permission_bindings  Manager permission_bindings in the Genesis installation
+  permissions          Manager permissions in the Genesis installation
+  profiles             Manage profiles in the Genesis installation
+  projects             Manager projects in the Genesis installation
+  ps                   List of running genesis installation
+  push                 Push the element to the repository
+  repo                 Manager Genesis repository
+  role_bindings        Manager role_bindings in the Genesis installation
+  roles                Manager roles in the Genesis installation
+  ssh                  Connect to genesis stand/element
+  users                Manager users in the Genesis installation
+  values               Manage values in the Genesis installation
+  vars                 Manage variables in the Genesis installation
+  version              Prints the genesis_devtools version
 ```

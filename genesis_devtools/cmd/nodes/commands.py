@@ -23,6 +23,7 @@ import prettytable
 from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.clients import node as node_lib
+from genesis_devtools.common import utils
 
 
 @click.group("nodes", help="Manager nodes in the Genesis installation")
@@ -45,7 +46,7 @@ def list_node_cmd(
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
     table = prettytable.PrettyTable()
-    nodes = node_lib.list_nodes(client, project_id)
+    nodes = node_lib.list_nodes(client, project_id=project_id)
 
     table.field_names = [
         "UUID",
@@ -272,14 +273,20 @@ def add_or_update_node_cmd(
 @nodes_group.command("delete", help="Delete node")
 @click.argument(
     "uuid",
-    type=click.UUID,
+    type=str,
 )
 @click.pass_context
 def delete_node_cmd(
     ctx: click.Context,
-    uuid: sys_uuid.UUID | None,
+    uuid: str,
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
+    if not utils.is_valid_uuid(uuid):
+        nodes = node_lib.list_nodes(client, name=uuid)
+        if nodes:
+            uuid = nodes[0]["uuid"]
+        else:
+            raise click.ClickException(f"Node with name {uuid} not found")
     node_lib.delete_node(client, uuid)
 
 

@@ -12,7 +12,7 @@ Usage: genesis nodes delete [OPTIONS] UUID
 ## Options
 
 * `uuid` (REQUIRED):
-    * Type: uuid
+    * Type: text
     * Default: `sentinel.unset`
     * Usage: `uuid`
 
