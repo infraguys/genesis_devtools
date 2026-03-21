@@ -135,13 +135,24 @@ class ElementInventory(tp.NamedTuple):
             json.dump(self.to_dict(), f, indent=2, sort_keys=True)
 
     @classmethod
-    def load(cls, path: pathlib.Path) -> "ElementInventory":
+    def load(cls, path: pathlib.Path, index: int = 0) -> "ElementInventory":
         """Create an element inventory from a path."""
         if path.is_dir():
             path = path / cls.file_name
 
         with open(path, "r") as f:
             inventory = json.load(f)
+
+        # Backward compatibility: support both single
+        # inventory and list of inventories
+        if isinstance(inventory, list):
+            try:
+                inventory = inventory[index]
+            except IndexError:
+                raise ValueError(
+                    f"Inventory index {index} not found in list of "
+                    f"{len(inventory)} inventories"
+                )
 
         kwargs = {
             "name": inventory["name"],
@@ -150,6 +161,17 @@ class ElementInventory(tp.NamedTuple):
         for category in cls.categories():
             kwargs[category] = [pathlib.Path(p) for p in inventory.get(category, [])]
 
+        return cls(**kwargs)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, tp.Any]) -> "ElementInventory":
+        """Create an element inventory from a dictionary."""
+        kwargs = {
+            "name": data["name"],
+            "version": data["version"],
+        }
+        for category in cls.categories():
+            kwargs[category] = [pathlib.Path(p) for p in data.get(category, [])]
         return cls(**kwargs)
 
 

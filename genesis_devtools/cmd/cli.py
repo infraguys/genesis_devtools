@@ -27,6 +27,7 @@ import ipaddress
 import fnmatch
 import pathlib
 import uuid as sys_uuid
+import json
 
 import yaml
 import click
@@ -393,20 +394,30 @@ def push_cmd(
 ) -> None:
     driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
 
-    # Push the element
-    element = base_builder.ElementInventory.load(pathlib.Path(element_dir))
-    try:
-        driver.push(element)
-    except base_repo.ElementAlreadyExistsError:
-        if force:
-            driver.remove(element)
-            driver.push(element)
-            return
+    # Push elements
+    path = pathlib.Path(element_dir) / base_builder.ElementInventory.file_name
+    with open(path, "r") as f:
+        inventories = json.load(f)
 
-        click.secho(
-            f"Element {element.name} version {element.version} already exists.",
-            fg="red",
-        )
+    # Backward compatibility: support both single
+    # inventory and list of inventories
+    if not isinstance(inventories, list):
+        inventories = [inventories]
+
+    for inventory in inventories:
+        element = base_builder.ElementInventory.from_dict(inventory)
+        try:
+            driver.push(element)
+        except base_repo.ElementAlreadyExistsError:
+            if force:
+                driver.remove(element)
+                driver.push(element)
+                continue
+
+            click.secho(
+                f"Element {element.name} version {element.version} already exists.",
+                fg="red",
+            )
 
 
 def _get_core_image_uri_from_manifest(manifest_path: str) -> str:

@@ -13,6 +13,8 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+import json
+import pathlib
 import typing as tp
 from unittest.mock import MagicMock
 
@@ -80,7 +82,7 @@ class TestBuilder:
         element = base.Element(manifest=manifest_rel, images=[])
 
         # Act
-        builder.build_element(
+        inventory = builder.build_element(
             element=element,
             build_dir=None,
             developer_keys=None,
@@ -103,9 +105,9 @@ class TestBuilder:
         # images list is empty -> joined string should be empty quotes
         assert 'images: ""' in content
 
-        # Inventory file should be created and include the manifest reference
-        inventory_json = out_dir / "inventory.json"
-        assert inventory_json.exists(), "inventory.json was not created"
+        assert inventory is not None
+        assert inventory.manifests
+        assert pathlib.Path(inventory.manifests[0]).name == "myapp.yaml"
 
     def test_manifest_rendering_preserves_filename_without_template_ext(
         self, tmp_path
@@ -141,3 +143,57 @@ class TestBuilder:
 
         # The output manifest should be saved without the .jinja2 extension
         assert (out_dir / "manifests" / "service.yaml").exists()
+
+    def test_build_multiple_manifests_writes_inventory_json(self, tmp_path) -> None:
+        work_dir = tmp_path / "work"
+        out_dir = tmp_path / "out"
+        work_dir.mkdir()
+        out_dir.mkdir()
+
+        manifest_1 = "app1.yaml"
+        manifest_2 = "app2.yaml"
+        (work_dir / manifest_1).write_text("name: app1\nversion: 0\n")
+        (work_dir / manifest_2).write_text("name: app2\nversion: 0\n")
+
+        builder = SimpleBuilder(
+            work_dir=str(work_dir),
+            deps=[],
+            elements=[
+                base.Element(manifest=manifest_1, images=[]),
+                base.Element(manifest=manifest_2, images=[]),
+            ],
+            image_builder=MagicMock(spec=base.AbstractImageBuilder),
+            logger=DummyLogger(),
+            elements_output_dir=str(out_dir),
+        )
+
+        builder.build(
+            build_dir=None,
+            developer_keys=None,
+            build_suffix="9.9.9",
+            inventory_mode=True,
+            manifest_vars=None,
+        )
+
+        inventory_json = out_dir / "inventory.json"
+        assert inventory_json.exists()
+
+        data = json.loads(inventory_json.read_text())
+        assert isinstance(data, list)
+        assert len(data) == 2
+
+        names = {item["name"] for item in data}
+        assert names == {"app1", "app2"}
+
+        versions = {item["version"] for item in data}
+        assert versions == {"9.9.9"}
+
+        manifest_names = {
+            pathlib.Path(item["manifests"][0]).name
+            for item in data
+            if item["manifests"]
+        }
+        assert manifest_names == {"app1.yaml", "app2.yaml"}
+
+        assert (out_dir / "manifests" / "app1.yaml").exists()
+        assert (out_dir / "manifests" / "app2.yaml").exists()
