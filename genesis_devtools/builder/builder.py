@@ -15,6 +15,7 @@
 #    under the License.
 from __future__ import annotations
 
+import json
 import typing as tp
 import tempfile
 import shutil
@@ -130,7 +131,7 @@ class SimpleBuilder:
         build_suffix: str = "",
         inventory_mode: bool = False,
         manifest_vars: dict[str, tp.Any] | None = None,
-    ) -> None:
+    ) -> base.ElementInventory | None:
         """Build an element."""
         self._logger.info(f"Building element: {element}")
         image_paths = []
@@ -221,7 +222,7 @@ class SimpleBuilder:
                 images=image_paths,
                 manifests=manifests,
             )
-            inventory.save(inventory_path)
+            return inventory
 
     def build(
         self,
@@ -233,8 +234,10 @@ class SimpleBuilder:
     ) -> None:
         """Build all elements."""
         self._logger.important("Building elements")
+
+        inventories = []
         for e in self._elements:
-            self.build_element(
+            inventory = self.build_element(
                 e,
                 build_dir,
                 developer_keys,
@@ -242,6 +245,16 @@ class SimpleBuilder:
                 inventory_mode,
                 manifest_vars,
             )
+            if inventory:
+                inventories.append(inventory)
+
+        # Save inventories
+        if inventories:
+            data = [inventory.to_dict() for inventory in inventories]
+            with open(
+                os.path.join(self._elements_output_dir, "inventory.json"), "w"
+            ) as f:
+                json.dump(data, f, indent=2, sort_keys=True)
 
     @classmethod
     def from_config(
