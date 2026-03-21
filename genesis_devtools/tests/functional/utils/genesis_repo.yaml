@@ -1,0 +1,4 @@
+push:
+  my_push_name:
+    driver: fs
+    path: /tmp/repo_test

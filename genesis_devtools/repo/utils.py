@@ -30,7 +30,7 @@ def load_repo_driver(
         gen_config = utils.get_genesis_config(project_dir, genesis_cfg_file)
     except FileNotFoundError:
         raise base_repo.UnableLoadDriverError(
-            f"Genesis configuration file not found in {project_dir}"
+            f"Genesis configuration file {genesis_cfg_file} not found in {project_dir}"
         )
 
     if "push" not in gen_config or not gen_config["push"]:
