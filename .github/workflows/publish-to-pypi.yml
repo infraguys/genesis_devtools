@@ -5,6 +5,11 @@ on:
     tags:
       - '*'
 
+env:
+  PROJECT_NAME: genesis-devtools
+  DEVTOOLS_PATH: https://repository.genesis-core.tech/genesis-devtools/
+  REPO_ENDPOINT_PUT: http://10.20.0.1:8082
+
 jobs:
   build_python:
     name: Build distribution 📦
@@ -134,3 +139,37 @@ jobs:
         gh release upload
         "$GITHUB_REF_NAME" dist/**
         --repo "$GITHUB_REPOSITORY"
+
+  genesis-release:
+    name: Create genesis Release with artifacts
+    needs:
+    - build_binaries
+    runs-on: self-hosted
+    steps:
+    - name: Download Linux binary
+      uses: actions/download-artifact@v4
+      with:
+        name: genesis-ubuntu-latest
+        path: dist/
+    - name: Download macOS binary
+      uses: actions/download-artifact@v4
+      with:
+        name: genesis-macos-latest
+        path: dist/
+    - name: Push artifacts to repository
+      run: |
+        set -eux
+        chmod +x ./dist/genesis-linux
+        VERSION=$(./dist/genesis-linux version)
+        
+        # Upload VERSION release
+        curl -X PUT --upload-file ./dist/genesis-macos \
+          $REPO_ENDPOINT_PUT/${PROJECT_NAME}/${VERSION}/genesis-macos
+        curl -X PUT --upload-file ./dist/genesis-linux \
+          $REPO_ENDPOINT_PUT/${PROJECT_NAME}/${VERSION}/genesis-linux
+        
+        # Upload latest release
+        curl -X PUT --upload-file ./dist/genesis-macos \
+          $REPO_ENDPOINT_PUT/${PROJECT_NAME}/latest/genesis-macos
+        curl -X PUT --upload-file ./dist/genesis-linux \
+          $REPO_ENDPOINT_PUT/${PROJECT_NAME}/latest/genesis-linux
