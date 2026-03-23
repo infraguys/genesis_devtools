@@ -33,4 +33,5 @@ Commands:
   add-or-update  Add a new node or update an existing one
   delete         Delete node
   list           List nodes
+  show           Show node
 ```

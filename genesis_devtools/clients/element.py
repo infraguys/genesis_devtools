@@ -112,8 +112,16 @@ def list_elements(
 
 def list_resources(
     client: http_client.CollectionBaseClient,
-    element_uuid: sys_uuid.UUID,
+    element_uuid: sys_uuid.UUID | str,
     **filters,
 ) -> list[dict[str, tp.Any]]:
     collection = f"{c.ELEMENT_COLLECTION}{element_uuid}/resources/"
     return client.filter(collection, **filters)
+
+
+def get_resource(
+    client: http_client.CollectionBaseClient,
+    element_uuid: sys_uuid.UUID | str,
+    resource_uuid: sys_uuid.UUID | str,
+) -> dict[str, tp.Any]:
+    return client.get(f"{c.ELEMENT_COLLECTION}{element_uuid}/resources/", resource_uuid)

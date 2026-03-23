@@ -35,6 +35,18 @@ def list_nodes(
     return client.filter(c.NODE_COLLECTION, **filters)
 
 
+def get_node(
+    client: http_client.CollectionBaseClient,
+    node_uuid: sys_uuid.UUID,
+):
+    node = client.get(c.NODE_COLLECTION, uuid=node_uuid)
+    return node
+
+
+def get_node_ip(node_data: dict[str, tp.Any]) -> str | None:
+    return node_data["default_network"].get("ipv4", None)
+
+
 def add_node(
     client: http_client.CollectionBaseClient,
     uuid: sys_uuid.UUID | None,
