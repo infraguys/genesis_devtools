@@ -28,6 +28,7 @@ from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import manifest as manifests_lib
+from genesis_devtools.clients import node as node_lib
 from genesis_devtools.clients import repo as repo_lib
 from genesis_devtools import logger
 
@@ -130,6 +131,33 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
 
     click.echo("Resources:")
     click.echo(table)
+
+
+@elements_group.command("ips", help="Show element ips")
+@click.argument("name")
+@click.pass_context
+def show_element_ips(ctx: click.Context, name: str) -> None:
+    client: http_client.CollectionBaseClient = ctx.obj.client
+
+    element = elements_lib.list_elements(client, name=name)
+    if not element:
+        raise click.ClickException(f"Element {name} not found")
+
+    if len(element) > 1:
+        raise click.ClickException(f"Multiple elements found with name {name}")
+
+    resources = elements_lib.list_resources(
+        client, sys_uuid.UUID(element[0]["uuid"]), kind="em_core_compute_nodes"
+    )
+    if len(resources) == 0:
+        raise click.ClickException(f"No nodes found for element {name}")
+    elif len(resources) > 1:
+        for resource in resources:
+            node = node_lib.get_node(client, resource["uuid"])
+            click.echo(f"Name: {node['name']}, IP: {node_lib.get_node_ip(node)}")
+    else:
+        node = node_lib.get_node(client, resources[0]["uuid"])
+        click.echo(node_lib.get_node_ip(node))
 
 
 def upgrade_manifest(

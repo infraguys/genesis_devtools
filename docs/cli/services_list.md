@@ -1,0 +1,30 @@
+
+# services_list
+
+List services
+
+## Usage
+
+```console
+Usage: genesis services list [OPTIONS]
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis services list [OPTIONS]
+
+  List services
+
+Options:
+  --help  Show this message and exit.
+```

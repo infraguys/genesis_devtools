@@ -1,20 +1,20 @@
 
-# nodes_delete
+# services_show
 
-Delete node
+Show service
 
 ## Usage
 
 ```console
-Usage: genesis nodes delete [OPTIONS] UUID_NAME
+Usage: genesis services show [OPTIONS] UUID
 ```
 
 ## Options
 
-* `uuid_name` (REQUIRED):
+* `uuid` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `uuid_name`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -26,9 +26,9 @@ Usage: genesis nodes delete [OPTIONS] UUID_NAME
 ## CLI Help
 
 ```console
-Usage: genesis nodes delete [OPTIONS] UUID_NAME
+Usage: genesis services show [OPTIONS] UUID
 
-  Delete node
+  Show service
 
 Options:
   --help  Show this message and exit.

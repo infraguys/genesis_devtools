@@ -30,6 +30,7 @@ Options:
 
 Commands:
   install    Install element from a manifest (YAML file)
+  ips        Show element ips
   list       List elements
   show       Show element general information
   uninstall  Uninstall manifest by UUID, path or name

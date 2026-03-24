@@ -19,6 +19,7 @@ import typing as tp
 
 PKG_NAME = "genesis_devtools"
 GITHUB_RELEASES_URL = f"https://api.github.com/repos/infraguys/{PKG_NAME}/releases"
+GENESIS_REPO_URL = "https://repository.genesis-core.tech"
 LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
 DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"
@@ -49,6 +50,7 @@ ENV_FILE_FORMAT = tp.Literal["json", "env"]
 
 MANIFEST_COLLECTION = "/v1/em/manifests/"
 ELEMENT_COLLECTION = "/v1/em/elements/"
+SERVICE_COLLECTION = "/v1/em/services/"
 
 PROFILE_COLLECTION = "/v1/vs/profiles/"
 VALUE_COLLECTION = "/v1/vs/values/"

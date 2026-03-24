@@ -69,6 +69,8 @@ from genesis_devtools.cmd.configs import commands as configs_commands
 from genesis_devtools.cmd.elements import commands as elements_commands
 from genesis_devtools.cmd.profiles import commands as profiles_commands
 from genesis_devtools.cmd.repo import commands as repo_commands
+from genesis_devtools.cmd.resources import commands as resources_commands
+from genesis_devtools.cmd.services import commands as services_commands
 from genesis_devtools.cmd.iam.user import commands as user_commands
 from genesis_devtools.cmd.values import commands as values_commands
 from genesis_devtools.cmd.vars import commands as vars_commands
@@ -114,6 +116,18 @@ class CmdContext(tp.NamedTuple):
     help="Password for the client user",
 )
 @click.option(
+    "-a",
+    "--access_token",
+    default=None,
+    help="access token for the client user",
+)
+@click.option(
+    "-r",
+    "--refresh_token",
+    default=None,
+    help="refresh token for the client user",
+)
+@click.option(
     "-P",
     "--project-id",
     default=None,
@@ -127,6 +141,8 @@ def genesis(
     endpoint: str,
     user: str | None,
     password: str | None,
+    access_token: str | None,
+    refresh_token: str | None,
     project_id: sys_uuid.UUID | None,
 ) -> None:
     # Load configuration from file (if exists)
@@ -160,6 +176,8 @@ def genesis(
     final_endpoint = _get_final_value("endpoint", endpoint)
     final_user = _get_final_value("user", user)
     final_password = _get_final_value("password", password)
+    final_access_token = _get_final_value("access_token", access_token)
+    final_refresh_token = _get_final_value("refresh_token", refresh_token)
 
     # Project ID
     final_project_id = None
@@ -184,6 +202,8 @@ def genesis(
         base_url=final_endpoint,
         username=final_user,
         password=final_password,
+        access_token=final_access_token,
+        refresh_token=final_refresh_token,
         scope=scope,
     )
     client = http_client.CollectionBaseClient(
@@ -1336,8 +1356,8 @@ def check_latest_version() -> None:
 
         if version.parse(latest_tag) > version.parse(genesis_version.version_info):
             click.secho(
-                f"New version available: {latest_tag}. (current: {genesis_version.version_info}) "
-                f"Download from: {c.GITHUB_RELEASES_URL}",
+                f"New version available: {latest_tag} (current: {genesis_version.version_info}) "
+                f"Update by:\ncurl -fsSL {c.GENESIS_REPO_URL}/install.sh | sudo sh",
                 fg="yellow",
             )
     except Exception as e:
@@ -1395,6 +1415,16 @@ def cowsay_cmd() -> None:
     cowsay.cow("I am genesis-cli")
 
 
+@genesis.command("hello", help="Display a genesis message")
+def hello() -> None:
+    msg = """
+▄▖        ▘  
+▌ █▌▛▌█▌▛▘▌▛▘
+▙▌▙▖▌▌▙▖▄▌▌▄▌
+"""
+    click.echo(msg)
+
+
 genesis.add_command(iam_commands.auth_group)  # noqa
 genesis.add_command(client_commands.clients_group)  # noqa
 genesis.add_command(idp_commands.idps_group)  # noqa
@@ -1412,6 +1442,8 @@ genesis.add_command(configs_commands.configs_group)  # noqa
 genesis.add_command(elements_commands.elements_group)  # noqa
 genesis.add_command(profiles_commands.profiles_group)  # noqa
 genesis.add_command(repo_commands.repository_group)  # noqa
+genesis.add_command(resources_commands.resources_group)  # noqa
+genesis.add_command(services_commands.services_group)  # noqa
 genesis.add_command(user_commands.users_group)  # noqa
 genesis.add_command(values_commands.values_group)  # noqa
 genesis.add_command(vars_commands.variables_group)  # noqa

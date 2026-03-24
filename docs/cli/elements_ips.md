@@ -1,20 +1,20 @@
 
-# nodes_delete
+# elements_ips
 
-Delete node
+Show element ips
 
 ## Usage
 
 ```console
-Usage: genesis nodes delete [OPTIONS] UUID_NAME
+Usage: genesis elements ips [OPTIONS] NAME
 ```
 
 ## Options
 
-* `uuid_name` (REQUIRED):
+* `name` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `uuid_name`
+    * Usage: `name`
 
 * `help`:
     * Type: boolean
@@ -26,9 +26,9 @@ Usage: genesis nodes delete [OPTIONS] UUID_NAME
 ## CLI Help
 
 ```console
-Usage: genesis nodes delete [OPTIONS] UUID_NAME
+Usage: genesis elements ips [OPTIONS] NAME
 
-  Delete node
+  Show element ips
 
 Options:
   --help  Show this message and exit.

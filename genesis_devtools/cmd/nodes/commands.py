@@ -272,22 +272,43 @@ def add_or_update_node_cmd(
 
 @nodes_group.command("delete", help="Delete node")
 @click.argument(
-    "uuid",
+    "uuid_name",
     type=str,
 )
 @click.pass_context
 def delete_node_cmd(
     ctx: click.Context,
-    uuid: str,
+    uuid_name: str,
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
-    if not utils.is_valid_uuid(uuid):
-        nodes = node_lib.list_nodes(client, name=uuid)
+    if not utils.is_valid_uuid(uuid_name):
+        nodes = node_lib.list_nodes(client, name=uuid_name)
         if nodes:
-            uuid = nodes[0]["uuid"]
+            uuid_name = nodes[0]["uuid"]
         else:
-            raise click.ClickException(f"Node with name {uuid} not found")
-    node_lib.delete_node(client, uuid)
+            raise click.ClickException(f"Node with name {uuid_name} not found")
+    node_lib.delete_node(client, uuid_name)
+
+
+@nodes_group.command("show", help="Show node")
+@click.argument(
+    "uuid_name",
+    type=str,
+)
+@click.pass_context
+def show_node_cmd(
+    ctx: click.Context,
+    uuid_name: str,
+) -> None:
+    client: http_client.CollectionBaseClient = ctx.obj.client
+    if not utils.is_valid_uuid(uuid_name):
+        nodes = node_lib.list_nodes(client, name=uuid_name)
+        if nodes:
+            uuid_name = nodes[0]["uuid"]
+        else:
+            raise click.ClickException(f"node with name {uuid_name} not found")
+    value = node_lib.get_node(client, uuid_name)
+    _print_node(value)
 
 
 def _print_node(node: dict) -> None:

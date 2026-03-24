@@ -1,0 +1,29 @@
+name: Upload and update on self-hosted
+
+on: workflow_dispatch
+
+env:
+  PROJECT_NAME: genesis-devtools
+  REPO_ENDPOINT_PUT: http://10.20.0.1:8082
+
+jobs:
+  upload-install-sh:
+    name: Upload install.sh
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
+    - name: Push artifacts to repository
+      run: curl -X PUT --upload-file ./etc/install.sh $REPO_ENDPOINT_PUT/install.sh
+
+  update-genesis-cli:
+    name: update genesis cli
+    needs: upload-install-sh
+    runs-on: self-hosted
+    steps:
+    - name: update genesis cli
+      run: |
+        set -eux
+        
+        curl -fsSL https://repository.genesis-core.tech/install.sh | sudo sh     
