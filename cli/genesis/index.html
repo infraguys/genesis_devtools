@@ -433,6 +433,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../elements_ips/" class="md-nav__link">
+        elements_ips
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_list/" class="md-nav__link">
         elements_list
       </a>
@@ -726,6 +740,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../genesis_hello/" class="md-nav__link">
+        genesis_hello
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../genesis_hypervisors/" class="md-nav__link">
         genesis_hypervisors
       </a>
@@ -908,6 +936,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../genesis_resources/" class="md-nav__link">
+        genesis_resources
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../genesis_role_bindings/" class="md-nav__link">
         genesis_role_bindings
       </a>
@@ -924,6 +966,20 @@
     <li class="md-nav__item">
       <a href="../genesis_roles/" class="md-nav__link">
         genesis_roles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_services/" class="md-nav__link">
+        genesis_services
       </a>
     </li>
   
@@ -1216,6 +1272,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../nodes_show/" class="md-nav__link">
+        nodes_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../organizations_delete/" class="md-nav__link">
         organizations_delete
       </a>
@@ -1496,6 +1566,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../resources_list/" class="md-nav__link">
+        resources_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources_show/" class="md-nav__link">
+        resources_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../role_bindings_delete/" class="md-nav__link">
         role_bindings_delete
       </a>
@@ -1568,6 +1666,76 @@
     <li class="md-nav__item">
       <a href="../roles_show/" class="md-nav__link">
         roles_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services_add/" class="md-nav__link">
+        services_add
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services_delete/" class="md-nav__link">
+        services_delete
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services_list/" class="md-nav__link">
+        services_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services_show/" class="md-nav__link">
+        services_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../services_update/" class="md-nav__link">
+        services_update
       </a>
     </li>
   
@@ -1826,6 +1994,26 @@
 </ul>
 <p>Password for the client user</p>
 <ul>
+<li><code>access_token</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>-a
+--access_token</code></li>
+</ul>
+</li>
+</ul>
+<p>access token for the client user</p>
+<ul>
+<li><code>refresh_token</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>-r
+--refresh_token</code></li>
+</ul>
+</li>
+</ul>
+<p>refresh token for the client user</p>
+<ul>
 <li><code>project_id</code>:<ul>
 <li>Type: uuid</li>
 <li>Default: <code>none</code></li>
@@ -1850,13 +2038,16 @@
 <span class="go">  Provides all the necessary tools for work with Genesis Platform</span>
 
 <span class="go">Options:</span>
-<span class="go">  --config FILE          Path to YAML config file  [default:</span>
-<span class="go">                         /home/user/.genesis/genesisctl.yaml]</span>
-<span class="go">  -e, --endpoint TEXT    Genesis API endpoint  [default: http://localhost:11010]</span>
-<span class="go">  -u, --user TEXT        Client user name</span>
-<span class="go">  -p, --password TEXT    Password for the client user</span>
-<span class="go">  -P, --project-id UUID  Project ID for the client user</span>
-<span class="go">  --help                 Show this message and exit.</span>
+<span class="go">  --config FILE             Path to YAML config file  [default:</span>
+<span class="go">                            /home/user/.genesis/genesisctl.yaml]</span>
+<span class="go">  -e, --endpoint TEXT       Genesis API endpoint  [default:</span>
+<span class="go">                            http://localhost:11010]</span>
+<span class="go">  -u, --user TEXT           Client user name</span>
+<span class="go">  -p, --password TEXT       Password for the client user</span>
+<span class="go">  -a, --access_token TEXT   access token for the client user</span>
+<span class="go">  -r, --refresh_token TEXT  refresh token for the client user</span>
+<span class="go">  -P, --project-id UUID     Project ID for the client user</span>
+<span class="go">  --help                    Show this message and exit.</span>
 
 <span class="go">Commands:</span>
 <span class="go">  auth                 Authenticate and manage IAM token</span>
@@ -1870,6 +2061,7 @@
 <span class="go">  delete               Delete the genesis stand/element</span>
 <span class="go">  elements             Manage elements in the Genesis installation</span>
 <span class="go">  get-version          Return the version of the project</span>
+<span class="go">  hello                Display a genesis message</span>
 <span class="go">  hypervisors          Manager hypervisors in the Genesis installation</span>
 <span class="go">  idps                 Manager idps in the Genesis installation</span>
 <span class="go">  latest               Check for the latest version on GitHub</span>
@@ -1883,8 +2075,10 @@
 <span class="go">  ps                   List of running genesis installation</span>
 <span class="go">  push                 Push the element to the repository</span>
 <span class="go">  repo                 Manager Genesis repository</span>
+<span class="go">  resources            Manage resources in the Genesis installation</span>
 <span class="go">  role_bindings        Manager role_bindings in the Genesis installation</span>
 <span class="go">  roles                Manager roles in the Genesis installation</span>
+<span class="go">  services             Manage services in the Genesis installation</span>
 <span class="go">  ssh                  Connect to genesis stand/element</span>
 <span class="go">  users                Manager users in the Genesis installation</span>
 <span class="go">  values               Manage values in the Genesis installation</span>

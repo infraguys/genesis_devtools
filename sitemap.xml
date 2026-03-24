@@ -2,410 +2,458 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/auth_login/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/auth_me/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/auth_refresh/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/clients_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/clients_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/clients_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/configs_add-from-env/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/configs_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/configs_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_install/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/elements_ips/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_uninstall/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/elements_update/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_auth/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_backup-decrypt/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_backup/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_bootstrap/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_build/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_clients/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_configs/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_cowsay/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_dumphelp/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_elements/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_get-version/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_hello/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_hypervisors/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_idps/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_latest/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_manifests/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_nodes/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_organizations/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_permission_bindings/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_permissions/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_profiles/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_projects/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_ps/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_push/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_repo/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_resources/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_role_bindings/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_roles/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_services/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_ssh/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_users/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_values/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_vars/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_version/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/hypervisors_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/hypervisors_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/hypervisors_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/idps_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/idps_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/idps_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/manifests_install/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/manifests_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/manifests_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/manifests_uninstall/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/manifests_update/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/nodes_add-or-update/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/nodes_add/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/nodes_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/nodes_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/nodes_show/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/organizations_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/organizations_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/organizations_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/permission_bindings_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/permission_bindings_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/permission_bindings_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/permissions_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/permissions_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/permissions_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/profiles_activate/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/profiles_add/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/profiles_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/profiles_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/profiles_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/projects_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/projects_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/projects_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/repo_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/repo_init/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/repo_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/resources_list/</loc>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/resources_show/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/role_bindings_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/role_bindings_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/role_bindings_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/roles_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/roles_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/roles_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/services_add/</loc>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/services_delete/</loc>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/services_list/</loc>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/services_show/</loc>
+         <lastmod>2026-03-24</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/services_update/</loc>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/users_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/users_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/users_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/values_add/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/values_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/values_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/values_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/values_update/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/vars_add/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/vars_delete/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/vars_list/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/vars_select/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/vars_show/</loc>
-         <lastmod>2026-03-20</lastmod>
+         <lastmod>2026-03-24</lastmod>
     </url>
 </urlset>
