@@ -15,7 +15,6 @@
 #    under the License.
 from __future__ import annotations
 
-import json
 import typing as tp
 import uuid as sys_uuid
 
@@ -146,7 +145,7 @@ def add_value_cmd(
         "project_id": str(project_id),
         "name": name,
         "description": description,
-        "value": _convert_to_nearest_type(value),
+        "value": utils.convert_to_nearest_type(value),
     }
 
     # Validate variable UUID if provided
@@ -221,7 +220,7 @@ def update_value_cmd(
     if description is not None:
         data["description"] = description
     if value is not None:
-        data["value"] = _convert_to_nearest_type(value)
+        data["value"] = utils.convert_to_nearest_type(value)
     if variable is not None:
         data["variable"] = variable
     value_resp = value_lib.update_value(client, uuid, data)
@@ -254,44 +253,3 @@ def _print_values(values: tp.List[dict]) -> None:
         )
 
     click.echo(table)
-
-
-def _convert_to_nearest_type(value: str) -> bool | int | float | list | dict | str:
-    """
-    Convert input string to the nearest appropriate type.
-
-    Args:
-        value: String value to convert
-
-    Returns:
-        Converted value in appropriate type (bool, int, float, list, dict, or str)
-    """
-    # Try boolean
-    if value.lower() in ("true", "false"):
-        return value.lower() == "true"
-
-    # Try integer
-    try:
-        return int(value)
-    except ValueError:
-        pass
-
-    # Try float
-    try:
-        return float(value)
-    except ValueError:
-        pass
-
-    # Try list (JSON array or object)
-    if (value.startswith("[") and value.endswith("]")) or (
-        value.startswith("[") and value.endswith("]")
-    ):
-        try:
-            parsed = json.loads(value)
-            if isinstance(parsed, (list, dict)):
-                return parsed
-        except (ValueError, TypeError):
-            pass
-
-    # Return as string if no other type matches
-    return value
