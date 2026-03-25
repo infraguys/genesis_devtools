@@ -81,6 +81,7 @@ dependencies = [
     { name = "jmespath", version = "1.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
     { name = "s3transfer", version = "0.16.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/74/ec/636ab2aa7ad9e6bf6e297240ac2d44dba63cc6611e2d5038db318436d449/boto3-1.42.74.tar.gz", hash = "sha256:dbacd808cf2a3dadbf35f3dbd8de97b94dc9f78b1ebd439f38f552e0f9753577", size = 112739, upload-time = "2026-03-23T19:34:09.815Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ad/16/a264b4da2af99f4a12609b93fea941cce5ec41da14b33ed3fef77a910f0c/boto3-1.42.74-py3-none-any.whl", hash = "sha256:4bf89c044d618fe4435af854ab820f09dd43569c0df15d7beb0398f50b9aa970", size = 140557, upload-time = "2026-03-23T19:34:07.084Z" },
 ]
@@ -1097,7 +1098,7 @@ wheels = [
 
 [[package]]
 name = "gcl-sdk"
-version = "2.0.7"
+version = "2.0.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "bjoern" },
@@ -1115,9 +1116,9 @@ dependencies = [
     { name = "restalchemy" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2d/3d/59d2b7eb5c5d78f19764580749184adb8f2adcd3b5ebffe6aaa1124519ad/gcl_sdk-2.0.7.tar.gz", hash = "sha256:187c0bd1ebf3f0866d9b2c839abcf39df5fe31785ed19407bd149aa120c3b2d4", size = 393481, upload-time = "2026-03-24T08:30:00.933Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/80/2c/86e02b1bc12a2bddb476318205ab826cc3fb488bb60664ef397019ed6c0f/gcl_sdk-2.0.8.tar.gz", hash = "sha256:125bc3c343d4fb6583e3a9ef6e7910c09890e1cc20976516ab94dfa195d2c7ce", size = 393582, upload-time = "2026-03-25T07:31:50.671Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c9/73/d7c01c2379f764ebe3129716a44f1f11fd4b973893bc96128655f4d39c55/gcl_sdk-2.0.7-py3-none-any.whl", hash = "sha256:1fbccb897d20acba6c28f46900e14d48fdf4466c3fcbdfdff5671eeac14bab55", size = 205636, upload-time = "2026-03-24T08:29:59.219Z" },
+    { url = "https://files.pythonhosted.org/packages/25/80/7ddf23169b99b80c04b3291ceb0b991d988273c6666c3e464aa20a628052/gcl_sdk-2.0.8-py3-none-any.whl", hash = "sha256:81c78debb860246baf8fd286b18491903b1a4080b5f36fcbf76ee8fbeb8f1367", size = 205657, upload-time = "2026-03-25T07:31:49.25Z" },
 ]
 
 [[package]]

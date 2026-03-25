@@ -1,0 +1,67 @@
+
+# ssh_keys_add
+
+Add a new ssh_key to the Genesis installation
+
+## Usage
+
+```console
+Usage: genesis ssh_keys add [OPTIONS]
+```
+
+## Options
+
+* `uuid`:
+    * Type: uuid
+    * Default: `none`
+    * Usage: `-u
+--uuid`
+
+  UUID of the ssh_key
+
+* `project_id` (REQUIRED):
+    * Type: uuid
+    * Default: `sentinel.unset`
+    * Usage: `-p
+--project-id`
+
+  Name of the project in which to deploy the ssh_key
+
+* `name`:
+    * Type: text
+    * Default: `test_ssh_key`
+    * Usage: `-n
+--name`
+
+  Name of the ssh_key
+
+* `description`:
+    * Type: text
+    * Default: ``
+    * Usage: `-D
+--description`
+
+  Description of the ssh_key
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis ssh_keys add [OPTIONS]
+
+  Add a new ssh_key to the Genesis installation
+
+Options:
+  -u, --uuid UUID         UUID of the ssh_key
+  -p, --project-id UUID   Name of the project in which to deploy the ssh_key
+                          [required]
+  -n, --name TEXT         Name of the ssh_key
+  -D, --description TEXT  Description of the ssh_key
+  --help                  Show this message and exit.
+```

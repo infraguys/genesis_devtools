@@ -94,10 +94,12 @@ Options:
 
 Commands:
   auth                 Authenticate and manage IAM token
+  autocomplete_help    Display a autocomplete help
   backup               Backup the current installation
   backup-decrypt       Decrypt a backup file
   bootstrap            Bootstrap genesis locally
   build                Build a Genesis element.
+  certificates         Manage certificates in the Genesis installation
   clients              Manager clients in the Genesis installation
   configs              Manager configs in the Genesis installation
   cowsay               Display a cow message
@@ -107,10 +109,12 @@ Commands:
   hello                Display a genesis message
   hypervisors          Manager hypervisors in the Genesis installation
   idps                 Manager idps in the Genesis installation
+  init                 Platformize the project
   latest               Check for the latest version on GitHub
   manifests            Manage manifests in the Genesis installation
   nodes                Manager nodes in the Genesis installation
   organizations        Manager organizations in the Genesis installation
+  passwords            Manage passwords in the Genesis installation
   permission_bindings  Manager permission_bindings in the Genesis installation
   permissions          Manager permissions in the Genesis installation
   profiles             Manage profiles in the Genesis installation
@@ -121,8 +125,10 @@ Commands:
   resources            Manage resources in the Genesis installation
   role_bindings        Manager role_bindings in the Genesis installation
   roles                Manager roles in the Genesis installation
+  rsa_keys             Manage rsa_keys in the Genesis installation
   services             Manage services in the Genesis installation
   ssh                  Connect to genesis stand/element
+  ssh_keys             Manage ssh_keys in the Genesis installation
   users                Manager users in the Genesis installation
   values               Manage values in the Genesis installation
   vars                 Manage variables in the Genesis installation

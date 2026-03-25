@@ -56,6 +56,11 @@ PROFILE_COLLECTION = "/v1/vs/profiles/"
 VALUE_COLLECTION = "/v1/vs/values/"
 VARIABLE_COLLECTION = "/v1/vs/variables/"
 
+CERTIFICATE_COLLECTION = "/v1/secret/certificates/"
+PASSWORD_COLLECTION = "/v1/secret/passwords/"
+SSH_KEY_COLLECTION = "/v1/secret/ssh_keys/"
+RSA_KEY_COLLECTION = "/v1/secret/rsa_keys/"
+
 NODE_COLLECTION = "/v1/compute/nodes/"
 HYPERVISOR_COLLECTION = "/v1/compute/hypervisors/"
 

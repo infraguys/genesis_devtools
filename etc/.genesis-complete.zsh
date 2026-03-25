@@ -1,28 +1,40 @@
+#compdef genesis
+
 _genesis_completion() {
-    local IFS=$'\n'
-    local response
+    local -a completions
+    local -a completions_with_descriptions
+    local -a response
+    (( ! $+commands[genesis] )) && return 1
 
-    response=$(env COMP_WORDS="${COMP_WORDS[*]}" COMP_CWORD=$COMP_CWORD _GENESIS_COMPLETE=zsh_complete $1)
+    response=("${(@f)$(env COMP_WORDS="${words[*]}" COMP_CWORD=$((CURRENT-1)) _GENESIS_COMPLETE=zsh_complete genesis)}")
 
-    for completion in $response; do
-        IFS=',' read type value <<< "$completion"
-
-        if [[ $type == 'dir' ]]; then
-            COMPREPLY=()
-            compopt -o dirnames1
-        elif [[ $type == 'file' ]]; then
-            COMPREPLY=()
-            compopt -o default
-        elif [[ $type == 'plain' ]]; then
-            COMPREPLY+=($value)
+    for type key descr in ${response}; do
+        if [[ "$type" == "plain" ]]; then
+            if [[ "$descr" == "_" ]]; then
+                completions+=("$key")
+            else
+                completions_with_descriptions+=("$key":"$descr")
+            fi
+        elif [[ "$type" == "dir" ]]; then
+            _path_files -/
+        elif [[ "$type" == "file" ]]; then
+            _path_files -f
         fi
     done
 
-    return 0
+    if [ -n "$completions_with_descriptions" ]; then
+        _describe -V unsorted completions_with_descriptions -U
+    fi
+
+    if [ -n "$completions" ]; then
+        compadd -U -V unsorted -a completions
+    fi
 }
 
-_genesis_completion_setup() {
-    complete -o nosort -F _genesis_completion genesis
-}
-
-_genesis_completion_setup;
+if [[ $zsh_eval_context[-1] == loadautofunc ]]; then
+    # autoload from fpath, call function directly
+    _genesis_completion "$@"
+else
+    # eval/source/. command, register function for later
+    compdef _genesis_completion genesis
+fi

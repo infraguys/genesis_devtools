@@ -1,0 +1,37 @@
+
+# genesis_ssh_keys
+
+Manage ssh_keys in the Genesis installation
+
+## Usage
+
+```console
+Usage: genesis ssh_keys [OPTIONS] COMMAND [ARGS]...
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+Usage: genesis ssh_keys [OPTIONS] COMMAND [ARGS]...
+
+  Manage ssh_keys in the Genesis installation
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  add     Add a new ssh_key to the Genesis installation
+  delete  Delete ssh_key
+  list    List ssh_keys
+  show    Show ssh_key
+  update  Update ssh_key
+```

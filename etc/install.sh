@@ -138,7 +138,8 @@ download_and_extract "https://repository.genesis-core.tech/genesis-devtools/late
 $SUDO chmod +x "$BINDIR"/genesis
 
 install_success() {
-    genesis msg
+    genesis hello
+    genesis autocomplete_help
     status 'Install complete. Run "genesis" from the command line.'
 }
 trap install_success EXIT
