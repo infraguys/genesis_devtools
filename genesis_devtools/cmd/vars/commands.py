@@ -20,9 +20,12 @@ import uuid as sys_uuid
 
 import click
 import prettytable
+from bazooka import exceptions as bazooka_exc
 
 from gcl_sdk.clients.http import base as http_client
 
+from genesis_devtools import constants as c
+from genesis_devtools.clients import value as value_lib
 from genesis_devtools.clients import variable as variable_lib
 from genesis_devtools.common import utils
 
@@ -59,6 +62,123 @@ def show_variable_cmd(
         else:
             raise click.ClickException(f"Variable with name {uuid} not found")
     variable = variable_lib.get_variable(client, uuid)
+    _print_variables([variable])
+
+
+@variables_group.command(
+    "set",
+    help="Create variable if missing and set its value by creating a new value record",
+)
+@click.argument(
+    "var_uuid_or_name",
+    type=str,
+    required=True,
+)
+@click.argument(
+    "value",
+    type=click.STRING,
+    required=True,
+)
+@click.option(
+    "-p",
+    "--project-id",
+    type=click.UUID,
+    required=True,
+    help="UUID of the project in which to deploy the variable",
+)
+@click.option(
+    "--name",
+    type=str,
+    default=None,
+    help="Name of the variable to create if it does not exist",
+)
+@click.option(
+    "--description",
+    type=str,
+    default=None,
+    help="Description of the variable to create if it does not exist",
+)
+@click.option(
+    "--rotate",
+    is_flag=True,
+    default=False,
+    help="Delete all existing values for the variable before creating the new one",
+)
+@click.pass_context
+def set_variable_cmd(
+    ctx: click.Context,
+    var_uuid_or_name: str,
+    value: str,
+    project_id: sys_uuid.UUID | None,
+    name: str | None,
+    description: str | None,
+    rotate: bool,
+) -> None:
+    client: http_client.CollectionBaseClient = ctx.obj.client
+
+    var_uuid: str | None = None
+    variable: dict[str, tp.Any] | None = None
+
+    if utils.is_valid_uuid(var_uuid_or_name):
+        var_uuid = var_uuid_or_name
+        try:
+            variable = variable_lib.get_variable(client, sys_uuid.UUID(var_uuid))
+        except bazooka_exc.NotFoundError as exc:
+            raise click.ClickException(
+                f"Variable with UUID {var_uuid} not found"
+            ) from exc
+    else:
+        variables = variable_lib.list_variables(client, name=var_uuid_or_name)
+        if len(variables) > 1:
+            raise click.ClickException(
+                f"Multiple variables with name {var_uuid_or_name} found; use UUID"
+            )
+        if len(variables) == 1:
+            variable = variables[0]
+            var_uuid = variable["uuid"]
+
+    if variable is None or var_uuid is None:
+        root_ctx = ctx.find_root()
+        project_id = project_id or root_ctx.params.get("project_id")
+        if project_id is None:
+            raise click.ClickException(
+                "Unable to create variable: project id is not set. "
+                "Provide it via '--project-id' (or set 'project_id' in config)."
+            )
+
+        variable_name = name if name is not None else var_uuid_or_name
+        variable_description = description if description is not None else ""
+
+        created = variable_lib.add_variable(
+            client,
+            {
+                "uuid": str(sys_uuid.uuid4()),
+                "project_id": str(project_id),
+                "name": variable_name,
+                "description": variable_description,
+                "setter": {"kind": "selector", "selector_strategy": "latest"},
+            },
+        )
+        variable = created
+        var_uuid = created["uuid"]
+
+    if rotate:
+        variable_ref = f"{c.VARIABLE_COLLECTION}{var_uuid}"
+        existing_values = value_lib.list_values(client, variable=variable_ref)
+        for existing in existing_values:
+            value_lib.delete_value(client, sys_uuid.UUID(existing["uuid"]))
+
+    data = {
+        "uuid": str(sys_uuid.uuid4()),
+        "project_id": variable["project_id"],
+        "name": f"{variable['name']}_value",
+        "description": "",
+        "value": utils.convert_to_nearest_type(value),
+        "variable": f"{c.VARIABLE_COLLECTION}{var_uuid}",
+    }
+    value_lib.add_value(client, data)
+
+    variable = variable_lib.get_variable(client, sys_uuid.UUID(var_uuid))
     _print_variables([variable])
 
 
