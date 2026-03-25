@@ -5,20 +5,20 @@
       
       
       
-        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/configs_delete/">
+        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/vars_set/">
       
       
-        <link rel="prev" href="../configs_add-from-env/">
+        <link rel="prev" href="../vars_select/">
       
       
-        <link rel="next" href="../configs_list/">
+        <link rel="next" href="../vars_show/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.0">
     
     
       
-        <title>configs_delete - genesis_devtools</title>
+        <title>vars_set - genesis_devtools</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configs_delete" class="md-skip">
+        <a href="#vars_set" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              configs_delete
+              vars_set
             
           </span>
         </div>
@@ -459,66 +459,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          configs_delete
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../configs_delete/" class="md-nav__link">
         configs_delete
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Содержание раздела
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-help" class="md-nav__link">
-    CLI Help
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2278,11 +2223,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../vars_set/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          vars_set
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         vars_set
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-help" class="md-nav__link">
+    CLI Help
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2326,50 +2326,78 @@
   
 
 
-<h1 id="configs_delete">configs_delete<a class="headerlink" href="#configs_delete" title="Permanent link">#</a></h1>
-<p>Delete configuration from environment variables</p>
+<h1 id="vars_set">vars_set<a class="headerlink" href="#vars_set" title="Permanent link">#</a></h1>
+<p>Create variable if missing and set its value by creating a new value record</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis configs delete [OPTIONS]</span>
+<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis vars set [OPTIONS] VAR_UUID_OR_NAME VALUE</span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
-<li><code>uuid</code>:<ul>
-<li>Type: uuid</li>
-<li>Default: <code>none</code></li>
-<li>Usage: <code>-u
---uuid</code></li>
-</ul>
+<li><code>var_uuid_or_name</code> (REQUIRED): </li>
+<li>Type: text </li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>
+<p>Usage: <code>var_uuid_or_name</code></p>
 </li>
-</ul>
-<p>Config UUID</p>
-<ul>
-<li><code>node</code>:<ul>
-<li>Type: uuid</li>
-<li>Default: <code>none</code></li>
-<li>Usage: <code>-n
---node</code></li>
-</ul>
+<li>
+<p><code>value</code> (REQUIRED): </p>
 </li>
+<li>Type: text </li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>
+<p>Usage: <code>value</code></p>
+</li>
+<li>
+<p><code>project_id</code> (REQUIRED): </p>
+</li>
+<li>Type: uuid </li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>-p
+--project-id</code></li>
 </ul>
-<p>Delete all configs for the node</p>
+<p>UUID of the project in which to deploy the variable</p>
 <ul>
-<li><code>help</code>:<ul>
-<li>Type: boolean</li>
+<li><code>name</code>: </li>
+<li>Type: text </li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>--name</code></li>
+</ul>
+<p>Name of the variable to create if it does not exist</p>
+<ul>
+<li><code>description</code>: </li>
+<li>Type: text </li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>--description</code></li>
+</ul>
+<p>Description of the variable to create if it does not exist</p>
+<ul>
+<li><code>rotate</code>: </li>
+<li>Type: boolean </li>
+<li>Default: <code>false</code></li>
+<li>Usage: <code>--rotate</code></li>
+</ul>
+<p>Delete all existing values for the variable before creating the new one</p>
+<ul>
+<li><code>help</code>: </li>
+<li>Type: boolean </li>
 <li>Default: <code>false</code></li>
 <li>Usage: <code>--help</code></li>
 </ul>
-</li>
-</ul>
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis configs delete [OPTIONS]</span>
+<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis vars set [OPTIONS] VAR_UUID_OR_NAME VALUE</span>
 
-<span class="go">  Delete configuration from environment variables</span>
+<span class="go">  Create variable if missing and set its value by creating a new value record</span>
 
 <span class="go">Options:</span>
-<span class="go">  -u, --uuid UUID  Config UUID</span>
-<span class="go">  -n, --node UUID  Delete all configs for the node</span>
-<span class="go">  --help           Show this message and exit.</span>
+<span class="go">  -p, --project-id UUID  UUID of the project in which to deploy the variable</span>
+<span class="go">                         [required]</span>
+<span class="go">  --name TEXT            Name of the variable to create if it does not exist</span>
+<span class="go">  --description TEXT     Description of the variable to create if it does not</span>
+<span class="go">                         exist</span>
+<span class="go">  --rotate               Delete all existing values for the variable before</span>
+<span class="go">                         creating the new one</span>
+<span class="go">  --help                 Show this message and exit.</span>
 </code></pre></div>
 
 
