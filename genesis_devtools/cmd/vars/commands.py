@@ -83,7 +83,7 @@ def show_variable_cmd(
     "-p",
     "--project-id",
     type=click.UUID,
-    required=True,
+    default=None,
     help="UUID of the project in which to deploy the variable",
 )
 @click.option(
@@ -120,13 +120,13 @@ def set_variable_cmd(
     variable: dict[str, tp.Any] | None = None
 
     if utils.is_valid_uuid(var_uuid_or_name):
-        var_uuid = var_uuid_or_name
+        var_uuid = str(var_uuid_or_name)
+        # Try to find variable by UUID
         try:
             variable = variable_lib.get_variable(client, sys_uuid.UUID(var_uuid))
-        except bazooka_exc.NotFoundError as exc:
-            raise click.ClickException(
-                f"Variable with UUID {var_uuid} not found"
-            ) from exc
+        except bazooka_exc.NotFoundError:
+            # No message found, just to create a variable with specified UUID
+            pass
     else:
         variables = variable_lib.list_variables(client, name=var_uuid_or_name)
         if len(variables) > 1:
@@ -137,7 +137,8 @@ def set_variable_cmd(
             variable = variables[0]
             var_uuid = variable["uuid"]
 
-    if variable is None or var_uuid is None:
+    # No variable found, create new one
+    if variable is None:
         root_ctx = ctx.find_root()
         project_id = project_id or root_ctx.params.get("project_id")
         if project_id is None:
@@ -146,13 +147,13 @@ def set_variable_cmd(
                 "Provide it via '--project-id' (or set 'project_id' in config)."
             )
 
-        variable_name = name if name is not None else var_uuid_or_name
-        variable_description = description if description is not None else ""
+        variable_name = name if name else var_uuid_or_name
+        variable_description = description if description else ""
 
         created = variable_lib.add_variable(
             client,
             {
-                "uuid": str(sys_uuid.uuid4()),
+                "uuid": var_uuid if var_uuid else str(sys_uuid.uuid4()),
                 "project_id": str(project_id),
                 "name": variable_name,
                 "description": variable_description,
