@@ -6,7 +6,9 @@ Manager projects in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis projects [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis projects [OPTIONS] COMMAND [ARGS]...                            
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis projects [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis projects [OPTIONS] COMMAND [ARGS]...
-
-  Manager projects in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete project
-  list    List projects
-  show    Show project
+                                                                                
+ Usage: genesis projects [OPTIONS] COMMAND [ARGS]...                            
+                                                                                
+ Manager projects in the Genesis installation                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete                    Delete project                                     │
+│ list                      List projects                                      │
+│ show                      Show project                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

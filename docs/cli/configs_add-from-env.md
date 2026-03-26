@@ -6,7 +6,9 @@ Add configuration from environment variables
 ## Usage
 
 ```console
-Usage: genesis configs add-from-env [OPTIONS] NODE
+                                                                                
+ Usage: genesis configs add-from-env [OPTIONS] NODE                             
+                                                                                
 ```
 
 ## Options
@@ -77,18 +79,22 @@ Usage: genesis configs add-from-env [OPTIONS] NODE
 ## CLI Help
 
 ```console
-Usage: genesis configs add-from-env [OPTIONS] NODE
-
-  Add configuration from environment variables
-
-Options:
-  -p, --project-id UUID    Project ID ofthe config  [required]
-  --env-prefix TEXT        Prefix used to filter environment variables for envs
-  --env-path TEXT          Path to the env file will be saved on the node
-  --env-format [json|env]  Format of the env file  [default: env]
-  --cfg-prefix TEXT        Prefix used to filter environment variables for
-                           configs
-  --base64                 Base64 encode is enabled for configs
-  -u, --uuid UUID          Config UUID
-  --help                   Show this message and exit.
+                                                                                
+ Usage: genesis configs add-from-env [OPTIONS] NODE                             
+                                                                                
+ Add configuration from environment variables                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ *  --project-id  -p  UUID        Project ID ofthe config [required]          │
+│    --env-prefix      TEXT        Prefix used to filter environment variables │
+│                                  for envs                                    │
+│    --env-path        TEXT        Path to the env file will be saved on the   │
+│                                  node                                        │
+│    --env-format      [json|env]  Format of the env file [default: env]       │
+│    --cfg-prefix      TEXT        Prefix used to filter environment variables │
+│                                  for configs                                 │
+│    --base64                      Base64 encode is enabled for configs        │
+│    --uuid        -u  UUID        Config UUID                                 │
+│    --help                        Show this message and exit.                 │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

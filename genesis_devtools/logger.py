@@ -15,7 +15,7 @@
 #    under the License.
 
 import abc
-import click
+import rich_click as click
 
 
 class AbstractLogger(abc.ABC):

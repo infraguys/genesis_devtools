@@ -6,7 +6,9 @@ Delete value
 ## Usage
 
 ```console
-Usage: genesis values delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis values delete [OPTIONS] UUID                                    
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis values delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis values delete [OPTIONS] UUID
-
-  Delete value
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis values delete [OPTIONS] UUID                                    
+                                                                                
+ Delete value                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Show rsa_key
 ## Usage
 
 ```console
-Usage: genesis rsa_keys show [OPTIONS] UUID
+                                                                                
+ Usage: genesis rsa_keys show [OPTIONS] UUID                                    
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis rsa_keys show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis rsa_keys show [OPTIONS] UUID
-
-  Show rsa_key
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis rsa_keys show [OPTIONS] UUID                                    
+                                                                                
+ Show rsa_key                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

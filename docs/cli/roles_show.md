@@ -6,7 +6,9 @@ Show role
 ## Usage
 
 ```console
-Usage: genesis roles show [OPTIONS] UUID
+                                                                                
+ Usage: genesis roles show [OPTIONS] UUID                                       
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis roles show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis roles show [OPTIONS] UUID
-
-  Show role
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis roles show [OPTIONS] UUID                                       
+                                                                                
+ Show role                                                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

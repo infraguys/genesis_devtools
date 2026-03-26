@@ -6,7 +6,9 @@ Manager hypervisors in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis hypervisors [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis hypervisors [OPTIONS] COMMAND [ARGS]...                         
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis hypervisors [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis hypervisors [OPTIONS] COMMAND [ARGS]...
-
-  Manager hypervisors in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete hypervisor
-  list    List hypervisors
-  show    Show hypervisor
+                                                                                
+ Usage: genesis hypervisors [OPTIONS] COMMAND [ARGS]...                         
+                                                                                
+ Manager hypervisors in the Genesis installation                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete                 Delete hypervisor                                     │
+│ list                   List hypervisors                                      │
+│ show                   Show hypervisor                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

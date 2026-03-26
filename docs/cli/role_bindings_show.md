@@ -6,7 +6,9 @@ Show role_binding
 ## Usage
 
 ```console
-Usage: genesis role_bindings show [OPTIONS] UUID
+                                                                                
+ Usage: genesis role_bindings show [OPTIONS] UUID                               
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis role_bindings show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis role_bindings show [OPTIONS] UUID
-
-  Show role_binding
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis role_bindings show [OPTIONS] UUID                               
+                                                                                
+ Show role_binding                                                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

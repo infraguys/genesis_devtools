@@ -18,8 +18,8 @@ from __future__ import annotations
 import json
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -36,27 +36,23 @@ def manifests_group():
 def list_manifest_cmd(ctx: click.Context) -> None:
     """List manifests"""
     client: http_client.CollectionBaseClient = ctx.obj.client
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Description",
-        "Version",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Description")
+    table.add_column("Version")
+    table.add_column("Status")
 
     manifests = manifests_lib.list_manifests(client)
     for manifest in manifests:
         table.add_row(
-            [
-                manifest["uuid"],
-                manifest["name"],
-                manifest["description"],
-                manifest["version"],
-                manifest["status"],
-            ]
+            manifest["uuid"],
+            manifest["name"],
+            manifest["description"],
+            manifest["version"],
+            manifest["status"],
         )
-    click.echo(table)
+    print_table(table)
 
 
 @manifests_group.command("show", help="Show manifest general information")
@@ -75,25 +71,21 @@ def show_manifest_cmd(ctx: click.Context, name: str) -> None:
 
     manifest = manifest[0]
 
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Version",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Version")
+    table.add_column("Status")
 
     table.add_row(
-        [
-            manifest["uuid"],
-            manifest["name"],
-            manifest["version"],
-            manifest["status"],
-        ]
+        manifest["uuid"],
+        manifest["name"],
+        manifest["version"],
+        manifest["status"],
     )
 
     click.echo(f"manifest {name}:")
-    click.echo(table)
+    print_table(table)
 
     if manifest["resources"]:
         click.echo("Resources json:")
@@ -109,29 +101,25 @@ def show_manifest_cmd(ctx: click.Context, name: str) -> None:
         click.echo(json.dumps(manifest["exports"], indent=4))
 
     resources = manifests_lib.list_resources(client, sys_uuid.UUID(manifest["uuid"]))
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Kind",
-        "Full hash",
-        "Status",
-        "Created at",
-        "Updated at",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Kind")
+    table.add_column("Full hash")
+    table.add_column("Status")
+    table.add_column("Created at")
+    table.add_column("Updated at")
 
     for resource in resources:
         table.add_row(
-            [
-                resource["uuid"],
-                resource["name"],
-                resource["kind"],
-                resource["full_hash"],
-                resource["status"],
-                resource["created_at"],
-                resource["updated_at"],
-            ]
+            resource["uuid"],
+            resource["name"],
+            resource["kind"],
+            str(resource["full_hash"]),
+            resource["status"],
+            resource["created_at"],
+            resource["updated_at"],
         )
 
     click.echo("Resources:")
-    click.echo(table)
+    print_table(table)

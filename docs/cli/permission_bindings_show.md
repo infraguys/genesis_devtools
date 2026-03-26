@@ -6,7 +6,9 @@ Show permission_binding
 ## Usage
 
 ```console
-Usage: genesis permission_bindings show [OPTIONS] UUID
+                                                                                
+ Usage: genesis permission_bindings show [OPTIONS] UUID                         
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis permission_bindings show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis permission_bindings show [OPTIONS] UUID
-
-  Show permission_binding
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis permission_bindings show [OPTIONS] UUID                         
+                                                                                
+ Show permission_binding                                                        
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

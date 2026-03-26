@@ -17,8 +17,8 @@ from __future__ import annotations
 
 import os
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from genesis_devtools.clients import iam as iam_client
 
@@ -150,16 +150,18 @@ def auth_me_cmd(project_dir: str) -> None:
     orgs = me_data.get("organization") or []
     org = orgs[0] if orgs else {}
 
-    table = prettytable.PrettyTable()
-    table.field_names = ["field", "value"]
-    table.add_row(["uuid", user.get("uuid")])
-    table.add_row(["username", user.get("username")])
-    table.add_row(["name", user.get("name")])
-    table.add_row(["email", user.get("email")])
-    table.add_row(["status", user.get("status")])
-    table.add_row(["organization", org.get("name")])
+    table = get_table()
+    table.add_column("field")
+    table.add_column("value")
 
-    click.echo(table)
+    table.add_row("uuid", user.get("uuid"))
+    table.add_row("username", user.get("username"))
+    table.add_row("name", user.get("name"))
+    table.add_row("email", user.get("email"))
+    table.add_row("status", user.get("status"))
+    table.add_row("organization", org.get("name"))
+
+    print_table(table)
 
 
 @auth_group.command("refresh", help="Refresh stored token using refresh token")

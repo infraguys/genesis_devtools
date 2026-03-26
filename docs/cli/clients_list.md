@@ -6,7 +6,9 @@ List clients
 ## Usage
 
 ```console
-Usage: genesis clients list [OPTIONS]
+                                                                                
+ Usage: genesis clients list [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis clients list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis clients list [OPTIONS]
-
-  List clients
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis clients list [OPTIONS]                                          
+                                                                                
+ List clients                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

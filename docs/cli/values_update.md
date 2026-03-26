@@ -6,7 +6,9 @@ Update value
 ## Usage
 
 ```console
-Usage: genesis values update [OPTIONS] UUID
+                                                                                
+ Usage: genesis values update [OPTIONS] UUID                                    
+                                                                                
 ```
 
 ## Options
@@ -66,15 +68,17 @@ Usage: genesis values update [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis values update [OPTIONS] UUID
-
-  Update value
-
-Options:
-  -p, --project-id UUID   Name of the project in which to deploy the value
-  -n, --name TEXT         Name of the value
-  -D, --description TEXT  Description of the value
-  -V, --value TEXT        value
-  -v, --variable TEXT     uuid of the variable
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis values update [OPTIONS] UUID                                    
+                                                                                
+ Update value                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the value    │
+│ --name         -n  TEXT  Name of the value                                   │
+│ --description  -D  TEXT  Description of the value                            │
+│ --value        -V  TEXT  value                                               │
+│ --variable     -v  TEXT  uuid of the variable                                │
+│ --help                   Show this message and exit.                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

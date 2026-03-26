@@ -6,7 +6,9 @@ Delete password
 ## Usage
 
 ```console
-Usage: genesis passwords delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis passwords delete [OPTIONS] UUID                                 
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis passwords delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis passwords delete [OPTIONS] UUID
-
-  Delete password
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis passwords delete [OPTIONS] UUID                                 
+                                                                                
+ Delete password                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

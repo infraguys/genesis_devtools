@@ -6,7 +6,9 @@ Delete role
 ## Usage
 
 ```console
-Usage: genesis roles delete [OPTIONS]
+                                                                                
+ Usage: genesis roles delete [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis roles delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis roles delete [OPTIONS]
-
-  Delete role
-
-Options:
-  -u, --uuid UUID  role UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis roles delete [OPTIONS]                                          
+                                                                                
+ Delete role                                                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  role UUID                                                  │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

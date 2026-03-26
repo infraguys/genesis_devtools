@@ -6,7 +6,9 @@ Initialize the repository
 ## Usage
 
 ```console
-Usage: genesis repo init [OPTIONS] [PROJECT_DIR]
+                                                                                
+ Usage: genesis repo init [OPTIONS] [PROJECT_DIR]                               
+                                                                                
 ```
 
 ## Options
@@ -50,13 +52,15 @@ Usage: genesis repo init [OPTIONS] [PROJECT_DIR]
 ## CLI Help
 
 ```console
-Usage: genesis repo init [OPTIONS] [PROJECT_DIR]
-
-  Initialize the repository
-
-Options:
-  -c, --genesis-cfg-file TEXT  Name of the project configuration file
-  -t, --target TEXT            Target repository to push to
-  -f, --force                  Force init even if the repo already exists
-  --help                       Show this message and exit.
+                                                                                
+ Usage: genesis repo init [OPTIONS] [PROJECT_DIR]                               
+                                                                                
+ Initialize the repository                                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file         │
+│ --target            -t  TEXT  Target repository to push to                   │
+│ --force             -f        Force init even if the repo already exists     │
+│ --help                        Show this message and exit.                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ List role_bindings
 ## Usage
 
 ```console
-Usage: genesis role_bindings list [OPTIONS]
+                                                                                
+ Usage: genesis role_bindings list [OPTIONS]                                    
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis role_bindings list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis role_bindings list [OPTIONS]
-
-  List role_bindings
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis role_bindings list [OPTIONS]                                    
+                                                                                
+ List role_bindings                                                             
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

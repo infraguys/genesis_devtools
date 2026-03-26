@@ -6,7 +6,9 @@ Manage values in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis values [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis values [OPTIONS] COMMAND [ARGS]...                              
+                                                                                
 ```
 
 ## Options
@@ -21,17 +23,19 @@ Usage: genesis values [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis values [OPTIONS] COMMAND [ARGS]...
-
-  Manage values in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add     Add a new value to the Genesis installation
-  delete  Delete value
-  list    List values
-  show    Show value
-  update  Update value
+                                                                                
+ Usage: genesis values [OPTIONS] COMMAND [ARGS]...                              
+                                                                                
+ Manage values in the Genesis installation                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add         Add a new value to the Genesis installation                      │
+│ delete      Delete value                                                     │
+│ list        List values                                                      │
+│ show        Show value                                                       │
+│ update      Update value                                                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Manage variables in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis vars [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis vars [OPTIONS] COMMAND [ARGS]...                                
+                                                                                
 ```
 
 ## Options
@@ -21,17 +23,21 @@ Usage: genesis vars [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis vars [OPTIONS] COMMAND [ARGS]...
-
-  Manage variables in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add     Add a new variable to the Genesis installation
-  delete  Delete variable
-  list    List variables
-  select  Select variable
-  show    Show variable
+                                                                                
+ Usage: genesis vars [OPTIONS] COMMAND [ARGS]...                                
+                                                                                
+ Manage variables in the Genesis installation                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add     Add a new variable to the Genesis installation                       │
+│ delete  Delete variable                                                      │
+│ list    List variables                                                       │
+│ select  Select variable                                                      │
+│ set     Create variable if missing and set its value by creating a new value │
+│         record                                                               │
+│ show    Show variable                                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

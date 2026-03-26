@@ -15,8 +15,8 @@
 #    under the License.
 from __future__ import annotations
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 from genesis_devtools.repo import base as base_repo
 from genesis_devtools.repo import utils as repo_utils
 
@@ -120,7 +120,7 @@ def repo_list_cmd(
     element: str | None,
     project_dir: str,
 ) -> None:
-    table = prettytable.PrettyTable()
+    table = get_table()
 
     driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
     try:
@@ -133,23 +133,19 @@ def repo_list_cmd(
         if element not in elements:
             raise click.UsageError(f"Element {element} not found")
 
-        table.field_names = [
-            "version",
-        ]
+        table.add_column("version")
 
         for version in sorted(elements[element]):
-            table.add_row([version])
+            table.add_row(version)
 
-        click.echo(table)
+        print_table(table)
         return
 
-    table.field_names = [
-        "name",
-        "last version",
-        "versions",
-    ]
+    table.add_column("name")
+    table.add_column("last version")
+    table.add_column("versions")
 
     for element in elements:
-        table.add_row([element, sorted(elements[element])[-1], len(elements[element])])
+        table.add_row(element, sorted(elements[element])[-1], len(elements[element]))
 
-    click.echo(table)
+    print_table(table)

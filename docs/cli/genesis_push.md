@@ -6,7 +6,9 @@ Push the element to the repository
 ## Usage
 
 ```console
-Usage: genesis push [OPTIONS] [PROJECT_DIR]
+                                                                                
+ Usage: genesis push [OPTIONS] [PROJECT_DIR]                                    
+                                                                                
 ```
 
 ## Options
@@ -58,14 +60,16 @@ Usage: genesis push [OPTIONS] [PROJECT_DIR]
 ## CLI Help
 
 ```console
-Usage: genesis push [OPTIONS] [PROJECT_DIR]
-
-  Push the element to the repository
-
-Options:
-  -c, --genesis-cfg-file TEXT  Name of the project configuration file
-  -t, --target TEXT            Target repository to push to
-  -e, --element-dir PATH       Directory where element artifacts are stored
-  -f, --force                  Force push even if the element already exists
-  --help                       Show this message and exit.
+                                                                                
+ Usage: genesis push [OPTIONS] [PROJECT_DIR]                                    
+                                                                                
+ Push the element to the repository                                             
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file         │
+│ --target            -t  TEXT  Target repository to push to                   │
+│ --element-dir       -e  PATH  Directory where element artifacts are stored   │
+│ --force             -f        Force push even if the element already exists  │
+│ --help                        Show this message and exit.                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

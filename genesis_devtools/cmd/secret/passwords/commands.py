@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -183,24 +183,20 @@ def update_password_cmd(
 
 
 def _print_passwords(passwords: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Method",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Method")
+    table.add_column("Status")
 
     for password in passwords:
         table.add_row(
-            [
-                password["uuid"],
-                password["project_id"],
-                password["name"],
-                password["method"],
-                password["status"],
-            ]
+            password["uuid"],
+            password["project_id"],
+            password["name"],
+            password["method"],
+            password["status"],
         )
 
-    click.echo(table)
+    print_table(table)

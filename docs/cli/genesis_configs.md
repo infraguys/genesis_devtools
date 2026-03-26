@@ -6,7 +6,9 @@ Manager configs in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis configs [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis configs [OPTIONS] COMMAND [ARGS]...                             
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis configs [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis configs [OPTIONS] COMMAND [ARGS]...
-
-  Manager configs in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add-from-env  Add configuration from environment variables
-  delete        Delete configuration from environment variables
-  list          List configs
+                                                                                
+ Usage: genesis configs [OPTIONS] COMMAND [ARGS]...                             
+                                                                                
+ Manager configs in the Genesis installation                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add-from-env      Add configuration from environment variables               │
+│ delete            Delete configuration from environment variables            │
+│ list              List configs                                               │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Delete client
 ## Usage
 
 ```console
-Usage: genesis clients delete [OPTIONS]
+                                                                                
+ Usage: genesis clients delete [OPTIONS]                                        
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis clients delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis clients delete [OPTIONS]
-
-  Delete client
-
-Options:
-  -u, --uuid UUID  client UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis clients delete [OPTIONS]                                        
+                                                                                
+ Delete client                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  client UUID                                                │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

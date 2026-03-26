@@ -6,7 +6,9 @@ Delete the genesis stand/element
 ## Usage
 
 ```console
-Usage: genesis delete [OPTIONS] NAME
+                                                                                
+ Usage: genesis delete [OPTIONS] NAME                                           
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis delete [OPTIONS] NAME
 ## CLI Help
 
 ```console
-Usage: genesis delete [OPTIONS] NAME
-
-  Delete the genesis stand/element
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis delete [OPTIONS] NAME                                           
+                                                                                
+ Delete the genesis stand/element                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

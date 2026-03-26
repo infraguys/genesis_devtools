@@ -6,7 +6,9 @@ Delete role_binding
 ## Usage
 
 ```console
-Usage: genesis role_bindings delete [OPTIONS]
+                                                                                
+ Usage: genesis role_bindings delete [OPTIONS]                                  
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis role_bindings delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis role_bindings delete [OPTIONS]
-
-  Delete role_binding
-
-Options:
-  -u, --uuid UUID  role_binding UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis role_bindings delete [OPTIONS]                                  
+                                                                                
+ Delete role_binding                                                            
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  role_binding UUID                                          │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

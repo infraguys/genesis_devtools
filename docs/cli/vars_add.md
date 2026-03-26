@@ -6,7 +6,9 @@ Add a new variable to the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis vars add [OPTIONS]
+                                                                                
+ Usage: genesis vars add [OPTIONS]                                              
+                                                                                
 ```
 
 ## Options
@@ -53,15 +55,17 @@ Usage: genesis vars add [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis vars add [OPTIONS]
-
-  Add a new variable to the Genesis installation
-
-Options:
-  -u, --uuid UUID         UUID of the variable
-  -p, --project-id UUID   Name of the project in which to deploy the variable
-                          [required]
-  -n, --name TEXT         Name of the variable
-  -D, --description TEXT  Description of the variable
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis vars add [OPTIONS]                                              
+                                                                                
+ Add a new variable to the Genesis installation                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the variable                             │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the       │
+│                             variable [required]                              │
+│    --name         -n  TEXT  Name of the variable                             │
+│    --description  -D  TEXT  Description of the variable                      │
+│    --help                   Show this message and exit.                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

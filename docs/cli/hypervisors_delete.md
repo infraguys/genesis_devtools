@@ -6,7 +6,9 @@ Delete hypervisor
 ## Usage
 
 ```console
-Usage: genesis hypervisors delete [OPTIONS]
+                                                                                
+ Usage: genesis hypervisors delete [OPTIONS]                                    
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis hypervisors delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis hypervisors delete [OPTIONS]
-
-  Delete hypervisor
-
-Options:
-  -u, --uuid UUID  hypervisor UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis hypervisors delete [OPTIONS]                                    
+                                                                                
+ Delete hypervisor                                                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  hypervisor UUID                                            │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

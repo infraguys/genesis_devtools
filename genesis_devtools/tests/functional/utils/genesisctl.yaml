@@ -1,3 +1,30 @@
-endpoint: http://127.0.0.1:11010
+# Old format configuration
+endpoint: http://10.20.0.2:11010
 password: admin
 user: admin
+check_updates: true
+
+# New format configuration
+schema_version: 1
+realms:
+  default-realm:
+    endpoint: http://10.20.0.2:11010
+    check_updates: true
+    contexts:
+      admin:
+        project_id: default
+        password: admin
+        user: admin
+    current-context: admin
+  slavoniy-realm:
+    endpoint: http://10.30.0.2:11010
+    check_updates: false
+    contexts:
+      default:
+        access_token: dsgdfsgdsfhsdfh
+        refresh_token: fhgfjghkhhjljl
+      slavoniy-context:
+        user: slavoniy
+        password: slavoniy_password
+    current-context: default
+current-realm: default-realm

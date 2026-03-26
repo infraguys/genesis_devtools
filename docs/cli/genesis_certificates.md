@@ -6,7 +6,9 @@ Manage certificates in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis certificates [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis certificates [OPTIONS] COMMAND [ARGS]...                        
+                                                                                
 ```
 
 ## Options
@@ -21,17 +23,19 @@ Usage: genesis certificates [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis certificates [OPTIONS] COMMAND [ARGS]...
-
-  Manage certificates in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add     Add a new certificate to the Genesis installation
-  delete  Delete certificate
-  list    List certificates
-  show    Show certificate
-  update  Update certificate
+                                                                                
+ Usage: genesis certificates [OPTIONS] COMMAND [ARGS]...                        
+                                                                                
+ Manage certificates in the Genesis installation                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add        Add a new certificate to the Genesis installation                 │
+│ delete     Delete certificate                                                │
+│ list       List certificates                                                 │
+│ show       Show certificate                                                  │
+│ update     Update certificate                                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

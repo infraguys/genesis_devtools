@@ -20,7 +20,7 @@ import os
 import textwrap
 import typing as tp
 
-import click
+import rich_click as click
 
 from genesis_devtools.wizards.scenarios import platformizers
 from genesis_devtools.wizards.engines.templaters import templaters

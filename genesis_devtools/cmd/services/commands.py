@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -183,22 +183,18 @@ def update_service_cmd(
 
 
 def _print_services(services: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Status")
 
     for service in services:
         table.add_row(
-            [
-                service["uuid"],
-                service["project_id"],
-                service["name"],
-                service["status"],
-            ]
+            service["uuid"],
+            service["project_id"],
+            service["name"],
+            service["status"],
         )
 
-    click.echo(table)
+    print_table(table)

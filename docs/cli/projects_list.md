@@ -6,7 +6,9 @@ List projects
 ## Usage
 
 ```console
-Usage: genesis projects list [OPTIONS]
+                                                                                
+ Usage: genesis projects list [OPTIONS]                                         
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis projects list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis projects list [OPTIONS]
-
-  List projects
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis projects list [OPTIONS]                                         
+                                                                                
+ List projects                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

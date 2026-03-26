@@ -16,7 +16,7 @@
 
 import os
 
-import click
+from rich_click.rich_context import RichContext
 import pathlib
 
 from genesis_devtools.common import utils
@@ -45,7 +45,7 @@ md_base_template = """
 
 
 def recursive_help(cmd, parent=None):
-    ctx = click.core.Context(cmd, info_name=cmd.name, parent=parent)
+    ctx = RichContext(cmd, info_name=cmd.name, parent=parent)
 
     yield {
         "command": cmd,

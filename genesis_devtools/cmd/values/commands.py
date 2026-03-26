@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -228,28 +228,24 @@ def update_value_cmd(
 
 
 def _print_values(values: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Variable",
-        "Value",
-        "ReadOnly",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Variable")
+    table.add_column("Value")
+    table.add_column("ReadOnly")
+    table.add_column("Status")
 
     for value in values:
         table.add_row(
-            [
-                value["uuid"],
-                value["project_id"],
-                value["name"],
-                value.get("variable", ""),
-                value["value"],
-                value["read_only"],
-                value["status"],
-            ]
+            value["uuid"],
+            value["project_id"],
+            value["name"],
+            value.get("variable", ""),
+            str(value["value"]),
+            str(value["read_only"]),
+            value["status"],
         )
 
-    click.echo(table)
+    print_table(table)

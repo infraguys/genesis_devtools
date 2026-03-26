@@ -6,7 +6,9 @@ List configs
 ## Usage
 
 ```console
-Usage: genesis configs list [OPTIONS]
+                                                                                
+ Usage: genesis configs list [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis configs list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis configs list [OPTIONS]
-
-  List configs
-
-Options:
-  -n, --node UUID  Filter configs by node
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis configs list [OPTIONS]                                          
+                                                                                
+ List configs                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --node  -n  UUID  Filter configs by node                                     │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

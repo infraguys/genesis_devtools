@@ -6,7 +6,9 @@ Display a cow message
 ## Usage
 
 ```console
-Usage: genesis cowsay [OPTIONS]
+                                                                                
+ Usage: genesis cowsay [OPTIONS]                                                
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis cowsay [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis cowsay [OPTIONS]
-
-  Display a cow message
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis cowsay [OPTIONS]                                                
+                                                                                
+ Display a cow message                                                          
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

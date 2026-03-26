@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -84,22 +84,18 @@ def delete_role_binding(
 
 
 def _print_values(role_bindings: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Role",
-        "User",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Role")
+    table.add_column("User")
+    table.add_column("Status")
 
     for role_binding in role_bindings:
         table.add_row(
-            [
-                role_binding["uuid"],
-                role_binding["role"],
-                role_binding["user"],
-                role_binding["status"],
-            ]
+            role_binding["uuid"],
+            role_binding["role"],
+            role_binding["user"],
+            role_binding["status"],
         )
 
-    click.echo(table)
+    print_table(table)

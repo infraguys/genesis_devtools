@@ -21,7 +21,7 @@ import abc
 import typing as tp
 import time
 
-import prettytable
+from genesis_devtools.common.table import get_table
 
 from genesis_devtools.backup import base
 from genesis_devtools import logger as logger_base
@@ -159,15 +159,13 @@ class AbstractQcowBackuper(base.AbstractBackuper):
         domains: tp.List[str],
         encryption: base.EncryptionCreds | None = None,
     ) -> None:
-        table = prettytable.PrettyTable()
-        table.field_names = [
-            "domain",
-            "time start",
-            "time end",
-            "duration (s)",
-            "size",
-            "status",
-        ]
+        table = get_table()
+        table.add_column("domain")
+        table.add_column("time start")
+        table.add_column("time end")
+        table.add_column("duration (s)")
+        table.add_column("size")
+        table.add_column("status")
 
         for domain in domains:
             domain_backup_path = os.path.join(backup_path, domain)
@@ -182,7 +180,7 @@ class AbstractQcowBackuper(base.AbstractBackuper):
                 self._logger.error(f"Failed to backup domain {domain}: {e}")
                 continue
 
-            table.add_row([domain, ts, te, duration, size, status])
+            table.add_row(domain, ts, te, duration, size, status)
 
         self._logger.info(f"Summary: {backup_path}")
         self._logger.info(table)

@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -82,24 +82,20 @@ def delete_idp(
 
 
 def _print_values(idps: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Scope",
-        "Iam_client",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Scope")
+    table.add_column("Iam_client")
+    table.add_column("Status")
 
     for idp in idps:
         table.add_row(
-            [
-                idp["uuid"],
-                idp["name"],
-                idp["scope"],
-                idp["iam_client"],
-                idp["status"],
-            ]
+            idp["uuid"],
+            idp["name"],
+            idp["scope"],
+            idp["iam_client"],
+            idp["status"],
         )
 
-    click.echo(table)
+    print_table(table)

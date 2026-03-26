@@ -6,7 +6,9 @@ Delete service
 ## Usage
 
 ```console
-Usage: genesis services delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis services delete [OPTIONS] UUID                                  
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis services delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis services delete [OPTIONS] UUID
-
-  Delete service
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis services delete [OPTIONS] UUID                                  
+                                                                                
+ Delete service                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

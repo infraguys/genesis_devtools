@@ -6,7 +6,9 @@ List of running genesis installation
 ## Usage
 
 ```console
-Usage: genesis ps [OPTIONS]
+                                                                                
+ Usage: genesis ps [OPTIONS]                                                    
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis ps [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis ps [OPTIONS]
-
-  List of running genesis installation
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis ps [OPTIONS]                                                    
+                                                                                
+ List of running genesis installation                                           
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

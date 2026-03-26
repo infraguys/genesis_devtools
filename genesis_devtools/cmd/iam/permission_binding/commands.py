@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -87,20 +87,16 @@ def delete_permission_binding(
 
 
 def _print_values(permission_bindings: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Role",
-        "Permission",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Role")
+    table.add_column("Permission")
 
     for permission_binding in permission_bindings:
         table.add_row(
-            [
-                permission_binding["uuid"],
-                permission_binding["role"],
-                permission_binding["permission"],
-            ]
+            permission_binding["uuid"],
+            permission_binding["role"],
+            permission_binding["permission"],
         )
 
-    click.echo(table)
+    print_table(table)

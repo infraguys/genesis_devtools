@@ -22,8 +22,8 @@ import shutil
 import typing as tp
 import multiprocessing as mp
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from genesis_devtools import utils
 from genesis_devtools.infra.libvirt import libvirt
@@ -81,15 +81,13 @@ def _do_backup(
 ) -> None:
     os.makedirs(backup_path, exist_ok=True)
 
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "domain",
-        "time start",
-        "time end",
-        "duration (s)",
-        "size",
-        "status",
-    ]
+    table = get_table()
+    table.add_column("domain")
+    table.add_column("time start")
+    table.add_column("time end")
+    table.add_column("duration (s)")
+    table.add_column("size")
+    table.add_column("status")
 
     for domain in domains:
         domain_backup_path = os.path.join(backup_path, domain)
@@ -113,10 +111,10 @@ def _do_backup(
         except Exception:
             click.secho(f"Backup of {domain} failed", fg="red")
 
-        table.add_row([domain, ts, te, f"{duration}", size, status])
+        table.add_row(domain, ts, te, f"{duration}", size, status)
 
     click.echo(f"Summary: {backup_path}")
-    click.echo(table)
+    print_table(table)
 
     if not compress:
         return

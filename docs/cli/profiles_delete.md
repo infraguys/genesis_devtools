@@ -6,7 +6,9 @@ Delete profile
 ## Usage
 
 ```console
-Usage: genesis profiles delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis profiles delete [OPTIONS] UUID                                  
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis profiles delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis profiles delete [OPTIONS] UUID
-
-  Delete profile
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis profiles delete [OPTIONS] UUID                                  
+                                                                                
+ Delete profile                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

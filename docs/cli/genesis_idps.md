@@ -6,7 +6,9 @@ Manager idps in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis idps [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis idps [OPTIONS] COMMAND [ARGS]...                                
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis idps [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis idps [OPTIONS] COMMAND [ARGS]...
-
-  Manager idps in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete idp
-  list    List idps
-  show    Show idp
+                                                                                
+ Usage: genesis idps [OPTIONS] COMMAND [ARGS]...                                
+                                                                                
+ Manager idps in the Genesis installation                                       
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete                         Delete idp                                    │
+│ list                           List idps                                     │
+│ show                           Show idp                                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
