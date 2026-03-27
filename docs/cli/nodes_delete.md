@@ -6,7 +6,9 @@ Delete node
 ## Usage
 
 ```console
-Usage: genesis nodes delete [OPTIONS] UUID_NAME
+                                                                                
+ Usage: genesis nodes delete [OPTIONS] UUID_NAME                                
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis nodes delete [OPTIONS] UUID_NAME
 ## CLI Help
 
 ```console
-Usage: genesis nodes delete [OPTIONS] UUID_NAME
-
-  Delete node
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis nodes delete [OPTIONS] UUID_NAME                                
+                                                                                
+ Delete node                                                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

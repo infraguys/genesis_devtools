@@ -6,7 +6,9 @@ List resources
 ## Usage
 
 ```console
-Usage: genesis resources list [OPTIONS] NAME_UUID
+                                                                                
+ Usage: genesis resources list [OPTIONS] NAME_UUID                              
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis resources list [OPTIONS] NAME_UUID
 ## CLI Help
 
 ```console
-Usage: genesis resources list [OPTIONS] NAME_UUID
-
-  List resources
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis resources list [OPTIONS] NAME_UUID                              
+                                                                                
+ List resources                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

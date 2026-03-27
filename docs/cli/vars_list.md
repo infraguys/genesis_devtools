@@ -6,7 +6,9 @@ List variables
 ## Usage
 
 ```console
-Usage: genesis vars list [OPTIONS]
+                                                                                
+ Usage: genesis vars list [OPTIONS]                                             
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis vars list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis vars list [OPTIONS]
-
-  List variables
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis vars list [OPTIONS]                                             
+                                                                                
+ List variables                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

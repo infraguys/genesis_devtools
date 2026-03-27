@@ -6,7 +6,9 @@ Activate profile
 ## Usage
 
 ```console
-Usage: genesis profiles activate [OPTIONS] UUID
+                                                                                
+ Usage: genesis profiles activate [OPTIONS] UUID                                
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis profiles activate [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis profiles activate [OPTIONS] UUID
-
-  Activate profile
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis profiles activate [OPTIONS] UUID                                
+                                                                                
+ Activate profile                                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

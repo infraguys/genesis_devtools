@@ -6,7 +6,9 @@ Display a autocomplete help
 ## Usage
 
 ```console
-Usage: genesis autocomplete_help [OPTIONS]
+                                                                                
+ Usage: genesis autocomplete_help [OPTIONS]                                     
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis autocomplete_help [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis autocomplete_help [OPTIONS]
-
-  Display a autocomplete help
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis autocomplete_help [OPTIONS]                                     
+                                                                                
+ Display a autocomplete help                                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

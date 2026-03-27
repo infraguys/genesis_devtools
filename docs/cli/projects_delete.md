@@ -6,7 +6,9 @@ Delete project
 ## Usage
 
 ```console
-Usage: genesis projects delete [OPTIONS]
+                                                                                
+ Usage: genesis projects delete [OPTIONS]                                       
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis projects delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis projects delete [OPTIONS]
-
-  Delete project
-
-Options:
-  -u, --uuid UUID  project UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis projects delete [OPTIONS]                                       
+                                                                                
+ Delete project                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  project UUID                                               │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -183,22 +183,18 @@ def update_rsa_key_cmd(
 
 
 def _print_rsa_keys(rsa_keys: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Status")
 
     for rsa_key in rsa_keys:
         table.add_row(
-            [
-                rsa_key["uuid"],
-                rsa_key["project_id"],
-                rsa_key["name"],
-                rsa_key["status"],
-            ]
+            rsa_key["uuid"],
+            rsa_key["project_id"],
+            rsa_key["name"],
+            rsa_key["status"],
         )
 
-    click.echo(table)
+    print_table(table)

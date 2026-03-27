@@ -20,7 +20,7 @@ import time
 import typing as tp
 import uuid as sys_uuid
 
-import click
+import rich_click as click
 from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
 

@@ -6,7 +6,9 @@ Delete user
 ## Usage
 
 ```console
-Usage: genesis users delete [OPTIONS]
+                                                                                
+ Usage: genesis users delete [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis users delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis users delete [OPTIONS]
-
-  Delete user
-
-Options:
-  -u, --uuid UUID  user UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis users delete [OPTIONS]                                          
+                                                                                
+ Delete user                                                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  user UUID                                                  │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

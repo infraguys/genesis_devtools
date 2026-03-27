@@ -6,7 +6,9 @@ Update ssh_key
 ## Usage
 
 ```console
-Usage: genesis ssh_keys update [OPTIONS] UUID
+                                                                                
+ Usage: genesis ssh_keys update [OPTIONS] UUID                                  
+                                                                                
 ```
 
 ## Options
@@ -50,13 +52,15 @@ Usage: genesis ssh_keys update [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis ssh_keys update [OPTIONS] UUID
-
-  Update ssh_key
-
-Options:
-  -p, --project-id UUID   Name of the project in which to deploy the ssh_key
-  -n, --name TEXT         Name of the ssh_key
-  -D, --description TEXT  Description of the ssh_key
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis ssh_keys update [OPTIONS] UUID                                  
+                                                                                
+ Update ssh_key                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the ssh_key  │
+│ --name         -n  TEXT  Name of the ssh_key                                 │
+│ --description  -D  TEXT  Description of the ssh_key                          │
+│ --help                   Show this message and exit.                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

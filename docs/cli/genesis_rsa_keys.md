@@ -6,7 +6,9 @@ Manage rsa_keys in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis rsa_keys [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis rsa_keys [OPTIONS] COMMAND [ARGS]...                            
+                                                                                
 ```
 
 ## Options
@@ -21,17 +23,19 @@ Usage: genesis rsa_keys [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis rsa_keys [OPTIONS] COMMAND [ARGS]...
-
-  Manage rsa_keys in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add     Add a new rsa_key to the Genesis installation
-  delete  Delete rsa_key
-  list    List rsa_keys
-  show    Show rsa_key
-  update  Update rsa_key
+                                                                                
+ Usage: genesis rsa_keys [OPTIONS] COMMAND [ARGS]...                            
+                                                                                
+ Manage rsa_keys in the Genesis installation                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add         Add a new rsa_key to the Genesis installation                    │
+│ delete      Delete rsa_key                                                   │
+│ list        List rsa_keys                                                    │
+│ show        Show rsa_key                                                     │
+│ update      Update rsa_key                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

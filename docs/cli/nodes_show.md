@@ -6,7 +6,9 @@ Show node
 ## Usage
 
 ```console
-Usage: genesis nodes show [OPTIONS] UUID_NAME
+                                                                                
+ Usage: genesis nodes show [OPTIONS] UUID_NAME                                  
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis nodes show [OPTIONS] UUID_NAME
 ## CLI Help
 
 ```console
-Usage: genesis nodes show [OPTIONS] UUID_NAME
-
-  Show node
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis nodes show [OPTIONS] UUID_NAME                                  
+                                                                                
+ Show node                                                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

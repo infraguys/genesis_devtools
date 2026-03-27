@@ -6,7 +6,9 @@ Show hypervisor
 ## Usage
 
 ```console
-Usage: genesis hypervisors show [OPTIONS] UUID
+                                                                                
+ Usage: genesis hypervisors show [OPTIONS] UUID                                 
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis hypervisors show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis hypervisors show [OPTIONS] UUID
-
-  Show hypervisor
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis hypervisors show [OPTIONS] UUID                                 
+                                                                                
+ Show hypervisor                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

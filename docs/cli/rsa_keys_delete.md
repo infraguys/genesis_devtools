@@ -6,7 +6,9 @@ Delete rsa_key
 ## Usage
 
 ```console
-Usage: genesis rsa_keys delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis rsa_keys delete [OPTIONS] UUID                                  
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis rsa_keys delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis rsa_keys delete [OPTIONS] UUID
-
-  Delete rsa_key
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis rsa_keys delete [OPTIONS] UUID                                  
+                                                                                
+ Delete rsa_key                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

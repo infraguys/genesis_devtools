@@ -21,8 +21,8 @@ import typing as tp
 import uuid as sys_uuid
 import yaml
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -30,6 +30,7 @@ from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import manifest as manifests_lib
 from genesis_devtools.clients import node as node_lib
 from genesis_devtools.clients import repo as repo_lib
+import genesis_devtools.constants as c
 from genesis_devtools import logger
 
 
@@ -43,27 +44,23 @@ def elements_group():
 def list_element_cmd(ctx: click.Context) -> None:
     """List elements"""
     client: http_client.CollectionBaseClient = ctx.obj.client
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Description",
-        "Version",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Description")
+    table.add_column("Version")
+    table.add_column("Status")
 
     elements = elements_lib.list_elements(client)
     for element in elements:
         table.add_row(
-            [
-                element["uuid"],
-                element["name"],
-                element["description"],
-                element["version"],
-                element["status"],
-            ]
+            element["uuid"],
+            element["name"],
+            element["description"],
+            element["version"],
+            element["status"],
         )
-    click.echo(table)
+    print_table(table)
 
 
 @elements_group.command("show", help="Show element general information")
@@ -82,55 +79,47 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
 
     element = element[0]
 
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Description",
-        "Version",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Description")
+    table.add_column("Version")
+    table.add_column("Status")
 
     table.add_row(
-        [
-            element["uuid"],
-            element["name"],
-            element["description"],
-            element["version"],
-            element["status"],
-        ]
+        element["uuid"],
+        element["name"],
+        element["description"],
+        element["version"],
+        element["status"],
     )
 
     click.echo(f"Element {name}:")
-    click.echo(table)
+    print_table(table)
 
     resources = elements_lib.list_resources(client, sys_uuid.UUID(element["uuid"]))
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Kind",
-        "Full hash",
-        "Status",
-        "Created at",
-        "Updated at",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Kind")
+    table.add_column("Full hash")
+    table.add_column("Status")
+    table.add_column("Created at")
+    table.add_column("Updated at")
 
     for resource in resources:
         table.add_row(
-            [
-                resource["uuid"],
-                resource["name"],
-                resource["kind"],
-                resource["full_hash"],
-                resource["status"],
-                resource["created_at"],
-                resource["updated_at"],
-            ]
+            resource["uuid"],
+            resource["name"],
+            resource["kind"],
+            resource["full_hash"],
+            resource["status"],
+            resource["created_at"],
+            resource["updated_at"],
         )
 
     click.echo("Resources:")
-    click.echo(table)
+    print_table(table)
 
 
 @elements_group.command("ips", help="Show element ips")
@@ -263,7 +252,7 @@ def upgrade_manifest(
 @click.option(
     "-r",
     "--repository",
-    default="http://10.20.0.1:8080/genesis-elements/",
+    default=f"{c.ELEMENT_REPO_URL}/",
     show_default=True,
     help="Repository endpoint",
 )
@@ -284,7 +273,7 @@ def install_manifest_cmd(
 @click.option(
     "-r",
     "--repository",
-    default="http://10.20.0.1:8080/genesis-elements/",
+    default=f"{c.ELEMENT_REPO_URL}/",
     show_default=True,
     help="Repository endpoint",
 )

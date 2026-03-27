@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 from bazooka import exceptions as bazooka_exc
 
 from gcl_sdk.clients.http import base as http_client
@@ -292,24 +292,20 @@ def add_variable_cmd(
 
 
 def _print_variables(variables: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Value",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Value")
+    table.add_column("Status")
 
     for variable in variables:
         table.add_row(
-            [
-                variable["uuid"],
-                variable["project_id"],
-                variable["name"],
-                variable.get("value", ""),
-                variable["status"],
-            ]
+            variable["uuid"],
+            variable["project_id"],
+            variable["name"],
+            str(variable.get("value", "")),
+            variable["status"],
         )
 
-    click.echo(table)
+    print_table(table)

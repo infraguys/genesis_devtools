@@ -6,7 +6,9 @@ Delete certificate
 ## Usage
 
 ```console
-Usage: genesis certificates delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis certificates delete [OPTIONS] UUID                              
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis certificates delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis certificates delete [OPTIONS] UUID
-
-  Delete certificate
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis certificates delete [OPTIONS] UUID                              
+                                                                                
+ Delete certificate                                                             
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

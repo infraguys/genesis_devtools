@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -164,26 +164,22 @@ def add_profile_cmd(
 
 
 def _print_profiles(profiles: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "ProfileType",
-        "Active",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("ProfileType")
+    table.add_column("Active")
+    table.add_column("Status")
 
     for profile in profiles:
         table.add_row(
-            [
-                profile["uuid"],
-                profile["project_id"],
-                profile["name"],
-                profile["profile_type"],
-                profile["active"],
-                profile["status"],
-            ]
+            profile["uuid"],
+            profile["project_id"],
+            profile["name"],
+            profile["profile_type"],
+            str(profile["active"]),
+            profile["status"],
         )
 
-    click.echo(table)
+    print_table(table)

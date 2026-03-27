@@ -6,7 +6,9 @@ List ssh_keys
 ## Usage
 
 ```console
-Usage: genesis ssh_keys list [OPTIONS]
+                                                                                
+ Usage: genesis ssh_keys list [OPTIONS]                                         
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis ssh_keys list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis ssh_keys list [OPTIONS]
-
-  List ssh_keys
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis ssh_keys list [OPTIONS]                                         
+                                                                                
+ List ssh_keys                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

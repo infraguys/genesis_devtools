@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -46,34 +46,30 @@ def list_config_cmd(
     node: sys_uuid.UUID | None,
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
-    table = prettytable.PrettyTable()
+    table = get_table()
 
     configs = config_lib.list_config(client, node)
 
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Path",
-        "Mode",
-        "Owner",
-        "Group",
-        "Status",
-    ]
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Path")
+    table.add_column("Mode")
+    table.add_column("Owner")
+    table.add_column("Group")
+    table.add_column("Status")
 
     for config in configs:
         table.add_row(
-            [
-                config["uuid"],
-                config["name"],
-                config["path"],
-                config["mode"],
-                config["owner"],
-                config["group"],
-                config["status"],
-            ]
+            config["uuid"],
+            config["name"],
+            config["path"],
+            config["mode"],
+            config["owner"],
+            config["group"],
+            config["status"],
         )
 
-    print(table)
+    print_table(table)
 
 
 @configs_group.command(

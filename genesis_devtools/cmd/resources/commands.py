@@ -17,8 +17,8 @@ from __future__ import annotations
 
 import typing as tp
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -98,28 +98,24 @@ def show_resource_cmd(
 
 
 def _print_resources(resources: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "Kind",
-        "Full hash",
-        "Status",
-        "Created at",
-        "Updated at",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("Kind")
+    table.add_column("Full hash")
+    table.add_column("Status")
+    table.add_column("Created at")
+    table.add_column("Updated at")
 
     for resource in resources:
         table.add_row(
-            [
-                resource["uuid"],
-                resource["name"],
-                resource["kind"],
-                resource["full_hash"],
-                resource["status"],
-                resource["created_at"],
-                resource["updated_at"],
-            ]
+            resource["uuid"],
+            resource["name"],
+            resource["kind"],
+            resource["full_hash"],
+            resource["status"],
+            resource["created_at"],
+            resource["updated_at"],
         )
 
-    click.echo(table)
+    print_table(table)

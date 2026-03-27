@@ -6,7 +6,9 @@ List organizations
 ## Usage
 
 ```console
-Usage: genesis organizations list [OPTIONS]
+                                                                                
+ Usage: genesis organizations list [OPTIONS]                                    
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis organizations list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis organizations list [OPTIONS]
-
-  List organizations
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis organizations list [OPTIONS]                                    
+                                                                                
+ List organizations                                                             
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Display a genesis message
 ## Usage
 
 ```console
-Usage: genesis hello [OPTIONS]
+                                                                                
+ Usage: genesis hello [OPTIONS]                                                 
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis hello [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis hello [OPTIONS]
-
-  Display a genesis message
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis hello [OPTIONS]                                                 
+                                                                                
+ Display a genesis message                                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

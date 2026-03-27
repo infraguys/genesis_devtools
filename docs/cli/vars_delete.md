@@ -6,7 +6,9 @@ Delete variable
 ## Usage
 
 ```console
-Usage: genesis vars delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis vars delete [OPTIONS] UUID                                      
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis vars delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis vars delete [OPTIONS] UUID
-
-  Delete variable
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis vars delete [OPTIONS] UUID                                      
+                                                                                
+ Delete variable                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

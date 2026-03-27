@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import typing as tp
 
-import click
+import rich_click as click
 
 from genesis_devtools.wizards.wizards import base
 from genesis_devtools.wizards.scenarios import base as scenarios

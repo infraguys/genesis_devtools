@@ -25,5 +25,12 @@ jobs:
     - name: update genesis cli
       run: |
         set -eux
+
+        mkdir -p "$HOME/bin"
+        curl --fail --show-error --location --progress-bar https://repository.genesis-core.tech/genesis-devtools/latest/genesis-linux --output "$HOME/bin/genesis"
+        chmod +x "$HOME/bin/genesis"
         
-        curl -fsSL https://repository.genesis-core.tech/install.sh | sh     
+        source ~/.profile
+        which genesis
+        genesis version
+ 

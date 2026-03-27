@@ -15,7 +15,7 @@
 #    under the License.
 from unittest.mock import MagicMock, patch
 
-import click
+import rich_click as click
 import pytest
 
 from genesis_devtools.cmd.cli import backup_cmd

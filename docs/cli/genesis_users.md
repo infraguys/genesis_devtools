@@ -6,7 +6,9 @@ Manager users in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis users [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis users [OPTIONS] COMMAND [ARGS]...                               
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis users [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis users [OPTIONS] COMMAND [ARGS]...
-
-  Manager users in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete user
-  list    List users
-  show    Show user
+                                                                                
+ Usage: genesis users [OPTIONS] COMMAND [ARGS]...                               
+                                                                                
+ Manager users in the Genesis installation                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete                       Delete user                                     │
+│ list                         List users                                      │
+│ show                         Show user                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

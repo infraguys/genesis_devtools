@@ -6,7 +6,9 @@ Select variable
 ## Usage
 
 ```console
-Usage: genesis vars select [OPTIONS] UUID
+                                                                                
+ Usage: genesis vars select [OPTIONS] UUID                                      
+                                                                                
 ```
 
 ## Options
@@ -34,12 +36,14 @@ Usage: genesis vars select [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis vars select [OPTIONS] UUID
-
-  Select variable
-
-Options:
-  -v, --value UUID  Uuid of the value to select as the value of the variable
-                    [required]
-  --help            Show this message and exit.
+                                                                                
+ Usage: genesis vars select [OPTIONS] UUID                                      
+                                                                                
+ Select variable                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ *  --value  -v  UUID  Uuid of the value to select as the value of the        │
+│                       variable [required]                                    │
+│    --help             Show this message and exit.                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

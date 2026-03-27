@@ -17,8 +17,8 @@ from __future__ import annotations
 
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -45,37 +45,8 @@ def list_node_cmd(
     project_id: str | None,
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
-    table = prettytable.PrettyTable()
     nodes = node_lib.list_nodes(client, project_id=project_id)
-
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Cores",
-        "RAM",
-        "Root Disk",
-        "Image",
-        "IP",
-        "Status",
-    ]
-
-    for node in nodes:
-        table.add_row(
-            [
-                node["uuid"],
-                node["project_id"],
-                node["name"],
-                node["cores"],
-                node["ram"],
-                node["disk_spec"].get("size", "unknown"),
-                node["disk_spec"].get("image", "unknown"),
-                node["default_network"].get("ipv4", ""),
-                node["status"],
-            ]
-        )
-
-    print(table)
+    _print_nodes(nodes)
 
 
 @nodes_group.command("add", help="Add a new node to the Genesis installation")
@@ -171,7 +142,7 @@ def add_node_cmd(
         description,
         wait,
     )
-    _print_node(node)
+    _print_nodes([node])
 
 
 @nodes_group.command("add-or-update", help="Add a new node or update an existing one")
@@ -267,7 +238,7 @@ def add_or_update_node_cmd(
         description,
         wait,
     )
-    _print_node(node)
+    _print_nodes([node])
 
 
 @nodes_group.command("delete", help="Delete node")
@@ -307,34 +278,32 @@ def show_node_cmd(
             uuid_name = nodes[0]["uuid"]
         else:
             raise click.ClickException(f"node with name {uuid_name} not found")
-    value = node_lib.get_node(client, uuid_name)
-    _print_node(value)
+    node = node_lib.get_node(client, uuid_name)
+    _print_nodes([node])
 
 
-def _print_node(node: dict) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Cores",
-        "RAM",
-        "Root Disk",
-        "Image",
-        "IP",
-        "Status",
-    ]
-    table.add_row(
-        [
+def _print_nodes(nodes: list) -> None:
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Cores")
+    table.add_column("RAM")
+    table.add_column("Root Disk")
+    table.add_column("Image")
+    table.add_column("IP")
+    table.add_column("Status")
+
+    for node in nodes:
+        table.add_row(
             node["uuid"],
             node["project_id"],
             node["name"],
-            node["cores"],
-            node["ram"],
-            node["disk_spec"]["size"],
-            node["disk_spec"]["image"],
+            str(node["cores"]),
+            str(node["ram"]),
+            node["disk_spec"].get("size", "Unknown"),
+            node["disk_spec"].get("image", "Unknown"),
             node["default_network"].get("ipv4", ""),
             node["status"],
-        ]
-    )
-    click.echo(table)
+        )
+    print_table(table)

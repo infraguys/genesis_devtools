@@ -6,7 +6,9 @@ Add a new service to the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis services add [OPTIONS]
+                                                                                
+ Usage: genesis services add [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -53,15 +55,17 @@ Usage: genesis services add [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis services add [OPTIONS]
-
-  Add a new service to the Genesis installation
-
-Options:
-  -u, --uuid UUID         UUID of the service
-  -p, --project-id UUID   Name of the project in which to deploy the service
-                          [required]
-  -n, --name TEXT         Name of the service
-  -D, --description TEXT  Description of the service
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis services add [OPTIONS]                                          
+                                                                                
+ Add a new service to the Genesis installation                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the service                              │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the       │
+│                             service [required]                               │
+│    --name         -n  TEXT  Name of the service                              │
+│    --description  -D  TEXT  Description of the service                       │
+│    --help                   Show this message and exit.                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

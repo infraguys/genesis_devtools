@@ -6,7 +6,9 @@ Uninstall manifest by UUID, path or name
 ## Usage
 
 ```console
-Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME
+                                                                                
+ Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME                     
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME
 ## CLI Help
 
 ```console
-Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME
-
-  Uninstall manifest by UUID, path or name
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis elements uninstall [OPTIONS] PATH_UUID_NAME                     
+                                                                                
+ Uninstall manifest by UUID, path or name                                       
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

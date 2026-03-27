@@ -6,7 +6,9 @@ Connect to genesis stand/element
 ## Usage
 
 ```console
-Usage: genesis ssh [OPTIONS]
+                                                                                
+ Usage: genesis ssh [OPTIONS]                                                   
+                                                                                
 ```
 
 ## Options
@@ -37,12 +39,14 @@ Usage: genesis ssh [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis ssh [OPTIONS]
-
-  Connect to genesis stand/element
-
-Options:
-  -s, --stand TEXT     Stand to connect to
-  -u, --username TEXT  Default username
-  --help               Show this message and exit.
+                                                                                
+ Usage: genesis ssh [OPTIONS]                                                   
+                                                                                
+ Connect to genesis stand/element                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --stand     -s  TEXT  Stand to connect to                                    │
+│ --username  -u  TEXT  Default username                                       │
+│ --help                Show this message and exit.                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

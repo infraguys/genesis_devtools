@@ -6,7 +6,9 @@ Manager roles in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis roles [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis roles [OPTIONS] COMMAND [ARGS]...                               
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis roles [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis roles [OPTIONS] COMMAND [ARGS]...
-
-  Manager roles in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete role
-  list    List roles
-  show    Show role
+                                                                                
+ Usage: genesis roles [OPTIONS] COMMAND [ARGS]...                               
+                                                                                
+ Manager roles in the Genesis installation                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete                       Delete role                                     │
+│ list                         List roles                                      │
+│ show                         Show role                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

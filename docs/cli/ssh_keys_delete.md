@@ -6,7 +6,9 @@ Delete ssh_key
 ## Usage
 
 ```console
-Usage: genesis ssh_keys delete [OPTIONS] UUID
+                                                                                
+ Usage: genesis ssh_keys delete [OPTIONS] UUID                                  
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis ssh_keys delete [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis ssh_keys delete [OPTIONS] UUID
-
-  Delete ssh_key
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis ssh_keys delete [OPTIONS] UUID                                  
+                                                                                
+ Delete ssh_key                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

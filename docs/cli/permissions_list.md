@@ -6,7 +6,9 @@ List permissions
 ## Usage
 
 ```console
-Usage: genesis permissions list [OPTIONS]
+                                                                                
+ Usage: genesis permissions list [OPTIONS]                                      
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis permissions list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis permissions list [OPTIONS]
-
-  List permissions
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis permissions list [OPTIONS]                                      
+                                                                                
+ List permissions                                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

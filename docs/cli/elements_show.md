@@ -6,7 +6,9 @@ Show element general information
 ## Usage
 
 ```console
-Usage: genesis elements show [OPTIONS] NAME
+                                                                                
+ Usage: genesis elements show [OPTIONS] NAME                                    
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis elements show [OPTIONS] NAME
 ## CLI Help
 
 ```console
-Usage: genesis elements show [OPTIONS] NAME
-
-  Show element general information
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis elements show [OPTIONS] NAME                                    
+                                                                                
+ Show element general information                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

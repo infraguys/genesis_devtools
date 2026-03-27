@@ -6,7 +6,9 @@ Show idp
 ## Usage
 
 ```console
-Usage: genesis idps show [OPTIONS] UUID
+                                                                                
+ Usage: genesis idps show [OPTIONS] UUID                                        
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis idps show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis idps show [OPTIONS] UUID
-
-  Show idp
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis idps show [OPTIONS] UUID                                        
+                                                                                
+ Show idp                                                                       
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

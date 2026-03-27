@@ -6,7 +6,9 @@ List hypervisors
 ## Usage
 
 ```console
-Usage: genesis hypervisors list [OPTIONS]
+                                                                                
+ Usage: genesis hypervisors list [OPTIONS]                                      
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis hypervisors list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis hypervisors list [OPTIONS]
-
-  List hypervisors
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis hypervisors list [OPTIONS]                                      
+                                                                                
+ List hypervisors                                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

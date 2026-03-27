@@ -6,7 +6,9 @@ Add a new rsa_key to the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis rsa_keys add [OPTIONS]
+                                                                                
+ Usage: genesis rsa_keys add [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -53,15 +55,17 @@ Usage: genesis rsa_keys add [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis rsa_keys add [OPTIONS]
-
-  Add a new rsa_key to the Genesis installation
-
-Options:
-  -u, --uuid UUID         UUID of the rsa_key
-  -p, --project-id UUID   Name of the project in which to deploy the rsa_key
-                          [required]
-  -n, --name TEXT         Name of the rsa_key
-  -D, --description TEXT  Description of the rsa_key
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis rsa_keys add [OPTIONS]                                          
+                                                                                
+ Add a new rsa_key to the Genesis installation                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the rsa_key                              │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the       │
+│                             rsa_key [required]                               │
+│    --name         -n  TEXT  Name of the rsa_key                              │
+│    --description  -D  TEXT  Description of the rsa_key                       │
+│    --help                   Show this message and exit.                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Check for the latest version on GitHub
 ## Usage
 
 ```console
-Usage: genesis latest [OPTIONS]
+                                                                                
+ Usage: genesis latest [OPTIONS]                                                
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis latest [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis latest [OPTIONS]
-
-  Check for the latest version on GitHub
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis latest [OPTIONS]                                                
+                                                                                
+ Check for the latest version on GitHub                                         
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

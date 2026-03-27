@@ -6,7 +6,9 @@ Show organization
 ## Usage
 
 ```console
-Usage: genesis organizations show [OPTIONS] UUID
+                                                                                
+ Usage: genesis organizations show [OPTIONS] UUID                               
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis organizations show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis organizations show [OPTIONS] UUID
-
-  Show organization
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis organizations show [OPTIONS] UUID                               
+                                                                                
+ Show organization                                                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

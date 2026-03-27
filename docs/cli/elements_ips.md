@@ -6,7 +6,9 @@ Show element ips
 ## Usage
 
 ```console
-Usage: genesis elements ips [OPTIONS] NAME
+                                                                                
+ Usage: genesis elements ips [OPTIONS] NAME                                     
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis elements ips [OPTIONS] NAME
 ## CLI Help
 
 ```console
-Usage: genesis elements ips [OPTIONS] NAME
-
-  Show element ips
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis elements ips [OPTIONS] NAME                                     
+                                                                                
+ Show element ips                                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
