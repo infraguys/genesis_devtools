@@ -104,9 +104,10 @@ class SimpleBuilder:
             raw_src = os.path.join(output_dir, f"{img.name}.raw")
             gz_tgt = os.path.join(images_output_dir, f"{img.name}.raw.gz")
             # Compress using standard library (gzip uses zlib) with level 5
-            with open(raw_src, "rb") as f_in, gzip.open(
-                gz_tgt, "wb", compresslevel=5
-            ) as f_out:
+            with (
+                open(raw_src, "rb") as f_in,
+                gzip.open(gz_tgt, "wb", compresslevel=5) as f_out,
+            ):
                 shutil.copyfileobj(f_in, f_out)
             return os.path.abspath(gz_tgt)
         else:

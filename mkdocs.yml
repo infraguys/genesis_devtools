@@ -75,3 +75,4 @@ markdown_extensions:
 nav:
   - Software: index.md
   - Cli: cli
+  - Realms: realms.md
