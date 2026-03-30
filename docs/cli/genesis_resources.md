@@ -6,7 +6,9 @@ Manage resources in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis resources [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis resources [OPTIONS] COMMAND [ARGS]...                           
+                                                                                
 ```
 
 ## Options
@@ -21,14 +23,16 @@ Usage: genesis resources [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis resources [OPTIONS] COMMAND [ARGS]...
-
-  Manage resources in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  list  List resources
-  show  Show resource
+                                                                                
+ Usage: genesis resources [OPTIONS] COMMAND [ARGS]...                           
+                                                                                
+ Manage resources in the Genesis installation                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ list                List resources                                           │
+│ show                Show resource                                            │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

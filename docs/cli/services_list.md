@@ -6,7 +6,9 @@ List services
 ## Usage
 
 ```console
-Usage: genesis services list [OPTIONS]
+                                                                                
+ Usage: genesis services list [OPTIONS]                                         
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis services list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis services list [OPTIONS]
-
-  List services
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis services list [OPTIONS]                                         
+                                                                                
+ List services                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

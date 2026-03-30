@@ -6,7 +6,9 @@ Delete configuration from environment variables
 ## Usage
 
 ```console
-Usage: genesis configs delete [OPTIONS]
+                                                                                
+ Usage: genesis configs delete [OPTIONS]                                        
+                                                                                
 ```
 
 ## Options
@@ -37,12 +39,14 @@ Usage: genesis configs delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis configs delete [OPTIONS]
-
-  Delete configuration from environment variables
-
-Options:
-  -u, --uuid UUID  Config UUID
-  -n, --node UUID  Delete all configs for the node
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis configs delete [OPTIONS]                                        
+                                                                                
+ Delete configuration from environment variables                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  Config UUID                                                │
+│ --node  -n  UUID  Delete all configs for the node                            │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Prints the genesis_devtools version
 ## Usage
 
 ```console
-Usage: genesis version [OPTIONS]
+                                                                                
+ Usage: genesis version [OPTIONS]                                               
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis version [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis version [OPTIONS]
-
-  Prints the genesis_devtools version
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis version [OPTIONS]                                               
+                                                                                
+ Prints the genesis_devtools version                                            
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

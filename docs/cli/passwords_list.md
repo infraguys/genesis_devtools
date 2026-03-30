@@ -6,7 +6,9 @@ List passwords
 ## Usage
 
 ```console
-Usage: genesis passwords list [OPTIONS]
+                                                                                
+ Usage: genesis passwords list [OPTIONS]                                        
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis passwords list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis passwords list [OPTIONS]
-
-  List passwords
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis passwords list [OPTIONS]                                        
+                                                                                
+ List passwords                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

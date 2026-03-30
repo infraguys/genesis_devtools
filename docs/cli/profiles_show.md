@@ -6,7 +6,9 @@ Show profile
 ## Usage
 
 ```console
-Usage: genesis profiles show [OPTIONS] UUID
+                                                                                
+ Usage: genesis profiles show [OPTIONS] UUID                                    
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis profiles show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis profiles show [OPTIONS] UUID
-
-  Show profile
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis profiles show [OPTIONS] UUID                                    
+                                                                                
+ Show profile                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

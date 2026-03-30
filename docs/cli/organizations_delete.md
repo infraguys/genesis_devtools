@@ -6,7 +6,9 @@ Delete organization
 ## Usage
 
 ```console
-Usage: genesis organizations delete [OPTIONS]
+                                                                                
+ Usage: genesis organizations delete [OPTIONS]                                  
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis organizations delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis organizations delete [OPTIONS]
-
-  Delete organization
-
-Options:
-  -u, --uuid UUID  organization UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis organizations delete [OPTIONS]                                  
+                                                                                
+ Delete organization                                                            
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  organization UUID                                          │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

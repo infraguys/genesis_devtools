@@ -6,7 +6,9 @@ Manager nodes in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                               
+                                                                                
 ```
 
 ## Options
@@ -21,17 +23,19 @@ Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...
-
-  Manager nodes in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add            Add a new node to the Genesis installation
-  add-or-update  Add a new node or update an existing one
-  delete         Delete node
-  list           List nodes
-  show           Show node
+                                                                                
+ Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                               
+                                                                                
+ Manager nodes in the Genesis installation                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add                 Add a new node to the Genesis installation               │
+│ add-or-update       Add a new node or update an existing one                 │
+│ delete              Delete node                                              │
+│ list                List nodes                                               │
+│ show                Show node                                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

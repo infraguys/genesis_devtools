@@ -6,7 +6,9 @@ Manage passwords in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis passwords [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis passwords [OPTIONS] COMMAND [ARGS]...                           
+                                                                                
 ```
 
 ## Options
@@ -21,17 +23,19 @@ Usage: genesis passwords [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis passwords [OPTIONS] COMMAND [ARGS]...
-
-  Manage passwords in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  add     Add a new password to the Genesis installation
-  delete  Delete password
-  list    List passwords
-  show    Show password
-  update  Update password
+                                                                                
+ Usage: genesis passwords [OPTIONS] COMMAND [ARGS]...                           
+                                                                                
+ Manage passwords in the Genesis installation                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add        Add a new password to the Genesis installation                    │
+│ delete     Delete password                                                   │
+│ list       List passwords                                                    │
+│ show       Show password                                                     │
+│ update     Update password                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

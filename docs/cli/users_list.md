@@ -6,7 +6,9 @@ List users
 ## Usage
 
 ```console
-Usage: genesis users list [OPTIONS]
+                                                                                
+ Usage: genesis users list [OPTIONS]                                            
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis users list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis users list [OPTIONS]
-
-  List users
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis users list [OPTIONS]                                            
+                                                                                
+ List users                                                                     
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

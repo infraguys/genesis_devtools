@@ -6,7 +6,9 @@ Return the version of the project
 ## Usage
 
 ```console
-Usage: genesis get-version [OPTIONS] ELEMENT_DIR
+                                                                                
+ Usage: genesis get-version [OPTIONS] ELEMENT_DIR                               
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis get-version [OPTIONS] ELEMENT_DIR
 ## CLI Help
 
 ```console
-Usage: genesis get-version [OPTIONS] ELEMENT_DIR
-
-  Return the version of the project
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis get-version [OPTIONS] ELEMENT_DIR                               
+                                                                                
+ Return the version of the project                                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

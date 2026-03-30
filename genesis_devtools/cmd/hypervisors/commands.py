@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -82,30 +82,26 @@ def delete_hypervisor(
 
 
 def _print_values(hypervisors: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Name",
-        "MachineType",
-        "All Cores",
-        "Avail Cores",
-        "All Ram",
-        "Avail Ram",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Name")
+    table.add_column("MachineType")
+    table.add_column("All Cores")
+    table.add_column("Avail Cores")
+    table.add_column("All Ram")
+    table.add_column("Avail Ram")
+    table.add_column("Status")
 
     for hypervisor in hypervisors:
         table.add_row(
-            [
-                hypervisor["uuid"],
-                hypervisor["name"],
-                hypervisor["machine_type"],
-                hypervisor["all_cores"],
-                hypervisor["avail_cores"],
-                hypervisor["all_ram"],
-                hypervisor["avail_ram"],
-                hypervisor["status"],
-            ]
+            hypervisor["uuid"],
+            hypervisor["name"],
+            hypervisor["machine_type"],
+            str(hypervisor["all_cores"]),
+            str(hypervisor["avail_cores"]),
+            str(hypervisor["all_ram"]),
+            str(hypervisor["avail_ram"]),
+            hypervisor["status"],
         )
 
-    click.echo(table)
+    print_table(table)

@@ -6,7 +6,9 @@ List manifests
 ## Usage
 
 ```console
-Usage: genesis manifests list [OPTIONS]
+                                                                                
+ Usage: genesis manifests list [OPTIONS]                                        
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis manifests list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis manifests list [OPTIONS]
-
-  List manifests
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis manifests list [OPTIONS]                                        
+                                                                                
+ List manifests                                                                 
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

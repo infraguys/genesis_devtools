@@ -6,7 +6,9 @@ List certificates
 ## Usage
 
 ```console
-Usage: genesis certificates list [OPTIONS]
+                                                                                
+ Usage: genesis certificates list [OPTIONS]                                     
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis certificates list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis certificates list [OPTIONS]
-
-  List certificates
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis certificates list [OPTIONS]                                     
+                                                                                
+ List certificates                                                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

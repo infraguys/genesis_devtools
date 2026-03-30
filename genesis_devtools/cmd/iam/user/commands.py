@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -82,26 +82,22 @@ def delete_user(
 
 
 def _print_values(users: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Username",
-        "First Name",
-        "Last Name",
-        "Email",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Username")
+    table.add_column("First Name")
+    table.add_column("Last Name")
+    table.add_column("Email")
+    table.add_column("Status")
 
     for user in users:
         table.add_row(
-            [
-                user["uuid"],
-                user["username"],
-                user["first_name"],
-                user["last_name"],
-                user["email"],
-                user["status"],
-            ]
+            user["uuid"],
+            user["username"],
+            user["first_name"],
+            user["last_name"],
+            user["email"],
+            user["status"],
         )
 
-    click.echo(table)
+    print_table(table)

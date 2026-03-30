@@ -6,7 +6,9 @@ Update certificate
 ## Usage
 
 ```console
-Usage: genesis certificates update [OPTIONS] UUID
+                                                                                
+ Usage: genesis certificates update [OPTIONS] UUID                              
+                                                                                
 ```
 
 ## Options
@@ -50,13 +52,16 @@ Usage: genesis certificates update [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis certificates update [OPTIONS] UUID
-
-  Update certificate
-
-Options:
-  -p, --project-id UUID   Name of the project in which to deploy the certificate
-  -n, --name TEXT         Name of the certificate
-  -D, --description TEXT  Description of the certificate
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis certificates update [OPTIONS] UUID                              
+                                                                                
+ Update certificate                                                             
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the          │
+│                          certificate                                         │
+│ --name         -n  TEXT  Name of the certificate                             │
+│ --description  -D  TEXT  Description of the certificate                      │
+│ --help                   Show this message and exit.                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

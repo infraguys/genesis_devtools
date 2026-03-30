@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -185,26 +185,22 @@ def update_certificate_cmd(
 
 
 def _print_certificates(certificates: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Email",
-        "Expiration_at",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Email")
+    table.add_column("Expiration_at")
+    table.add_column("Status")
 
     for certificate in certificates:
         table.add_row(
-            [
-                certificate["uuid"],
-                certificate["project_id"],
-                certificate["name"],
-                certificate.get("email", ""),
-                certificate["certificate"],
-                certificate["status"],
-            ]
+            certificate["uuid"],
+            certificate["project_id"],
+            certificate["name"],
+            certificate.get("email", ""),
+            certificate["certificate"],
+            certificate["status"],
         )
 
-    click.echo(table)
+    print_table(table)

@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import click
-import prettytable
+import rich_click as click
+from genesis_devtools.common.table import get_table, print_table
 
 from gcl_sdk.clients.http import base as http_client
 
@@ -113,12 +113,32 @@ def delete_ssh_key_cmd(
     default="",
     help="Description of the ssh_key",
 )
+@click.option(
+    "--node",
+    type=click.UUID,
+    required=True,
+    help="node uuid of the ssh_key",
+)
+@click.option(
+    "--user",
+    type=str,
+    required=True,
+    help="user uuid of the ssh_key",
+)
+@click.option(
+    "--target_public_key",
+    type=str,
+    default=None,
+)
 def add_ssh_key_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
     project_id: sys_uuid.UUID,
     name: str,
     description: str,
+    node: sys_uuid.UUID,
+    user: str,
+    target_public_key: str | None,
 ) -> None:
     client: http_client.CollectionBaseClient = ctx.obj.client
     if uuid is None:
@@ -129,7 +149,13 @@ def add_ssh_key_cmd(
         "project_id": str(project_id),
         "name": name,
         "description": description,
+        "kind": "node",
+        "node": str(node),
+        "user": str(user),
     }
+
+    if target_public_key is not None:
+        data["target_public_key"] = target_public_key
 
     ssh_key_resp = ssh_key_lib.add_ssh_key(client, data)
     _print_ssh_keys([ssh_key_resp])
@@ -183,22 +209,22 @@ def update_ssh_key_cmd(
 
 
 def _print_ssh_keys(ssh_keys: tp.List[dict]) -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "UUID",
-        "Project",
-        "Name",
-        "Status",
-    ]
+    table = get_table()
+    table.add_column("UUID")
+    table.add_column("Project")
+    table.add_column("Name")
+    table.add_column("Target")
+    table.add_column("User")
+    table.add_column("Status")
 
     for ssh_key in ssh_keys:
         table.add_row(
-            [
-                ssh_key["uuid"],
-                ssh_key["project_id"],
-                ssh_key["name"],
-                ssh_key["status"],
-            ]
+            ssh_key["uuid"],
+            ssh_key["project_id"],
+            ssh_key["name"],
+            ssh_key["target"],
+            ssh_key["user"],
+            ssh_key["status"],
         )
 
-    click.echo(table)
+    print_table(table)

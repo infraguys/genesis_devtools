@@ -6,7 +6,9 @@ Update password
 ## Usage
 
 ```console
-Usage: genesis passwords update [OPTIONS] UUID
+                                                                                
+ Usage: genesis passwords update [OPTIONS] UUID                                 
+                                                                                
 ```
 
 ## Options
@@ -50,13 +52,15 @@ Usage: genesis passwords update [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis passwords update [OPTIONS] UUID
-
-  Update password
-
-Options:
-  -p, --project-id UUID   Name of the project in which to deploy the password
-  -n, --name TEXT         Name of the password
-  -D, --description TEXT  Description of the password
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis passwords update [OPTIONS] UUID                                 
+                                                                                
+ Update password                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the password │
+│ --name         -n  TEXT  Name of the password                                │
+│ --description  -D  TEXT  Description of the password                         │
+│ --help                   Show this message and exit.                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

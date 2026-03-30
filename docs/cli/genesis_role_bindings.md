@@ -6,7 +6,9 @@ Manager role_bindings in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis role_bindings [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis role_bindings [OPTIONS] COMMAND [ARGS]...                       
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis role_bindings [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis role_bindings [OPTIONS] COMMAND [ARGS]...
-
-  Manager role_bindings in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete role_binding
-  list    List role_bindings
-  show    Show role_binding
+                                                                                
+ Usage: genesis role_bindings [OPTIONS] COMMAND [ARGS]...                       
+                                                                                
+ Manager role_bindings in the Genesis installation                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete               Delete role_binding                                     │
+│ list                 List role_bindings                                      │
+│ show                 Show role_binding                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

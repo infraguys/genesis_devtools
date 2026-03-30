@@ -6,7 +6,9 @@ Add a new profile to the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis profiles add [OPTIONS]
+                                                                                
+ Usage: genesis profiles add [OPTIONS]                                          
+                                                                                
 ```
 
 ## Options
@@ -61,16 +63,18 @@ Usage: genesis profiles add [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis profiles add [OPTIONS]
-
-  Add a new profile to the Genesis installation
-
-Options:
-  -u, --uuid UUID          UUID of the profile
-  -p, --project-id UUID    Name of the project in which to deploy the profile
-                           [required]
-  -n, --name TEXT          Name of the profile
-  -D, --description TEXT   Description of the profile
-  -t, --profile_type TEXT  Profile_type (ELEMENT, GLOBAL)
-  --help                   Show this message and exit.
+                                                                                
+ Usage: genesis profiles add [OPTIONS]                                          
+                                                                                
+ Add a new profile to the Genesis installation                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│    --uuid          -u  UUID  UUID of the profile                             │
+│ *  --project-id    -p  UUID  Name of the project in which to deploy the      │
+│                              profile [required]                              │
+│    --name          -n  TEXT  Name of the profile                             │
+│    --description   -D  TEXT  Description of the profile                      │
+│    --profile_type  -t  TEXT  Profile_type (ELEMENT, GLOBAL)                  │
+│    --help                    Show this message and exit.                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

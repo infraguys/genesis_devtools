@@ -6,7 +6,9 @@ Show ssh_key
 ## Usage
 
 ```console
-Usage: genesis ssh_keys show [OPTIONS] UUID
+                                                                                
+ Usage: genesis ssh_keys show [OPTIONS] UUID                                    
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis ssh_keys show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis ssh_keys show [OPTIONS] UUID
-
-  Show ssh_key
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis ssh_keys show [OPTIONS] UUID                                    
+                                                                                
+ Show ssh_key                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ List permission_bindings
 ## Usage
 
 ```console
-Usage: genesis permission_bindings list [OPTIONS]
+                                                                                
+ Usage: genesis permission_bindings list [OPTIONS]                              
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis permission_bindings list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis permission_bindings list [OPTIONS]
-
-  List permission_bindings
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis permission_bindings list [OPTIONS]                              
+                                                                                
+ List permission_bindings                                                       
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

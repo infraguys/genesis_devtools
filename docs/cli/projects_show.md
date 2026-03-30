@@ -6,7 +6,9 @@ Show project
 ## Usage
 
 ```console
-Usage: genesis projects show [OPTIONS] UUID
+                                                                                
+ Usage: genesis projects show [OPTIONS] UUID                                    
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis projects show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis projects show [OPTIONS] UUID
-
-  Show project
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis projects show [OPTIONS] UUID                                    
+                                                                                
+ Show project                                                                   
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,7 +6,9 @@ Show certificate
 ## Usage
 
 ```console
-Usage: genesis certificates show [OPTIONS] UUID
+                                                                                
+ Usage: genesis certificates show [OPTIONS] UUID                                
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis certificates show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis certificates show [OPTIONS] UUID
-
-  Show certificate
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis certificates show [OPTIONS] UUID                                
+                                                                                
+ Show certificate                                                               
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

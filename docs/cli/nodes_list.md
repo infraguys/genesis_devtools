@@ -6,7 +6,9 @@ List nodes
 ## Usage
 
 ```console
-Usage: genesis nodes list [OPTIONS]
+                                                                                
+ Usage: genesis nodes list [OPTIONS]                                            
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis nodes list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis nodes list [OPTIONS]
-
-  List nodes
-
-Options:
-  -P, --project-id TEXT  Filter nodes by project
-  --help                 Show this message and exit.
+                                                                                
+ Usage: genesis nodes list [OPTIONS]                                            
+                                                                                
+ List nodes                                                                     
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --project-id  -P  TEXT  Filter nodes by project                              │
+│ --help                  Show this message and exit.                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

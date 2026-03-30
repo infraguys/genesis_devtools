@@ -6,7 +6,9 @@ List roles
 ## Usage
 
 ```console
-Usage: genesis roles list [OPTIONS]
+                                                                                
+ Usage: genesis roles list [OPTIONS]                                            
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis roles list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis roles list [OPTIONS]
-
-  List roles
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis roles list [OPTIONS]                                            
+                                                                                
+ List roles                                                                     
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -18,6 +18,7 @@ from __future__ import annotations
 import cowsay
 import os
 import requests
+from requests.exceptions import RequestException
 import time
 import shutil
 import typing as tp
@@ -30,11 +31,12 @@ import uuid as sys_uuid
 import json
 
 import yaml
-import click
-import prettytable
+import rich_click as click
 
+from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
 
+from genesis_devtools.common.table import get_table, print_table
 import genesis_devtools.constants as c
 from genesis_devtools import utils
 from genesis_devtools.backup import base as backup_base
@@ -66,6 +68,7 @@ from genesis_devtools.cmd.secret.passwords import commands as password_commands
 from genesis_devtools.cmd.secret.rsa_keys import commands as rsa_keys_commands
 from genesis_devtools.cmd.secret.ssh_keys import commands as ssh_keys_commands
 
+from genesis_devtools.cmd.settings import commands as settings_commands
 from genesis_devtools.cmd.hypervisors import commands as hypervisors_commands
 from genesis_devtools.cmd.manifests import commands as manifests_commands
 from genesis_devtools.cmd.initialization import commands as initialization_commands
@@ -88,6 +91,7 @@ GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
 
 class CmdContext(tp.NamedTuple):
     client: http_client.CollectionBaseClient
+    cfg_path: str
 
 
 @click.group(
@@ -96,7 +100,7 @@ class CmdContext(tp.NamedTuple):
 )
 @click.option(
     "--config",
-    default=os.path.expanduser("~/.genesis/genesisctl.yaml"),
+    default=c.CONFIG_FILE,
     show_default=True,
     type=click.Path(exists=False, dir_okay=False),
     help="Path to YAML config file",
@@ -127,10 +131,21 @@ class CmdContext(tp.NamedTuple):
     help="access token for the client user",
 )
 @click.option(
-    "-r",
     "--refresh_token",
     default=None,
     help="refresh token for the client user",
+)
+@click.option(
+    "-r",
+    "--realm",
+    type=str,
+    help="Name of the realm",
+)
+@click.option(
+    "-c",
+    "--context",
+    type=str,
+    help="Name of the context",
 )
 @click.option(
     "-P",
@@ -148,56 +163,44 @@ def genesis(
     password: str | None,
     access_token: str | None,
     refresh_token: str | None,
+    realm: str | None,
+    context: str | None,
     project_id: sys_uuid.UUID | None,
 ) -> None:
     # Load configuration from file (if exists)
-    cfg_path = os.path.expanduser(config) if config else None
-    cfg: dict = {}
-    if cfg_path and os.path.exists(cfg_path):
-        try:
-            with open(cfg_path, "r", encoding="utf-8") as f:
-                loaded = yaml.safe_load(f) or {}
-        except OSError as e:
-            raise click.ClickException(f"Could not read config file '{cfg_path}': {e}")
-        except yaml.YAMLError as e:
-            raise click.ClickException(f"Error parsing YAML file '{cfg_path}': {e}")
+    cfg_path = config if config else None
+    cfg = settings_commands.load_config(cfg_path)
 
-        if not isinstance(loaded, dict):
-            raise click.ClickException("Config file must contain a YAML mapping")
-        cfg = loaded
+    realm_conf = settings_commands.get_realm(cfg, realm)
+    context_conf = settings_commands.get_context(realm_conf, context)
 
     # Determine parameter sources to respect CLI priority over config
     ps = ctx.get_parameter_source
 
-    def _get_final_value(param_name: str, cli_value: tp.Any) -> tp.Any:
+    def _get_final_value(
+        param_name: str, cli_value: tp.Any, base_conf: dict, direct_conf: dict
+    ) -> tp.Any:
         if ps(param_name) == click.core.ParameterSource.COMMANDLINE:
             return cli_value
-        return cfg.get(param_name, cli_value)
+        return direct_conf.get(param_name, base_conf.get(param_name, cli_value))
 
-    if cfg.get("check_updates", False) and should_check_version():
+    final_endpoint = _get_final_value("endpoint", endpoint, cfg, realm_conf)
+    final_check_updates = _get_final_value("check_updates", False, cfg, realm_conf)
+    final_user = _get_final_value("user", user, cfg, context_conf)
+    final_password = _get_final_value("password", password, cfg, context_conf)
+    final_access_token = _get_final_value(
+        "access_token", access_token, cfg, context_conf
+    )
+    final_refresh_token = _get_final_value(
+        "refresh_token", refresh_token, cfg, context_conf
+    )
+
+    if final_check_updates and should_check_version():
         check_latest_version()
         save_last_check_time()
 
-    final_endpoint = _get_final_value("endpoint", endpoint)
-    final_user = _get_final_value("user", user)
-    final_password = _get_final_value("password", password)
-    final_access_token = _get_final_value("access_token", access_token)
-    final_refresh_token = _get_final_value("refresh_token", refresh_token)
+    final_project_id = _get_final_value("project_id", project_id, cfg, context_conf)
 
-    # Project ID
-    final_project_id = None
-    if ps("project_id") == click.core.ParameterSource.COMMANDLINE:
-        final_project_id = project_id
-    else:
-        if cfg_project := cfg.get("project_id"):
-            try:
-                final_project_id = sys_uuid.UUID(str(cfg_project))
-            except (ValueError, AttributeError) as exc:
-                raise click.ClickException(
-                    f"Invalid project_id in config: {cfg_project}"
-                ) from exc
-
-    # Prepare a client
     if final_project_id is not None:
         scope = http_client.CoreIamAuthenticator.project_scope(final_project_id)
     else:
@@ -215,7 +218,7 @@ def genesis(
         base_url=final_endpoint,
         auth=auth,
     )
-    ctx.obj = CmdContext(client)
+    ctx.obj = CmdContext(client, config)
 
 
 def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
@@ -553,7 +556,7 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
 @click.option(
     "-r",
     "--repository",
-    default="https://repository.genesis-core.tech/",
+    default=f"{c.GENESIS_REPO_URL}/",
     type=str,
     help="Default element repository",
     show_default=True,
@@ -786,12 +789,10 @@ def conn_cmd(stand: str | None, username: str) -> None:
 
 @genesis.command("ps", help="List of running genesis installation")
 def ps_cmd() -> None:
-    table = prettytable.PrettyTable()
-    table.field_names = [
-        "name",
-        "nodes",
-        "IP",
-    ]
+    table = get_table()
+    table.add_column("name")
+    table.add_column("nodes")
+    table.add_column("IP")
 
     infra = libvirt_infra.LibvirtInfraDriver()
 
@@ -802,10 +803,10 @@ def ps_cmd() -> None:
             ip = stand.network.cidr[2]
 
         nodes = len(stand.bootstraps) + len(stand.baremetals)
-        table.add_row([stand.name, nodes, ip])
+        table.add_row(stand.name, nodes, ip)
 
     click.echo("Genesis installations:")
-    click.echo(table)
+    print_table(table)
 
 
 @genesis.command("delete", help="Delete the genesis stand/element")
@@ -1464,6 +1465,7 @@ genesis.add_command(password_commands.passwords_group)  # noqa
 genesis.add_command(rsa_keys_commands.rsa_keys_group)  # noqa
 genesis.add_command(ssh_keys_commands.ssh_keys_group)  # noqa
 
+genesis.add_command(settings_commands.settings_group)  # noqa
 genesis.add_command(hypervisors_commands.hypervisors_group)  # noqa
 genesis.add_command(manifests_commands.manifests_group)  # noqa
 genesis.add_command(nodes_commands.nodes_group)  # noqa
@@ -1479,8 +1481,17 @@ genesis.add_command(vars_commands.variables_group)  # noqa
 
 
 # Initialization
-genesis.add_command(initialization_commands.init_cmd)
+genesis.add_command(initialization_commands.init_cmd)  # noqa
 
 
 if __name__ == "__main__":
-    genesis()
+    try:
+        genesis()
+    except bazooka_exc.BaseHTTPException as e:
+        click.secho(f"Error: [{e.code}] {e.cause.response.text}", fg="red")
+    except RequestException as e:
+        if e.response is not None:
+            click.secho(
+                f"Error: [{e.response.status_code}] {e.response.text}", fg="red"
+            )
+        click.secho(f"Error: {e}", fg="red")

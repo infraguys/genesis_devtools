@@ -6,7 +6,9 @@ Platformize the project
 ## Usage
 
 ```console
-Usage: genesis init [OPTIONS]
+                                                                                
+ Usage: genesis init [OPTIONS]                                                  
+                                                                                
 ```
 
 ## Options
@@ -35,14 +37,9 @@ Usage: genesis init [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis init [OPTIONS]
-
-  Platformize the project
-
-Options:
-  --force             Overwrite existing generated files
-  --project-dir PATH  Project directory  [default: .]
-  --help              Show this message and exit.
+                                                                                
+ Usage: genesis init [OPTIONS]                                                  
+                                                                                
 
 Dynamic options (derived from scenario actions):
 

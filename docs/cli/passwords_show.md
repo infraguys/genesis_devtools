@@ -6,7 +6,9 @@ Show password
 ## Usage
 
 ```console
-Usage: genesis passwords show [OPTIONS] UUID
+                                                                                
+ Usage: genesis passwords show [OPTIONS] UUID                                   
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis passwords show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis passwords show [OPTIONS] UUID
-
-  Show password
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis passwords show [OPTIONS] UUID                                   
+                                                                                
+ Show password                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

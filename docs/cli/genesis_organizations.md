@@ -6,7 +6,9 @@ Manager organizations in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis organizations [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis organizations [OPTIONS] COMMAND [ARGS]...                       
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis organizations [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis organizations [OPTIONS] COMMAND [ARGS]...
-
-  Manager organizations in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete organization
-  list    List organizations
-  show    Show organization
+                                                                                
+ Usage: genesis organizations [OPTIONS] COMMAND [ARGS]...                       
+                                                                                
+ Manager organizations in the Genesis installation                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete               Delete organization                                     │
+│ list                 List organizations                                      │
+│ show                 Show organization                                       │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

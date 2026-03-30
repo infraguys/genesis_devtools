@@ -20,6 +20,7 @@ import typing as tp
 PKG_NAME = "genesis_devtools"
 GITHUB_RELEASES_URL = f"https://api.github.com/repos/infraguys/{PKG_NAME}/releases"
 GENESIS_REPO_URL = "https://repository.genesis-core.tech"
+ELEMENT_REPO_URL = f"{GENESIS_REPO_URL}/genesis-elements"
 LIBVIRT_DEF_POOL_PATH = "/var/lib/libvirt/images"
 DEF_GEN_CFG_FILE_NAME = "genesis.yaml"
 DEF_GEN_WORK_DIR_NAME = "genesis"
@@ -76,7 +77,7 @@ PERMISSION_BINDING_COLLECTION = "/v1/iam/permission_bindings/"
 
 # Cli
 CONFIG_DIR = "~/.genesis"
-CONFIG_FILE = f"{CONFIG_DIR}/genesisctl.yaml"
+CONFIG_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.yaml")
 LAST_CHECK_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.last_version_check")
 UPDATE_CHECK_INTERVAL = 60 * 60  # 1 hour in seconds
 

@@ -6,7 +6,9 @@ Show client
 ## Usage
 
 ```console
-Usage: genesis clients show [OPTIONS] UUID
+                                                                                
+ Usage: genesis clients show [OPTIONS] UUID                                     
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis clients show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis clients show [OPTIONS] UUID
-
-  Show client
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis clients show [OPTIONS] UUID                                     
+                                                                                
+ Show client                                                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

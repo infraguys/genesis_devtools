@@ -6,7 +6,9 @@ Show permission
 ## Usage
 
 ```console
-Usage: genesis permissions show [OPTIONS] UUID
+                                                                                
+ Usage: genesis permissions show [OPTIONS] UUID                                 
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis permissions show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis permissions show [OPTIONS] UUID
-
-  Show permission
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis permissions show [OPTIONS] UUID                                 
+                                                                                
+ Show permission                                                                
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

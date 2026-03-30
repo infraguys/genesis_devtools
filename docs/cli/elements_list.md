@@ -6,7 +6,9 @@ List elements
 ## Usage
 
 ```console
-Usage: genesis elements list [OPTIONS]
+                                                                                
+ Usage: genesis elements list [OPTIONS]                                         
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis elements list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis elements list [OPTIONS]
-
-  List elements
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis elements list [OPTIONS]                                         
+                                                                                
+ List elements                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

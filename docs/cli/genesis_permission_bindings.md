@@ -6,7 +6,9 @@ Manager permission_bindings in the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis permission_bindings [OPTIONS] COMMAND [ARGS]...
+                                                                                
+ Usage: genesis permission_bindings [OPTIONS] COMMAND [ARGS]...                 
+                                                                                
 ```
 
 ## Options
@@ -21,15 +23,17 @@ Usage: genesis permission_bindings [OPTIONS] COMMAND [ARGS]...
 ## CLI Help
 
 ```console
-Usage: genesis permission_bindings [OPTIONS] COMMAND [ARGS]...
-
-  Manager permission_bindings in the Genesis installation
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  delete  Delete permission_binding
-  list    List permission_bindings
-  show    Show permission_binding
+                                                                                
+ Usage: genesis permission_bindings [OPTIONS] COMMAND [ARGS]...                 
+                                                                                
+ Manager permission_bindings in the Genesis installation                        
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ delete            Delete permission_binding                                  │
+│ list              List permission_bindings                                   │
+│ show              Show permission_binding                                    │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

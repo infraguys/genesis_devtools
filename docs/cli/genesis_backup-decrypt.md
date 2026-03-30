@@ -6,7 +6,9 @@ Decrypt a backup file
 ## Usage
 
 ```console
-Usage: genesis backup-decrypt [OPTIONS] PATH
+                                                                                
+ Usage: genesis backup-decrypt [OPTIONS] PATH                                   
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis backup-decrypt [OPTIONS] PATH
 ## CLI Help
 
 ```console
-Usage: genesis backup-decrypt [OPTIONS] PATH
-
-  Decrypt a backup file
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis backup-decrypt [OPTIONS] PATH                                   
+                                                                                
+ Decrypt a backup file                                                          
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

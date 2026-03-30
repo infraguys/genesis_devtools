@@ -6,7 +6,9 @@ List values
 ## Usage
 
 ```console
-Usage: genesis values list [OPTIONS]
+                                                                                
+ Usage: genesis values list [OPTIONS]                                           
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis values list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis values list [OPTIONS]
-
-  List values
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis values list [OPTIONS]                                           
+                                                                                
+ List values                                                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

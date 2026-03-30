@@ -1,0 +1,34 @@
+
+# settings_current-realm
+
+Display the current-realm
+
+## Usage
+
+```console
+                                                                                
+ Usage: genesis settings current-realm [OPTIONS]                                
+                                                                                
+```
+
+## Options
+
+* `help`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--help`
+
+  Show this message and exit.
+
+## CLI Help
+
+```console
+                                                                                
+ Usage: genesis settings current-realm [OPTIONS]                                
+                                                                                
+ Display the current-realm                                                      
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```

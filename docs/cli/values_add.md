@@ -6,7 +6,9 @@ Add a new value to the Genesis installation
 ## Usage
 
 ```console
-Usage: genesis values add [OPTIONS]
+                                                                                
+ Usage: genesis values add [OPTIONS]                                            
+                                                                                
 ```
 
 ## Options
@@ -68,17 +70,19 @@ Usage: genesis values add [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis values add [OPTIONS]
-
-  Add a new value to the Genesis installation
-
-Options:
-  -u, --uuid UUID         UUID of the value
-  -p, --project-id UUID   Name of the project in which to deploy the value
-                          [required]
-  -n, --name TEXT         Name of the value
-  -D, --description TEXT  Description of the value
-  --var TEXT              UUID of a variable the value belongs to
-  -V, --value TEXT        value
-  --help                  Show this message and exit.
+                                                                                
+ Usage: genesis values add [OPTIONS]                                            
+                                                                                
+ Add a new value to the Genesis installation                                    
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the value                                │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the value │
+│                             [required]                                       │
+│    --name         -n  TEXT  Name of the value                                │
+│    --description  -D  TEXT  Description of the value                         │
+│    --var              TEXT  UUID of a variable the value belongs to          │
+│    --value        -V  TEXT  value                                            │
+│    --help                   Show this message and exit.                      │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

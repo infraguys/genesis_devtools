@@ -6,7 +6,9 @@ Delete permission
 ## Usage
 
 ```console
-Usage: genesis permissions delete [OPTIONS]
+                                                                                
+ Usage: genesis permissions delete [OPTIONS]                                    
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis permissions delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis permissions delete [OPTIONS]
-
-  Delete permission
-
-Options:
-  -u, --uuid UUID  permission UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis permissions delete [OPTIONS]                                    
+                                                                                
+ Delete permission                                                              
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  permission UUID                                            │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

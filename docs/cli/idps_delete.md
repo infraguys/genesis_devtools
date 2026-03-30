@@ -6,7 +6,9 @@ Delete idp
 ## Usage
 
 ```console
-Usage: genesis idps delete [OPTIONS]
+                                                                                
+ Usage: genesis idps delete [OPTIONS]                                           
+                                                                                
 ```
 
 ## Options
@@ -29,11 +31,13 @@ Usage: genesis idps delete [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis idps delete [OPTIONS]
-
-  Delete idp
-
-Options:
-  -u, --uuid UUID  idp UUID
-  --help           Show this message and exit.
+                                                                                
+ Usage: genesis idps delete [OPTIONS]                                           
+                                                                                
+ Delete idp                                                                     
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  idp UUID                                                   │
+│ --help            Show this message and exit.                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

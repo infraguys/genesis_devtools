@@ -6,7 +6,9 @@ List rsa_keys
 ## Usage
 
 ```console
-Usage: genesis rsa_keys list [OPTIONS]
+                                                                                
+ Usage: genesis rsa_keys list [OPTIONS]                                         
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis rsa_keys list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis rsa_keys list [OPTIONS]
-
-  List rsa_keys
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis rsa_keys list [OPTIONS]                                         
+                                                                                
+ List rsa_keys                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -22,7 +22,7 @@ import base64 as base64_lib
 import typing as tp
 import uuid as sys_uuid
 
-import click
+import rich_click as click
 from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools import logger

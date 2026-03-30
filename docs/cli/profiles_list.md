@@ -6,7 +6,9 @@ List profiles
 ## Usage
 
 ```console
-Usage: genesis profiles list [OPTIONS]
+                                                                                
+ Usage: genesis profiles list [OPTIONS]                                         
+                                                                                
 ```
 
 ## Options
@@ -21,10 +23,12 @@ Usage: genesis profiles list [OPTIONS]
 ## CLI Help
 
 ```console
-Usage: genesis profiles list [OPTIONS]
-
-  List profiles
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis profiles list [OPTIONS]                                         
+                                                                                
+ List profiles                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```

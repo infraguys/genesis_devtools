@@ -6,7 +6,9 @@ Show variable
 ## Usage
 
 ```console
-Usage: genesis vars show [OPTIONS] UUID
+                                                                                
+ Usage: genesis vars show [OPTIONS] UUID                                        
+                                                                                
 ```
 
 ## Options
@@ -26,10 +28,12 @@ Usage: genesis vars show [OPTIONS] UUID
 ## CLI Help
 
 ```console
-Usage: genesis vars show [OPTIONS] UUID
-
-  Show variable
-
-Options:
-  --help  Show this message and exit.
+                                                                                
+ Usage: genesis vars show [OPTIONS] UUID                                        
+                                                                                
+ Show variable                                                                  
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
