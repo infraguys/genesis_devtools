@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import os
 import json
+from packaging import version
 import pathlib
 import requests
 
@@ -64,6 +65,12 @@ class NginxRepoDriver(base.AbstractRepoDriver):
             f"{self._base_url}/genesis-elements"
             f"/{element.name}/{element.version}/inventory.json"
         )
+
+    def elements_inventory_path_latest(
+        self, element: builder_base.ElementInventory
+    ) -> str:
+        """Get the base path for elements in the repository."""
+        return f"{self._base_url}/genesis-elements/{element.name}/latest/inventory.json"
 
     def _upload_file(self, local_path: str, remote_path: str) -> None:
         """Upload a file to the Nginx server.
@@ -167,7 +174,9 @@ class NginxRepoDriver(base.AbstractRepoDriver):
 
         self._logger.info(f"Deleted repo at {self._base_url}")
 
-    def push(self, element: builder_base.ElementInventory) -> None:
+    def push(
+        self, element: builder_base.ElementInventory, latest: bool = False
+    ) -> None:
         """Push the element to the repo."""
         element_url = f"{self.elements_path}/{element.name}/{element.version}"
 
@@ -204,6 +213,30 @@ class NginxRepoDriver(base.AbstractRepoDriver):
         response.raise_for_status()
 
         self._logger.info(f"Pushed {element.name} version {element.version}")
+
+        if latest and not version.parse(element.version).is_prerelease:
+            element_url_latest = f"{self.elements_path}/{element.name}/latest"
+
+            for category in element.categories():
+                if artifacts := getattr(element, category):
+                    for artifact in artifacts:
+                        self._upload_file(
+                            artifact,
+                            f"{element_url_latest}/{category}/{os.path.basename(artifact)}",
+                        )
+                        self._logger.info(
+                            f"Uploaded {os.path.basename(artifact)} to "
+                            f"{element.name}/latest"
+                        )
+
+            # Upload the inventory file
+            response = self._session.put(
+                self.elements_inventory_path_latest(element),
+                data=json.dumps(spec, indent=2).encode("utf-8"),
+            )
+            response.raise_for_status()
+
+            self._logger.info(f"Pushed {element.name} version latest")
 
     def pull(self, element: builder_base.ElementInventory, dst_path: str) -> None:
         """Pull the element from the repo."""

@@ -60,7 +60,9 @@ class AbstractRepoDriver(abc.ABC):
         """Delete the repo."""
 
     @abc.abstractmethod
-    def push(self, element: builder_base.ElementInventory) -> None:
+    def push(
+        self, element: builder_base.ElementInventory, latest: bool = False
+    ) -> None:
         """Push the element to the repo."""
 
     @abc.abstractmethod
