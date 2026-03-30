@@ -1132,6 +1132,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../genesis_settings/" class="md-nav__link">
+        genesis_settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../genesis_ssh/" class="md-nav__link">
         genesis_ssh
       </a>
@@ -1300,20 +1314,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../manifests_install/" class="md-nav__link">
-        manifests_install
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../manifests_list/" class="md-nav__link">
         manifests_list
       </a>
@@ -1330,34 +1330,6 @@
     <li class="md-nav__item">
       <a href="../manifests_show/" class="md-nav__link">
         manifests_show
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_uninstall/" class="md-nav__link">
-        manifests_uninstall
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_update/" class="md-nav__link">
-        manifests_update
       </a>
     </li>
   
@@ -2042,6 +2014,174 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_current-realm/" class="md-nav__link">
+        settings_current-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-context/" class="md-nav__link">
+        settings_delete-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-realm/" class="md-nav__link">
+        settings_delete-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_get/" class="md-nav__link">
+        settings_get
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_list-realms/" class="md-nav__link">
+        settings_list-realms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_rename-context/" class="md-nav__link">
+        settings_rename-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-context/" class="md-nav__link">
+        settings_set-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-realm/" class="md-nav__link">
+        settings_set-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set/" class="md-nav__link">
+        settings_set
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_unset/" class="md-nav__link">
+        settings_unset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_use-realm/" class="md-nav__link">
+        settings_use-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_view/" class="md-nav__link">
+        settings_view
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ssh_keys_add/" class="md-nav__link">
         ssh_keys_add
       </a>
@@ -2329,7 +2469,9 @@
 <h1 id="genesis">genesis<a class="headerlink" href="#genesis" title="Permanent link">#</a></h1>
 <p>Provides all the necessary tools for work with Genesis Platform</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis [OPTIONS] COMMAND [ARGS]...</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis [OPTIONS] COMMAND [ARGS]...                                     </span>
+<span class="go">                                                                                </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
@@ -2385,12 +2527,31 @@
 <li><code>refresh_token</code>:<ul>
 <li>Type: text</li>
 <li>Default: <code>none</code></li>
-<li>Usage: <code>-r
---refresh_token</code></li>
+<li>Usage: <code>--refresh_token</code></li>
 </ul>
 </li>
 </ul>
 <p>refresh token for the client user</p>
+<ul>
+<li><code>realm</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>-r
+--realm</code></li>
+</ul>
+</li>
+</ul>
+<p>Name of the realm</p>
+<ul>
+<li><code>context</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>-c
+--context</code></li>
+</ul>
+</li>
+</ul>
+<p>Name of the context</p>
 <ul>
 <li><code>project_id</code>:<ul>
 <li>Type: uuid</li>
@@ -2411,63 +2572,72 @@
 </ul>
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis [OPTIONS] COMMAND [ARGS]...</span>
-
-<span class="go">  Provides all the necessary tools for work with Genesis Platform</span>
-
-<span class="go">Options:</span>
-<span class="go">  --config FILE             Path to YAML config file  [default:</span>
-<span class="go">                            /home/user/.genesis/genesisctl.yaml]</span>
-<span class="go">  -e, --endpoint TEXT       Genesis API endpoint  [default:</span>
-<span class="go">                            http://localhost:11010]</span>
-<span class="go">  -u, --user TEXT           Client user name</span>
-<span class="go">  -p, --password TEXT       Password for the client user</span>
-<span class="go">  -a, --access_token TEXT   access token for the client user</span>
-<span class="go">  -r, --refresh_token TEXT  refresh token for the client user</span>
-<span class="go">  -P, --project-id UUID     Project ID for the client user</span>
-<span class="go">  --help                    Show this message and exit.</span>
-
-<span class="go">Commands:</span>
-<span class="go">  auth                 Authenticate and manage IAM token</span>
-<span class="go">  autocomplete_help    Display a autocomplete help</span>
-<span class="go">  backup               Backup the current installation</span>
-<span class="go">  backup-decrypt       Decrypt a backup file</span>
-<span class="go">  bootstrap            Bootstrap genesis locally</span>
-<span class="go">  build                Build a Genesis element.</span>
-<span class="go">  certificates         Manage certificates in the Genesis installation</span>
-<span class="go">  clients              Manager clients in the Genesis installation</span>
-<span class="go">  configs              Manager configs in the Genesis installation</span>
-<span class="go">  cowsay               Display a cow message</span>
-<span class="go">  delete               Delete the genesis stand/element</span>
-<span class="go">  elements             Manage elements in the Genesis installation</span>
-<span class="go">  get-version          Return the version of the project</span>
-<span class="go">  hello                Display a genesis message</span>
-<span class="go">  hypervisors          Manager hypervisors in the Genesis installation</span>
-<span class="go">  idps                 Manager idps in the Genesis installation</span>
-<span class="go">  init                 Platformize the project</span>
-<span class="go">  latest               Check for the latest version on GitHub</span>
-<span class="go">  manifests            Manage manifests in the Genesis installation</span>
-<span class="go">  nodes                Manager nodes in the Genesis installation</span>
-<span class="go">  organizations        Manager organizations in the Genesis installation</span>
-<span class="go">  passwords            Manage passwords in the Genesis installation</span>
-<span class="go">  permission_bindings  Manager permission_bindings in the Genesis installation</span>
-<span class="go">  permissions          Manager permissions in the Genesis installation</span>
-<span class="go">  profiles             Manage profiles in the Genesis installation</span>
-<span class="go">  projects             Manager projects in the Genesis installation</span>
-<span class="go">  ps                   List of running genesis installation</span>
-<span class="go">  push                 Push the element to the repository</span>
-<span class="go">  repo                 Manager Genesis repository</span>
-<span class="go">  resources            Manage resources in the Genesis installation</span>
-<span class="go">  role_bindings        Manager role_bindings in the Genesis installation</span>
-<span class="go">  roles                Manager roles in the Genesis installation</span>
-<span class="go">  rsa_keys             Manage rsa_keys in the Genesis installation</span>
-<span class="go">  services             Manage services in the Genesis installation</span>
-<span class="go">  ssh                  Connect to genesis stand/element</span>
-<span class="go">  ssh_keys             Manage ssh_keys in the Genesis installation</span>
-<span class="go">  users                Manager users in the Genesis installation</span>
-<span class="go">  values               Manage values in the Genesis installation</span>
-<span class="go">  vars                 Manage variables in the Genesis installation</span>
-<span class="go">  version              Prints the genesis_devtools version</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis [OPTIONS] COMMAND [ARGS]...                                     </span>
+<span class="go">                                                                                </span>
+<span class="go"> Provides all the necessary tools for work with Genesis Platform                </span>
+<span class="go">                                                                                </span>
+<span class="go">╭─ Options ────────────────────────────────────────────────────────────────────╮</span>
+<span class="go">│ --config             FILE  Path to YAML config file [default:                │</span>
+<span class="go">│                            /home/user/.genesis/genesisctl.yaml]              │</span>
+<span class="go">│ --endpoint       -e  TEXT  Genesis API endpoint [default:                    │</span>
+<span class="go">│                            http://localhost:11010]                           │</span>
+<span class="go">│ --user           -u  TEXT  Client user name                                  │</span>
+<span class="go">│ --password       -p  TEXT  Password for the client user                      │</span>
+<span class="go">│ --access_token   -a  TEXT  access token for the client user                  │</span>
+<span class="go">│ --refresh_token      TEXT  refresh token for the client user                 │</span>
+<span class="go">│ --realm          -r  TEXT  Name of the realm                                 │</span>
+<span class="go">│ --context        -c  TEXT  Name of the context                               │</span>
+<span class="go">│ --project-id     -P  UUID  Project ID for the client user                    │</span>
+<span class="go">│ --help                     Show this message and exit.                       │</span>
+<span class="go">╰──────────────────────────────────────────────────────────────────────────────╯</span>
+<span class="go">╭─ Commands ───────────────────────────────────────────────────────────────────╮</span>
+<span class="go">│ auth                 Authenticate and manage IAM token                       │</span>
+<span class="go">│ autocomplete_help    Display a autocomplete help                             │</span>
+<span class="go">│ backup               Backup the current installation                         │</span>
+<span class="go">│ backup-decrypt       Decrypt a backup file                                   │</span>
+<span class="go">│ bootstrap            Bootstrap genesis locally                               │</span>
+<span class="go">│ build                Build a Genesis element. The command build all images,  │</span>
+<span class="go">│                      manifests and other artifacts required for the element. │</span>
+<span class="go">│                      The manifest in the project may be a raw YAML file or a │</span>
+<span class="go">│                      template using Jinja2 templates. For Jinja2 templates,  │</span>
+<span class="go">│                      the following variables are available by default:       │</span>
+<span class="go">│ certificates         Manage certificates in the Genesis installation         │</span>
+<span class="go">│ clients              Manager clients in the Genesis installation             │</span>
+<span class="go">│ configs              Manager configs in the Genesis installation             │</span>
+<span class="go">│ cowsay               Display a cow message                                   │</span>
+<span class="go">│ delete               Delete the genesis stand/element                        │</span>
+<span class="go">│ elements             Manage elements in the Genesis installation             │</span>
+<span class="go">│ get-version          Return the version of the project                       │</span>
+<span class="go">│ hello                Display a genesis message                               │</span>
+<span class="go">│ hypervisors          Manager hypervisors in the Genesis installation         │</span>
+<span class="go">│ idps                 Manager idps in the Genesis installation                │</span>
+<span class="go">│ init                 Platformize the project                                 │</span>
+<span class="go">│ latest               Check for the latest version on GitHub                  │</span>
+<span class="go">│ manifests            Manage manifests in the Genesis installation            │</span>
+<span class="go">│ nodes                Manager nodes in the Genesis installation               │</span>
+<span class="go">│ organizations        Manager organizations in the Genesis installation       │</span>
+<span class="go">│ passwords            Manage passwords in the Genesis installation            │</span>
+<span class="go">│ permission_bindings  Manager permission_bindings in the Genesis installation │</span>
+<span class="go">│ permissions          Manager permissions in the Genesis installation         │</span>
+<span class="go">│ profiles             Manage profiles in the Genesis installation             │</span>
+<span class="go">│ projects             Manager projects in the Genesis installation            │</span>
+<span class="go">│ ps                   List of running genesis installation                    │</span>
+<span class="go">│ push                 Push the element to the repository                      │</span>
+<span class="go">│ repo                 Manager Genesis repository                              │</span>
+<span class="go">│ resources            Manage resources in the Genesis installation            │</span>
+<span class="go">│ role_bindings        Manager role_bindings in the Genesis installation       │</span>
+<span class="go">│ roles                Manager roles in the Genesis installation               │</span>
+<span class="go">│ rsa_keys             Manage rsa_keys in the Genesis installation             │</span>
+<span class="go">│ services             Manage services in the Genesis installation             │</span>
+<span class="go">│ settings             Modify genesis settings files                           │</span>
+<span class="go">│ ssh                  Connect to genesis stand/element                        │</span>
+<span class="go">│ ssh_keys             Manage ssh_keys in the Genesis installation             │</span>
+<span class="go">│ users                Manager users in the Genesis installation               │</span>
+<span class="go">│ values               Manage values in the Genesis installation               │</span>
+<span class="go">│ vars                 Manage variables in the Genesis installation            │</span>
+<span class="go">│ version              Prints the genesis_devtools version                     │</span>
+<span class="go">╰──────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

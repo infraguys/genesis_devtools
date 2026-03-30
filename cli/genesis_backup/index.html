@@ -1132,6 +1132,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../genesis_settings/" class="md-nav__link">
+        genesis_settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../genesis_ssh/" class="md-nav__link">
         genesis_ssh
       </a>
@@ -1300,20 +1314,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../manifests_install/" class="md-nav__link">
-        manifests_install
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../manifests_list/" class="md-nav__link">
         manifests_list
       </a>
@@ -1330,34 +1330,6 @@
     <li class="md-nav__item">
       <a href="../manifests_show/" class="md-nav__link">
         manifests_show
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_uninstall/" class="md-nav__link">
-        manifests_uninstall
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_update/" class="md-nav__link">
-        manifests_update
       </a>
     </li>
   
@@ -2042,6 +2014,174 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_current-realm/" class="md-nav__link">
+        settings_current-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-context/" class="md-nav__link">
+        settings_delete-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-realm/" class="md-nav__link">
+        settings_delete-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_get/" class="md-nav__link">
+        settings_get
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_list-realms/" class="md-nav__link">
+        settings_list-realms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_rename-context/" class="md-nav__link">
+        settings_rename-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-context/" class="md-nav__link">
+        settings_set-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-realm/" class="md-nav__link">
+        settings_set-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set/" class="md-nav__link">
+        settings_set
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_unset/" class="md-nav__link">
+        settings_unset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_use-realm/" class="md-nav__link">
+        settings_use-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_view/" class="md-nav__link">
+        settings_view
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ssh_keys_add/" class="md-nav__link">
         ssh_keys_add
       </a>
@@ -2329,7 +2469,9 @@
 <h1 id="genesis_backup">genesis_backup<a class="headerlink" href="#genesis_backup" title="Permanent link">#</a></h1>
 <p>Backup the current installation</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis backup [OPTIONS]</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis backup [OPTIONS]                                                </span>
+<span class="go">                                                                                </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
@@ -2459,41 +2601,60 @@
 </ul>
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis backup [OPTIONS]</span>
-
-<span class="go">  Backup the current installation</span>
-
-<span class="go">Options:</span>
-<span class="go">  --config PATH                   Path to the backuper configuration file</span>
-<span class="go">  -n, --name TEXT                 Name of the libvirt domain, if not provided,</span>
-<span class="go">                                  all will be backed up</span>
-<span class="go">  -d, --backup-dir PATH           Directory where backups will be stored</span>
-<span class="go">  -p, --period [1m|5m|15m|30m|1h|3h|6h|12h|1d|3d|7d]</span>
-<span class="go">                                  the regularity of backups  [default: 1d]</span>
-<span class="go">  -o, --offset [1m|5m|15m|30m|1h|3h|6h|12h|1d|3d|7d]</span>
-<span class="go">                                  The time offset of the first backup. If not</span>
-<span class="go">                                  provided, the same value as the period will be</span>
-<span class="go">                                  used</span>
-<span class="go">  --start _START_VALIDATION_TYPE  Time of day to start backup in format</span>
-<span class="go">                                  HH:MM:SS. Cannot be used together with</span>
-<span class="go">                                  --offset. If provided, period must be &gt;= 1d.</span>
-<span class="go">  --oneshot                       Do a backup once and exit</span>
-<span class="go">  -c, --compress                  Compress the backup.</span>
-<span class="go">  -e, --encrypt                   Encrypt the backup. Works only with the</span>
-<span class="go">                                  compress flag. Use environment variable to</span>
-<span class="go">                                  specify the encryption key and the</span>
-<span class="go">                                  initialization vector: GEN_DEV_BACKUP_KEY and</span>
-<span class="go">                                  GEN_DEV_BACKUP_IV</span>
-<span class="go">  -s, --min-free-space INTEGER    Free disk space shouldn't be lower than this</span>
-<span class="go">                                  threshold. If the space becomes lower, the</span>
-<span class="go">                                  backup process is stopped. The value is in GB.</span>
-<span class="go">                                  [default: 50]</span>
-<span class="go">  -r, --rotate INTEGER            Maximum number of backups to keep. The oldest</span>
-<span class="go">                                  backups are deleted. `0` means no rotation.</span>
-<span class="go">                                  [default: 5]</span>
-<span class="go">  --no, --exclude-name TEXT       Name or pattern of libvirt domains to exclude</span>
-<span class="go">                                  from backup</span>
-<span class="go">  --help                          Show this message and exit.</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis backup [OPTIONS]                                                </span>
+<span class="go">                                                                                </span>
+<span class="go"> Backup the current installation                                                </span>
+<span class="go">                                                                                </span>
+<span class="go">╭─ Options ────────────────────────────────────────────────────────────────────╮</span>
+<span class="go">│ --config                 PATH                      Path to the backuper      │</span>
+<span class="go">│                                                    configuration file        │</span>
+<span class="go">│ --name               -n  TEXT                      Name of the libvirt       │</span>
+<span class="go">│                                                    domain, if not provided,  │</span>
+<span class="go">│                                                    all will be backed up     │</span>
+<span class="go">│ --backup-dir         -d  PATH                      Directory where backups   │</span>
+<span class="go">│                                                    will be stored            │</span>
+<span class="go">│ --period             -p  [1m|5m|15m|30m|1h|3h|6h|  the regularity of backups │</span>
+<span class="go">│                          12h|1d|3d|7d]             [default: 1d]             │</span>
+<span class="go">│ --offset             -o  [1m|5m|15m|30m|1h|3h|6h|  The time offset of the    │</span>
+<span class="go">│                          12h|1d|3d|7d]             first backup. If not      │</span>
+<span class="go">│                                                    provided, the same value  │</span>
+<span class="go">│                                                    as the period will be     │</span>
+<span class="go">│                                                    used                      │</span>
+<span class="go">│ --start                  _START_VALIDATION_TYPE    Time of day to start      │</span>
+<span class="go">│                                                    backup in format          │</span>
+<span class="go">│                                                    HH:MM:SS. Cannot be used  │</span>
+<span class="go">│                                                    together with --offset.   │</span>
+<span class="go">│                                                    If provided, period must  │</span>
+<span class="go">│                                                    be &gt;= 1d.                 │</span>
+<span class="go">│ --oneshot                                          Do a backup once and exit │</span>
+<span class="go">│ --compress           -c                            Compress the backup.      │</span>
+<span class="go">│ --encrypt            -e                            Encrypt the backup. Works │</span>
+<span class="go">│                                                    only with the compress    │</span>
+<span class="go">│                                                    flag. Use environment     │</span>
+<span class="go">│                                                    variable to specify the   │</span>
+<span class="go">│                                                    encryption key and the    │</span>
+<span class="go">│                                                    initialization vector:    │</span>
+<span class="go">│                                                    GEN_DEV_BACKUP_KEY and    │</span>
+<span class="go">│                                                    GEN_DEV_BACKUP_IV         │</span>
+<span class="go">│ --min-free-space     -s  INTEGER                   Free disk space shouldn't │</span>
+<span class="go">│                                                    be lower than this        │</span>
+<span class="go">│                                                    threshold. If the space   │</span>
+<span class="go">│                                                    becomes lower, the backup │</span>
+<span class="go">│                                                    process is stopped. The   │</span>
+<span class="go">│                                                    value is in GB. [default: │</span>
+<span class="go">│                                                    50]                       │</span>
+<span class="go">│ --rotate             -r  INTEGER                   Maximum number of backups │</span>
+<span class="go">│                                                    to keep. The oldest       │</span>
+<span class="go">│                                                    backups are deleted. `0`  │</span>
+<span class="go">│                                                    means no rotation.        │</span>
+<span class="go">│                                                    [default: 5]              │</span>
+<span class="go">│ --no,--exclude-name      TEXT                      Name or pattern of        │</span>
+<span class="go">│                                                    libvirt domains to        │</span>
+<span class="go">│                                                    exclude from backup       │</span>
+<span class="go">│ --help                                             Show this message and     │</span>
+<span class="go">│                                                    exit.                     │</span>
+<span class="go">╰──────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

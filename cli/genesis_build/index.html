@@ -1132,6 +1132,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../genesis_settings/" class="md-nav__link">
+        genesis_settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../genesis_ssh/" class="md-nav__link">
         genesis_ssh
       </a>
@@ -1300,20 +1314,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../manifests_install/" class="md-nav__link">
-        manifests_install
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../manifests_list/" class="md-nav__link">
         manifests_list
       </a>
@@ -1330,34 +1330,6 @@
     <li class="md-nav__item">
       <a href="../manifests_show/" class="md-nav__link">
         manifests_show
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_uninstall/" class="md-nav__link">
-        manifests_uninstall
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_update/" class="md-nav__link">
-        manifests_update
       </a>
     </li>
   
@@ -2042,6 +2014,174 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_current-realm/" class="md-nav__link">
+        settings_current-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-context/" class="md-nav__link">
+        settings_delete-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-realm/" class="md-nav__link">
+        settings_delete-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_get/" class="md-nav__link">
+        settings_get
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_list-realms/" class="md-nav__link">
+        settings_list-realms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_rename-context/" class="md-nav__link">
+        settings_rename-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-context/" class="md-nav__link">
+        settings_set-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-realm/" class="md-nav__link">
+        settings_set-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set/" class="md-nav__link">
+        settings_set
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_unset/" class="md-nav__link">
+        settings_unset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_use-realm/" class="md-nav__link">
+        settings_use-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_view/" class="md-nav__link">
+        settings_view
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ssh_keys_add/" class="md-nav__link">
         ssh_keys_add
       </a>
@@ -2344,7 +2484,9 @@
 </ul>
 <p>Additional variables can be passed using the --manifest-var options.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis build [OPTIONS] PROJECT_DIR</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis build [OPTIONS] PROJECT_DIR                                     </span>
+<span class="go">                                                                                </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
@@ -2452,41 +2594,48 @@
 </ul>
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis build [OPTIONS] PROJECT_DIR</span>
-
-<span class="go">  Build a Genesis element. The command build all images, manifests and other</span>
-<span class="go">  artifacts required for the element. The manifest in the project may be a raw</span>
-<span class="go">  YAML file or a template using Jinja2 templates. For Jinja2 templates, the</span>
-<span class="go">  following variables are available by default:</span>
-
-<span class="go">  - {{ version }}: version of the element</span>
-
-<span class="go">  - {{ name }}: name of the element</span>
-
-<span class="go">  - {{ images }}: list of images</span>
-
-<span class="go">  - {{ manifests }}: list of manifests</span>
-
-<span class="go">  Additional variables can be passed using the --manifest-var options.</span>
-
-<span class="go">Options:</span>
-<span class="go">  -c, --genesis-cfg-file TEXT     Name of the project configuration file</span>
-<span class="go">  --deps-dir TEXT                 Directory where dependencies will be fetched</span>
-<span class="go">  --build-dir TEXT                Directory where temporary build artifacts will</span>
-<span class="go">                                  be stored</span>
-<span class="go">  --output-dir TEXT               Directory where output artifacts will be</span>
-<span class="go">                                  stored</span>
-<span class="go">  -i, --developer-key-path TEXT   Path to developer public key</span>
-<span class="go">  -s, --version-suffix [latest|none|element]</span>
-<span class="go">                                  Version suffix will be used for the build</span>
-<span class="go">                                  [default: none]</span>
-<span class="go">  -f, --force                     Rebuild if the output already exists</span>
-<span class="go">  --inventory                     Build using the inventory format</span>
-<span class="go">  --manifest-var TEXT             Additional variables to pass to the manifest</span>
-<span class="go">                                  template. The format is 'key=value'. For</span>
-<span class="go">                                  example: --manifest-var key1=value1</span>
-<span class="go">                                  --manifest-var key2=value2</span>
-<span class="go">  --help                          Show this message and exit.</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis build [OPTIONS] PROJECT_DIR                                     </span>
+<span class="go">                                                                                </span>
+<span class="go"> Build a Genesis element. The command build all images, manifests and other     </span>
+<span class="go"> artifacts required for the element. The manifest in the project may be a raw   </span>
+<span class="go"> YAML file or a template using Jinja2 templates. For Jinja2 templates, the      </span>
+<span class="go"> following variables are available by default:                                  </span>
+<span class="go"> - {{ version }}: version of the element                                        </span>
+<span class="go"> - {{ name }}: name of the element                                              </span>
+<span class="go"> - {{ images }}: list of images                                                 </span>
+<span class="go"> - {{ manifests }}: list of manifests                                           </span>
+<span class="go">                                                                                </span>
+<span class="go"> Additional variables can be passed using the --manifest-var options.           </span>
+<span class="go">                                                                                </span>
+<span class="go">╭─ Options ────────────────────────────────────────────────────────────────────╮</span>
+<span class="go">│ --genesis-cfg-file    -c  TEXT                   Name of the project         │</span>
+<span class="go">│                                                  configuration file          │</span>
+<span class="go">│ --deps-dir                TEXT                   Directory where             │</span>
+<span class="go">│                                                  dependencies will be        │</span>
+<span class="go">│                                                  fetched                     │</span>
+<span class="go">│ --build-dir               TEXT                   Directory where temporary   │</span>
+<span class="go">│                                                  build artifacts will be     │</span>
+<span class="go">│                                                  stored                      │</span>
+<span class="go">│ --output-dir              TEXT                   Directory where output      │</span>
+<span class="go">│                                                  artifacts will be stored    │</span>
+<span class="go">│ --developer-key-path  -i  TEXT                   Path to developer public    │</span>
+<span class="go">│                                                  key                         │</span>
+<span class="go">│ --version-suffix      -s  [latest|none|element]  Version suffix will be used │</span>
+<span class="go">│                                                  for the build [default:     │</span>
+<span class="go">│                                                  none]                       │</span>
+<span class="go">│ --force               -f                         Rebuild if the output       │</span>
+<span class="go">│                                                  already exists              │</span>
+<span class="go">│ --inventory                                      Build using the inventory   │</span>
+<span class="go">│                                                  format                      │</span>
+<span class="go">│ --manifest-var            TEXT                   Additional variables to     │</span>
+<span class="go">│                                                  pass to the manifest        │</span>
+<span class="go">│                                                  template. The format is     │</span>
+<span class="go">│                                                  'key=value'. For example:   │</span>
+<span class="go">│                                                  --manifest-var key1=value1  │</span>
+<span class="go">│                                                  --manifest-var key2=value2  │</span>
+<span class="go">│ --help                                           Show this message and exit. │</span>
+<span class="go">╰──────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

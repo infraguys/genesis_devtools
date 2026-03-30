@@ -1132,6 +1132,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../genesis_settings/" class="md-nav__link">
+        genesis_settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../genesis_ssh/" class="md-nav__link">
         genesis_ssh
       </a>
@@ -1300,20 +1314,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../manifests_install/" class="md-nav__link">
-        manifests_install
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../manifests_list/" class="md-nav__link">
         manifests_list
       </a>
@@ -1330,34 +1330,6 @@
     <li class="md-nav__item">
       <a href="../manifests_show/" class="md-nav__link">
         manifests_show
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_uninstall/" class="md-nav__link">
-        manifests_uninstall
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../manifests_update/" class="md-nav__link">
-        manifests_update
       </a>
     </li>
   
@@ -2042,6 +2014,174 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_current-realm/" class="md-nav__link">
+        settings_current-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-context/" class="md-nav__link">
+        settings_delete-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_delete-realm/" class="md-nav__link">
+        settings_delete-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_get/" class="md-nav__link">
+        settings_get
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_list-realms/" class="md-nav__link">
+        settings_list-realms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_rename-context/" class="md-nav__link">
+        settings_rename-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-context/" class="md-nav__link">
+        settings_set-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set-realm/" class="md-nav__link">
+        settings_set-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_set/" class="md-nav__link">
+        settings_set
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_unset/" class="md-nav__link">
+        settings_unset
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_use-realm/" class="md-nav__link">
+        settings_use-realm
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings_view/" class="md-nav__link">
+        settings_view
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ssh_keys_add/" class="md-nav__link">
         ssh_keys_add
       </a>
@@ -2329,7 +2469,9 @@
 <h1 id="genesis_bootstrap">genesis_bootstrap<a class="headerlink" href="#genesis_bootstrap" title="Permanent link">#</a></h1>
 <p>Bootstrap genesis locally</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis bootstrap [OPTIONS]</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis bootstrap [OPTIONS]                                             </span>
+<span class="go">                                                                                </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
@@ -2527,54 +2669,89 @@
 </ul>
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
-<div class="highlight"><pre><span></span><code><span class="go">Usage: genesis bootstrap [OPTIONS]</span>
-
-<span class="go">  Bootstrap genesis locally</span>
-
-<span class="go">Options:</span>
-<span class="go">  -i, --inventory TEXT            Path to the genesis inventory file or</span>
-<span class="go">                                  directory with inventory.json</span>
-<span class="go">  --profile [develop|small|medium|large|legacy]</span>
-<span class="go">                                  Profile for the installation.  [default:</span>
-<span class="go">                                  small]</span>
-<span class="go">  --name TEXT                     Name of the installation</span>
-<span class="go">  -m, --launch-mode [core|element|custom]</span>
-<span class="go">                                  Launch mode for start element, core or custom</span>
-<span class="go">                                  configuration  [default: element]</span>
-<span class="go">  -s, --stand-spec PATH           Additional stand specification for core mode.</span>
-<span class="go">  --cidr IPV4NETWORK              The main network CIDR  [default: 10.20.0.0/22]</span>
-<span class="go">  --core-ip IPV4ADDRESS           The IP address for the core VM. If `None` is</span>
-<span class="go">                                  provided, second IP address from the main</span>
-<span class="go">                                  network will be used.</span>
-<span class="go">  --bridge TEXT                   Name of the linux bridge for the main network,</span>
-<span class="go">                                  it will be created if not set.</span>
-<span class="go">  --boot-cidr IPV4NETWORK         The bootstrap network CIDR  [default:</span>
-<span class="go">                                  10.30.0.0/24]</span>
-<span class="go">  --boot-bridge TEXT              Name of the linux bridge for the bootstrap</span>
-<span class="go">                                  network, it will be created if not set.</span>
-<span class="go">  -f, --force                     Rebuild if the output already exists</span>
-<span class="go">  --no-wait                       Cancel waiting for the installation to start</span>
-<span class="go">  -r, --repository TEXT           Default element repository  [default:</span>
-<span class="go">                                  https://repository.genesis-core.tech/]</span>
-<span class="go">  --admin-password TEXT           A password for the admin user in. If not</span>
-<span class="go">                                  provided, the password will be generated.</span>
-<span class="go">  --save-admin-password-file TEXT</span>
-<span class="go">                                  If the option is specified the admin password</span>
-<span class="go">                                  is saved to the file. Otherwise it's printed</span>
-<span class="go">                                  to the console.</span>
-<span class="go">  --hyper-connection-uri TEXT     Connection URI for the hypervisor, e.g.</span>
-<span class="go">                                  'qemu+tcp://10.0.0.1/system' or</span>
-<span class="go">                                  'qemu+ssh://user@10.0.0.1/system'. If not set,</span>
-<span class="go">                                  the first address of the network(--cidr</span>
-<span class="go">                                  option) will be used.</span>
-<span class="go">  --hyper-storage-pool TEXT       Storage pool for the hypervisor.  [default:</span>
-<span class="go">                                  default]</span>
-<span class="go">  --hyper-machine-prefix TEXT     A prefix for new VMs.  [default: vm-]</span>
-<span class="go">  --hyper-iface-rom-file TEXT     A path to the custom ROM file of a network</span>
-<span class="go">                                  interface.  [default:</span>
-<span class="go">                                  /usr/share/qemu/1af41041.rom]</span>
-<span class="go">  --no-start                      Do not start the stand after creation</span>
-<span class="go">  --help                          Show this message and exit.</span>
+<div class="highlight"><pre><span></span><code><span class="go">                                                                                </span>
+<span class="go"> Usage: genesis bootstrap [OPTIONS]                                             </span>
+<span class="go">                                                                                </span>
+<span class="go"> Bootstrap genesis locally                                                      </span>
+<span class="go">                                                                                </span>
+<span class="go">╭─ Options ────────────────────────────────────────────────────────────────────╮</span>
+<span class="go">│ --inventory              -i  TEXT                    Path to the genesis     │</span>
+<span class="go">│                                                      inventory file or       │</span>
+<span class="go">│                                                      directory with          │</span>
+<span class="go">│                                                      inventory.json          │</span>
+<span class="go">│ --profile                    [develop|small|medium|  Profile for the         │</span>
+<span class="go">│                              large|legacy]           installation. [default: │</span>
+<span class="go">│                                                      small]                  │</span>
+<span class="go">│ --name                       TEXT                    Name of the             │</span>
+<span class="go">│                                                      installation            │</span>
+<span class="go">│ --launch-mode            -m  [core|element|custom]   Launch mode for start   │</span>
+<span class="go">│                                                      element, core or custom │</span>
+<span class="go">│                                                      configuration [default: │</span>
+<span class="go">│                                                      element]                │</span>
+<span class="go">│ --stand-spec             -s  PATH                    Additional stand        │</span>
+<span class="go">│                                                      specification for core  │</span>
+<span class="go">│                                                      mode.                   │</span>
+<span class="go">│ --cidr                       IPV4NETWORK             The main network CIDR   │</span>
+<span class="go">│                                                      [default: 10.20.0.0/22] │</span>
+<span class="go">│ --core-ip                    IPV4ADDRESS             The IP address for the  │</span>
+<span class="go">│                                                      core VM. If `None` is   │</span>
+<span class="go">│                                                      provided, second IP     │</span>
+<span class="go">│                                                      address from the main   │</span>
+<span class="go">│                                                      network will be used.   │</span>
+<span class="go">│ --bridge                     TEXT                    Name of the linux       │</span>
+<span class="go">│                                                      bridge for the main     │</span>
+<span class="go">│                                                      network, it will be     │</span>
+<span class="go">│                                                      created if not set.     │</span>
+<span class="go">│ --boot-cidr                  IPV4NETWORK             The bootstrap network   │</span>
+<span class="go">│                                                      CIDR [default:          │</span>
+<span class="go">│                                                      10.30.0.0/24]           │</span>
+<span class="go">│ --boot-bridge                TEXT                    Name of the linux       │</span>
+<span class="go">│                                                      bridge for the          │</span>
+<span class="go">│                                                      bootstrap network, it   │</span>
+<span class="go">│                                                      will be created if not  │</span>
+<span class="go">│                                                      set.                    │</span>
+<span class="go">│ --force                  -f                          Rebuild if the output   │</span>
+<span class="go">│                                                      already exists          │</span>
+<span class="go">│ --no-wait                                            Cancel waiting for the  │</span>
+<span class="go">│                                                      installation to start   │</span>
+<span class="go">│ --repository             -r  TEXT                    Default element         │</span>
+<span class="go">│                                                      repository [default:    │</span>
+<span class="go">│                                                      https://repository.gene │</span>
+<span class="go">│                                                      sis-core.tech/]         │</span>
+<span class="go">│ --admin-password             TEXT                    A password for the      │</span>
+<span class="go">│                                                      admin user in. If not   │</span>
+<span class="go">│                                                      provided, the password  │</span>
+<span class="go">│                                                      will be generated.      │</span>
+<span class="go">│ --save-admin-password-…      TEXT                    If the option is        │</span>
+<span class="go">│                                                      specified the admin     │</span>
+<span class="go">│                                                      password is saved to    │</span>
+<span class="go">│                                                      the file. Otherwise     │</span>
+<span class="go">│                                                      it's printed to the     │</span>
+<span class="go">│                                                      console.                │</span>
+<span class="go">│ --hyper-connection-uri       TEXT                    Connection URI for the  │</span>
+<span class="go">│                                                      hypervisor, e.g.        │</span>
+<span class="go">│                                                      'qemu+tcp://10.0.0.1/sy │</span>
+<span class="go">│                                                      stem' or                │</span>
+<span class="go">│                                                      'qemu+ssh://user@10.0.0 │</span>
+<span class="go">│                                                      .1/system'. If not set, │</span>
+<span class="go">│                                                      the first address of    │</span>
+<span class="go">│                                                      the network(--cidr      │</span>
+<span class="go">│                                                      option) will be used.   │</span>
+<span class="go">│ --hyper-storage-pool         TEXT                    Storage pool for the    │</span>
+<span class="go">│                                                      hypervisor. [default:   │</span>
+<span class="go">│                                                      default]                │</span>
+<span class="go">│ --hyper-machine-prefix       TEXT                    A prefix for new VMs.   │</span>
+<span class="go">│                                                      [default: vm-]          │</span>
+<span class="go">│ --hyper-iface-rom-file       TEXT                    A path to the custom    │</span>
+<span class="go">│                                                      ROM file of a network   │</span>
+<span class="go">│                                                      interface. [default:    │</span>
+<span class="go">│                                                      /usr/share/qemu/1af4104 │</span>
+<span class="go">│                                                      1.rom]                  │</span>
+<span class="go">│ --no-start                                           Do not start the stand  │</span>
+<span class="go">│                                                      after creation          │</span>
+<span class="go">│ --help                                               Show this message and   │</span>
+<span class="go">│                                                      exit.                   │</span>
+<span class="go">╰──────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 
