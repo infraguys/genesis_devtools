@@ -1,4 +1,6 @@
 version: 2
+git:
+  depth: 0
 updates:
   - package-ecosystem: "uv"
     directory: "/"
