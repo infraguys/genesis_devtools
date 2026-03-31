@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import os
 import json
+from packaging import version
 import shutil
 
 from genesis_devtools.repo import base
@@ -55,6 +56,14 @@ class FSRepoDriver(base.AbstractRepoDriver):
             self.elements_path, element.name, element.version, "inventory.json"
         )
 
+    def elements_inventory_path_latest(
+        self, element: builder_base.ElementInventory
+    ) -> str:
+        """Get the base path for elements in the repository as latest."""
+        return os.path.join(
+            self.elements_path, element.name, "latest", "inventory.json"
+        )
+
     def init_repo(self) -> None:
         """Initialize the repo."""
         elements_path = self.elements_path
@@ -82,7 +91,9 @@ class FSRepoDriver(base.AbstractRepoDriver):
         if os.path.exists(meta_path):
             os.remove(meta_path)
 
-    def push(self, element: builder_base.ElementInventory) -> None:
+    def push(
+        self, element: builder_base.ElementInventory, latest: bool = False
+    ) -> None:
         """Push the element to the repo."""
         element_path = os.path.join(self.elements_path, element.name, element.version)
         if os.path.exists(element_path):
@@ -105,6 +116,22 @@ class FSRepoDriver(base.AbstractRepoDriver):
 
         with open(self.elements_inventory_path(element), "w") as f:
             json.dump(spec, f, indent=2)
+
+        if latest and not version.parse(element.version).is_prerelease:
+            # Push latest
+            latest_element_path = os.path.join(
+                self.elements_path, element.name, "latest"
+            )
+
+            shutil.rmtree(latest_element_path, ignore_errors=True)
+            os.makedirs(latest_element_path, exist_ok=True)
+
+            # Push all artifacts to latest
+            for name in builder_base.ElementInventory.categories():
+                self._push_directory(element, latest_element_path, name)
+
+            with open(self.elements_inventory_path_latest(element), "w") as f:
+                json.dump(spec, f, indent=2)
 
     def pull(self, element: builder_base.ElementInventory, dst_path: str) -> None:
         """Pull the element from the repo."""

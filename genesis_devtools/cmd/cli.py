@@ -206,11 +206,6 @@ def genesis(
     else:
         scope = None
 
-    if final_user is None and final_password is None or final_access_token is None:
-        raise click.UsageError(
-            "Either user and password or access token must be provided for authentication. "
-            "Use the 'genesis settings set-context' command to set the context."
-        )
     auth = http_client.CoreIamAuthenticator(
         base_url=final_endpoint,
         username=final_user,
@@ -417,12 +412,20 @@ def build_cmd(
     is_flag=True,
     help="Force push even if the element already exists",
 )
+@click.option(
+    "-l",
+    "--latest",
+    show_default=True,
+    is_flag=True,
+    help="Push the element too as the latest version (if stable version)",
+)
 @click.argument("project_dir", type=click.Path(), default=".")
 def push_cmd(
     genesis_cfg_file: str,
     target: str | None,
-    force: bool,
     element_dir: str,
+    force: bool,
+    latest: bool,
     project_dir: str,
 ) -> None:
     driver = repo_utils.load_repo_driver(genesis_cfg_file, target, project_dir)
@@ -440,11 +443,11 @@ def push_cmd(
     for inventory in inventories:
         element = base_builder.ElementInventory.from_dict(inventory)
         try:
-            driver.push(element)
+            driver.push(element, latest=latest)
         except base_repo.ElementAlreadyExistsError:
             if force:
                 driver.remove(element)
-                driver.push(element)
+                driver.push(element, latest=latest)
                 continue
 
             click.secho(
@@ -1353,7 +1356,7 @@ def _bootstrap_core(
         )
 
 
-def check_latest_version() -> None:
+def check_latest_version(echo_on_latest: bool = False) -> None:
     """Check for the latest version on GitHub and warn if newer version exists."""
     try:
         response = requests.get(f"{c.GITHUB_RELEASES_URL}/latest", timeout=1)
@@ -1371,8 +1374,16 @@ def check_latest_version() -> None:
                 f"Update by:\ncurl -fsSL {c.GENESIS_REPO_URL}/install.sh | sudo sh",
                 fg="yellow",
             )
-    except Exception as e:
-        click.secho(f"Failed to check for the latest version on GitHub: {e}", fg="red")
+        else:
+            if echo_on_latest:
+                click.secho(
+                    f"You are using the latest version: {genesis_version.version_info}",
+                    fg="green",
+                )
+    except Exception as err:
+        click.secho(
+            f"Failed to check for the latest version on GitHub: {err}", fg="red"
+        )
 
 
 def should_check_version():
@@ -1416,9 +1427,9 @@ def version() -> None:
     click.echo(version.version_info)
 
 
-@genesis.command(help="Check for the latest version on GitHub")
-def latest() -> None:
-    check_latest_version()
+@genesis.command(name="latest", help="Check for the latest version on GitHub")
+def latest_cmd() -> None:
+    check_latest_version(echo_on_latest=True)
 
 
 @genesis.command("cowsay", help="Display a cow message")
@@ -1499,4 +1510,6 @@ if __name__ == "__main__":
             click.secho(
                 f"Error: [{e.response.status_code}] {e.response.text}", fg="red"
             )
+        click.secho(f"Error: {e}", fg="red")
+    except ValueError as e:
         click.secho(f"Error: {e}", fg="red")
