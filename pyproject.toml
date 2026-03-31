@@ -5,7 +5,7 @@ readme = "README.md"
 authors = [{name = "Genesis Corporation", email = "anton.kremenetsky@gmail.com"}]
 dynamic = ["version"]
 license = {text = "Apache-2.0"}
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
