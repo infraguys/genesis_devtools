@@ -53,6 +53,18 @@
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/compute_hypervisors/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/compute_nodes/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/compute_sets/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/configs_add-from-env/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
@@ -125,6 +137,10 @@
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_compute/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_configs/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
@@ -154,6 +170,10 @@
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_hypervisors/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_iam/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
@@ -229,7 +249,15 @@
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_secret/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_services/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_sets/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
@@ -261,6 +289,10 @@
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/genesis_vs/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/hypervisors_delete/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
@@ -270,6 +302,42 @@
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/hypervisors_show/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_clients/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_idps/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_organizations/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_permission_bindings/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_permissions/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_projects/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_role_bindings/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_roles/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/iam_users/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
@@ -465,6 +533,22 @@
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/secret_certificates/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/secret_passwords/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/secret_rsa_keys/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/secret_ssh_keys/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/services_add/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
@@ -482,6 +566,18 @@
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/services_update/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/sets_delete/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/sets_list/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/sets_show/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
     <url>
@@ -606,6 +702,18 @@
     </url>
     <url>
          <loc>https://github.com/infraguys/genesis_devtools/cli/vars_show/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/vs_profiles/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/vs_values/</loc>
+         <lastmod>2026-03-31</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/infraguys/genesis_devtools/cli/vs_vars/</loc>
          <lastmod>2026-03-31</lastmod>
     </url>
 </urlset>
