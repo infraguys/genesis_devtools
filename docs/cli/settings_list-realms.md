@@ -6,9 +6,9 @@ Describe one or many realms
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings list-realms [OPTIONS]                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings list-realms [OPTIONS]                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -31,13 +31,13 @@ Describe one or many realms
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings list-realms [OPTIONS]                                  
-                                                                                
- Describe one or many realms                                                    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --output  -o  [json|yaml]  Output format                                     │
-│ --help                     Show this message and exit.                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings list-realms [OPTIONS]                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+ Describe one or many realms                                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --output  -o  [json|yaml]  Output format                                                                                                                                                                                                                                                                │
+│ --help                     Show this message and exit.                                                                                                                                                                                                                                                  │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

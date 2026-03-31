@@ -6,9 +6,9 @@ Show resource
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis resources show [OPTIONS] ELEMENT_NAME_UUID RESOURCE_NAME_UUID   
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis resources show [OPTIONS] ELEMENT_NAME_UUID RESOURCE_NAME_UUID                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -33,12 +33,12 @@ Show resource
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis resources show [OPTIONS] ELEMENT_NAME_UUID RESOURCE_NAME_UUID   
-                                                                                
- Show resource                                                                  
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis resources show [OPTIONS] ELEMENT_NAME_UUID RESOURCE_NAME_UUID                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+ Show resource                                                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

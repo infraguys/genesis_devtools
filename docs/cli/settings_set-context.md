@@ -6,9 +6,9 @@ Set a context entry in settings
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings set-context [OPTIONS] REALM                            
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings set-context [OPTIONS] REALM                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -68,17 +68,17 @@ Set a context entry in settings
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings set-context [OPTIONS] REALM                            
-                                                                                
- Set a context entry in settings                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ *  --name           -n  TEXT  Name of the context [required]                 │
-│    --user           -u  TEXT  User for the context                           │
-│    --password       -p  TEXT  Password for the user in context               │
-│    --access_token   -a  TEXT  Access token for the user in context           │
-│    --refresh_token  -t  TEXT  Refresh token for the user in context          │
-│    --help                     Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings set-context [OPTIONS] REALM                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
+ Set a context entry in settings                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --name           -n  TEXT  Name of the context [required]                                                                                                                                                                                                                                            │
+│    --user           -u  TEXT  User for the context                                                                                                                                                                                                                                                      │
+│    --password       -p  TEXT  Password for the user in context                                                                                                                                                                                                                                          │
+│    --access_token   -a  TEXT  Access token for the user in context                                                                                                                                                                                                                                      │
+│    --refresh_token  -t  TEXT  Refresh token for the user in context                                                                                                                                                                                                                                     │
+│    --help                     Show this message and exit.                                                                                                                                                                                                                                               │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

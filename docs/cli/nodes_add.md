@@ -6,9 +6,9 @@ Add a new node to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis nodes add [OPTIONS]                                             
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis compute nodes add [OPTIONS]                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -94,25 +94,21 @@ Add a new node to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis nodes add [OPTIONS]                                             
-                                                                                
- Add a new node to the Genesis installation                                     
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid         -u  UUID     UUID of the node                              │
-│ *  --project-id   -p  UUID     Name of the project in which to deploy the    │
-│                                node [required]                               │
-│    --cores        -c  INTEGER  Number of cores to allocate for the node      │
-│                                [default: 1]                                  │
-│    --ram          -r  INTEGER  Amount of RAM in Mb to allocate for the node  │
-│                                [default: 1024]                               │
-│    --root-disk    -d  INTEGER  Number of GiB of root disk to allocate for    │
-│                                the node [default: 10]                        │
-│ *  --image        -i  TEXT     Name of the image to deploy [required]        │
-│    --name         -n  TEXT     Name of the node                              │
-│    --description  -D  TEXT     Description of the node                       │
-│    --wait                      Wait until the node is running                │
-│    --help                      Show this message and exit.                   │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis compute nodes add [OPTIONS]                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Add a new node to the Genesis installation                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID     UUID of the node                                                                                                                                                                                                                                                         │
+│ *  --project-id   -p  UUID     Name of the project in which to deploy the node [required]                                                                                                                                                                                                               │
+│    --cores        -c  INTEGER  Number of cores to allocate for the node [default: 1]                                                                                                                                                                                                                    │
+│    --ram          -r  INTEGER  Amount of RAM in Mb to allocate for the node [default: 1024]                                                                                                                                                                                                             │
+│    --root-disk    -d  INTEGER  Number of GiB of root disk to allocate for the node [default: 10]                                                                                                                                                                                                        │
+│ *  --image        -i  TEXT     Name of the image to deploy [required]                                                                                                                                                                                                                                   │
+│    --name         -n  TEXT     Name of the node                                                                                                                                                                                                                                                         │
+│    --description  -D  TEXT     Description of the node                                                                                                                                                                                                                                                  │
+│    --wait                      Wait until the node is running                                                                                                                                                                                                                                           │
+│    --help                      Show this message and exit.                                                                                                                                                                                                                                              │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

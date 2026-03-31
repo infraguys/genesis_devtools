@@ -6,9 +6,9 @@ Add a new profile to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis profiles add [OPTIONS]                                          
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs profiles add [OPTIONS]                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -63,18 +63,17 @@ Add a new profile to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis profiles add [OPTIONS]                                          
-                                                                                
- Add a new profile to the Genesis installation                                  
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid          -u  UUID  UUID of the profile                             │
-│ *  --project-id    -p  UUID  Name of the project in which to deploy the      │
-│                              profile [required]                              │
-│    --name          -n  TEXT  Name of the profile                             │
-│    --description   -D  TEXT  Description of the profile                      │
-│    --profile_type  -t  TEXT  Profile_type (ELEMENT, GLOBAL)                  │
-│    --help                    Show this message and exit.                     │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs profiles add [OPTIONS]                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
+ Add a new profile to the Genesis installation                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid          -u  UUID  UUID of the profile                                                                                                                                                                                                                                                        │
+│ *  --project-id    -p  UUID  Name of the project in which to deploy the profile [required]                                                                                                                                                                                                              │
+│    --name          -n  TEXT  Name of the profile                                                                                                                                                                                                                                                        │
+│    --description   -D  TEXT  Description of the profile                                                                                                                                                                                                                                                 │
+│    --profile_type  -t  TEXT  Profile_type (ELEMENT, GLOBAL)                                                                                                                                                                                                                                             │
+│    --help                    Show this message and exit.                                                                                                                                                                                                                                                │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,9 +6,9 @@ Manage elements in the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis elements [OPTIONS] COMMAND [ARGS]...                            
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis elements [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -23,20 +23,20 @@ Manage elements in the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis elements [OPTIONS] COMMAND [ARGS]...                            
-                                                                                
- Manage elements in the Genesis installation                                    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ install         Install element from a manifest (YAML file)                  │
-│ ips             Show element ips                                             │
-│ list            List elements                                                │
-│ show            Show element general information                             │
-│ uninstall       Uninstall manifest by UUID, path or name                     │
-│ update          Update element from a YAML file                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis elements [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
+ Manage elements in the Genesis installation                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ install                                                 Install element from a manifest (YAML file)                                                                                                                                                                                                     │
+│ ips                                                     Show element ips                                                                                                                                                                                                                                │
+│ list                                                    List elements                                                                                                                                                                                                                                   │
+│ show                                                    Show element general information                                                                                                                                                                                                                │
+│ uninstall                                               Uninstall manifest by UUID, path or name                                                                                                                                                                                                        │
+│ update                                                  Update element from a YAML file                                                                                                                                                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

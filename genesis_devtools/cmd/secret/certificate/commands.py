@@ -21,7 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
+from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import certificate as certificate_lib
 from genesis_devtools.common import utils
@@ -35,7 +35,7 @@ def certificates_group():
 @certificates_group.command("list", help="List certificates")
 @click.pass_context
 def list_certificates(ctx: click.Context) -> None:
-    client = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     certificates = certificate_lib.list_certificates(client)
     _print_certificates(certificates)
 
@@ -51,7 +51,7 @@ def show_certificate_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         certificates = certificate_lib.list_certificates(client, name=uuid)
         if certificates:
@@ -73,7 +73,7 @@ def delete_certificate_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         certificates = certificate_lib.list_certificates(client, name=uuid)
         if certificates:
@@ -122,7 +122,7 @@ def add_certificate_cmd(
     name: str,
     description: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -172,7 +172,7 @@ def update_certificate_cmd(
     name: str | None,
     description: str | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)

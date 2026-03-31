@@ -6,9 +6,9 @@ Delete hypervisor
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis hypervisors delete [OPTIONS]                                    
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis compute hypervisors delete [OPTIONS]                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -31,13 +31,13 @@ Delete hypervisor
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis hypervisors delete [OPTIONS]                                    
-                                                                                
- Delete hypervisor                                                              
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  hypervisor UUID                                            │
-│ --help            Show this message and exit.                                │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis compute hypervisors delete [OPTIONS]                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
+ Delete hypervisor                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  hypervisor UUID                                                                                                                                                                                                                                                                       │
+│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

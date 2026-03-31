@@ -21,8 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
-
+from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import config as config_lib
 from genesis_devtools import constants as c
 
@@ -45,7 +44,7 @@ def list_config_cmd(
     ctx: click.Context,
     node: sys_uuid.UUID | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     table = get_table()
 
     configs = config_lib.list_config(client, node)
@@ -130,7 +129,7 @@ def add_config_from_env_cmd(
     uuid: sys_uuid.UUID | None,
     node: sys_uuid.UUID,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     config_lib.add_config_from_env(
         client,
         project_id,
@@ -165,5 +164,5 @@ def delete_config_cmd(
     uuid: sys_uuid.UUID | None,
     node: sys_uuid.UUID | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     config_lib.delete_config(client, uuid, node)

@@ -21,7 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
+from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import client as client_lib
 from genesis_devtools.common import utils
@@ -37,7 +37,7 @@ def clients_group():
 def list_clients(
     ctx: click.Context,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     clients = client_lib.list_clients(client)
     _print_values(clients)
 
@@ -53,7 +53,7 @@ def show_client(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         clients = client_lib.list_clients(client, clientname=uuid)
         if clients:
@@ -77,7 +77,7 @@ def delete_client(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     client_lib.delete_client(client, uuid)
 
 

@@ -21,7 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
+from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import permission_binding as permission_binding_lib
 from genesis_devtools.common import utils
@@ -40,7 +40,7 @@ def permission_bindings_group():
 def list_permission_bindings(
     ctx: click.Context,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     permission_bindings = permission_binding_lib.list_permission_bindings(client)
     _print_values(permission_bindings)
 
@@ -56,7 +56,7 @@ def show_permission_binding(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         permission_bindings = permission_binding_lib.list_permission_bindings(
             client, permission_bindingname=uuid
@@ -82,7 +82,7 @@ def delete_permission_binding(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     permission_binding_lib.delete_permission_binding(client, uuid)
 
 

@@ -6,9 +6,9 @@ Set an individual value in a settings file
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings set [OPTIONS] KEY VALUE                                
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings set [OPTIONS] KEY VALUE                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -33,12 +33,12 @@ Set an individual value in a settings file
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings set [OPTIONS] KEY VALUE                                
-                                                                                
- Set an individual value in a settings file                                     
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings set [OPTIONS] KEY VALUE                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+ Set an individual value in a settings file                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

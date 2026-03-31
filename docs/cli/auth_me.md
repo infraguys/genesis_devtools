@@ -6,9 +6,9 @@ Validate stored token and show user info
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis auth me [OPTIONS] PROJECT_DIR                                   
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis auth me [OPTIONS] PROJECT_DIR                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -28,12 +28,12 @@ Validate stored token and show user info
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis auth me [OPTIONS] PROJECT_DIR                                   
-                                                                                
- Validate stored token and show user info                                       
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis auth me [OPTIONS] PROJECT_DIR                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+ Validate stored token and show user info                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

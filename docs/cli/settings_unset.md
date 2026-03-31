@@ -6,9 +6,9 @@ Unset an individual value in a settings file
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings unset [OPTIONS] KEY                                    
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings unset [OPTIONS] KEY                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -28,12 +28,12 @@ Unset an individual value in a settings file
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings unset [OPTIONS] KEY                                    
-                                                                                
- Unset an individual value in a settings file                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings unset [OPTIONS] KEY                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+ Unset an individual value in a settings file                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

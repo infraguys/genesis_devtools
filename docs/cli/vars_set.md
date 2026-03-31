@@ -6,9 +6,9 @@ Create variable if missing and set its value by creating a new value record
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis vars set [OPTIONS] VAR_UUID_OR_NAME VALUE                       
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs vars set [OPTIONS] VAR_UUID_OR_NAME VALUE                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -62,18 +62,16 @@ Create variable if missing and set its value by creating a new value record
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis vars set [OPTIONS] VAR_UUID_OR_NAME VALUE                       
-                                                                                
- Create variable if missing and set its value by creating a new value record    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --project-id   -p  UUID  UUID of the project in which to deploy the variable │
-│ --name             TEXT  Name of the variable to create if it does not exist │
-│ --description      TEXT  Description of the variable to create if it does    │
-│                          not exist                                           │
-│ --rotate                 Delete all existing values for the variable before  │
-│                          creating the new one                                │
-│ --help                   Show this message and exit.                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs vars set [OPTIONS] VAR_UUID_OR_NAME VALUE                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+ Create variable if missing and set its value by creating a new value record                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  UUID of the project in which to deploy the variable                                                                                                                                                                                                                            │
+│ --name             TEXT  Name of the variable to create if it does not exist                                                                                                                                                                                                                            │
+│ --description      TEXT  Description of the variable to create if it does not exist                                                                                                                                                                                                                     │
+│ --rotate                 Delete all existing values for the variable before creating the new one                                                                                                                                                                                                        │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,9 +6,9 @@ Authenticate in IAM and store tokens locally
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis auth login [OPTIONS] PROJECT_DIR                                
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis auth login [OPTIONS] PROJECT_DIR                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -85,23 +85,20 @@ Authenticate in IAM and store tokens locally
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis auth login [OPTIONS] PROJECT_DIR                                
-                                                                                
- Authenticate in IAM and store tokens locally                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ *  --iam-client-endpoint      TEXT     Full URL of the IAM client [required] │
-│ *  --project-id               TEXT     Project ID for IAM authentication     │
-│                                        [required]                            │
-│    --client-id                TEXT     OAuth client id (optional)            │
-│    --client-secret            TEXT     OAuth client secret (optional)        │
-│    --scope                    TEXT     OAuth scope [default: profile]        │
-│    --ttl                      INTEGER  Access token lifetime in seconds      │
-│                                        [default: 900]                        │
-│    --refresh-ttl              INTEGER  Refresh token lifetime in seconds     │
-│                                        [default: 3600]                       │
-│    --force                -f           Overwrite existing auth file          │
-│    --help                              Show this message and exit.           │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis auth login [OPTIONS] PROJECT_DIR                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+ Authenticate in IAM and store tokens locally                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --iam-client-endpoint      TEXT     Full URL of the IAM client [required]                                                                                                                                                                                                                            │
+│ *  --project-id               TEXT     Project ID for IAM authentication [required]                                                                                                                                                                                                                     │
+│    --client-id                TEXT     OAuth client id (optional)                                                                                                                                                                                                                                       │
+│    --client-secret            TEXT     OAuth client secret (optional)                                                                                                                                                                                                                                   │
+│    --scope                    TEXT     OAuth scope [default: profile]                                                                                                                                                                                                                                   │
+│    --ttl                      INTEGER  Access token lifetime in seconds [default: 900]                                                                                                                                                                                                                  │
+│    --refresh-ttl              INTEGER  Refresh token lifetime in seconds [default: 3600]                                                                                                                                                                                                                │
+│    --force                -f           Overwrite existing auth file                                                                                                                                                                                                                                     │
+│    --help                              Show this message and exit.                                                                                                                                                                                                                                      │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

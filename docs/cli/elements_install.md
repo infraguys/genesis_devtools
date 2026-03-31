@@ -6,9 +6,9 @@ Install element from a manifest (YAML file)
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis elements install [OPTIONS] PATH_OR_NAME                         
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis elements install [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -36,15 +36,13 @@ Install element from a manifest (YAML file)
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis elements install [OPTIONS] PATH_OR_NAME                         
-                                                                                
- Install element from a manifest (YAML file)                                    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --repository  -r  TEXT  Repository endpoint [default:                        │
-│                         https://repository.genesis-core.tech/genesis-element │
-│                         s/]                                                  │
-│ --help                  Show this message and exit.                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis elements install [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                           
+ Install element from a manifest (YAML file)                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │
+│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

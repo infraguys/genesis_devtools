@@ -23,7 +23,9 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from gcl_sdk.clients.http import base as http_client
+
+if tp.TYPE_CHECKING:
+    from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools import logger
 from genesis_devtools import constants as c

@@ -6,9 +6,9 @@ Delete the specified realm from the settings
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings delete-realm [OPTIONS] REALM                           
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings delete-realm [OPTIONS] REALM                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -28,12 +28,12 @@ Delete the specified realm from the settings
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings delete-realm [OPTIONS] REALM                           
-                                                                                
- Delete the specified realm from the settings                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings delete-realm [OPTIONS] REALM                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                           
+ Delete the specified realm from the settings                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,9 +6,9 @@ Rename a context from the settings file
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings rename-context [OPTIONS] OLD_CONTEXT NEW_CONTEXT       
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings rename-context [OPTIONS] OLD_CONTEXT NEW_CONTEXT                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -41,13 +41,13 @@ Rename a context from the settings file
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings rename-context [OPTIONS] OLD_CONTEXT NEW_CONTEXT       
-                                                                                
- Rename a context from the settings file                                        
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ *  --realm  -r  TEXT  Name of the context [required]                         │
-│    --help             Show this message and exit.                            │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings rename-context [OPTIONS] OLD_CONTEXT NEW_CONTEXT                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
+ Rename a context from the settings file                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --realm  -r  TEXT  Name of the context [required]                                                                                                                                                                                                                                                    │
+│    --help             Show this message and exit.                                                                                                                                                                                                                                                       │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

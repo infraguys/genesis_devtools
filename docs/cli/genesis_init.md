@@ -6,9 +6,9 @@ Platformize the project
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis init [OPTIONS]                                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis init [OPTIONS]                                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -37,9 +37,9 @@ Platformize the project
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis init [OPTIONS]                                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis init [OPTIONS]                                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
 
 Dynamic options (derived from scenario actions):
 

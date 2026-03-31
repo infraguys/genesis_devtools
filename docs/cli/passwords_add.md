@@ -6,9 +6,9 @@ Add a new password to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis passwords add [OPTIONS]                                         
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret passwords add [OPTIONS]                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -55,17 +55,16 @@ Add a new password to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis passwords add [OPTIONS]                                         
-                                                                                
- Add a new password to the Genesis installation                                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid         -u  UUID  UUID of the password                             │
-│ *  --project-id   -p  UUID  Name of the project in which to deploy the       │
-│                             password [required]                              │
-│    --name         -n  TEXT  Name of the password                             │
-│    --description  -D  TEXT  Description of the password                      │
-│    --help                   Show this message and exit.                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret passwords add [OPTIONS]                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+ Add a new password to the Genesis installation                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the password                                                                                                                                                                                                                                                        │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the password [required]                                                                                                                                                                                                              │
+│    --name         -n  TEXT  Name of the password                                                                                                                                                                                                                                                        │
+│    --description  -D  TEXT  Description of the password                                                                                                                                                                                                                                                 │
+│    --help                   Show this message and exit.                                                                                                                                                                                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,9 +6,9 @@ Update password
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis passwords update [OPTIONS] UUID                                 
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret passwords update [OPTIONS] UUID                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -52,15 +52,15 @@ Update password
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis passwords update [OPTIONS] UUID                                 
-                                                                                
- Update password                                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --project-id   -p  UUID  Name of the project in which to deploy the password │
-│ --name         -n  TEXT  Name of the password                                │
-│ --description  -D  TEXT  Description of the password                         │
-│ --help                   Show this message and exit.                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret passwords update [OPTIONS] UUID                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
+ Update password                                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the password                                                                                                                                                                                                                            │
+│ --name         -n  TEXT  Name of the password                                                                                                                                                                                                                                                           │
+│ --description  -D  TEXT  Description of the password                                                                                                                                                                                                                                                    │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

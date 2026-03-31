@@ -6,9 +6,9 @@ Get an individual value from a settings file
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings get [OPTIONS] KEY                                      
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings get [OPTIONS] KEY                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -28,12 +28,12 @@ Get an individual value from a settings file
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings get [OPTIONS] KEY                                      
-                                                                                
- Get an individual value from a settings file                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings get [OPTIONS] KEY                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                                                                           
+ Get an individual value from a settings file                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

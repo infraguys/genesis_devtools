@@ -6,9 +6,9 @@ Show manifest general information
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis manifests show [OPTIONS] NAME                                   
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis manifests show [OPTIONS] NAME                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -28,12 +28,12 @@ Show manifest general information
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis manifests show [OPTIONS] NAME                                   
-                                                                                
- Show manifest general information                                              
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis manifests show [OPTIONS] NAME                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+ Show manifest general information                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

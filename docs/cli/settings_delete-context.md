@@ -6,9 +6,9 @@ Delete the specified context from the settings
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings delete-context [OPTIONS] NAME                          
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings delete-context [OPTIONS] NAME                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -36,13 +36,13 @@ Delete the specified context from the settings
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings delete-context [OPTIONS] NAME                          
-                                                                                
- Delete the specified context from the settings                                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --realm  -r  TEXT  Name of the realm                                         │
-│ --help             Show this message and exit.                               │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings delete-context [OPTIONS] NAME                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
+ Delete the specified context from the settings                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --realm  -r  TEXT  Name of the realm                                                                                                                                                                                                                                                                    │
+│ --help             Show this message and exit.                                                                                                                                                                                                                                                          │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

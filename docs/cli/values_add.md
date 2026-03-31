@@ -6,9 +6,9 @@ Add a new value to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis values add [OPTIONS]                                            
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs values add [OPTIONS]                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -70,19 +70,18 @@ Add a new value to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis values add [OPTIONS]                                            
-                                                                                
- Add a new value to the Genesis installation                                    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid         -u  UUID  UUID of the value                                │
-│ *  --project-id   -p  UUID  Name of the project in which to deploy the value │
-│                             [required]                                       │
-│    --name         -n  TEXT  Name of the value                                │
-│    --description  -D  TEXT  Description of the value                         │
-│    --var              TEXT  UUID of a variable the value belongs to          │
-│    --value        -V  TEXT  value                                            │
-│    --help                   Show this message and exit.                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs values add [OPTIONS]                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                           
+ Add a new value to the Genesis installation                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the value                                                                                                                                                                                                                                                           │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the value [required]                                                                                                                                                                                                                 │
+│    --name         -n  TEXT  Name of the value                                                                                                                                                                                                                                                           │
+│    --description  -D  TEXT  Description of the value                                                                                                                                                                                                                                                    │
+│    --var              TEXT  UUID of a variable the value belongs to                                                                                                                                                                                                                                     │
+│    --value        -V  TEXT  value                                                                                                                                                                                                                                                                       │
+│    --help                   Show this message and exit.                                                                                                                                                                                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

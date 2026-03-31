@@ -6,9 +6,9 @@ Update element from a YAML file
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis elements update [OPTIONS] PATH_OR_NAME                          
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis elements update [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -36,15 +36,13 @@ Update element from a YAML file
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis elements update [OPTIONS] PATH_OR_NAME                          
-                                                                                
- Update element from a YAML file                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --repository  -r  TEXT  Repository endpoint [default:                        │
-│                         https://repository.genesis-core.tech/genesis-element │
-│                         s/]                                                  │
-│ --help                  Show this message and exit.                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis elements update [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
+ Update element from a YAML file                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │
+│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

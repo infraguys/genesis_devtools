@@ -6,9 +6,9 @@ Display merged genesis settings
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings view [OPTIONS]                                         
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings view [OPTIONS]                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -30,13 +30,13 @@ Display merged genesis settings
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings view [OPTIONS]                                         
-                                                                                
- Display merged genesis settings                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --raw   Display the raw merge of the genesis config                          │
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings view [OPTIONS]                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                           
+ Display merged genesis settings                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --raw   Display the raw merge of the genesis config                                                                                                                                                                                                                                                     │
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

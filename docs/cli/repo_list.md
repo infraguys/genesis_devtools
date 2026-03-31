@@ -6,9 +6,9 @@ List the repository
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis repo list [OPTIONS] [PROJECT_DIR]                               
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis repo list [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -52,15 +52,15 @@ List the repository
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis repo list [OPTIONS] [PROJECT_DIR]                               
-                                                                                
- List the repository                                                            
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file         │
-│ --target            -t  TEXT  Target repository to push to                   │
-│ --element           -e  TEXT  Element to list                                │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis repo list [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                           
+ List the repository                                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file                                                                                                                                                                                                                                    │
+│ --target            -t  TEXT  Target repository to push to                                                                                                                                                                                                                                              │
+│ --element           -e  TEXT  Element to list                                                                                                                                                                                                                                                           │
+│ --help                        Show this message and exit.                                                                                                                                                                                                                                               │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

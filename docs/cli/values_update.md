@@ -6,9 +6,9 @@ Update value
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis values update [OPTIONS] UUID                                    
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs values update [OPTIONS] UUID                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -68,17 +68,17 @@ Update value
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis values update [OPTIONS] UUID                                    
-                                                                                
- Update value                                                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --project-id   -p  UUID  Name of the project in which to deploy the value    │
-│ --name         -n  TEXT  Name of the value                                   │
-│ --description  -D  TEXT  Description of the value                            │
-│ --value        -V  TEXT  value                                               │
-│ --variable     -v  TEXT  uuid of the variable                                │
-│ --help                   Show this message and exit.                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs values update [OPTIONS] UUID                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
+ Update value                                                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the value                                                                                                                                                                                                                               │
+│ --name         -n  TEXT  Name of the value                                                                                                                                                                                                                                                              │
+│ --description  -D  TEXT  Description of the value                                                                                                                                                                                                                                                       │
+│ --value        -V  TEXT  value                                                                                                                                                                                                                                                                          │
+│ --variable     -v  TEXT  uuid of the variable                                                                                                                                                                                                                                                           │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

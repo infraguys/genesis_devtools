@@ -6,9 +6,9 @@ Add a new ssh_key to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis ssh_keys add [OPTIONS]                                          
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret ssh_keys add [OPTIONS]                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -74,20 +74,19 @@ Add a new ssh_key to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis ssh_keys add [OPTIONS]                                          
-                                                                                
- Add a new ssh_key to the Genesis installation                                  
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid               -u  UUID  UUID of the ssh_key                        │
-│ *  --project-id         -p  UUID  Name of the project in which to deploy the │
-│                                   ssh_key [required]                         │
-│    --name               -n  TEXT  Name of the ssh_key                        │
-│    --description        -D  TEXT  Description of the ssh_key                 │
-│ *  --node                   UUID  node uuid of the ssh_key [required]        │
-│ *  --user                   TEXT  user uuid of the ssh_key [required]        │
-│    --target_public_key      TEXT                                             │
-│    --help                         Show this message and exit.                │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret ssh_keys add [OPTIONS]                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                                           
+ Add a new ssh_key to the Genesis installation                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid               -u  UUID  UUID of the ssh_key                                                                                                                                                                                                                                                   │
+│ *  --project-id         -p  UUID  Name of the project in which to deploy the ssh_key [required]                                                                                                                                                                                                         │
+│    --name               -n  TEXT  Name of the ssh_key                                                                                                                                                                                                                                                   │
+│    --description        -D  TEXT  Description of the ssh_key                                                                                                                                                                                                                                            │
+│ *  --node                   UUID  node uuid of the ssh_key [required]                                                                                                                                                                                                                                   │
+│ *  --user                   TEXT  user uuid of the ssh_key [required]                                                                                                                                                                                                                                   │
+│    --target_public_key      TEXT                                                                                                                                                                                                                                                                        │
+│    --help                         Show this message and exit.                                                                                                                                                                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

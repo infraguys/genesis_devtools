@@ -6,9 +6,9 @@ Push the element to the repository
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis push [OPTIONS] [PROJECT_DIR]                                    
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis push [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -45,6 +45,14 @@ Push the element to the repository
 
   Force push even if the element already exists
 
+* `latest`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-l
+--latest`
+
+  Push the element too as the latest version (if stable version)
+
 * `project_dir`:
     * Type: path
     * Default: `.`
@@ -60,16 +68,17 @@ Push the element to the repository
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis push [OPTIONS] [PROJECT_DIR]                                    
-                                                                                
- Push the element to the repository                                             
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file         │
-│ --target            -t  TEXT  Target repository to push to                   │
-│ --element-dir       -e  PATH  Directory where element artifacts are stored   │
-│ --force             -f        Force push even if the element already exists  │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis push [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                           
+ Push the element to the repository                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file                                                                                                                                                                                                                                    │
+│ --target            -t  TEXT  Target repository to push to                                                                                                                                                                                                                                              │
+│ --element-dir       -e  PATH  Directory where element artifacts are stored                                                                                                                                                                                                                              │
+│ --force             -f        Force push even if the element already exists                                                                                                                                                                                                                             │
+│ --latest            -l        Push the element too as the latest version (if stable version)                                                                                                                                                                                                            │
+│ --help                        Show this message and exit.                                                                                                                                                                                                                                               │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
