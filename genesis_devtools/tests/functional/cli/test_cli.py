@@ -41,14 +41,14 @@ class TestCli:
 
     def test_base_commands(self, cli_runner):
 
-        result = cli_runner.invoke(cli.genesis, self._def_args)
+        result = cli_runner.invoke(cli.genesis)
         assert result.exit_code == 0
 
-        result = cli_runner.invoke(cli.genesis, self._def_args + ["cowsay"])
+        result = cli_runner.invoke(cli.genesis, ["cowsay"])
         assert result.exit_code == 0
         assert result.output
 
-        result = cli_runner.invoke(cli.genesis, self._def_args + ["version"])
+        result = cli_runner.invoke(cli.genesis, ["version"])
         assert result.exit_code == 0
         assert result.output
 

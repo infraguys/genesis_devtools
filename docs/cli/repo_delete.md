@@ -6,9 +6,9 @@ Delete the repository
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis repo delete [OPTIONS] [PROJECT_DIR]                             
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis repo delete [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -44,14 +44,14 @@ Delete the repository
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis repo delete [OPTIONS] [PROJECT_DIR]                             
-                                                                                
- Delete the repository                                                          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file         │
-│ --target            -t  TEXT  Target repository to push to                   │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis repo delete [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                           
+ Delete the repository                                                                                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --genesis-cfg-file  -c  TEXT  Name of the project configuration file                                                                                                                                                                                                                                    │
+│ --target            -t  TEXT  Target repository to push to                                                                                                                                                                                                                                              │
+│ --help                        Show this message and exit.                                                                                                                                                                                                                                               │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -6,9 +6,9 @@ Bootstrap genesis locally
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis bootstrap [OPTIONS]                                             
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis bootstrap [OPTIONS]                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -168,87 +168,32 @@ Bootstrap genesis locally
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis bootstrap [OPTIONS]                                             
-                                                                                
- Bootstrap genesis locally                                                      
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --inventory              -i  TEXT                    Path to the genesis     │
-│                                                      inventory file or       │
-│                                                      directory with          │
-│                                                      inventory.json          │
-│ --profile                    [develop|small|medium|  Profile for the         │
-│                              large|legacy]           installation. [default: │
-│                                                      small]                  │
-│ --name                       TEXT                    Name of the             │
-│                                                      installation            │
-│ --launch-mode            -m  [core|element|custom]   Launch mode for start   │
-│                                                      element, core or custom │
-│                                                      configuration [default: │
-│                                                      element]                │
-│ --stand-spec             -s  PATH                    Additional stand        │
-│                                                      specification for core  │
-│                                                      mode.                   │
-│ --cidr                       IPV4NETWORK             The main network CIDR   │
-│                                                      [default: 10.20.0.0/22] │
-│ --core-ip                    IPV4ADDRESS             The IP address for the  │
-│                                                      core VM. If `None` is   │
-│                                                      provided, second IP     │
-│                                                      address from the main   │
-│                                                      network will be used.   │
-│ --bridge                     TEXT                    Name of the linux       │
-│                                                      bridge for the main     │
-│                                                      network, it will be     │
-│                                                      created if not set.     │
-│ --boot-cidr                  IPV4NETWORK             The bootstrap network   │
-│                                                      CIDR [default:          │
-│                                                      10.30.0.0/24]           │
-│ --boot-bridge                TEXT                    Name of the linux       │
-│                                                      bridge for the          │
-│                                                      bootstrap network, it   │
-│                                                      will be created if not  │
-│                                                      set.                    │
-│ --force                  -f                          Rebuild if the output   │
-│                                                      already exists          │
-│ --no-wait                                            Cancel waiting for the  │
-│                                                      installation to start   │
-│ --repository             -r  TEXT                    Default element         │
-│                                                      repository [default:    │
-│                                                      https://repository.gene │
-│                                                      sis-core.tech/]         │
-│ --admin-password             TEXT                    A password for the      │
-│                                                      admin user in. If not   │
-│                                                      provided, the password  │
-│                                                      will be generated.      │
-│ --save-admin-password-…      TEXT                    If the option is        │
-│                                                      specified the admin     │
-│                                                      password is saved to    │
-│                                                      the file. Otherwise     │
-│                                                      it's printed to the     │
-│                                                      console.                │
-│ --hyper-connection-uri       TEXT                    Connection URI for the  │
-│                                                      hypervisor, e.g.        │
-│                                                      'qemu+tcp://10.0.0.1/sy │
-│                                                      stem' or                │
-│                                                      'qemu+ssh://user@10.0.0 │
-│                                                      .1/system'. If not set, │
-│                                                      the first address of    │
-│                                                      the network(--cidr      │
-│                                                      option) will be used.   │
-│ --hyper-storage-pool         TEXT                    Storage pool for the    │
-│                                                      hypervisor. [default:   │
-│                                                      default]                │
-│ --hyper-machine-prefix       TEXT                    A prefix for new VMs.   │
-│                                                      [default: vm-]          │
-│ --hyper-iface-rom-file       TEXT                    A path to the custom    │
-│                                                      ROM file of a network   │
-│                                                      interface. [default:    │
-│                                                      /usr/share/qemu/1af4104 │
-│                                                      1.rom]                  │
-│ --no-start                                           Do not start the stand  │
-│                                                      after creation          │
-│ --help                                               Show this message and   │
-│                                                      exit.                   │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis bootstrap [OPTIONS]                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                           
+ Bootstrap genesis locally                                                                                                                                                                                                                                                                                 
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --inventory                 -i  TEXT                                 Path to the genesis inventory file or directory with inventory.json                                                                                                                                                                │
+│ --profile                       [develop|small|medium|large|legacy]  Profile for the installation. [default: small]                                                                                                                                                                                     │
+│ --name                          TEXT                                 Name of the installation                                                                                                                                                                                                           │
+│ --launch-mode               -m  [core|element|custom]                Launch mode for start element, core or custom configuration [default: element]                                                                                                                                                     │
+│ --stand-spec                -s  PATH                                 Additional stand specification for core mode.                                                                                                                                                                                      │
+│ --cidr                          IPV4NETWORK                          The main network CIDR [default: 10.20.0.0/22]                                                                                                                                                                                      │
+│ --core-ip                       IPV4ADDRESS                          The IP address for the core VM. If `None` is provided, second IP address from the main network will be used.                                                                                                                       │
+│ --bridge                        TEXT                                 Name of the linux bridge for the main network, it will be created if not set.                                                                                                                                                      │
+│ --boot-cidr                     IPV4NETWORK                          The bootstrap network CIDR [default: 10.30.0.0/24]                                                                                                                                                                                 │
+│ --boot-bridge                   TEXT                                 Name of the linux bridge for the bootstrap network, it will be created if not set.                                                                                                                                                 │
+│ --force                     -f                                       Rebuild if the output already exists                                                                                                                                                                                               │
+│ --no-wait                                                            Cancel waiting for the installation to start                                                                                                                                                                                       │
+│ --repository                -r  TEXT                                 Default element repository [default: https://repository.genesis-core.tech/]                                                                                                                                                        │
+│ --admin-password                TEXT                                 A password for the admin user in. If not provided, the password will be generated.                                                                                                                                                 │
+│ --save-admin-password-file      TEXT                                 If the option is specified the admin password is saved to the file. Otherwise it's printed to the console.                                                                                                                         │
+│ --hyper-connection-uri          TEXT                                 Connection URI for the hypervisor, e.g. 'qemu+tcp://10.0.0.1/system' or 'qemu+ssh://user@10.0.0.1/system'. If not set, the first address of the network(--cidr option) will be used.                                               │
+│ --hyper-storage-pool            TEXT                                 Storage pool for the hypervisor. [default: default]                                                                                                                                                                                │
+│ --hyper-machine-prefix          TEXT                                 A prefix for new VMs. [default: vm-]                                                                                                                                                                                               │
+│ --hyper-iface-rom-file          TEXT                                 A path to the custom ROM file of a network interface. [default: /usr/share/qemu/1af41041.rom]                                                                                                                                      │
+│ --no-start                                                           Do not start the stand after creation                                                                                                                                                                                              │
+│ --help                                                               Show this message and exit.                                                                                                                                                                                                        │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

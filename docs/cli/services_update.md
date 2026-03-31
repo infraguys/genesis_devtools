@@ -6,9 +6,9 @@ Update service
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis services update [OPTIONS] UUID                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis services update [OPTIONS] UUID                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -52,15 +52,15 @@ Update service
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis services update [OPTIONS] UUID                                  
-                                                                                
- Update service                                                                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --project-id   -p  UUID  Name of the project in which to deploy the service  │
-│ --name         -n  TEXT  Name of the service                                 │
-│ --description  -D  TEXT  Description of the service                          │
-│ --help                   Show this message and exit.                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis services update [OPTIONS] UUID                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+ Update service                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the service                                                                                                                                                                                                                             │
+│ --name         -n  TEXT  Name of the service                                                                                                                                                                                                                                                            │
+│ --description  -D  TEXT  Description of the service                                                                                                                                                                                                                                                     │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -75,4 +75,4 @@ jobs:
         run: uv tool install tox --with tox-uv
       - name: Coverage
         run: |
-          tox -e begin,${{ matrix.python-version }},end
+          tox -e begin,${{ matrix.python-version }},${{ matrix.python-version }}-functional,end

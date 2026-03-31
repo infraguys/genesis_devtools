@@ -6,9 +6,9 @@ Delete role_binding
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis role_bindings delete [OPTIONS]                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis iam role_bindings delete [OPTIONS]                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -31,13 +31,13 @@ Delete role_binding
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis role_bindings delete [OPTIONS]                                  
-                                                                                
- Delete role_binding                                                            
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  role_binding UUID                                          │
-│ --help            Show this message and exit.                                │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis iam role_bindings delete [OPTIONS]                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+ Delete role_binding                                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  role_binding UUID                                                                                                                                                                                                                                                                     │
+│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

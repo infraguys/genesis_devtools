@@ -64,6 +64,7 @@ RSA_KEY_COLLECTION = "/v1/secret/rsa_keys/"
 
 NODE_COLLECTION = "/v1/compute/nodes/"
 HYPERVISOR_COLLECTION = "/v1/compute/hypervisors/"
+SET_COLLECTION = "/v1/compute/sets/"
 
 USER_COLLECTION = "/v1/iam/users/"
 IDP_COLLECTION = "/v1/iam/idp/"

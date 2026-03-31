@@ -6,9 +6,9 @@ Add a new variable to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis vars add [OPTIONS]                                              
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs vars add [OPTIONS]                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -55,17 +55,16 @@ Add a new variable to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis vars add [OPTIONS]                                              
-                                                                                
- Add a new variable to the Genesis installation                                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid         -u  UUID  UUID of the variable                             │
-│ *  --project-id   -p  UUID  Name of the project in which to deploy the       │
-│                             variable [required]                              │
-│    --name         -n  TEXT  Name of the variable                             │
-│    --description  -D  TEXT  Description of the variable                      │
-│    --help                   Show this message and exit.                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis vs vars add [OPTIONS]                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                           
+ Add a new variable to the Genesis installation                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the variable                                                                                                                                                                                                                                                        │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the variable [required]                                                                                                                                                                                                              │
+│    --name         -n  TEXT  Name of the variable                                                                                                                                                                                                                                                        │
+│    --description  -D  TEXT  Description of the variable                                                                                                                                                                                                                                                 │
+│    --help                   Show this message and exit.                                                                                                                                                                                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

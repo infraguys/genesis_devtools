@@ -21,7 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
+from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import rsa_key as rsa_key_lib
 from genesis_devtools.common import utils
@@ -35,7 +35,7 @@ def rsa_keys_group():
 @rsa_keys_group.command("list", help="List rsa_keys")
 @click.pass_context
 def list_rsa_keys(ctx: click.Context) -> None:
-    client = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     rsa_keys = rsa_key_lib.list_rsa_keys(client)
     _print_rsa_keys(rsa_keys)
 
@@ -51,7 +51,7 @@ def show_rsa_key_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         rsa_keys = rsa_key_lib.list_rsa_keys(client, name=uuid)
         if rsa_keys:
@@ -73,7 +73,7 @@ def delete_rsa_key_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         rsa_keys = rsa_key_lib.list_rsa_keys(client, name=uuid)
         if rsa_keys:
@@ -120,7 +120,7 @@ def add_rsa_key_cmd(
     name: str,
     description: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -170,7 +170,7 @@ def update_rsa_key_cmd(
     name: str | None,
     description: str | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)

@@ -21,7 +21,9 @@ import uuid as sys_uuid
 
 import rich_click as click
 from bazooka import exceptions as bazooka_exc
-from gcl_sdk.clients.http import base as http_client
+
+if tp.TYPE_CHECKING:
+    from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools import constants as c
 

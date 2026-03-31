@@ -6,9 +6,9 @@ Add a new certificate to the Genesis installation
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis certificates add [OPTIONS]                                      
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret certificates add [OPTIONS]                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -55,17 +55,16 @@ Add a new certificate to the Genesis installation
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis certificates add [OPTIONS]                                      
-                                                                                
- Add a new certificate to the Genesis installation                              
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│    --uuid         -u  UUID  UUID of the certificate                          │
-│ *  --project-id   -p  UUID  Name of the project in which to deploy the       │
-│                             certificate [required]                           │
-│    --name         -n  TEXT  Name of the certificate                          │
-│    --description  -D  TEXT  Description of the certificate                   │
-│    --help                   Show this message and exit.                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret certificates add [OPTIONS]                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                           
+ Add a new certificate to the Genesis installation                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│    --uuid         -u  UUID  UUID of the certificate                                                                                                                                                                                                                                                     │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the certificate [required]                                                                                                                                                                                                           │
+│    --name         -n  TEXT  Name of the certificate                                                                                                                                                                                                                                                     │
+│    --description  -D  TEXT  Description of the certificate                                                                                                                                                                                                                                              │
+│    --help                   Show this message and exit.                                                                                                                                                                                                                                                 │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -52,36 +52,21 @@ from genesis_devtools.stand import models as stand_models
 from genesis_devtools.infra.driver import libvirt as libvirt_infra
 
 from genesis_devtools.cmd.iam.auth import commands as iam_commands
-from genesis_devtools.cmd.iam.client import commands as client_commands
-from genesis_devtools.cmd.iam.idp import commands as idp_commands
-from genesis_devtools.cmd.iam.organization import commands as organization_commands
-from genesis_devtools.cmd.iam.permission import commands as permission_commands
-from genesis_devtools.cmd.iam.permission_binding import (
-    commands as permission_binding_commands,
-)
-from genesis_devtools.cmd.iam.project import commands as project_commands
-from genesis_devtools.cmd.iam.role import commands as role_commands
-from genesis_devtools.cmd.iam.role_binding import commands as role_binding_commands
 
-from genesis_devtools.cmd.secret.certificate import commands as certificate_commands
-from genesis_devtools.cmd.secret.passwords import commands as password_commands
-from genesis_devtools.cmd.secret.rsa_keys import commands as rsa_keys_commands
-from genesis_devtools.cmd.secret.ssh_keys import commands as ssh_keys_commands
+from genesis_devtools.cmd.iam import iam_group
+from genesis_devtools.cmd.secret import secret_group
+from genesis_devtools.cmd.vs import vs_group
+from genesis_devtools.cmd.compute import compute_group
 
-from genesis_devtools.cmd.settings import commands as settings_commands
-from genesis_devtools.cmd.hypervisors import commands as hypervisors_commands
-from genesis_devtools.cmd.manifests import commands as manifests_commands
+from genesis_devtools.cmd.em.manifests import commands as manifests_commands
+from genesis_devtools.cmd.em.elements import commands as elements_commands
+from genesis_devtools.cmd.em.services import commands as services_commands
+
 from genesis_devtools.cmd.initialization import commands as initialization_commands
-from genesis_devtools.cmd.nodes import commands as nodes_commands
 from genesis_devtools.cmd.configs import commands as configs_commands
-from genesis_devtools.cmd.elements import commands as elements_commands
-from genesis_devtools.cmd.profiles import commands as profiles_commands
 from genesis_devtools.cmd.repo import commands as repo_commands
-from genesis_devtools.cmd.resources import commands as resources_commands
-from genesis_devtools.cmd.services import commands as services_commands
-from genesis_devtools.cmd.iam.user import commands as user_commands
-from genesis_devtools.cmd.values import commands as values_commands
-from genesis_devtools.cmd.vars import commands as vars_commands
+from genesis_devtools.cmd.em.resources import commands as resources_commands
+from genesis_devtools.cmd.settings import commands as settings_commands
 
 BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
@@ -90,7 +75,7 @@ GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
 
 
 class CmdContext(tp.NamedTuple):
-    client: http_client.CollectionBaseClient
+    auth_data: dict[str, tp.Any]
     cfg_path: str
 
 
@@ -206,19 +191,15 @@ def genesis(
     else:
         scope = None
 
-    auth = http_client.CoreIamAuthenticator(
-        base_url=final_endpoint,
+    auth_data = dict(
+        endpoint=final_endpoint,
         username=final_user,
         password=final_password,
         access_token=final_access_token,
         refresh_token=final_refresh_token,
         scope=scope,
     )
-    client = http_client.CollectionBaseClient(
-        base_url=final_endpoint,
-        auth=auth,
-    )
-    ctx.obj = CmdContext(client, config)
+    ctx.obj = CmdContext(auth_data, config)
 
 
 def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
@@ -1467,36 +1448,21 @@ To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
 
 
 genesis.add_command(iam_commands.auth_group)  # noqa
-genesis.add_command(client_commands.clients_group)  # noqa
-genesis.add_command(idp_commands.idps_group)  # noqa
-genesis.add_command(organization_commands.organizations_group)  # noqa
-genesis.add_command(permission_commands.permissions_group)  # noqa
-genesis.add_command(permission_binding_commands.permission_bindings_group)  # noqa
-genesis.add_command(project_commands.projects_group)  # noqa
-genesis.add_command(role_commands.roles_group)  # noqa
-genesis.add_command(role_binding_commands.role_bindings_group)  # noqa
 
-genesis.add_command(certificate_commands.certificates_group)  # noqa
-genesis.add_command(password_commands.passwords_group)  # noqa
-genesis.add_command(rsa_keys_commands.rsa_keys_group)  # noqa
-genesis.add_command(ssh_keys_commands.ssh_keys_group)  # noqa
+genesis.add_command(iam_group)  # noqa
+genesis.add_command(secret_group)  # noqa
+genesis.add_command(compute_group)  # noqa
+genesis.add_command(vs_group)  # noqa
 
-genesis.add_command(settings_commands.settings_group)  # noqa
-genesis.add_command(hypervisors_commands.hypervisors_group)  # noqa
 genesis.add_command(manifests_commands.manifests_group)  # noqa
-genesis.add_command(nodes_commands.nodes_group)  # noqa
-genesis.add_command(configs_commands.configs_group)  # noqa
 genesis.add_command(elements_commands.elements_group)  # noqa
-genesis.add_command(profiles_commands.profiles_group)  # noqa
+genesis.add_command(services_commands.services_group)  # noqa
+
+genesis.add_command(configs_commands.configs_group)  # noqa
+genesis.add_command(settings_commands.settings_group)  # noqa
 genesis.add_command(repo_commands.repository_group)  # noqa
 genesis.add_command(resources_commands.resources_group)  # noqa
-genesis.add_command(services_commands.services_group)  # noqa
-genesis.add_command(user_commands.users_group)  # noqa
-genesis.add_command(values_commands.values_group)  # noqa
-genesis.add_command(vars_commands.variables_group)  # noqa
 
-
-# Initialization
 genesis.add_command(initialization_commands.init_cmd)  # noqa
 
 

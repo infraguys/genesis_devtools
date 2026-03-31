@@ -6,9 +6,9 @@ Delete organization
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis organizations delete [OPTIONS]                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis iam organizations delete [OPTIONS]                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -31,13 +31,13 @@ Delete organization
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis organizations delete [OPTIONS]                                  
-                                                                                
- Delete organization                                                            
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  organization UUID                                          │
-│ --help            Show this message and exit.                                │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis iam organizations delete [OPTIONS]                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+ Delete organization                                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --uuid  -u  UUID  organization UUID                                                                                                                                                                                                                                                                     │
+│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

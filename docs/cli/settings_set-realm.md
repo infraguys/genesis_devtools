@@ -6,9 +6,9 @@ Set a realm entry in settings
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings set-realm [OPTIONS] REALM                              
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings set-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -42,6 +42,13 @@ Set a realm entry in settings
 
   Skip TLS certificate verification
 
+* `current`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--current`
+
+  Set as current realm
+
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -52,15 +59,16 @@ Set a realm entry in settings
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings set-realm [OPTIONS] REALM                              
-                                                                                
- Set a realm entry in settings                                                  
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ *  --endpoint         -e  TEXT  Endpoint for the realm [required]            │
-│    --check_updates    -c        Check for updates on startup                 │
-│    --skip_tls_verify  -s        Skip TLS certificate verification            │
-│    --help                       Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings set-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+ Set a realm entry in settings                                                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --endpoint         -e  TEXT  Endpoint for the realm [required]                                                                                                                                                                                                                                       │
+│    --check_updates    -c        Check for updates on startup                                                                                                                                                                                                                                            │
+│    --skip_tls_verify  -s        Skip TLS certificate verification                                                                                                                                                                                                                                       │
+│    --current                    Set as current realm                                                                                                                                                                                                                                                    │
+│    --help                       Show this message and exit.                                                                                                                                                                                                                                             │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

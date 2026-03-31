@@ -21,7 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
+from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import idp as idp_lib
 from genesis_devtools.common import utils
@@ -37,7 +37,7 @@ def idps_group():
 def list_idps(
     ctx: click.Context,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     idps = idp_lib.list_idps(client)
     _print_values(idps)
 
@@ -53,7 +53,7 @@ def show_idp(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         idps = idp_lib.list_idps(client, idpname=uuid)
         if idps:
@@ -77,7 +77,7 @@ def delete_idp(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     idp_lib.delete_idp(client, uuid)
 
 

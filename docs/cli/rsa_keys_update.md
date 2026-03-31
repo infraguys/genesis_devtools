@@ -6,9 +6,9 @@ Update rsa_key
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis rsa_keys update [OPTIONS] UUID                                  
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret rsa_keys update [OPTIONS] UUID                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -52,15 +52,15 @@ Update rsa_key
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis rsa_keys update [OPTIONS] UUID                                  
-                                                                                
- Update rsa_key                                                                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --project-id   -p  UUID  Name of the project in which to deploy the rsa_key  │
-│ --name         -n  TEXT  Name of the rsa_key                                 │
-│ --description  -D  TEXT  Description of the rsa_key                          │
-│ --help                   Show this message and exit.                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret rsa_keys update [OPTIONS] UUID                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                           
+ Update rsa_key                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the rsa_key                                                                                                                                                                                                                             │
+│ --name         -n  TEXT  Name of the rsa_key                                                                                                                                                                                                                                                            │
+│ --description  -D  TEXT  Description of the rsa_key                                                                                                                                                                                                                                                     │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

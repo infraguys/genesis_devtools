@@ -6,9 +6,9 @@ Update certificate
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis certificates update [OPTIONS] UUID                              
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret certificates update [OPTIONS] UUID                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -52,16 +52,15 @@ Update certificate
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis certificates update [OPTIONS] UUID                              
-                                                                                
- Update certificate                                                             
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --project-id   -p  UUID  Name of the project in which to deploy the          │
-│                          certificate                                         │
-│ --name         -n  TEXT  Name of the certificate                             │
-│ --description  -D  TEXT  Description of the certificate                      │
-│ --help                   Show this message and exit.                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis secret certificates update [OPTIONS] UUID                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
+ Update certificate                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --project-id   -p  UUID  Name of the project in which to deploy the certificate                                                                                                                                                                                                                         │
+│ --name         -n  TEXT  Name of the certificate                                                                                                                                                                                                                                                        │
+│ --description  -D  TEXT  Description of the certificate                                                                                                                                                                                                                                                 │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

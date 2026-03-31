@@ -21,7 +21,7 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
-from gcl_sdk.clients.http import base as http_client
+from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import user as user_lib
 from genesis_devtools.common import utils
@@ -37,7 +37,7 @@ def users_group():
 def list_users(
     ctx: click.Context,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     users = user_lib.list_users(client)
     _print_values(users)
 
@@ -53,7 +53,7 @@ def show_user(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
         users = user_lib.list_users(client, username=uuid)
         if users:
@@ -77,7 +77,7 @@ def delete_user(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
 ) -> None:
-    client: http_client.CollectionBaseClient = ctx.obj.client
+    client = get_user_api_client(ctx.obj.auth_data)
     user_lib.delete_user(client, uuid)
 
 

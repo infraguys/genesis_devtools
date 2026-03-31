@@ -6,9 +6,9 @@ Provides all the necessary tools for work with Genesis Platform
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis [OPTIONS] COMMAND [ARGS]...                                     
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -93,70 +93,50 @@ Provides all the necessary tools for work with Genesis Platform
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis [OPTIONS] COMMAND [ARGS]...                                     
-                                                                                
- Provides all the necessary tools for work with Genesis Platform                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --config             FILE  Path to YAML config file [default:                │
-│                            /home/user/.genesis/genesisctl.yaml]              │
-│ --endpoint       -e  TEXT  Genesis API endpoint [default:                    │
-│                            http://localhost:11010]                           │
-│ --user           -u  TEXT  Client user name                                  │
-│ --password       -p  TEXT  Password for the client user                      │
-│ --access_token   -a  TEXT  access token for the client user                  │
-│ --refresh_token      TEXT  refresh token for the client user                 │
-│ --realm          -r  TEXT  Name of the realm                                 │
-│ --context        -c  TEXT  Name of the context                               │
-│ --project-id     -P  UUID  Project ID for the client user                    │
-│ --help                     Show this message and exit.                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ auth                 Authenticate and manage IAM token                       │
-│ autocomplete_help    Display a autocomplete help                             │
-│ backup               Backup the current installation                         │
-│ backup-decrypt       Decrypt a backup file                                   │
-│ bootstrap            Bootstrap genesis locally                               │
-│ build                Build a Genesis element. The command build all images,  │
-│                      manifests and other artifacts required for the element. │
-│                      The manifest in the project may be a raw YAML file or a │
-│                      template using Jinja2 templates. For Jinja2 templates,  │
-│                      the following variables are available by default:       │
-│ certificates         Manage certificates in the Genesis installation         │
-│ clients              Manager clients in the Genesis installation             │
-│ configs              Manager configs in the Genesis installation             │
-│ cowsay               Display a cow message                                   │
-│ delete               Delete the genesis stand/element                        │
-│ elements             Manage elements in the Genesis installation             │
-│ get-version          Return the version of the project                       │
-│ hello                Display a genesis message                               │
-│ hypervisors          Manager hypervisors in the Genesis installation         │
-│ idps                 Manager idps in the Genesis installation                │
-│ init                 Platformize the project                                 │
-│ latest               Check for the latest version on GitHub                  │
-│ manifests            Manage manifests in the Genesis installation            │
-│ nodes                Manager nodes in the Genesis installation               │
-│ organizations        Manager organizations in the Genesis installation       │
-│ passwords            Manage passwords in the Genesis installation            │
-│ permission_bindings  Manager permission_bindings in the Genesis installation │
-│ permissions          Manager permissions in the Genesis installation         │
-│ profiles             Manage profiles in the Genesis installation             │
-│ projects             Manager projects in the Genesis installation            │
-│ ps                   List of running genesis installation                    │
-│ push                 Push the element to the repository                      │
-│ repo                 Manager Genesis repository                              │
-│ resources            Manage resources in the Genesis installation            │
-│ role_bindings        Manager role_bindings in the Genesis installation       │
-│ roles                Manager roles in the Genesis installation               │
-│ rsa_keys             Manage rsa_keys in the Genesis installation             │
-│ services             Manage services in the Genesis installation             │
-│ settings             Modify genesis settings files                           │
-│ ssh                  Connect to genesis stand/element                        │
-│ ssh_keys             Manage ssh_keys in the Genesis installation             │
-│ users                Manager users in the Genesis installation               │
-│ values               Manage values in the Genesis installation               │
-│ vars                 Manage variables in the Genesis installation            │
-│ version              Prints the genesis_devtools version                     │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Provides all the necessary tools for work with Genesis Platform                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --config             FILE  Path to YAML config file [default: /home/user/.genesis/genesisctl.yaml]                                                                                                                                                                                                      │
+│ --endpoint       -e  TEXT  Genesis API endpoint [default: http://localhost:11010]                                                                                                                                                                                                                       │
+│ --user           -u  TEXT  Client user name                                                                                                                                                                                                                                                             │
+│ --password       -p  TEXT  Password for the client user                                                                                                                                                                                                                                                 │
+│ --access_token   -a  TEXT  access token for the client user                                                                                                                                                                                                                                             │
+│ --refresh_token      TEXT  refresh token for the client user                                                                                                                                                                                                                                            │
+│ --realm          -r  TEXT  Name of the realm                                                                                                                                                                                                                                                            │
+│ --context        -c  TEXT  Name of the context                                                                                                                                                                                                                                                          │
+│ --project-id     -P  UUID  Project ID for the client user                                                                                                                                                                                                                                               │
+│ --help                     Show this message and exit.                                                                                                                                                                                                                                                  │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ auth                Authenticate and manage IAM token                                                                                                                                                                                                                                                   │
+│ autocomplete_help   Display a autocomplete help                                                                                                                                                                                                                                                         │
+│ backup              Backup the current installation                                                                                                                                                                                                                                                     │
+│ backup-decrypt      Decrypt a backup file                                                                                                                                                                                                                                                               │
+│ bootstrap           Bootstrap genesis locally                                                                                                                                                                                                                                                           │
+│ build               Build a Genesis element. The command build all images, manifests and other artifacts required for the element. The manifest in the project may be a raw YAML file or a template using Jinja2 templates. For Jinja2 templates, the following variables are available by default:     │
+│ compute             Compute group in the Genesis installation                                                                                                                                                                                                                                           │
+│ configs             Manager configs in the Genesis installation                                                                                                                                                                                                                                         │
+│ cowsay              Display a cow message                                                                                                                                                                                                                                                               │
+│ delete              Delete the genesis stand/element                                                                                                                                                                                                                                                    │
+│ elements            Manage elements in the Genesis installation                                                                                                                                                                                                                                         │
+│ get-version         Return the version of the project                                                                                                                                                                                                                                                   │
+│ hello               Display a genesis message                                                                                                                                                                                                                                                           │
+│ iam                 iam group in the Genesis installation                                                                                                                                                                                                                                               │
+│ init                Platformize the project                                                                                                                                                                                                                                                             │
+│ latest              Check for the latest version on GitHub                                                                                                                                                                                                                                              │
+│ manifests           Manage manifests in the Genesis installation                                                                                                                                                                                                                                        │
+│ ps                  List of running genesis installation                                                                                                                                                                                                                                                │
+│ push                Push the element to the repository                                                                                                                                                                                                                                                  │
+│ repo                Manager Genesis repository                                                                                                                                                                                                                                                          │
+│ resources           Manage resources in the Genesis installation                                                                                                                                                                                                                                        │
+│ secret              Secret group in the Genesis installation                                                                                                                                                                                                                                            │
+│ services            Manage services in the Genesis installation                                                                                                                                                                                                                                         │
+│ settings            Modify genesis settings files                                                                                                                                                                                                                                                       │
+│ ssh                 Connect to genesis stand/element                                                                                                                                                                                                                                                    │
+│ version             Prints the genesis_devtools version                                                                                                                                                                                                                                                 │
+│ vs                  vs group in the Genesis installation                                                                                                                                                                                                                                                │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

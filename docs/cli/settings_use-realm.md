@@ -6,9 +6,9 @@ Set the current-realm in a settings file
 ## Usage
 
 ```console
-                                                                                
- Usage: genesis settings use-realm [OPTIONS] REALM                              
-                                                                                
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings use-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
 ```
 
 ## Options
@@ -28,12 +28,12 @@ Set the current-realm in a settings file
 ## CLI Help
 
 ```console
-                                                                                
- Usage: genesis settings use-realm [OPTIONS] REALM                              
-                                                                                
- Set the current-realm in a settings file                                       
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                          │
-╰──────────────────────────────────────────────────────────────────────────────╯
+                                                                                                                                                                                                                                                                                                           
+ Usage: genesis settings use-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                           
+ Set the current-realm in a settings file                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                                           
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
