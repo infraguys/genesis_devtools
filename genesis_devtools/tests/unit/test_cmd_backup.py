@@ -30,15 +30,17 @@ class TestCmdBackup:
 
         backuper_mock = MagicMock()
         # Local backuper constructor should return our mock instance
-        with patch(
-            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
-            return_value=backuper_mock,
-        ) as local_backuper_ctor, patch(
-            "genesis_devtools.cmd.cli._domains_for_backup",
-            return_value=domains,
-        ) as domains_for_backup, patch(
-            "genesis_devtools.cmd.cli.utils.load_driver"
-        ) as load_driver:
+        with (
+            patch(
+                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                return_value=backuper_mock,
+            ) as local_backuper_ctor,
+            patch(
+                "genesis_devtools.cmd.cli._domains_for_backup",
+                return_value=domains,
+            ) as domains_for_backup,
+            patch("genesis_devtools.cmd.cli.utils.load_driver") as load_driver,
+        ):
             # Act
             backup_cmd.callback(
                 config=None,
@@ -77,15 +79,19 @@ class TestCmdBackup:
         domains = ["vmX"]
         backuper_mock = MagicMock()
 
-        with patch(
-            "genesis_devtools.cmd.cli.utils.load_driver",
-            return_value=backuper_mock,
-        ) as load_driver, patch(
-            "genesis_devtools.cmd.cli._domains_for_backup",
-            return_value=domains,
-        ) as domains_for_backup, patch(
-            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper"
-        ) as local_backuper_ctor:
+        with (
+            patch(
+                "genesis_devtools.cmd.cli.utils.load_driver",
+                return_value=backuper_mock,
+            ) as load_driver,
+            patch(
+                "genesis_devtools.cmd.cli._domains_for_backup",
+                return_value=domains,
+            ) as domains_for_backup,
+            patch(
+                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper"
+            ) as local_backuper_ctor,
+        ):
             # Act
             backup_cmd.callback(
                 config="/path/to/config.yaml",
@@ -115,15 +121,17 @@ class TestCmdBackup:
         filtered_domains = ["vm1"]
         backuper_mock = MagicMock()
 
-        with patch(
-            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
-            return_value=backuper_mock,
-        ) as local_backuper_ctor, patch(
-            "genesis_devtools.cmd.cli._domains_for_backup",
-            return_value=filtered_domains,
-        ) as domains_for_backup, patch(
-            "genesis_devtools.cmd.cli.utils.load_driver"
-        ) as load_driver:
+        with (
+            patch(
+                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                return_value=backuper_mock,
+            ) as local_backuper_ctor,
+            patch(
+                "genesis_devtools.cmd.cli._domains_for_backup",
+                return_value=filtered_domains,
+            ) as domains_for_backup,
+            patch("genesis_devtools.cmd.cli.utils.load_driver") as load_driver,
+        ):
             # Act
             backup_cmd.callback(
                 config=None,
@@ -176,12 +184,15 @@ class TestCmdBackup:
     ) -> None:
         # Arrange: local backuper returned but backup should never be called
         backuper_mock = MagicMock()
-        with patch(
-            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
-            return_value=backuper_mock,
-        ), patch(
-            "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.validate_env",
-            side_effect=ValueError("invalid env"),
+        with (
+            patch(
+                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                return_value=backuper_mock,
+            ),
+            patch(
+                "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.validate_env",
+                side_effect=ValueError("invalid env"),
+            ),
         ):
             # Act / Assert
             with pytest.raises(click.UsageError):
@@ -208,18 +219,23 @@ class TestCmdBackup:
         backuper_mock = MagicMock()
         encryption_obj = MagicMock()
 
-        with patch(
-            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
-            return_value=backuper_mock,
-        ), patch(
-            "genesis_devtools.cmd.cli._domains_for_backup",
-            return_value=domains,
-        ), patch(
-            "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.validate_env",
-            return_value=None,
-        ), patch(
-            "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.from_env",
-            return_value=encryption_obj,
+        with (
+            patch(
+                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                return_value=backuper_mock,
+            ),
+            patch(
+                "genesis_devtools.cmd.cli._domains_for_backup",
+                return_value=domains,
+            ),
+            patch(
+                "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.validate_env",
+                return_value=None,
+            ),
+            patch(
+                "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.from_env",
+                return_value=encryption_obj,
+            ),
         ):
             # Act
             backup_cmd.callback(
@@ -256,19 +272,25 @@ class TestCmdBackup:
         domains = ["vmA"]
         backuper_mock = MagicMock()
 
-        with patch(
-            "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
-            return_value=backuper_mock,
-        ), patch(
-            "genesis_devtools.cmd.cli._domains_for_backup",
-            return_value=domains,
-        ) as domains_for_backup, patch(
-            "genesis_devtools.cmd.cli.time.time",
-            side_effect=[now_ts, now_ts],
-        ), patch(
-            "genesis_devtools.cmd.cli.time.localtime",
-            return_value=now_struct,
-        ), patch("genesis_devtools.cmd.cli.time.sleep") as sleep_mock:
+        with (
+            patch(
+                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                return_value=backuper_mock,
+            ),
+            patch(
+                "genesis_devtools.cmd.cli._domains_for_backup",
+                return_value=domains,
+            ) as domains_for_backup,
+            patch(
+                "genesis_devtools.cmd.cli.time.time",
+                side_effect=[now_ts, now_ts],
+            ),
+            patch(
+                "genesis_devtools.cmd.cli.time.localtime",
+                return_value=now_struct,
+            ),
+            patch("genesis_devtools.cmd.cli.time.sleep") as sleep_mock,
+        ):
             # Make rotate raise to stop after first iteration
             backuper_mock.rotate.side_effect = SystemExit
 

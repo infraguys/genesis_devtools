@@ -206,6 +206,11 @@ def genesis(
     else:
         scope = None
 
+    if final_user is None and final_password is None or final_access_token is None:
+        raise click.UsageError(
+            "Either user and password or access token must be provided for authentication. "
+            "Use the 'genesis settings set-context' command to set the context."
+        )
     auth = http_client.CoreIamAuthenticator(
         base_url=final_endpoint,
         username=final_user,

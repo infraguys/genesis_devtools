@@ -19,6 +19,7 @@ import os
 import yaml
 import rich_click as click
 import json
+import tempfile
 
 from genesis_devtools import constants as c
 
@@ -42,11 +43,24 @@ def load_config(cfg_path: str | None = c.CONFIG_FILE) -> dict:
 
 
 def _save_config(config: dict, cfg_path: str = c.CONFIG_FILE) -> None:
-    """Save configuration to file"""
+    """Save configuration to file atomically"""
     try:
-        with open(cfg_path, "w") as f:
-            yaml.dump(config, f, default_flow_style=False)
+        dir_name = os.path.dirname(cfg_path) or "."
+        os.makedirs(dir_name, exist_ok=True)
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", dir=dir_name, delete=False, suffix=".tmp"
+        ) as tmp_f:
+            tmp_path = tmp_f.name
+            yaml.dump(config, tmp_f, default_flow_style=False)
+            tmp_f.flush()
+            os.fsync(tmp_f.fileno())
+
+        # Atomically replace the original file
+        os.replace(tmp_path, cfg_path)
     except Exception as e:
+        if "tmp_path" in locals() and os.path.exists(tmp_path):
+            os.unlink(tmp_path)
         raise click.ClickException(f"Error writing settings: {e}")
 
 
@@ -158,6 +172,12 @@ def list_realms(ctx: click.Context, output: str) -> None:
     default=True,
     help="Skip TLS certificate verification",
 )
+@click.option(
+    "--current",
+    is_flag=True,
+    default=False,
+    help="Set as current realm",
+)
 @click.pass_context
 def set_realm(
     ctx: click.Context,
@@ -165,6 +185,7 @@ def set_realm(
     endpoint: str | None,
     check_updates: bool,
     skip_tls_verify: bool,
+    current: bool,
 ) -> None:
     config = load_config(ctx.obj.cfg_path)
 
@@ -175,7 +196,11 @@ def set_realm(
         "endpoint": endpoint,
         "check_updates": check_updates,
         "skip_tls_verify": skip_tls_verify,
+        "contexts": {},
     }
+
+    if current:
+        config["current-realm"] = realm
 
     config["realms"][realm] = realm_config
     _save_config(config, ctx.obj.cfg_path)
@@ -294,6 +319,8 @@ def set_context(
     if refresh_token:
         context_config["refresh_token"] = refresh_token
 
+    if "contexts" not in config["realms"][realm]:
+        config["realms"][realm]["contexts"] = {}
     config["realms"][realm]["contexts"][name] = context_config
     _save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{name}' for realm '{realm}' set")
