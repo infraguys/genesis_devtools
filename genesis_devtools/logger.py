@@ -41,6 +41,13 @@ class AbstractLogger(abc.ABC):
 class ClickLogger(AbstractLogger):
     """Logger based on Click."""
 
+    __instance__ = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance__:
+            cls.__instance__ = super().__new__(cls)
+        return cls.__instance__
+
     def error(self, msg: str) -> None:
         """Log an error message."""
         click.secho(msg, fg="red")
