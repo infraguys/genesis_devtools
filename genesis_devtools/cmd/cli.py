@@ -15,7 +15,6 @@
 #    under the License.
 from __future__ import annotations
 
-import cowsay
 import os
 import requests
 from requests.exceptions import RequestException
@@ -23,7 +22,6 @@ import time
 import shutil
 import typing as tp
 import tempfile
-import secrets
 import ipaddress
 import fnmatch
 import pathlib
@@ -36,7 +34,6 @@ import rich_click as click
 from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
 
-from genesis_devtools.common.table import get_table, print_table
 import genesis_devtools.constants as c
 from genesis_devtools import utils
 from genesis_devtools.backup import base as backup_base
@@ -57,6 +54,7 @@ from genesis_devtools.cmd.iam import iam_group
 from genesis_devtools.cmd.secret import secret_group
 from genesis_devtools.cmd.vs import vs_group
 from genesis_devtools.cmd.compute import compute_group
+from genesis_devtools.cmd.realms.commands import realms_group
 
 from genesis_devtools.cmd.em.manifests import commands as manifests_commands
 from genesis_devtools.cmd.em.elements import commands as elements_commands
@@ -643,7 +641,10 @@ def bootstrap_cmd(
         raise click.UsageError("Core IP is not in the main network")
 
     # Generate admin password if not provided
-    admin_password = admin_password or secrets.token_urlsafe(16)
+    if not admin_password:
+        import secrets
+
+        admin_password = secrets.token_urlsafe(16)
 
     # Load inventory and get image path and image URI.
     inventory = base_builder.ElementInventory.load(pathlib.Path(inventory))
@@ -730,87 +731,6 @@ def bootstrap_cmd(
         hypervisors=hypervisors,
         no_start=no_start,
     )
-
-
-@genesis.command("ssh", help="Connect to genesis stand/element")
-@click.option(
-    "-s",
-    "--stand",
-    default=None,
-    help="Stand to connect to",
-)
-@click.option(
-    "-u",
-    "--username",
-    default="ubuntu",
-    help="Default username",
-)
-def conn_cmd(stand: str | None, username: str) -> None:
-    logger = ClickLogger()
-    infra = libvirt_infra.LibvirtInfraDriver()
-    stands = infra.list_stands()
-
-    if len(stands) == 0:
-        logger.warn("No genesis stands found")
-        return
-
-    if len(stands) > 1 and stand is None:
-        logger.warn("Multiple genesis stands found, please specify one")
-        return
-
-    # If the stand is not specified, use the first one
-    for dev_stand in stands:
-        if stand is None:
-            break
-
-        if dev_stand.name == stand:
-            break
-    else:
-        raise click.UsageError("No genesis stand found")
-
-    if dev_stand.network.dhcp:
-        ip_address = libvirt.get_domain_ip(dev_stand.bootstraps[0].name)
-    else:
-        ip_address = dev_stand.network.cidr[2]
-
-    os.system(f"ssh {username}@{ip_address}")
-
-
-@genesis.command("ps", help="List of running genesis installation")
-def ps_cmd() -> None:
-    table = get_table()
-    table.add_column("name")
-    table.add_column("nodes")
-    table.add_column("IP")
-
-    infra = libvirt_infra.LibvirtInfraDriver()
-
-    for stand in infra.list_stands():
-        if stand.network.dhcp:
-            ip = libvirt.get_domain_ip(stand.bootstraps[0].name)
-        else:
-            ip = stand.network.cidr[2]
-
-        nodes = len(stand.bootstraps) + len(stand.baremetals)
-        table.add_row(stand.name, nodes, ip)
-
-    click.echo("Genesis installations:")
-    print_table(table)
-
-
-@genesis.command("delete", help="Delete the genesis stand/element")
-@click.argument("name", type=str)
-def delete_cmd(name: str) -> None:
-    infra = libvirt_infra.LibvirtInfraDriver()
-
-    # Check if the target stand already exists
-    for stand in infra.list_stands():
-        if stand.name == name:
-            break
-    else:
-        raise click.UsageError(f"Stand {name} not found")
-
-    infra.delete_stand(stand)
 
 
 @genesis.command("get-version", help="Return the version of the project")
@@ -1415,6 +1335,8 @@ def latest_cmd() -> None:
 
 @genesis.command("cowsay", help="Display a cow message")
 def cowsay_cmd() -> None:
+    import cowsay
+
     cowsay.cow("I am genesis-cli")
 
 
@@ -1453,6 +1375,7 @@ genesis.add_command(iam_group)  # noqa
 genesis.add_command(secret_group)  # noqa
 genesis.add_command(compute_group)  # noqa
 genesis.add_command(vs_group)  # noqa
+genesis.add_command(realms_group)  # noqa
 
 genesis.add_command(manifests_commands.manifests_group)  # noqa
 genesis.add_command(elements_commands.elements_group)  # noqa

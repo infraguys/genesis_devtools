@@ -33,7 +33,7 @@ def load_repo_driver(
             f"Genesis configuration file {genesis_cfg_file} not found in {project_dir}"
         )
 
-    if "push" not in gen_config or not gen_config["push"]:
+    if not gen_config or "push" not in gen_config or not gen_config["push"]:
         raise base_repo.UnableLoadDriverError(
             "No push section found in the configuration"
         )
