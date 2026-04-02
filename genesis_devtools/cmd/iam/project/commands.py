@@ -27,7 +27,7 @@ from genesis_devtools.clients import project as project_lib
 from genesis_devtools.common import utils
 
 
-@click.group("projects", help="Manager projects in the Genesis installation")
+@click.group("projects", help="Manage projects in the Genesis installation")
 def projects_group():
     pass
 

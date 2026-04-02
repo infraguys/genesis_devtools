@@ -1,7 +1,7 @@
 
 # genesis_roles
 
-Manager roles in the Genesis installation
+Manage roles in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager roles in the Genesis installation
                                                                                 
  Usage: genesis roles [OPTIONS] COMMAND [ARGS]...                               
                                                                                 
- Manager roles in the Genesis installation                                      
+ Manage roles in the Genesis installation                                      
                                                                                 
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                          │

@@ -17,6 +17,11 @@
 from rich.table import Table
 from rich import print as rprint
 
+SHOW_FIELDS = [
+    "Field",
+    "Value",
+]
+
 
 def get_table(*args, **kwargs) -> Table:
     table = Table(show_header=True, *args, **kwargs)
@@ -25,3 +30,10 @@ def get_table(*args, **kwargs) -> Table:
 
 def print_table(table: Table) -> None:
     rprint(table)
+
+
+def show_data(data: dict) -> None:
+    table = get_table(*SHOW_FIELDS)
+    for key, value in data.items():
+        table.add_row(key, str(value))
+    print_table(table)

@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -59,7 +59,7 @@ def show_ssh_key_cmd(
         else:
             raise click.ClickException(f"ssh_key with name {uuid} not found")
     ssh_key = ssh_key_lib.get_ssh_key(client, uuid)
-    _print_ssh_keys([ssh_key])
+    show_data(ssh_key)
 
 
 @ssh_keys_group.command("delete", help="Delete ssh_key")
@@ -160,7 +160,7 @@ def add_ssh_key_cmd(
         data["target_public_key"] = target_public_key
 
     ssh_key_resp = ssh_key_lib.add_ssh_key(client, data)
-    _print_ssh_keys([ssh_key_resp])
+    show_data(ssh_key_resp)
 
 
 @ssh_keys_group.command("update", help="Update ssh_key")
@@ -207,7 +207,7 @@ def update_ssh_key_cmd(
     if description is not None:
         data["description"] = description
     ssh_key_resp = ssh_key_lib.update_ssh_key(client, uuid, data)
-    _print_ssh_keys([ssh_key_resp])
+    show_data(ssh_key_resp)
 
 
 def _print_ssh_keys(ssh_keys: tp.List[dict]) -> None:

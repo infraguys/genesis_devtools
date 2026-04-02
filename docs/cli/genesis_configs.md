@@ -1,7 +1,7 @@
 
 # genesis_configs
 
-Manager configs in the Genesis installation
+Manage configs in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager configs in the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis configs [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
- Manager configs in the Genesis installation                                                                                                                                                                                                                                                               
+ Manage configs in the Genesis installation                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

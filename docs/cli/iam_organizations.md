@@ -1,7 +1,7 @@
 
 # iam_organizations
 
-Manager organizations in the Genesis installation
+Manage organizations in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager organizations in the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis iam organizations [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
- Manager organizations in the Genesis installation                                                                                                                                                                                                                                                         
+ Manage organizations in the Genesis installation                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

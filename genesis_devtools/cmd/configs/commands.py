@@ -26,7 +26,7 @@ from genesis_devtools.clients import config as config_lib
 from genesis_devtools import constants as c
 
 
-@click.group("configs", help="Manager configs in the Genesis installation")
+@click.group("configs", help="Manage configs in the Genesis installation")
 def configs_group():
     pass
 

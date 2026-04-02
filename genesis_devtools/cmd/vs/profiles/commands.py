@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients import base_client
 
@@ -59,7 +59,7 @@ def show_profile_cmd(
         else:
             raise click.ClickException(f"Profile with name {uuid} not found")
     profile = base_client.get_entity(client, c.PROFILE_COLLECTION, uuid)
-    _print_profiles([profile])
+    show_data(profile)
 
 
 @profiles_group.command("delete", help="Delete profile")
@@ -158,7 +158,7 @@ def add_profile_cmd(
         "profile_type": profile_type,
     }
     profile = base_client.add_entity(client, c.PROFILE_COLLECTION, data)
-    _print_profiles([profile])
+    show_data(profile)
 
 
 def _print_profiles(profiles: tp.List[dict]) -> None:

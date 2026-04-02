@@ -27,7 +27,7 @@ from genesis_devtools.clients import permission as permission_lib
 from genesis_devtools.common import utils
 
 
-@click.group("permissions", help="Manager permissions in the Genesis installation")
+@click.group("permissions", help="Manage permissions in the Genesis installation")
 def permissions_group():
     pass
 

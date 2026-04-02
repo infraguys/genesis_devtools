@@ -19,14 +19,14 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import hypervisor as hypervisor_lib
 from genesis_devtools.common import utils
 
 
-@click.group("hypervisors", help="Manager hypervisors in the Genesis installation")
+@click.group("hypervisors", help="Manage hypervisors in the Genesis installation")
 def hypervisors_group():
     pass
 
@@ -54,13 +54,13 @@ def show_hypervisor(
 ) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        hypervisors = hypervisor_lib.list_hypervisors(client, hypervisorname=uuid)
+        hypervisors = hypervisor_lib.list_hypervisors(client, name=uuid)
         if hypervisors:
             uuid = hypervisors[0]["uuid"]
         else:
             raise click.ClickException(f"hypervisor with name {uuid} not found")
-    value = hypervisor_lib.get_hypervisor(client, uuid)
-    _print_values([value])
+    hypervisor = hypervisor_lib.get_hypervisor(client, uuid)
+    show_data(hypervisor)
 
 
 @hypervisors_group.command("delete", help="Delete hypervisor")

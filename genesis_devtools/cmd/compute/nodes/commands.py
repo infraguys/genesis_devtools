@@ -18,7 +18,7 @@ from __future__ import annotations
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import node as node_lib
@@ -26,21 +26,9 @@ from genesis_devtools.common import utils
 
 
 LIST_FIELDS = ["UUID", "Project", "Name", "Cores", "RAM", "IP", "Status"]
-SHOW_FIELDS = [
-    "UUID",
-    "Project",
-    "Name",
-    "Cores",
-    "RAM",
-    "DiskSpec",
-    "Network",
-    "NodeType",
-    "NodeSet",
-    "Status",
-]
 
 
-@click.group("nodes", help="Manager nodes in the Genesis installation")
+@click.group("nodes", help="Manage nodes in the Genesis installation")
 def nodes_group():
     pass
 
@@ -168,7 +156,7 @@ def add_node_cmd(
         description,
         wait,
     )
-    _print_node(node)
+    show_data(node)
 
 
 @nodes_group.command("add-or-update", help="Add a new node or update an existing one")
@@ -264,7 +252,7 @@ def add_or_update_node_cmd(
         description,
         wait,
     )
-    _print_node(node)
+    show_data(node)
 
 
 @nodes_group.command("delete", help="Delete node")
@@ -305,22 +293,4 @@ def show_node_cmd(
         else:
             raise click.ClickException(f"node with name {uuid_name} not found")
     node = node_lib.get_node(client, uuid_name)
-    _print_node(node)
-
-
-def _print_node(node: dict) -> None:
-    table = get_table(*SHOW_FIELDS)
-
-    table.add_row(
-        node["uuid"],
-        node["project_id"],
-        node["name"],
-        str(node["cores"]),
-        str(node["ram"]),
-        str(node["disk_spec"]),
-        str(node["default_network"]),
-        node["node_type"],
-        node["node_set"],
-        node["status"],
-    )
-    print_table(table)
+    show_data(node)

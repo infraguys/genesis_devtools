@@ -1,7 +1,7 @@
 
 # genesis_repo
 
-Manager Genesis repository
+Manage Genesis repository
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager Genesis repository
                                                                                                                                                                                                                                                                                                            
  Usage: genesis repo [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
- Manager Genesis repository                                                                                                                                                                                                                                                                                
+ Manage Genesis repository                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

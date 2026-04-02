@@ -27,7 +27,7 @@ from genesis_devtools.clients import client as client_lib
 from genesis_devtools.common import utils
 
 
-@click.group("clients", help="Manager clients in the Genesis installation")
+@click.group("clients", help="Manage clients in the Genesis installation")
 def clients_group():
     pass
 

@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -59,7 +59,7 @@ def show_service_cmd(
         else:
             raise click.ClickException(f"service with name {uuid} not found")
     service = service_lib.get_service(client, uuid)
-    _print_services([service])
+    show_data(service)
 
 
 @services_group.command("delete", help="Delete service")
@@ -132,7 +132,7 @@ def add_service_cmd(
             "description": description,
         },
     )
-    _print_services([service_resp])
+    show_data(service_resp)
 
 
 @services_group.command("update", help="Update service")
@@ -179,7 +179,7 @@ def update_service_cmd(
     if description is not None:
         data["description"] = description
     service_resp = service_lib.update_service(client, uuid, data)
-    _print_services([service_resp])
+    show_data(service_resp)
 
 
 def _print_services(services: tp.List[dict]) -> None:

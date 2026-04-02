@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 from bazooka import exceptions as bazooka_exc
 
 from genesis_devtools.clients.base_client import get_user_api_client
@@ -62,7 +62,7 @@ def show_variable_cmd(
         else:
             raise click.ClickException(f"Variable with name {uuid} not found")
     variable = variable_lib.get_variable(client, uuid)
-    _print_variables([variable])
+    show_data(variable)
 
 
 @variables_group.command(
@@ -180,7 +180,7 @@ def set_variable_cmd(
     value_lib.add_value(client, data)
 
     variable = variable_lib.get_variable(client, sys_uuid.UUID(var_uuid))
-    _print_variables([variable])
+    show_data(variable)
 
 
 @variables_group.command("delete", help="Delete variable")
@@ -288,7 +288,7 @@ def add_variable_cmd(
             },
         },
     )
-    _print_variables([variable])
+    show_data(variable)
 
 
 def _print_variables(variables: tp.List[dict]) -> None:

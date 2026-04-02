@@ -23,7 +23,7 @@ from genesis_devtools.repo import utils as repo_utils
 from genesis_devtools import constants as c
 
 
-@click.group("repo", help="Manager Genesis repository")
+@click.group("repo", help="Manage Genesis repository")
 def repository_group():
     pass
 

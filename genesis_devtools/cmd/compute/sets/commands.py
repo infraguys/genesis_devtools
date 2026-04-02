@@ -16,7 +16,7 @@
 from __future__ import annotations
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import set as set_lib
@@ -83,7 +83,7 @@ def show_set_cmd(
         else:
             raise click.ClickException(f"set with name {uuid} not found")
     set_obj = set_lib.get_set(client, uuid)
-    _print_set(set_obj)
+    show_data(set_obj)
 
 
 @sets_group.command("delete", help="Delete set")
@@ -105,23 +105,3 @@ def delete_set_cmd(
         else:
             raise click.ClickException(f"set with name {uuid} not found")
     set_lib.delete_set(client, uuid)
-
-
-def _print_set(set_obj: dict) -> None:
-    table = get_table(*SHOW_FIELDS)
-
-    table.add_row(
-        set_obj["uuid"],
-        set_obj["project_id"],
-        set_obj["name"],
-        str(set_obj["cores"]),
-        str(set_obj["ram"]),
-        str(set_obj["replicas"]),
-        str(set_obj["disk_spec"]),
-        str(set_obj["default_network"]),
-        set_obj["node_type"],
-        set_obj["set_type"],
-        set_obj["status"],
-    )
-
-    print_table(table)

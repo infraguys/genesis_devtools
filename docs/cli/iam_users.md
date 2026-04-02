@@ -1,7 +1,7 @@
 
 # iam_users
 
-Manager users in the Genesis installation
+Manage users in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager users in the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis iam users [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                            
- Manager users in the Genesis installation                                                                                                                                                                                                                                                                 
+ Manage users in the Genesis installation                                                                                                                                                                                                                                                                 
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
