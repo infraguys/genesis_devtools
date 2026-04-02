@@ -27,7 +27,7 @@ from genesis_devtools.clients import user as user_lib
 from genesis_devtools.common import utils
 
 
-@click.group("users", help="Manager users in the Genesis installation")
+@click.group("users", help="Manage users in the Genesis installation")
 def users_group():
     pass
 

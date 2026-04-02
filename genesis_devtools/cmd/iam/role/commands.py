@@ -27,7 +27,7 @@ from genesis_devtools.clients import role as role_lib
 from genesis_devtools.common import utils
 
 
-@click.group("roles", help="Manager roles in the Genesis installation")
+@click.group("roles", help="Manage roles in the Genesis installation")
 def roles_group():
     pass
 

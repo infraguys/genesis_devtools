@@ -1,7 +1,7 @@
 
 # compute_hypervisors
 
-Manager hypervisors in the Genesis installation
+Manage hypervisors in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager hypervisors in the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis compute hypervisors [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
- Manager hypervisors in the Genesis installation                                                                                                                                                                                                                                                           
+ Manage hypervisors in the Genesis installation                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

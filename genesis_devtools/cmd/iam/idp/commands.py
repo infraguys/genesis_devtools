@@ -27,7 +27,7 @@ from genesis_devtools.clients import idp as idp_lib
 from genesis_devtools.common import utils
 
 
-@click.group("idps", help="Manager idps in the Genesis installation")
+@click.group("idps", help="Manage idps in the Genesis installation")
 def idps_group():
     pass
 

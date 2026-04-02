@@ -1,7 +1,7 @@
 
 # iam_idps
 
-Manager idps in the Genesis installation
+Manage idps in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager idps in the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis iam idps [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                       
                                                                                                                                                                                                                                                                                                            
- Manager idps in the Genesis installation                                                                                                                                                                                                                                                                  
+ Manage idps in the Genesis installation                                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

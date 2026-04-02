@@ -27,7 +27,7 @@ from genesis_devtools.clients import role_binding as role_binding_lib
 from genesis_devtools.common import utils
 
 
-@click.group("role_bindings", help="Manager role_bindings in the Genesis installation")
+@click.group("role_bindings", help="Manage role_bindings in the Genesis installation")
 def role_bindings_group():
     pass
 

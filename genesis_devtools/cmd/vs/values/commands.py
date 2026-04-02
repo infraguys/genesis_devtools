@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -60,7 +60,7 @@ def show_value_cmd(
         else:
             raise click.ClickException(f"Value with name {uuid} not found")
     value = value_lib.get_value(client, uuid)
-    _print_values([value])
+    show_data(value)
 
 
 @values_group.command("delete", help="Delete value")
@@ -157,7 +157,7 @@ def add_value_cmd(
         data["variable"] = f"{c.VARIABLE_COLLECTION}{var}"
 
     value_resp = value_lib.add_value(client, data)
-    _print_values([value_resp])
+    show_data(value_resp)
 
 
 @values_group.command("update", help="Update value")
@@ -224,7 +224,7 @@ def update_value_cmd(
     if variable is not None:
         data["variable"] = variable
     value_resp = value_lib.update_value(client, uuid, data)
-    _print_values([value_resp])
+    show_data(value_resp)
 
 
 def _print_values(values: tp.List[dict]) -> None:

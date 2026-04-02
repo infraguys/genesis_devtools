@@ -1,7 +1,7 @@
 
 # genesis_projects
 
-Manager projects in the Genesis installation
+Manage projects in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager projects in the Genesis installation
                                                                                 
  Usage: genesis projects [OPTIONS] COMMAND [ARGS]...                            
                                                                                 
- Manager projects in the Genesis installation                                   
+ Manage projects in the Genesis installation                                   
                                                                                 
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                          │

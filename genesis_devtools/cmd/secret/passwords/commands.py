@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -59,7 +59,7 @@ def show_password_cmd(
         else:
             raise click.ClickException(f"password with name {uuid} not found")
     password = password_lib.get_password(client, uuid)
-    _print_passwords([password])
+    show_data(password)
 
 
 @passwords_group.command("delete", help="Delete password")
@@ -132,7 +132,7 @@ def add_password_cmd(
     }
 
     password_resp = password_lib.add_password(client, data)
-    _print_passwords([password_resp])
+    show_data(password_resp)
 
 
 @passwords_group.command("update", help="Update password")
@@ -179,7 +179,7 @@ def update_password_cmd(
     if description is not None:
         data["description"] = description
     password_resp = password_lib.update_password(client, uuid, data)
-    _print_passwords([password_resp])
+    show_data(password_resp)
 
 
 def _print_passwords(passwords: tp.List[dict]) -> None:

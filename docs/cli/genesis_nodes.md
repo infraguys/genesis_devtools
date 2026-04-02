@@ -1,7 +1,7 @@
 
 # genesis_nodes
 
-Manager nodes in the Genesis installation
+Manage nodes in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager nodes in the Genesis installation
                                                                                 
  Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                               
                                                                                 
- Manager nodes in the Genesis installation                                      
+ Manage nodes in the Genesis installation                                      
                                                                                 
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                          │

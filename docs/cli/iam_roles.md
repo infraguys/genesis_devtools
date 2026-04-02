@@ -1,7 +1,7 @@
 
 # iam_roles
 
-Manager roles in the Genesis installation
+Manage roles in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager roles in the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis iam roles [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                            
- Manager roles in the Genesis installation                                                                                                                                                                                                                                                                 
+ Manage roles in the Genesis installation                                                                                                                                                                                                                                                                 
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

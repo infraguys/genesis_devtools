@@ -1,7 +1,7 @@
 
 # genesis_role_bindings
 
-Manager role_bindings in the Genesis installation
+Manage role_bindings in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager role_bindings in the Genesis installation
                                                                                 
  Usage: genesis role_bindings [OPTIONS] COMMAND [ARGS]...                       
                                                                                 
- Manager role_bindings in the Genesis installation                              
+ Manage role_bindings in the Genesis installation                              
                                                                                 
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                          │

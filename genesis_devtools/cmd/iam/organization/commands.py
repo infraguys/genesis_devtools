@@ -27,7 +27,7 @@ from genesis_devtools.clients import organization as organization_lib
 from genesis_devtools.common import utils
 
 
-@click.group("organizations", help="Manager organizations in the Genesis installation")
+@click.group("organizations", help="Manage organizations in the Genesis installation")
 def organizations_group():
     pass
 

@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -59,7 +59,7 @@ def show_rsa_key_cmd(
         else:
             raise click.ClickException(f"rsa_key with name {uuid} not found")
     rsa_key = rsa_key_lib.get_rsa_key(client, uuid)
-    _print_rsa_keys([rsa_key])
+    show_data(rsa_key)
 
 
 @rsa_keys_group.command("delete", help="Delete rsa_key")
@@ -132,7 +132,7 @@ def add_rsa_key_cmd(
     }
 
     rsa_key_resp = rsa_key_lib.add_rsa_key(client, data)
-    _print_rsa_keys([rsa_key_resp])
+    show_data(rsa_key_resp)
 
 
 @rsa_keys_group.command("update", help="Update rsa_key")
@@ -179,7 +179,7 @@ def update_rsa_key_cmd(
     if description is not None:
         data["description"] = description
     rsa_key_resp = rsa_key_lib.update_rsa_key(client, uuid, data)
-    _print_rsa_keys([rsa_key_resp])
+    show_data(rsa_key_resp)
 
 
 def _print_rsa_keys(rsa_keys: tp.List[dict]) -> None:

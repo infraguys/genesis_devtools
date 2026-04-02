@@ -29,7 +29,7 @@ from genesis_devtools.common import utils
 
 @click.group(
     "permission_bindings",
-    help="Manager permission_bindings in the Genesis installation",
+    help="Manage permission_bindings in the Genesis installation",
 )
 def permission_bindings_group():
     pass

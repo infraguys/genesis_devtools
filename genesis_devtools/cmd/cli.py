@@ -48,7 +48,7 @@ from genesis_devtools.infra.libvirt import libvirt
 from genesis_devtools.stand import models as stand_models
 from genesis_devtools.infra.driver import libvirt as libvirt_infra
 
-from genesis_devtools.cmd.iam.auth import commands as iam_commands
+from genesis_devtools.cmd.iam.auth import commands as auth_commands
 
 from genesis_devtools.cmd.iam import iam_group
 from genesis_devtools.cmd.secret import secret_group
@@ -1395,7 +1395,7 @@ To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
     click.echo(msg)
 
 
-genesis.add_command(iam_commands.auth_group)  # noqa
+genesis.add_command(auth_commands.auth_group)  # noqa
 
 genesis.add_command(iam_group)  # noqa
 genesis.add_command(secret_group)  # noqa

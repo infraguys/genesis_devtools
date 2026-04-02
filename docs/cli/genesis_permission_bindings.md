@@ -1,7 +1,7 @@
 
 # genesis_permission_bindings
 
-Manager permission_bindings in the Genesis installation
+Manage permission_bindings in the Genesis installation
 
 ## Usage
 
@@ -26,7 +26,7 @@ Manager permission_bindings in the Genesis installation
                                                                                 
  Usage: genesis permission_bindings [OPTIONS] COMMAND [ARGS]...                 
                                                                                 
- Manager permission_bindings in the Genesis installation                        
+ Manage permission_bindings in the Genesis installation                        
                                                                                 
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                          │

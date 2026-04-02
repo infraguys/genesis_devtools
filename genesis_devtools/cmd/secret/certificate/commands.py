@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -59,7 +59,7 @@ def show_certificate_cmd(
         else:
             raise click.ClickException(f"certificate with name {uuid} not found")
     certificate = certificate_lib.get_certificate(client, uuid)
-    _print_certificates([certificate])
+    show_data(certificate)
 
 
 @certificates_group.command("delete", help="Delete certificate")
@@ -134,7 +134,7 @@ def add_certificate_cmd(
     }
 
     certificate_resp = certificate_lib.add_certificate(client, data)
-    _print_certificates([certificate_resp])
+    show_data(certificate_resp)
 
 
 @certificates_group.command("update", help="Update certificate")
@@ -181,7 +181,7 @@ def update_certificate_cmd(
     if description is not None:
         data["description"] = description
     certificate_resp = certificate_lib.update_certificate(client, uuid, data)
-    _print_certificates([certificate_resp])
+    show_data(certificate_resp)
 
 
 def _print_certificates(certificates: tp.List[dict]) -> None:

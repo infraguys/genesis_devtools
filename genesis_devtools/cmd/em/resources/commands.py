@@ -18,7 +18,7 @@ from __future__ import annotations
 import typing as tp
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -94,7 +94,7 @@ def show_resource_cmd(
             )
 
     resource = elements_lib.get_resource(client, element_name_uuid, resource_name_uuid)
-    _print_resources([resource])
+    show_data(resource)
 
 
 def _print_resources(resources: tp.List[dict]) -> None:
