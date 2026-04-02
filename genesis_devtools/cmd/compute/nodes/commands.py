@@ -25,6 +25,21 @@ from genesis_devtools.clients import node as node_lib
 from genesis_devtools.common import utils
 
 
+LIST_FIELDS = ["UUID", "Project", "Name", "Cores", "RAM", "IP", "Status"]
+SHOW_FIELDS = [
+    "UUID",
+    "Project",
+    "Name",
+    "Cores",
+    "RAM",
+    "DiskSpec",
+    "Network",
+    "NodeType",
+    "NodeSet",
+    "Status",
+]
+
+
 @click.group("nodes", help="Manager nodes in the Genesis installation")
 def nodes_group():
     pass
@@ -45,7 +60,19 @@ def list_node_cmd(
 ) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
     nodes = node_lib.list_nodes(client, project_id=project_id)
-    _print_nodes(nodes)
+    table = get_table(*LIST_FIELDS)
+
+    for node in nodes:
+        table.add_row(
+            node["uuid"],
+            node["project_id"],
+            node["name"],
+            str(node["cores"]),
+            str(node["ram"]),
+            node["default_network"].get("ipv4", ""),
+            node["status"],
+        )
+    print_table(table)
 
 
 @nodes_group.command("add", help="Add a new node to the Genesis installation")
@@ -141,7 +168,7 @@ def add_node_cmd(
         description,
         wait,
     )
-    _print_nodes([node])
+    _print_node(node)
 
 
 @nodes_group.command("add-or-update", help="Add a new node or update an existing one")
@@ -237,7 +264,7 @@ def add_or_update_node_cmd(
         description,
         wait,
     )
-    _print_nodes([node])
+    _print_node(node)
 
 
 @nodes_group.command("delete", help="Delete node")
@@ -278,31 +305,22 @@ def show_node_cmd(
         else:
             raise click.ClickException(f"node with name {uuid_name} not found")
     node = node_lib.get_node(client, uuid_name)
-    _print_nodes([node])
+    _print_node(node)
 
 
-def _print_nodes(nodes: list) -> None:
-    table = get_table()
-    table.add_column("UUID")
-    table.add_column("Project")
-    table.add_column("Name")
-    table.add_column("Cores")
-    table.add_column("RAM")
-    table.add_column("Root Disk")
-    table.add_column("Image")
-    table.add_column("IP")
-    table.add_column("Status")
+def _print_node(node: dict) -> None:
+    table = get_table(*SHOW_FIELDS)
 
-    for node in nodes:
-        table.add_row(
-            node["uuid"],
-            node["project_id"],
-            node["name"],
-            str(node["cores"]),
-            str(node["ram"]),
-            str(node["disk_spec"].get("size", "Unknown")),
-            node["disk_spec"].get("image", "Unknown"),
-            node["default_network"].get("ipv4", ""),
-            node["status"],
-        )
+    table.add_row(
+        node["uuid"],
+        node["project_id"],
+        node["name"],
+        str(node["cores"]),
+        str(node["ram"]),
+        str(node["disk_spec"]),
+        str(node["default_network"]),
+        node["node_type"],
+        node["node_set"],
+        node["status"],
+    )
     print_table(table)

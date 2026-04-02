@@ -18,8 +18,8 @@ from rich.table import Table
 from rich import print as rprint
 
 
-def get_table() -> Table:
-    table = Table(show_header=True)
+def get_table(*args, **kwargs) -> Table:
+    table = Table(show_header=True, *args, **kwargs)
     return table
 
 
