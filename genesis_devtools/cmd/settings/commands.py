@@ -58,6 +58,7 @@ def _save_config(config: dict, cfg_path: str = c.CONFIG_FILE) -> None:
 
         # Atomically replace the original file
         os.replace(tmp_path, cfg_path)
+        os.chmod(cfg_path, 0o600)
     except Exception as e:
         if "tmp_path" in locals() and os.path.exists(tmp_path):
             os.unlink(tmp_path)
