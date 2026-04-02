@@ -150,6 +150,9 @@ def genesis(
     context: str | None,
     project_id: sys_uuid.UUID | None,
 ) -> None:
+    if not ctx.invoked_subcommand:
+        click.echo(ctx.get_help())
+        return
     # Load configuration from file (if exists)
     cfg_path = config if config else None
     cfg = settings_commands.load_config(cfg_path)

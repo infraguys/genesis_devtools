@@ -15,14 +15,28 @@
 #    under the License.
 from __future__ import annotations
 
-import typing as tp
-
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table
 
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import set as set_lib
 from genesis_devtools.common import utils
+
+
+LIST_FIELDS = ["UUID", "Project", "Name", "Cores", "RAM", "NodeType", "Status"]
+SHOW_FIELDS = [
+    "UUID",
+    "Project",
+    "Name",
+    "Cores",
+    "RAM",
+    "Replicas",
+    "Disk_Spec",
+    "Network",
+    "NodeType",
+    "SetType",
+    "Status",
+]
 
 
 @click.group("sets", help="Manage sets in the Genesis installation")
@@ -35,7 +49,19 @@ def sets_group():
 def list_sets(ctx: click.Context) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
     sets = set_lib.list_sets(client)
-    _print_sets(sets)
+    table = get_table(*LIST_FIELDS)
+    for set_obj in sets:
+        table.add_row(
+            set_obj["uuid"],
+            set_obj["project_id"],
+            set_obj["name"],
+            str(set_obj["cores"]),
+            str(set_obj["ram"]),
+            set_obj["node_type"],
+            set_obj["status"],
+        )
+
+    print_table(table)
 
 
 @sets_group.command("show", help="Show set")
@@ -57,7 +83,7 @@ def show_set_cmd(
         else:
             raise click.ClickException(f"set with name {uuid} not found")
     set_obj = set_lib.get_set(client, uuid)
-    _print_sets([set_obj])
+    _print_set(set_obj)
 
 
 @sets_group.command("delete", help="Delete set")
@@ -81,25 +107,21 @@ def delete_set_cmd(
     set_lib.delete_set(client, uuid)
 
 
-def _print_sets(sets: tp.List[dict]) -> None:
-    table = get_table()
-    table.add_column("UUID")
-    table.add_column("Project")
-    table.add_column("Name")
-    table.add_column("Node Type")
-    table.add_column("Cores")
-    table.add_column("RAM")
-    table.add_column("Status")
+def _print_set(set_obj: dict) -> None:
+    table = get_table(*SHOW_FIELDS)
 
-    for set_obj in sets:
-        table.add_row(
-            set_obj["uuid"],
-            set_obj["project_id"],
-            set_obj["name"],
-            set_obj["node_type"],
-            str(set_obj["cores"]),
-            str(set_obj["ram"]),
-            set_obj["status"],
-        )
+    table.add_row(
+        set_obj["uuid"],
+        set_obj["project_id"],
+        set_obj["name"],
+        str(set_obj["cores"]),
+        str(set_obj["ram"]),
+        str(set_obj["replicas"]),
+        str(set_obj["disk_spec"]),
+        str(set_obj["default_network"]),
+        set_obj["node_type"],
+        set_obj["set_type"],
+        set_obj["status"],
+    )
 
     print_table(table)

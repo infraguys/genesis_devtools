@@ -149,8 +149,10 @@ def add_ssh_key_cmd(
         "project_id": str(project_id),
         "name": name,
         "description": description,
-        "kind": "node",
-        "node": str(node),
+        "target": {
+            "kind": "node",
+            "node": str(node),
+        },
         "user": str(user),
     }
 
