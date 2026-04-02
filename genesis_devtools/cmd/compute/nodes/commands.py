@@ -300,7 +300,7 @@ def _print_nodes(nodes: list) -> None:
             node["name"],
             str(node["cores"]),
             str(node["ram"]),
-            node["disk_spec"].get("size", "Unknown"),
+            str(node["disk_spec"].get("size", "Unknown")),
             node["disk_spec"].get("image", "Unknown"),
             node["default_network"].get("ipv4", ""),
             node["status"],

@@ -1030,6 +1030,29 @@ def dumphelp() -> None:
     return None
 
 
+@genesis.command(
+    name="openapi", help="tool for creating openapi spec files", hidden=True
+)
+@click.argument(
+    "path",
+    required=True,
+    type=click.Path(exists=False, dir_okay=False),
+    help="Path to target file",
+)
+@click.pass_context
+def openapi_spec(ctx: click.Context, path: str) -> None:
+    import ruamel.yaml
+    from genesis_devtools.clients import base_client
+
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = client.filter("specifications/3.0.3")
+    with open(path, "w") as f:
+        yaml = ruamel.yaml.YAML()
+        yaml.indent(sequence=4, offset=2)
+        yaml.dump(data, f)
+    return None
+
+
 def _domains_for_backup(
     names: tp.List[str] | None = None,
     exclude_names: tp.List[str] | None = None,
@@ -1321,8 +1344,8 @@ def save_last_check_time():
         pass
 
 
-@genesis.command(help=f"Prints the {c.PKG_NAME} version")
-def version() -> None:
+@genesis.command(name="version", help=f"Prints the {c.PKG_NAME} version")
+def version_cmd() -> None:
     from genesis_devtools import version
 
     click.echo(version.version_info)
