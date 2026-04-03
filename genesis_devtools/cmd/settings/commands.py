@@ -292,6 +292,12 @@ def config_get(ctx: click.Context, key: str) -> None:
     type=str,
     help="Refresh token for the user in context",
 )
+@click.option(
+    "--current",
+    is_flag=True,
+    default=False,
+    help="Set as current realm",
+)
 @click.pass_context
 def set_context(
     ctx: click.Context,
@@ -301,6 +307,7 @@ def set_context(
     password: str | None,
     access_token: str | None,
     refresh_token: str | None,
+    current: bool,
 ) -> None:
     config = load_config(ctx.obj.cfg_path)
 
@@ -323,6 +330,42 @@ def set_context(
     if "contexts" not in config["realms"][realm]:
         config["realms"][realm]["contexts"] = {}
     config["realms"][realm]["contexts"][name] = context_config
+    if current:
+        config["realms"][realm]["current-context"] = name
+        config["current-realm"] = realm
+    _save_config(config, ctx.obj.cfg_path)
+    click.echo(f"Context '{name}' for realm '{realm}' set")
+
+
+@settings_group.command(
+    "use-context", help="Set the current-context in a settings file"
+)
+@click.argument("name", type=str, required=True)
+@click.option(
+    "-r",
+    "--realm",
+    type=str,
+    required=True,
+    help="Name of the realm",
+)
+@click.pass_context
+def use_context(
+    ctx: click.Context,
+    name: str,
+    realm: str,
+) -> None:
+    config = load_config(ctx.obj.cfg_path)
+
+    if "realms" not in config or realm not in config["realms"]:
+        raise click.ClickException(f"Realm '{realm}' not found")
+
+    if (
+        "contexts" not in config["realms"][realm]
+        or name not in config["realms"][realm]["contexts"]
+    ):
+        raise click.ClickException(f"Context '{name}' not found")
+
+    config["realms"][realm]["current-context"] = name
     _save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{name}' for realm '{realm}' set")
 
