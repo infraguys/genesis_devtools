@@ -138,6 +138,18 @@ def uninstall_manifest(
         raise click.ClickException(f"Manifest with UUID {uuid} not found")
 
 
+def validate_manifest(
+    client: http_client.CollectionBaseClient,
+    uuid: sys_uuid.UUID,
+) -> None:
+    try:
+        client.do_action(
+            c.MANIFEST_COLLECTION, uuid=uuid, name="validate", invoke=False
+        )
+    except bazooka_exc.NotFoundError:
+        raise click.ClickException(f"Manifest with UUID {uuid} not found")
+
+
 def list_elements(
     client: http_client.CollectionBaseClient, **filters
 ) -> list[dict[str, tp.Any]]:
