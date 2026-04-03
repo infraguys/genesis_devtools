@@ -5,20 +5,20 @@
       
       
       
-        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/profiles_list/">
+        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/manifests_validate/">
       
       
-        <link rel="prev" href="../profiles_delete/">
+        <link rel="prev" href="../manifests_show/">
       
       
-        <link rel="next" href="../profiles_show/">
+        <link rel="next" href="../nodes_add-or-update/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.0">
     
     
       
-        <title>profiles_list - genesis_devtools</title>
+        <title>manifests_validate - genesis_devtools</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#profiles_list" class="md-skip">
+        <a href="#manifests_validate" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              profiles_list
+              manifests_validate
             
           </span>
         </div>
@@ -1551,11 +1551,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../manifests_validate/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          manifests_validate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         manifests_validate
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-help" class="md-nav__link">
+    CLI Help
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1873,66 +1928,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          profiles_list
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../profiles_list/" class="md-nav__link">
         profiles_list
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Содержание раздела
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-help" class="md-nav__link">
-    CLI Help
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2943,16 +2943,36 @@
   
 
 
-<h1 id="profiles_list">profiles_list<a class="headerlink" href="#profiles_list" title="Permanent link">#</a></h1>
-<p>List profiles</p>
+<h1 id="manifests_validate">manifests_validate<a class="headerlink" href="#manifests_validate" title="Permanent link">#</a></h1>
+<p>Validate manifest</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Usage: genesis vs profiles list [OPTIONS]                                                                                                                                                                                                                                                                 </span>
+<span class="go"> Usage: genesis manifests validate [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                  </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
-<li><code>help</code>:<ul>
+<li><code>repository</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>https://repository.genesis-core.tech/genesis-elements/</code></li>
+<li>Usage: <code>-r
+--repository</code></li>
+</ul>
+</li>
+</ul>
+<p>Repository endpoint</p>
+<ul>
+<li>
+<p><code>path_or_name</code> (REQUIRED):</p>
+<ul>
+<li>Type: text</li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>path_or_name</code></li>
+</ul>
+</li>
+<li>
+<p><code>help</code>:</p>
+<ul>
 <li>Type: boolean</li>
 <li>Default: <code>false</code></li>
 <li>Usage: <code>--help</code></li>
@@ -2962,12 +2982,13 @@
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Usage: genesis vs profiles list [OPTIONS]                                                                                                                                                                                                                                                                 </span>
+<span class="go"> Usage: genesis manifests validate [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                  </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> List profiles                                                                                                                                                                                                                                                                                             </span>
+<span class="go"> Validate manifest                                                                                                                                                                                                                                                                                         </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
 <span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │</span>
+<span class="go">│ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │</span>
+<span class="go">│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │</span>
 <span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 

@@ -5,20 +5,20 @@
       
       
       
-        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/profiles_list/">
+        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/cli/genesis_openapi/">
       
       
-        <link rel="prev" href="../profiles_delete/">
+        <link rel="prev" href="../genesis_nodes/">
       
       
-        <link rel="next" href="../profiles_show/">
+        <link rel="next" href="../genesis_organizations/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.0">
     
     
       
-        <title>profiles_list - genesis_devtools</title>
+        <title>genesis_openapi - genesis_devtools</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#profiles_list" class="md-skip">
+        <a href="#genesis_openapi" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -115,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              profiles_list
+              genesis_openapi
             
           </span>
         </div>
@@ -949,11 +949,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../genesis_openapi/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          genesis_openapi
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         genesis_openapi
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cli-help" class="md-nav__link">
+    CLI Help
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1873,66 +1928,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          profiles_list
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../profiles_list/" class="md-nav__link">
         profiles_list
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Содержание раздела
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-help" class="md-nav__link">
-    CLI Help
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2943,14 +2943,23 @@
   
 
 
-<h1 id="profiles_list">profiles_list<a class="headerlink" href="#profiles_list" title="Permanent link">#</a></h1>
-<p>List profiles</p>
+<h1 id="genesis_openapi">genesis_openapi<a class="headerlink" href="#genesis_openapi" title="Permanent link">#</a></h1>
+<p>tool for creating openapi spec files</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Usage: genesis vs profiles list [OPTIONS]                                                                                                                                                                                                                                                                 </span>
+<span class="go"> Usage: genesis openapi [OPTIONS] PATH                                                                                                                                                                                                                                                                     </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
+<ul>
+<li><code>path</code> (REQUIRED):<ul>
+<li>Type: file</li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>path</code></li>
+</ul>
+</li>
+</ul>
+<p>Path to target file</p>
 <ul>
 <li><code>help</code>:<ul>
 <li>Type: boolean</li>
@@ -2962,10 +2971,13 @@
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Usage: genesis vs profiles list [OPTIONS]                                                                                                                                                                                                                                                                 </span>
+<span class="go"> Usage: genesis openapi [OPTIONS] PATH                                                                                                                                                                                                                                                                     </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> List profiles                                                                                                                                                                                                                                                                                             </span>
+<span class="go"> tool for creating openapi spec files                                                                                                                                                                                                                                                                      </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
+<span class="go">╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
+<span class="go">│ *  PATH  FILE  Path to target file [required]                                                                                                                                                                                                                                                           │</span>
+<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 <span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
 <span class="go">│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │</span>
 <span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
