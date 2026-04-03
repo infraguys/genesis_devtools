@@ -15,6 +15,7 @@
 #    under the License.
 from __future__ import annotations
 
+import logging
 import os
 import requests
 from requests.exceptions import RequestException
@@ -137,6 +138,13 @@ class CmdContext(tp.NamedTuple):
     type=click.UUID,
     help="Project ID for the client user",
 )
+@click.option(
+    "-vvv",
+    "--verbose",
+    show_default=True,
+    is_flag=True,
+    help="Verbose logs",
+)
 @click.pass_context
 def genesis(
     ctx: click.Context,
@@ -149,10 +157,13 @@ def genesis(
     realm: str | None,
     context: str | None,
     project_id: sys_uuid.UUID | None,
+    verbose: bool | None,
 ) -> None:
     if not ctx.invoked_subcommand:
         click.echo(ctx.get_help())
         return
+    if verbose:
+        logging.basicConfig(level=logging.DEBUG)
     # Load configuration from file (if exists)
     cfg_path = config if config else None
     cfg = settings_commands.load_config(cfg_path)

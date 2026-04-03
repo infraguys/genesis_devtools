@@ -16,6 +16,8 @@
 from __future__ import annotations
 
 import json
+import os
+import yaml
 import uuid as sys_uuid
 
 import rich_click as click
@@ -23,7 +25,9 @@ from genesis_devtools.common.table import get_table, print_table
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
+from genesis_devtools.clients import repo as repo_lib
 from genesis_devtools.clients import manifest as manifests_lib
+import genesis_devtools.constants as c
 
 
 @click.group("manifests", help="Manage manifests in the Genesis installation")
@@ -123,3 +127,29 @@ def show_manifest_cmd(ctx: click.Context, name: str) -> None:
 
     click.echo("Resources:")
     print_table(table)
+
+
+@manifests_group.command("validate", help="Validate manifest")
+@click.option(
+    "-r",
+    "--repository",
+    default=f"{c.ELEMENT_REPO_URL}/",
+    show_default=True,
+    help="Repository endpoint",
+)
+@click.argument("path_or_name")
+@click.pass_context
+def validate_manifest_cmd(
+    ctx: click.Context, repository: str, path_or_name: str
+) -> None:
+    client = get_user_api_client(ctx.obj.auth_data)
+
+    if os.path.exists(path_or_name):
+        with open(path_or_name, "r", encoding="utf-8") as f:
+            manifest_data = yaml.safe_load(f)
+            manifest = manifests_lib.add_manifest(client, manifest_data)
+    else:
+        manifest = repo_lib.download_manifest(repository, path_or_name)
+
+    manifests_lib.validate_manifest(client, sys_uuid.UUID(manifest["uuid"]))
+    click.echo("Manifest validated successfully")
