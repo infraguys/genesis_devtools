@@ -20,6 +20,7 @@ import pathlib
 
 import jinja2
 
+from genesis_devtools.wizards import constants as c
 from genesis_devtools.wizards.engines import base
 from genesis_devtools.wizards.engines.templaters import settings
 from genesis_devtools.wizards.scenarios import base as scenarios
@@ -42,6 +43,15 @@ class JinjaTemplateEngine(base.AbstractEngine):
                 isinstance(action.result, scenarios.Scenario)
                 for _, action in scenario_actions
             ):
+                continue
+
+            if (
+                isinstance(scenario, scenarios.TemplateScenario)
+                and scenario.template == c.EMPTY_TEMPLATE
+            ):
+                # TODO: Temporary workaround for nested orchestration scenarios
+                # that still use the placeholder `empty` template. This should
+                # be fixed at template/scenario definition level.
                 continue
 
             self._settings.append(settings.TemplateSetting(scenario))

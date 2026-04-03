@@ -16,6 +16,7 @@
 
 import os
 import shutil
+import tempfile
 import typing as tp
 
 from genesis_devtools.builder import dependency as deps
@@ -49,6 +50,29 @@ class TestDependency:
         finally:
             shutil.rmtree("/tmp/genesis_core_test_dir")
             shutil.rmtree("/tmp/___deps_dir")
+
+    def test_local_path_fetch_normalizes_parent_reference(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            src_dir = os.path.join(temp_dir, "source")
+            nested_dir = os.path.join(src_dir, "nested")
+            output_dir = os.path.join(temp_dir, "deps")
+
+            os.makedirs(nested_dir, exist_ok=True)
+            os.makedirs(output_dir, exist_ok=True)
+
+            readme_path = os.path.join(src_dir, "README.md")
+            with open(readme_path, "w") as fp:
+                fp.write("content")
+
+            dep = deps.LocalPathDependency(
+                path=os.path.join(nested_dir, ".."),
+                img_dest="/opt/genesis_core",
+            )
+
+            dep.fetch(output_dir)
+
+            assert dep.local_path == os.path.join(output_dir, "source")
+            assert os.path.exists(os.path.join(dep.local_path, "README.md"))
 
     def test_http_from_config(self, build_config: tp.Dict[str, tp.Any]) -> None:
         work_dir = "/tmp/work_dir"

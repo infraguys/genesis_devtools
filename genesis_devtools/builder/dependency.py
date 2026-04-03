@@ -62,12 +62,9 @@ class LocalPathDependency(base.AbstractDependency):
 
     def fetch(self, output_dir: str) -> None:
         """Fetch the dependency."""
-        path = self._path
+        path = os.path.normpath(self._path)
 
         if os.path.isdir(path):
-            # Remove trailing slash
-            if path.endswith("/"):
-                path = path[:-1]
             name = os.path.basename(path)
             ignore_func = self._ignore_func if self._exclude else None
             shutil.copytree(path, os.path.join(output_dir, name), ignore=ignore_func)
@@ -138,11 +135,9 @@ class LocalEnvPathDependency(base.AbstractDependency):
         if not os.path.isabs(path):
             path = os.path.join(self._work_dir, path)
 
-        if os.path.isdir(path):
-            # Remove trailing slash
-            if path.endswith("/"):
-                path = path[:-1]
+        path = os.path.normpath(path)
 
+        if os.path.isdir(path):
             name = os.path.basename(path)
             shutil.copytree(path, os.path.join(output_dir, name))
             self._local_path = os.path.join(output_dir, name)
