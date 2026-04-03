@@ -144,7 +144,7 @@ def validate_manifest_cmd(
 ) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
 
-    if os.path.exists(path_or_name):
+    if os.path.isfile(path_or_name):
         with open(path_or_name, "r", encoding="utf-8") as f:
             manifest_data = yaml.safe_load(f)
             manifest = manifests_lib.add_manifest(client, manifest_data)
