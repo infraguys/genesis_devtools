@@ -76,3 +76,4 @@ nav:
   - Software: index.md
   - Cli: cli
   - Realms: realms.md
+  - Versioning: versioning.md
