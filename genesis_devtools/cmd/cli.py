@@ -623,6 +623,34 @@ def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
     is_flag=True,
     help="Do not start the stand after creation",
 )
+# Ecosystem
+@click.option(
+    "--no-registration",
+    is_flag=True,
+    envvar="NO_REGISTRATION",
+    help="Don't register in ecosystem.",
+)
+@click.option(
+    "--disable-telemetry",
+    is_flag=True,
+    envvar="DISABLE_TELEMETRY",
+    help="Disable telemetry. Anonymized data only is sent by default.",
+)
+@click.option(
+    "--org-token",
+    prompt=False,
+    hide_input=True,
+    type=str,
+    envvar="ORG_TOKEN",
+    help="Organization token, used to register stand in ecosystem",
+)
+@click.option(
+    "--ecosystem-endpoint",
+    default="https://console.genesis-core.tech",
+    type=str,
+    envvar="ECOSYSTEM_ENDPOINT",
+    help="Ecosystem's endpoint to connect to",
+)
 def bootstrap_cmd(
     inventory: str,
     profile: str,
@@ -644,6 +672,10 @@ def bootstrap_cmd(
     hyper_machine_prefix: str,
     hyper_iface_rom_file: str,
     no_start: bool,
+    no_registration: bool,
+    disable_telemetry: bool,
+    org_token: str | None,
+    ecosystem_endpoint: str,
 ) -> None:
     if not inventory or not os.path.exists(inventory):
         raise click.UsageError("No inventory specified or not found")
@@ -698,6 +730,28 @@ def bootstrap_cmd(
             cidr=cidr,
         )
 
+    # Validate org-token requirement based on no-registration flag
+    if no_registration:
+        org_token = None
+    elif not org_token:
+        click.secho(
+            click.style(
+                """\
+
+Register your realm in the Genesis ecosystem to get access to additional features and support.
+You can skip registration by using --no-registration flag.
+
+""",
+                bold=True,
+                fg="yellow",
+            ),
+            bold=True,
+            # Underline makes the text more visible
+            underline=True,
+        )
+
+        org_token = click.prompt("Organization token", hide_input=True)
+
     if stand_spec is not None:
         with open(stand_spec) as f:
             stand_spec = yaml.safe_load(f)
@@ -731,6 +785,12 @@ def bootstrap_cmd(
     )
     hypervisors.append(hypervisor)
 
+    realm_uuid, realm_secret, realm_tokens = _register_core(
+        ecosystem_endpoint=ecosystem_endpoint,
+        disable_telemetry=disable_telemetry,
+        org_token=org_token,
+    )
+
     return _bootstrap_core(
         image_path=image_path,
         image_uri=image_uri,
@@ -747,6 +807,11 @@ def bootstrap_cmd(
         manifest_path=manifest_path,
         hypervisors=hypervisors,
         no_start=no_start,
+        ecosystem_endpoint=ecosystem_endpoint,
+        disable_telemetry=disable_telemetry,
+        realm_uuid=realm_uuid,
+        realm_secret=realm_secret,
+        realm_tokens=realm_tokens,
     )
 
 
@@ -1166,6 +1231,29 @@ def _bootstrap_element(
     logger.important(f"The element {name} is ready at:\nssh ubuntu@{ip}")
 
 
+def _register_core(
+    ecosystem_endpoint: str,
+    disable_telemetry: bool,
+    org_token: str | None,
+) -> tuple[str, str, str]:
+    from genesis_devtools.clients import ecosystem
+
+    logger = ClickLogger()
+    logger.info("Registering realm in ecosystem...")
+
+    realm_uuid, realm_secret, tokens_dict = ecosystem.register_realm(
+        ecosystem_endpoint=ecosystem_endpoint,
+        org_token=org_token,
+    )
+
+    if tokens_dict:
+        logger.info("Realm registered successfully")
+    else:
+        logger.info("Realm registered successfully in anonymous mode")
+
+    return realm_uuid, realm_secret, tokens_dict
+
+
 def _bootstrap_core(
     image_path: str | None,
     image_uri: str | None,
@@ -1182,6 +1270,11 @@ def _bootstrap_core(
     manifest_path: str,
     hypervisors: tp.Collection[stand_models.Hypervisor],
     no_start: bool,
+    ecosystem_endpoint: str,
+    disable_telemetry: bool,
+    realm_uuid: str,
+    realm_secret: str,
+    realm_tokens: dict,
 ) -> None:
     logger = ClickLogger()
     logger.info("Starting genesis bootstrap in 'core' mode")
@@ -1249,6 +1342,11 @@ def _bootstrap_core(
             repository=repository,
             admin_password=admin_password,
             profile=profile.value,
+            ecosystem_endpoint=ecosystem_endpoint,
+            disable_telemetry=disable_telemetry,
+            realm_uuid=realm_uuid,
+            realm_secret=realm_secret,
+            realm_tokens=realm_tokens,
         )
         logger.info(f"Launched genesis installation in `{profile.value}` profile")
 
@@ -1383,7 +1481,7 @@ def cowsay_cmd() -> None:
 @genesis.command("hello", help="Display a genesis message")
 def hello() -> None:
     msg = """
-▄▖        ▘  
+▄▖        ▘
 ▌ █▌▛▌█▌▛▘▌▛▘
 ▙▌▙▖▌▌▙▖▄▌▌▄▌
 """
