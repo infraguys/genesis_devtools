@@ -1,0 +1,3 @@
+if [ -f ~/.genesis/.genesis-complete.zsh ]; then
+. ~/.genesis/.genesis-complete.zsh
+fi

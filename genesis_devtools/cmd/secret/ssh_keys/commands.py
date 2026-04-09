@@ -224,7 +224,7 @@ def _print_ssh_keys(ssh_keys: tp.List[dict]) -> None:
             ssh_key["uuid"],
             ssh_key["project_id"],
             ssh_key["name"],
-            ssh_key["target"],
+            str(ssh_key["target"]),
             ssh_key["user"],
             ssh_key["status"],
         )
