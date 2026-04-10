@@ -14,21 +14,6 @@ To install the `genesis-devtools` binary, follow this step:
  curl -fsSL https://repository.genesis-core.tech/install.sh | sudo sh
  ```
 
-# Autocomplete of binary in bash
-
-To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
-
-## bash
-
-- Add content from `etc/.genesis-complete.bash` to your `~/.bashrc` file
-- Restart your shell
-
-## zsh
-
-- Save `etc/.genesis-complete.zsh` somewhere, for example `~/.genesis-complete.zsh`
-- Source the file `. ~/.genesis-complete.zsh` in your `~/.zshrc`
-- Restart your shell
-
 # Requirements
 
 Before you can install and use genesis tools you need to install several requirements:

@@ -81,6 +81,7 @@ def get_genesis_config(
 def get_keys_by_path_or_env(path: tp.Optional[str]) -> tp.Optional[str]:
     # Keys by path has the first priority
     if path is not None:
+        path = os.path.expanduser(path)
         if not os.path.exists(path) or not os.path.isfile(path):
             raise ValueError(f"Invalid path to the developer keys: {path}")
 

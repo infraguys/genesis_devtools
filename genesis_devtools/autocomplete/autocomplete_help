@@ -1,0 +1,12 @@
+To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
+
+# bash
+
+- Add content from `https://github.com/infraguys/genesis_devtools/blob/master/genesis_devtools/autocomplete/genesis-complete.bash` to your `~/.bashrc` file
+- Restart your shell
+
+# zsh
+
+- Save `https://github.com/infraguys/genesis_devtools/blob/master/genesis_devtools/autocomplete/genesis-complete.zsh` somewhere, for example `~/.genesis-complete.zsh`
+- Source the file `. ~/.genesis-complete.zsh` in your `~/.zshrc`
+- Restart your shell

@@ -67,6 +67,8 @@ from genesis_devtools.cmd.repo import commands as repo_commands
 from genesis_devtools.cmd.em.resources import commands as resources_commands
 from genesis_devtools.cmd.settings import commands as settings_commands
 
+from genesis_devtools.cmd.aliases import ClickAliasedGroup
+
 BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
 GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
@@ -79,6 +81,7 @@ class CmdContext(tp.NamedTuple):
 
 
 @click.group(
+    cls=ClickAliasedGroup,
     invoke_without_command=True,
     help="Provides all the necessary tools for work with Genesis Platform",
 )
@@ -1389,21 +1392,52 @@ def hello() -> None:
 
 @genesis.command("autocomplete_help", help="Display a autocomplete help")
 def autocomplete_help() -> None:
-    msg = """
-To enable autocomplete for the `genesis` in bash/zsh, follow these steps:
+    from genesis_devtools.common.utils import PROJECT_PATH
 
-# bash
+    with open(
+        os.path.join(
+            PROJECT_PATH, "genesis_devtools", "autocomplete", "autocomplete_help"
+        ),
+        "r",
+    ) as f:
+        autocomplete_data = f.read()
+    click.echo(autocomplete_data)
 
-- Add content from `https://github.com/infraguys/genesis_devtools/blob/master/etc/.genesis-complete.bash` to your `~/.bashrc` file
-- Restart your shell
 
-# zsh
+@genesis.command("autocomplete", help="update genesis autocomplete for bash")
+def autocomplete() -> None:
+    import psutil
+    from genesis_devtools.common.utils import PROJECT_PATH
 
-- Save `https://github.com/infraguys/genesis_devtools/blob/master/etc/.genesis-complete.zsh` somewhere, for example `~/.genesis-complete.zsh` 
-- Source the file `. ~/.genesis-complete.zsh` in your `~/.zshrc`
-- Restart your shell
-"""
-    click.echo(msg)
+    parent_process_name = psutil.Process(os.getppid()).parent().name()
+    if parent_process_name == "bash":
+        project_complete_path = "genesis-complete.bash"
+        rc_complete_path = "bashrc-complete"
+        rc_file = "~/.bashrc"
+    elif parent_process_name == "zsh":
+        project_complete_path = "genesis-complete.zsh"
+        rc_complete_path = "zshrc-complete"
+        rc_file = "~/.zshrc"
+    else:
+        click.echo(f"autocomplete not supported for this shell {parent_process_name}")
+        return
+    with open(
+        os.path.join(PROJECT_PATH, c.PKG_NAME, "autocomplete", project_complete_path),
+        "r",
+    ) as f:
+        autocomplete_data = f.read()
+    with open(os.path.expanduser(f"{c.CONFIG_DIR}/.{project_complete_path}"), "w") as f:
+        f.write(autocomplete_data)
+    with open(
+        os.path.join(PROJECT_PATH, c.PKG_NAME, "autocomplete", rc_complete_path),
+        "r",
+    ) as f:
+        rc_data = f.read()
+    with open(os.path.expanduser(rc_file), "a+") as f:
+        f.seek(0)
+        if rc_data not in f.read():
+            f.write(rc_data)
+    click.echo("autocomplete updated. Restart your shell")
 
 
 genesis.add_command(auth_commands.auth_group)  # noqa
@@ -1415,7 +1449,7 @@ genesis.add_command(vs_group)  # noqa
 genesis.add_command(realms_group)  # noqa
 
 genesis.add_command(manifests_commands.manifests_group)  # noqa
-genesis.add_command(elements_commands.elements_group)  # noqa
+genesis.add_command(elements_commands.elements_group, aliases=["e"])  # noqa
 genesis.add_command(services_commands.services_group)  # noqa
 
 genesis.add_command(configs_commands.configs_group)  # noqa
