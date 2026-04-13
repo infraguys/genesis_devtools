@@ -14,12 +14,17 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import os
 import typing as tp
 import uuid as sys_uuid
 
+import certifi
 import rich_click as click
+
 from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
+
+os.environ["SSL_CERT_FILE"] = certifi.where()
 
 
 def get_user_api_client(auth_data: dict) -> http_client.CollectionBaseClient:

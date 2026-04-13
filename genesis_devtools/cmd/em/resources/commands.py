@@ -32,33 +32,37 @@ def resources_group():
 
 
 @resources_group.command("list", help="List resources")
-@click.argument(
-    "name_uuid",
-    type=str,
-    required=True,
+@click.option(
+    "-e",
+    "--element",
+    default=None,
+    help="Name or uuid of the element",
 )
 @click.pass_context
-def list_resource_cmd(ctx: click.Context, name_uuid: str) -> None:
-    """List resources"""
+def list_resource_cmd(ctx: click.Context, element: str) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(name_uuid):
-        elements = elements_lib.list_elements(client, name=name_uuid)
-        if elements:
-            uuid = elements[0]["uuid"]
-            resources = elements_lib.list_resources(client, uuid)
-        else:
-            raise click.ClickException(f"Element with name {name_uuid} not found")
+    if element is None:
+        resources = elements_lib.list_all_resources(client)
     else:
-        resources = elements_lib.list_resources(client, name_uuid)
+        if not utils.is_valid_uuid(element):
+            elements = elements_lib.list_elements(client, name=element)
+            if elements:
+                uuid = elements[0]["uuid"]
+                resources = elements_lib.list_resources(client, uuid)
+            else:
+                raise click.ClickException(f"Element with name {element} not found")
+        else:
+            resources = elements_lib.list_resources(client, element)
 
     _print_resources(resources)
 
 
 @resources_group.command("show", help="Show resource")
-@click.argument(
-    "element_name_uuid",
-    type=str,
-    required=True,
+@click.option(
+    "-e",
+    "--element",
+    default=None,
+    help="Name or uuid of the element",
 )
 @click.argument(
     "resource_name_uuid",
@@ -68,54 +72,60 @@ def list_resource_cmd(ctx: click.Context, name_uuid: str) -> None:
 @click.pass_context
 def show_resource_cmd(
     ctx: click.Context,
-    element_name_uuid: str,
-    resource_name_uuid: str,
+    element: str | None,
+    resource_name_uuid: str | None,
 ) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
 
-    if not utils.is_valid_uuid(element_name_uuid):
-        elements = elements_lib.list_elements(client, name=element_name_uuid)
-        if elements:
-            element_name_uuid = elements[0]["uuid"]
-        else:
-            raise click.ClickException(
-                f"Element with name {element_name_uuid} not found"
-            )
+    if element is None:
+        if not utils.is_valid_uuid(resource_name_uuid):
+            resources = elements_lib.list_all_resources(client, name=resource_name_uuid)
+            if resources:
+                resource_name_uuid = resources[0]["uuid"]
+            else:
+                raise click.ClickException(
+                    f"resource with name {resource_name_uuid} not found"
+                )
+        resource = elements_lib.get_all_resource(client, resource_name_uuid)
 
-    if not utils.is_valid_uuid(resource_name_uuid):
-        resources = elements_lib.list_resources(
-            client, element_name_uuid, name=resource_name_uuid
-        )
-        if resources:
-            resource_name_uuid = resources[0]["uuid"]
-        else:
-            raise click.ClickException(
-                f"resource with name {resource_name_uuid} not found"
-            )
+    else:
+        if not utils.is_valid_uuid(element):
+            elements = elements_lib.list_elements(client, name=element)
+            if elements:
+                element = elements[0]["uuid"]
+            else:
+                raise click.ClickException(f"Element with name {element} not found")
 
-    resource = elements_lib.get_resource(client, element_name_uuid, resource_name_uuid)
+        if not utils.is_valid_uuid(resource_name_uuid):
+            resources = elements_lib.list_resources(
+                client, element, name=resource_name_uuid
+            )
+            if resources:
+                resource_name_uuid = resources[0]["uuid"]
+            else:
+                raise click.ClickException(
+                    f"resource with name {resource_name_uuid} not found"
+                )
+
+        resource = elements_lib.get_resource(client, element, resource_name_uuid)
+
     show_data(resource)
 
 
 def _print_resources(resources: tp.List[dict]) -> None:
-    table = get_table()
-    table.add_column("UUID")
-    table.add_column("Name")
-    table.add_column("Kind")
-    table.add_column("Full hash")
-    table.add_column("Status")
-    table.add_column("Created at")
-    table.add_column("Updated at")
-
-    for resource in resources:
-        table.add_row(
-            resource["uuid"],
-            resource["name"],
-            resource["kind"],
-            resource["full_hash"],
-            resource["status"],
-            resource["created_at"],
-            resource["updated_at"],
+    if resources:
+        table = get_table(
+            "UUID", "Name", "Kind", "Full hash", "Status", "Created at", "Updated at"
         )
+        for resource in resources:
+            table.add_row(
+                resource["uuid"],
+                resource["name"],
+                resource["kind"],
+                resource["full_hash"],
+                resource["status"],
+                resource["created_at"],
+                resource["updated_at"],
+            )
 
-    print_table(table)
+        print_table(table)
