@@ -1,28 +1,29 @@
-
-<!doctype html>
-<html lang="ru" class="no-js">
-  <head>
+<!DOCTYPE html><html lang="ru" class="no-js"><head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
       
       
+        <link rel="canonical" href="https://github.com/infraguys/genesis_devtools/config/">
       
       
-      <link rel="icon" href="/infraguys/genesis_devtools/assets/images/favicon.png">
+        <link rel="prev" href="../versioning/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.1.0">
     
     
       
-        <title>genesis_devtools</title>
+        <title>Configuration - genesis_devtools</title>
       
     
     
-      <link rel="stylesheet" href="/infraguys/genesis_devtools/assets/stylesheets/main.402914a4.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.402914a4.min.css">
       
         
-        <link rel="stylesheet" href="/infraguys/genesis_devtools/assets/stylesheets/palette.a0c5b2b5.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
       
       
 
@@ -32,20 +33,30 @@
       
         
         
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    <script>__md_scope=new URL("/infraguys/genesis_devtools/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
     
-  </head>
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
   
   
     
@@ -66,6 +77,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#config-for-genesis-cli" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -78,14 +94,14 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href="/infraguys/genesis_devtools/." title="genesis_devtools" class="md-header__button md-logo" aria-label="genesis_devtools" data-md-component="logo">
+    <a href=".." title="genesis_devtools" class="md-header__button md-logo" aria-label="genesis_devtools" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -97,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Configuration
             
           </span>
         </div>
@@ -107,18 +123,18 @@
       <form class="md-header__option" data-md-component="palette">
         
           
-          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_1">
           
-            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"/></svg>
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden="">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"></path></svg>
             </label>
           
         
           
-          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent="" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_2">
           
-            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"/></svg>
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden="">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"></path></svg>
             </label>
           
         
@@ -127,21 +143,21 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
       </label>
       <nav class="md-search__options" aria-label="Поиск">
         
         <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
         </button>
       </nav>
       
@@ -149,7 +165,7 @@
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" data-md-scrollfix>
+      <div class="md-search__scrollwrap" data-md-scrollfix="">
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Инициализация поиска
@@ -166,7 +182,7 @@
         <a href="https://github.com/infraguys/genesis_devtools" title="Перейти к репозиторию" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
   </div>
   <div class="md-source__repository">
     genesis_devtools
@@ -190,7 +206,7 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -200,10 +216,10 @@
 
 <nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/infraguys/genesis_devtools/." title="genesis_devtools" class="md-nav__button md-logo" aria-label="genesis_devtools" data-md-component="logo">
+    <a href=".." title="genesis_devtools" class="md-nav__button md-logo" aria-label="genesis_devtools" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
 
     </a>
     genesis_devtools
@@ -213,7 +229,7 @@
       <a href="https://github.com/infraguys/genesis_devtools" title="Перейти к репозиторию" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
   </div>
   <div class="md-source__repository">
     genesis_devtools
@@ -221,7 +237,7 @@
 </a>
     </div>
   
-  <ul class="md-nav__list" data-md-scrollfix>
+  <ul class="md-nav__list" data-md-scrollfix="">
     
       
       
@@ -231,7 +247,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         Software
       </a>
     </li>
@@ -251,7 +267,7 @@
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2">
       
       
       
@@ -265,7 +281,7 @@
           <span class="md-nav__icon md-icon"></span>
           Cli
         </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        <ul class="md-nav__list" data-md-scrollfix="">
           
             
               
@@ -273,7 +289,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/auth_login/" class="md-nav__link">
+      <a href="../cli/auth_login/" class="md-nav__link">
         auth_login
       </a>
     </li>
@@ -287,7 +303,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/auth_me/" class="md-nav__link">
+      <a href="../cli/auth_me/" class="md-nav__link">
         auth_me
       </a>
     </li>
@@ -301,7 +317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/auth_refresh/" class="md-nav__link">
+      <a href="../cli/auth_refresh/" class="md-nav__link">
         auth_refresh
       </a>
     </li>
@@ -315,7 +331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/certificates_add/" class="md-nav__link">
+      <a href="../cli/certificates_add/" class="md-nav__link">
         certificates_add
       </a>
     </li>
@@ -329,7 +345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/certificates_delete/" class="md-nav__link">
+      <a href="../cli/certificates_delete/" class="md-nav__link">
         certificates_delete
       </a>
     </li>
@@ -343,7 +359,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/certificates_list/" class="md-nav__link">
+      <a href="../cli/certificates_list/" class="md-nav__link">
         certificates_list
       </a>
     </li>
@@ -357,7 +373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/certificates_show/" class="md-nav__link">
+      <a href="../cli/certificates_show/" class="md-nav__link">
         certificates_show
       </a>
     </li>
@@ -371,7 +387,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/certificates_update/" class="md-nav__link">
+      <a href="../cli/certificates_update/" class="md-nav__link">
         certificates_update
       </a>
     </li>
@@ -385,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/clients_delete/" class="md-nav__link">
+      <a href="../cli/clients_delete/" class="md-nav__link">
         clients_delete
       </a>
     </li>
@@ -399,7 +415,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/clients_list/" class="md-nav__link">
+      <a href="../cli/clients_list/" class="md-nav__link">
         clients_list
       </a>
     </li>
@@ -413,7 +429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/clients_show/" class="md-nav__link">
+      <a href="../cli/clients_show/" class="md-nav__link">
         clients_show
       </a>
     </li>
@@ -427,7 +443,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/compute_hypervisors/" class="md-nav__link">
+      <a href="../cli/compute_hypervisors/" class="md-nav__link">
         compute_hypervisors
       </a>
     </li>
@@ -441,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/compute_nodes/" class="md-nav__link">
+      <a href="../cli/compute_nodes/" class="md-nav__link">
         compute_nodes
       </a>
     </li>
@@ -455,7 +471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/compute_sets/" class="md-nav__link">
+      <a href="../cli/compute_sets/" class="md-nav__link">
         compute_sets
       </a>
     </li>
@@ -469,7 +485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/configs_add-from-env/" class="md-nav__link">
+      <a href="../cli/configs_add-from-env/" class="md-nav__link">
         configs_add-from-env
       </a>
     </li>
@@ -483,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/configs_delete/" class="md-nav__link">
+      <a href="../cli/configs_delete/" class="md-nav__link">
         configs_delete
       </a>
     </li>
@@ -497,7 +513,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/configs_list/" class="md-nav__link">
+      <a href="../cli/configs_list/" class="md-nav__link">
         configs_list
       </a>
     </li>
@@ -511,7 +527,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/elements_install/" class="md-nav__link">
+      <a href="../cli/elements_install/" class="md-nav__link">
         elements_install
       </a>
     </li>
@@ -525,7 +541,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/elements_ips/" class="md-nav__link">
+      <a href="../cli/elements_ips/" class="md-nav__link">
         elements_ips
       </a>
     </li>
@@ -539,7 +555,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/elements_list/" class="md-nav__link">
+      <a href="../cli/elements_list/" class="md-nav__link">
         elements_list
       </a>
     </li>
@@ -553,7 +569,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/elements_show/" class="md-nav__link">
+      <a href="../cli/elements_show/" class="md-nav__link">
         elements_show
       </a>
     </li>
@@ -567,7 +583,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/elements_uninstall/" class="md-nav__link">
+      <a href="../cli/elements_uninstall/" class="md-nav__link">
         elements_uninstall
       </a>
     </li>
@@ -581,7 +597,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/elements_update/" class="md-nav__link">
+      <a href="../cli/elements_update/" class="md-nav__link">
         elements_update
       </a>
     </li>
@@ -595,7 +611,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis/" class="md-nav__link">
+      <a href="../cli/genesis/" class="md-nav__link">
         genesis
       </a>
     </li>
@@ -609,7 +625,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_auth/" class="md-nav__link">
+      <a href="../cli/genesis_auth/" class="md-nav__link">
         genesis_auth
       </a>
     </li>
@@ -623,7 +639,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_autocomplete_help/" class="md-nav__link">
+      <a href="../cli/genesis_autocomplete_help/" class="md-nav__link">
         genesis_autocomplete_help
       </a>
     </li>
@@ -637,7 +653,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_backup-decrypt/" class="md-nav__link">
+      <a href="../cli/genesis_backup-decrypt/" class="md-nav__link">
         genesis_backup-decrypt
       </a>
     </li>
@@ -651,7 +667,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_backup/" class="md-nav__link">
+      <a href="../cli/genesis_backup/" class="md-nav__link">
         genesis_backup
       </a>
     </li>
@@ -665,7 +681,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_bootstrap/" class="md-nav__link">
+      <a href="../cli/genesis_bootstrap/" class="md-nav__link">
         genesis_bootstrap
       </a>
     </li>
@@ -679,7 +695,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_build/" class="md-nav__link">
+      <a href="../cli/genesis_build/" class="md-nav__link">
         genesis_build
       </a>
     </li>
@@ -693,7 +709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_certificates/" class="md-nav__link">
+      <a href="../cli/genesis_certificates/" class="md-nav__link">
         genesis_certificates
       </a>
     </li>
@@ -707,7 +723,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_clients/" class="md-nav__link">
+      <a href="../cli/genesis_clients/" class="md-nav__link">
         genesis_clients
       </a>
     </li>
@@ -721,7 +737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_compute/" class="md-nav__link">
+      <a href="../cli/genesis_compute/" class="md-nav__link">
         genesis_compute
       </a>
     </li>
@@ -735,7 +751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_configs/" class="md-nav__link">
+      <a href="../cli/genesis_configs/" class="md-nav__link">
         genesis_configs
       </a>
     </li>
@@ -749,7 +765,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_cowsay/" class="md-nav__link">
+      <a href="../cli/genesis_cowsay/" class="md-nav__link">
         genesis_cowsay
       </a>
     </li>
@@ -763,7 +779,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_delete/" class="md-nav__link">
+      <a href="../cli/genesis_delete/" class="md-nav__link">
         genesis_delete
       </a>
     </li>
@@ -777,7 +793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_dumphelp/" class="md-nav__link">
+      <a href="../cli/genesis_dumphelp/" class="md-nav__link">
         genesis_dumphelp
       </a>
     </li>
@@ -791,7 +807,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_elements/" class="md-nav__link">
+      <a href="../cli/genesis_elements/" class="md-nav__link">
         genesis_elements
       </a>
     </li>
@@ -805,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_get-version/" class="md-nav__link">
+      <a href="../cli/genesis_get-version/" class="md-nav__link">
         genesis_get-version
       </a>
     </li>
@@ -819,7 +835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_hello/" class="md-nav__link">
+      <a href="../cli/genesis_hello/" class="md-nav__link">
         genesis_hello
       </a>
     </li>
@@ -833,7 +849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_hypervisors/" class="md-nav__link">
+      <a href="../cli/genesis_hypervisors/" class="md-nav__link">
         genesis_hypervisors
       </a>
     </li>
@@ -847,7 +863,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_iam/" class="md-nav__link">
+      <a href="../cli/genesis_iam/" class="md-nav__link">
         genesis_iam
       </a>
     </li>
@@ -861,7 +877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_idps/" class="md-nav__link">
+      <a href="../cli/genesis_idps/" class="md-nav__link">
         genesis_idps
       </a>
     </li>
@@ -875,7 +891,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_init/" class="md-nav__link">
+      <a href="../cli/genesis_init/" class="md-nav__link">
         genesis_init
       </a>
     </li>
@@ -889,7 +905,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_latest/" class="md-nav__link">
+      <a href="../cli/genesis_latest/" class="md-nav__link">
         genesis_latest
       </a>
     </li>
@@ -903,7 +919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_manifests/" class="md-nav__link">
+      <a href="../cli/genesis_manifests/" class="md-nav__link">
         genesis_manifests
       </a>
     </li>
@@ -917,7 +933,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_nodes/" class="md-nav__link">
+      <a href="../cli/genesis_nodes/" class="md-nav__link">
         genesis_nodes
       </a>
     </li>
@@ -931,7 +947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_openapi/" class="md-nav__link">
+      <a href="../cli/genesis_openapi/" class="md-nav__link">
         genesis_openapi
       </a>
     </li>
@@ -945,7 +961,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_organizations/" class="md-nav__link">
+      <a href="../cli/genesis_organizations/" class="md-nav__link">
         genesis_organizations
       </a>
     </li>
@@ -959,7 +975,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_passwords/" class="md-nav__link">
+      <a href="../cli/genesis_passwords/" class="md-nav__link">
         genesis_passwords
       </a>
     </li>
@@ -973,7 +989,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_permission_bindings/" class="md-nav__link">
+      <a href="../cli/genesis_permission_bindings/" class="md-nav__link">
         genesis_permission_bindings
       </a>
     </li>
@@ -987,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_permissions/" class="md-nav__link">
+      <a href="../cli/genesis_permissions/" class="md-nav__link">
         genesis_permissions
       </a>
     </li>
@@ -1001,7 +1017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_profiles/" class="md-nav__link">
+      <a href="../cli/genesis_profiles/" class="md-nav__link">
         genesis_profiles
       </a>
     </li>
@@ -1015,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_projects/" class="md-nav__link">
+      <a href="../cli/genesis_projects/" class="md-nav__link">
         genesis_projects
       </a>
     </li>
@@ -1029,7 +1045,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_ps/" class="md-nav__link">
+      <a href="../cli/genesis_ps/" class="md-nav__link">
         genesis_ps
       </a>
     </li>
@@ -1043,7 +1059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_push/" class="md-nav__link">
+      <a href="../cli/genesis_push/" class="md-nav__link">
         genesis_push
       </a>
     </li>
@@ -1057,7 +1073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_realms/" class="md-nav__link">
+      <a href="../cli/genesis_realms/" class="md-nav__link">
         genesis_realms
       </a>
     </li>
@@ -1071,7 +1087,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_repo/" class="md-nav__link">
+      <a href="../cli/genesis_repo/" class="md-nav__link">
         genesis_repo
       </a>
     </li>
@@ -1085,7 +1101,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_resources/" class="md-nav__link">
+      <a href="../cli/genesis_resources/" class="md-nav__link">
         genesis_resources
       </a>
     </li>
@@ -1099,7 +1115,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_role_bindings/" class="md-nav__link">
+      <a href="../cli/genesis_role_bindings/" class="md-nav__link">
         genesis_role_bindings
       </a>
     </li>
@@ -1113,7 +1129,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_roles/" class="md-nav__link">
+      <a href="../cli/genesis_roles/" class="md-nav__link">
         genesis_roles
       </a>
     </li>
@@ -1127,7 +1143,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_rsa_keys/" class="md-nav__link">
+      <a href="../cli/genesis_rsa_keys/" class="md-nav__link">
         genesis_rsa_keys
       </a>
     </li>
@@ -1141,7 +1157,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_secret/" class="md-nav__link">
+      <a href="../cli/genesis_secret/" class="md-nav__link">
         genesis_secret
       </a>
     </li>
@@ -1155,7 +1171,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_services/" class="md-nav__link">
+      <a href="../cli/genesis_services/" class="md-nav__link">
         genesis_services
       </a>
     </li>
@@ -1169,7 +1185,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_sets/" class="md-nav__link">
+      <a href="../cli/genesis_sets/" class="md-nav__link">
         genesis_sets
       </a>
     </li>
@@ -1183,7 +1199,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_settings/" class="md-nav__link">
+      <a href="../cli/genesis_settings/" class="md-nav__link">
         genesis_settings
       </a>
     </li>
@@ -1197,7 +1213,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_ssh/" class="md-nav__link">
+      <a href="../cli/genesis_ssh/" class="md-nav__link">
         genesis_ssh
       </a>
     </li>
@@ -1211,7 +1227,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_ssh_keys/" class="md-nav__link">
+      <a href="../cli/genesis_ssh_keys/" class="md-nav__link">
         genesis_ssh_keys
       </a>
     </li>
@@ -1225,7 +1241,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_users/" class="md-nav__link">
+      <a href="../cli/genesis_users/" class="md-nav__link">
         genesis_users
       </a>
     </li>
@@ -1239,7 +1255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_values/" class="md-nav__link">
+      <a href="../cli/genesis_values/" class="md-nav__link">
         genesis_values
       </a>
     </li>
@@ -1253,7 +1269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_vars/" class="md-nav__link">
+      <a href="../cli/genesis_vars/" class="md-nav__link">
         genesis_vars
       </a>
     </li>
@@ -1267,7 +1283,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_version/" class="md-nav__link">
+      <a href="../cli/genesis_version/" class="md-nav__link">
         genesis_version
       </a>
     </li>
@@ -1281,7 +1297,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/genesis_vs/" class="md-nav__link">
+      <a href="../cli/genesis_vs/" class="md-nav__link">
         genesis_vs
       </a>
     </li>
@@ -1295,7 +1311,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/hypervisors_delete/" class="md-nav__link">
+      <a href="../cli/hypervisors_delete/" class="md-nav__link">
         hypervisors_delete
       </a>
     </li>
@@ -1309,7 +1325,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/hypervisors_list/" class="md-nav__link">
+      <a href="../cli/hypervisors_list/" class="md-nav__link">
         hypervisors_list
       </a>
     </li>
@@ -1323,7 +1339,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/hypervisors_show/" class="md-nav__link">
+      <a href="../cli/hypervisors_show/" class="md-nav__link">
         hypervisors_show
       </a>
     </li>
@@ -1337,7 +1353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_clients/" class="md-nav__link">
+      <a href="../cli/iam_clients/" class="md-nav__link">
         iam_clients
       </a>
     </li>
@@ -1351,7 +1367,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_idps/" class="md-nav__link">
+      <a href="../cli/iam_idps/" class="md-nav__link">
         iam_idps
       </a>
     </li>
@@ -1365,7 +1381,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_organizations/" class="md-nav__link">
+      <a href="../cli/iam_organizations/" class="md-nav__link">
         iam_organizations
       </a>
     </li>
@@ -1379,7 +1395,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_permission_bindings/" class="md-nav__link">
+      <a href="../cli/iam_permission_bindings/" class="md-nav__link">
         iam_permission_bindings
       </a>
     </li>
@@ -1393,7 +1409,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_permissions/" class="md-nav__link">
+      <a href="../cli/iam_permissions/" class="md-nav__link">
         iam_permissions
       </a>
     </li>
@@ -1407,7 +1423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_projects/" class="md-nav__link">
+      <a href="../cli/iam_projects/" class="md-nav__link">
         iam_projects
       </a>
     </li>
@@ -1421,7 +1437,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_role_bindings/" class="md-nav__link">
+      <a href="../cli/iam_role_bindings/" class="md-nav__link">
         iam_role_bindings
       </a>
     </li>
@@ -1435,7 +1451,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_roles/" class="md-nav__link">
+      <a href="../cli/iam_roles/" class="md-nav__link">
         iam_roles
       </a>
     </li>
@@ -1449,7 +1465,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/iam_users/" class="md-nav__link">
+      <a href="../cli/iam_users/" class="md-nav__link">
         iam_users
       </a>
     </li>
@@ -1463,7 +1479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/idps_delete/" class="md-nav__link">
+      <a href="../cli/idps_delete/" class="md-nav__link">
         idps_delete
       </a>
     </li>
@@ -1477,7 +1493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/idps_list/" class="md-nav__link">
+      <a href="../cli/idps_list/" class="md-nav__link">
         idps_list
       </a>
     </li>
@@ -1491,7 +1507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/idps_show/" class="md-nav__link">
+      <a href="../cli/idps_show/" class="md-nav__link">
         idps_show
       </a>
     </li>
@@ -1505,7 +1521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/manifests_list/" class="md-nav__link">
+      <a href="../cli/manifests_list/" class="md-nav__link">
         manifests_list
       </a>
     </li>
@@ -1519,7 +1535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/manifests_show/" class="md-nav__link">
+      <a href="../cli/manifests_show/" class="md-nav__link">
         manifests_show
       </a>
     </li>
@@ -1533,7 +1549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/manifests_validate/" class="md-nav__link">
+      <a href="../cli/manifests_validate/" class="md-nav__link">
         manifests_validate
       </a>
     </li>
@@ -1547,7 +1563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/nodes_add-or-update/" class="md-nav__link">
+      <a href="../cli/nodes_add-or-update/" class="md-nav__link">
         nodes_add-or-update
       </a>
     </li>
@@ -1561,7 +1577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/nodes_add/" class="md-nav__link">
+      <a href="../cli/nodes_add/" class="md-nav__link">
         nodes_add
       </a>
     </li>
@@ -1575,7 +1591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/nodes_delete/" class="md-nav__link">
+      <a href="../cli/nodes_delete/" class="md-nav__link">
         nodes_delete
       </a>
     </li>
@@ -1589,7 +1605,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/nodes_list/" class="md-nav__link">
+      <a href="../cli/nodes_list/" class="md-nav__link">
         nodes_list
       </a>
     </li>
@@ -1603,7 +1619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/nodes_show/" class="md-nav__link">
+      <a href="../cli/nodes_show/" class="md-nav__link">
         nodes_show
       </a>
     </li>
@@ -1617,7 +1633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/organizations_delete/" class="md-nav__link">
+      <a href="../cli/organizations_delete/" class="md-nav__link">
         organizations_delete
       </a>
     </li>
@@ -1631,7 +1647,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/organizations_list/" class="md-nav__link">
+      <a href="../cli/organizations_list/" class="md-nav__link">
         organizations_list
       </a>
     </li>
@@ -1645,7 +1661,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/organizations_show/" class="md-nav__link">
+      <a href="../cli/organizations_show/" class="md-nav__link">
         organizations_show
       </a>
     </li>
@@ -1659,7 +1675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/passwords_add/" class="md-nav__link">
+      <a href="../cli/passwords_add/" class="md-nav__link">
         passwords_add
       </a>
     </li>
@@ -1673,7 +1689,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/passwords_delete/" class="md-nav__link">
+      <a href="../cli/passwords_delete/" class="md-nav__link">
         passwords_delete
       </a>
     </li>
@@ -1687,7 +1703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/passwords_list/" class="md-nav__link">
+      <a href="../cli/passwords_list/" class="md-nav__link">
         passwords_list
       </a>
     </li>
@@ -1701,7 +1717,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/passwords_show/" class="md-nav__link">
+      <a href="../cli/passwords_show/" class="md-nav__link">
         passwords_show
       </a>
     </li>
@@ -1715,7 +1731,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/passwords_update/" class="md-nav__link">
+      <a href="../cli/passwords_update/" class="md-nav__link">
         passwords_update
       </a>
     </li>
@@ -1729,7 +1745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/permission_bindings_delete/" class="md-nav__link">
+      <a href="../cli/permission_bindings_delete/" class="md-nav__link">
         permission_bindings_delete
       </a>
     </li>
@@ -1743,7 +1759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/permission_bindings_list/" class="md-nav__link">
+      <a href="../cli/permission_bindings_list/" class="md-nav__link">
         permission_bindings_list
       </a>
     </li>
@@ -1757,7 +1773,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/permission_bindings_show/" class="md-nav__link">
+      <a href="../cli/permission_bindings_show/" class="md-nav__link">
         permission_bindings_show
       </a>
     </li>
@@ -1771,7 +1787,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/permissions_delete/" class="md-nav__link">
+      <a href="../cli/permissions_delete/" class="md-nav__link">
         permissions_delete
       </a>
     </li>
@@ -1785,7 +1801,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/permissions_list/" class="md-nav__link">
+      <a href="../cli/permissions_list/" class="md-nav__link">
         permissions_list
       </a>
     </li>
@@ -1799,7 +1815,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/permissions_show/" class="md-nav__link">
+      <a href="../cli/permissions_show/" class="md-nav__link">
         permissions_show
       </a>
     </li>
@@ -1813,7 +1829,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/profiles_activate/" class="md-nav__link">
+      <a href="../cli/profiles_activate/" class="md-nav__link">
         profiles_activate
       </a>
     </li>
@@ -1827,7 +1843,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/profiles_add/" class="md-nav__link">
+      <a href="../cli/profiles_add/" class="md-nav__link">
         profiles_add
       </a>
     </li>
@@ -1841,7 +1857,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/profiles_delete/" class="md-nav__link">
+      <a href="../cli/profiles_delete/" class="md-nav__link">
         profiles_delete
       </a>
     </li>
@@ -1855,7 +1871,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/profiles_list/" class="md-nav__link">
+      <a href="../cli/profiles_list/" class="md-nav__link">
         profiles_list
       </a>
     </li>
@@ -1869,7 +1885,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/profiles_show/" class="md-nav__link">
+      <a href="../cli/profiles_show/" class="md-nav__link">
         profiles_show
       </a>
     </li>
@@ -1883,7 +1899,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/projects_delete/" class="md-nav__link">
+      <a href="../cli/projects_delete/" class="md-nav__link">
         projects_delete
       </a>
     </li>
@@ -1897,7 +1913,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/projects_list/" class="md-nav__link">
+      <a href="../cli/projects_list/" class="md-nav__link">
         projects_list
       </a>
     </li>
@@ -1911,7 +1927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/projects_show/" class="md-nav__link">
+      <a href="../cli/projects_show/" class="md-nav__link">
         projects_show
       </a>
     </li>
@@ -1925,7 +1941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/realms_delete/" class="md-nav__link">
+      <a href="../cli/realms_delete/" class="md-nav__link">
         realms_delete
       </a>
     </li>
@@ -1939,7 +1955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/realms_list/" class="md-nav__link">
+      <a href="../cli/realms_list/" class="md-nav__link">
         realms_list
       </a>
     </li>
@@ -1953,7 +1969,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/realms_ssh/" class="md-nav__link">
+      <a href="../cli/realms_ssh/" class="md-nav__link">
         realms_ssh
       </a>
     </li>
@@ -1967,7 +1983,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/repo_delete/" class="md-nav__link">
+      <a href="../cli/repo_delete/" class="md-nav__link">
         repo_delete
       </a>
     </li>
@@ -1981,7 +1997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/repo_init/" class="md-nav__link">
+      <a href="../cli/repo_init/" class="md-nav__link">
         repo_init
       </a>
     </li>
@@ -1995,7 +2011,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/repo_list/" class="md-nav__link">
+      <a href="../cli/repo_list/" class="md-nav__link">
         repo_list
       </a>
     </li>
@@ -2009,7 +2025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/resources_list/" class="md-nav__link">
+      <a href="../cli/resources_list/" class="md-nav__link">
         resources_list
       </a>
     </li>
@@ -2023,7 +2039,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/resources_show/" class="md-nav__link">
+      <a href="../cli/resources_show/" class="md-nav__link">
         resources_show
       </a>
     </li>
@@ -2037,7 +2053,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/role_bindings_delete/" class="md-nav__link">
+      <a href="../cli/role_bindings_delete/" class="md-nav__link">
         role_bindings_delete
       </a>
     </li>
@@ -2051,7 +2067,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/role_bindings_list/" class="md-nav__link">
+      <a href="../cli/role_bindings_list/" class="md-nav__link">
         role_bindings_list
       </a>
     </li>
@@ -2065,7 +2081,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/role_bindings_show/" class="md-nav__link">
+      <a href="../cli/role_bindings_show/" class="md-nav__link">
         role_bindings_show
       </a>
     </li>
@@ -2079,7 +2095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/roles_delete/" class="md-nav__link">
+      <a href="../cli/roles_delete/" class="md-nav__link">
         roles_delete
       </a>
     </li>
@@ -2093,7 +2109,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/roles_list/" class="md-nav__link">
+      <a href="../cli/roles_list/" class="md-nav__link">
         roles_list
       </a>
     </li>
@@ -2107,7 +2123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/roles_show/" class="md-nav__link">
+      <a href="../cli/roles_show/" class="md-nav__link">
         roles_show
       </a>
     </li>
@@ -2121,7 +2137,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/rsa_keys_add/" class="md-nav__link">
+      <a href="../cli/rsa_keys_add/" class="md-nav__link">
         rsa_keys_add
       </a>
     </li>
@@ -2135,7 +2151,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/rsa_keys_delete/" class="md-nav__link">
+      <a href="../cli/rsa_keys_delete/" class="md-nav__link">
         rsa_keys_delete
       </a>
     </li>
@@ -2149,7 +2165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/rsa_keys_list/" class="md-nav__link">
+      <a href="../cli/rsa_keys_list/" class="md-nav__link">
         rsa_keys_list
       </a>
     </li>
@@ -2163,7 +2179,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/rsa_keys_show/" class="md-nav__link">
+      <a href="../cli/rsa_keys_show/" class="md-nav__link">
         rsa_keys_show
       </a>
     </li>
@@ -2177,7 +2193,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/rsa_keys_update/" class="md-nav__link">
+      <a href="../cli/rsa_keys_update/" class="md-nav__link">
         rsa_keys_update
       </a>
     </li>
@@ -2191,7 +2207,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/secret_certificates/" class="md-nav__link">
+      <a href="../cli/secret_certificates/" class="md-nav__link">
         secret_certificates
       </a>
     </li>
@@ -2205,7 +2221,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/secret_passwords/" class="md-nav__link">
+      <a href="../cli/secret_passwords/" class="md-nav__link">
         secret_passwords
       </a>
     </li>
@@ -2219,7 +2235,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/secret_rsa_keys/" class="md-nav__link">
+      <a href="../cli/secret_rsa_keys/" class="md-nav__link">
         secret_rsa_keys
       </a>
     </li>
@@ -2233,7 +2249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/secret_ssh_keys/" class="md-nav__link">
+      <a href="../cli/secret_ssh_keys/" class="md-nav__link">
         secret_ssh_keys
       </a>
     </li>
@@ -2247,7 +2263,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/services_add/" class="md-nav__link">
+      <a href="../cli/services_add/" class="md-nav__link">
         services_add
       </a>
     </li>
@@ -2261,7 +2277,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/services_delete/" class="md-nav__link">
+      <a href="../cli/services_delete/" class="md-nav__link">
         services_delete
       </a>
     </li>
@@ -2275,7 +2291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/services_list/" class="md-nav__link">
+      <a href="../cli/services_list/" class="md-nav__link">
         services_list
       </a>
     </li>
@@ -2289,7 +2305,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/services_show/" class="md-nav__link">
+      <a href="../cli/services_show/" class="md-nav__link">
         services_show
       </a>
     </li>
@@ -2303,7 +2319,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/services_update/" class="md-nav__link">
+      <a href="../cli/services_update/" class="md-nav__link">
         services_update
       </a>
     </li>
@@ -2317,7 +2333,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/sets_delete/" class="md-nav__link">
+      <a href="../cli/sets_delete/" class="md-nav__link">
         sets_delete
       </a>
     </li>
@@ -2331,7 +2347,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/sets_list/" class="md-nav__link">
+      <a href="../cli/sets_list/" class="md-nav__link">
         sets_list
       </a>
     </li>
@@ -2345,7 +2361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/sets_show/" class="md-nav__link">
+      <a href="../cli/sets_show/" class="md-nav__link">
         sets_show
       </a>
     </li>
@@ -2359,7 +2375,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_current-realm/" class="md-nav__link">
+      <a href="../cli/settings_current-realm/" class="md-nav__link">
         settings_current-realm
       </a>
     </li>
@@ -2373,7 +2389,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_delete-context/" class="md-nav__link">
+      <a href="../cli/settings_delete-context/" class="md-nav__link">
         settings_delete-context
       </a>
     </li>
@@ -2387,7 +2403,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_delete-realm/" class="md-nav__link">
+      <a href="../cli/settings_delete-realm/" class="md-nav__link">
         settings_delete-realm
       </a>
     </li>
@@ -2401,7 +2417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_get/" class="md-nav__link">
+      <a href="../cli/settings_get/" class="md-nav__link">
         settings_get
       </a>
     </li>
@@ -2415,7 +2431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_list-realms/" class="md-nav__link">
+      <a href="../cli/settings_list-realms/" class="md-nav__link">
         settings_list-realms
       </a>
     </li>
@@ -2429,7 +2445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_rename-context/" class="md-nav__link">
+      <a href="../cli/settings_rename-context/" class="md-nav__link">
         settings_rename-context
       </a>
     </li>
@@ -2443,7 +2459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_set-context/" class="md-nav__link">
+      <a href="../cli/settings_set-context/" class="md-nav__link">
         settings_set-context
       </a>
     </li>
@@ -2457,7 +2473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_set-realm/" class="md-nav__link">
+      <a href="../cli/settings_set-realm/" class="md-nav__link">
         settings_set-realm
       </a>
     </li>
@@ -2471,7 +2487,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_set/" class="md-nav__link">
+      <a href="../cli/settings_set/" class="md-nav__link">
         settings_set
       </a>
     </li>
@@ -2485,7 +2501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_unset/" class="md-nav__link">
+      <a href="../cli/settings_unset/" class="md-nav__link">
         settings_unset
       </a>
     </li>
@@ -2499,7 +2515,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_use-realm/" class="md-nav__link">
+      <a href="../cli/settings_use-realm/" class="md-nav__link">
         settings_use-realm
       </a>
     </li>
@@ -2513,7 +2529,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/settings_view/" class="md-nav__link">
+      <a href="../cli/settings_view/" class="md-nav__link">
         settings_view
       </a>
     </li>
@@ -2527,7 +2543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/ssh_keys_add/" class="md-nav__link">
+      <a href="../cli/ssh_keys_add/" class="md-nav__link">
         ssh_keys_add
       </a>
     </li>
@@ -2541,7 +2557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/ssh_keys_delete/" class="md-nav__link">
+      <a href="../cli/ssh_keys_delete/" class="md-nav__link">
         ssh_keys_delete
       </a>
     </li>
@@ -2555,7 +2571,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/ssh_keys_list/" class="md-nav__link">
+      <a href="../cli/ssh_keys_list/" class="md-nav__link">
         ssh_keys_list
       </a>
     </li>
@@ -2569,7 +2585,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/ssh_keys_show/" class="md-nav__link">
+      <a href="../cli/ssh_keys_show/" class="md-nav__link">
         ssh_keys_show
       </a>
     </li>
@@ -2583,7 +2599,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/ssh_keys_update/" class="md-nav__link">
+      <a href="../cli/ssh_keys_update/" class="md-nav__link">
         ssh_keys_update
       </a>
     </li>
@@ -2597,7 +2613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/users_delete/" class="md-nav__link">
+      <a href="../cli/users_delete/" class="md-nav__link">
         users_delete
       </a>
     </li>
@@ -2611,7 +2627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/users_list/" class="md-nav__link">
+      <a href="../cli/users_list/" class="md-nav__link">
         users_list
       </a>
     </li>
@@ -2625,7 +2641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/users_show/" class="md-nav__link">
+      <a href="../cli/users_show/" class="md-nav__link">
         users_show
       </a>
     </li>
@@ -2639,7 +2655,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/values_add/" class="md-nav__link">
+      <a href="../cli/values_add/" class="md-nav__link">
         values_add
       </a>
     </li>
@@ -2653,7 +2669,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/values_delete/" class="md-nav__link">
+      <a href="../cli/values_delete/" class="md-nav__link">
         values_delete
       </a>
     </li>
@@ -2667,7 +2683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/values_list/" class="md-nav__link">
+      <a href="../cli/values_list/" class="md-nav__link">
         values_list
       </a>
     </li>
@@ -2681,7 +2697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/values_show/" class="md-nav__link">
+      <a href="../cli/values_show/" class="md-nav__link">
         values_show
       </a>
     </li>
@@ -2695,7 +2711,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/values_update/" class="md-nav__link">
+      <a href="../cli/values_update/" class="md-nav__link">
         values_update
       </a>
     </li>
@@ -2709,7 +2725,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vars_add/" class="md-nav__link">
+      <a href="../cli/vars_add/" class="md-nav__link">
         vars_add
       </a>
     </li>
@@ -2723,7 +2739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vars_delete/" class="md-nav__link">
+      <a href="../cli/vars_delete/" class="md-nav__link">
         vars_delete
       </a>
     </li>
@@ -2737,7 +2753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vars_list/" class="md-nav__link">
+      <a href="../cli/vars_list/" class="md-nav__link">
         vars_list
       </a>
     </li>
@@ -2751,7 +2767,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vars_select/" class="md-nav__link">
+      <a href="../cli/vars_select/" class="md-nav__link">
         vars_select
       </a>
     </li>
@@ -2765,7 +2781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vars_set/" class="md-nav__link">
+      <a href="../cli/vars_set/" class="md-nav__link">
         vars_set
       </a>
     </li>
@@ -2779,7 +2795,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vars_show/" class="md-nav__link">
+      <a href="../cli/vars_show/" class="md-nav__link">
         vars_show
       </a>
     </li>
@@ -2793,7 +2809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vs_profiles/" class="md-nav__link">
+      <a href="../cli/vs_profiles/" class="md-nav__link">
         vs_profiles
       </a>
     </li>
@@ -2807,7 +2823,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vs_values/" class="md-nav__link">
+      <a href="../cli/vs_values/" class="md-nav__link">
         vs_values
       </a>
     </li>
@@ -2821,7 +2837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/cli/vs_vars/" class="md-nav__link">
+      <a href="../cli/vs_vars/" class="md-nav__link">
         vs_vars
       </a>
     </li>
@@ -2843,7 +2859,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/realms/" class="md-nav__link">
+      <a href="../realms/" class="md-nav__link">
         Realms
       </a>
     </li>
@@ -2858,7 +2874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/versioning/" class="md-nav__link">
+      <a href="../versioning/" class="md-nav__link">
         Versioning
       </a>
     </li>
@@ -2871,11 +2887,59 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="/infraguys/genesis_devtools/config/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Configuration
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#realms" class="md-nav__link">
+    Realms
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#developer_key_path" class="md-nav__link">
+    developer_key_path
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2892,8 +2956,56 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="config-for-genesis-cli">Config for genesis cli<a class="headerlink" href="#config-for-genesis-cli" title="Permanent link">#</a></h1>
+<p>Default path for config file: <code>~/.genesis/genesisctl.yaml</code></p>
+<p>Example config:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">current-realm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">realms</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">check_updates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">contexts</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">admin</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">        </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">current-context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://10.20.0.2:11010</span>
+<span class="w">  </span><span class="nt">my_stand</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">check_updates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">contexts</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">base</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_password</span>
+<span class="w">        </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_admin</span>
+<span class="w">    </span><span class="nt">current-context</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">base</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://console.my_company.tech:80</span>
+<span class="w">  </span><span class="nt">production</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">check_updates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://10.40.0.2:11010</span>
+<span class="w">    </span><span class="nt">skip_tls_verify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">developer_key_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.ssh/id_rsa.pub</span>
+</code></pre></div>
+<p>You can change the path to the config file by setting the command line argument <code>--config</code>.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code>genesis<span class="w"> </span>--config<span class="w"> </span>~/.genesis.yaml<span class="w"> </span>elements<span class="w"> </span>list
+</code></pre></div>
+<h2 id="realms">Realms<a class="headerlink" href="#realms" title="Permanent link">#</a></h2>
+<p>Realms are used to separate environments. For example, you can have production and development environments.</p>
+<p>See the <a href="../realms/">realms</a> page for more information.</p>
+<h2 id="developer_key_path">developer_key_path<a class="headerlink" href="#developer_key_path" title="Permanent link">#</a></h2>
+<p>The path to your ssh key.</p>
+<p>You can change the path to the ssh key by config or by setting the command line argument <code>--developer_key_path</code> or <code>-i</code>
+or by environment variable <code>GEN_DEV_KEYS</code>.</p>
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -2925,11 +3037,13 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "/infraguys/genesis_devtools/", "features": ["search.suggest", "search.highlight", "toc.integrate", "content.code.copy"], "search": "/infraguys/genesis_devtools/assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["search.suggest", "search.highlight", "toc.integrate", "content.code.copy"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}}</script>
     
     
-      <script src="/infraguys/genesis_devtools/assets/javascripts/bundle.ce72ebac.min.js"></script>
+      <script src="../assets/javascripts/bundle.ce72ebac.min.js"></script>
       
     
-  </body>
-</html>
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
