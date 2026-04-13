@@ -1,17 +1,25 @@
 
-# genesis_version
+# genesis_autocomplete
 
-Prints the genesis_devtools version
+update genesis autocomplete for your shell
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis version [OPTIONS]                                                                                                                                                                                                                                                                          
+ Usage: genesis autocomplete [OPTIONS]                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
+
+* `shell`:
+    * Type: choice
+    * Default: `none`
+    * Usage: `-s
+--shell`
+
+  shell kind
 
 * `help`:
     * Type: boolean
@@ -24,6 +32,6 @@ Prints the genesis_devtools version
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis version [OPTIONS]                                                                                                                                                                                                                                                                          
+ Usage: genesis autocomplete [OPTIONS]                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                            
 ```

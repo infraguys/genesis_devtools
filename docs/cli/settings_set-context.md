@@ -58,6 +58,13 @@ Set a context entry in settings
 
   Refresh token for the user in context
 
+* `current`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--current`
+
+  Set as current context
+
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -79,6 +86,7 @@ Set a context entry in settings
 │    --password       -p  TEXT  Password for the user in context                                                                                                                                                                                                                                          │
 │    --access_token   -a  TEXT  Access token for the user in context                                                                                                                                                                                                                                      │
 │    --refresh_token  -t  TEXT  Refresh token for the user in context                                                                                                                                                                                                                                     │
+│    --current                  Set as current context                                                                                                                                                                                                                                                    │
 │    --help                     Show this message and exit.                                                                                                                                                                                                                                               │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

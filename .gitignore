@@ -11,6 +11,7 @@ __pycache__/
 
 # IDE
 .idea/
+.gigaide/
 .vscode/
 
 # Distribution / packaging

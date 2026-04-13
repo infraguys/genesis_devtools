@@ -21,6 +21,13 @@ Describe one or many realms
 
   Output format
 
+* `show_sensitive`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--show-sensitive`
+
+  Show sensitive data
+
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -37,7 +44,8 @@ Describe one or many realms
  Describe one or many realms                                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --output  -o  [json|yaml]  Output format                                                                                                                                                                                                                                                                │
-│ --help                     Show this message and exit.                                                                                                                                                                                                                                                  │
+│ --output          -o  [json|yaml]  Output format                                                                                                                                                                                                                                                        │
+│ --show-sensitive                   Show sensitive data                                                                                                                                                                                                                                                  │
+│ --help                             Show this message and exit.                                                                                                                                                                                                                                          │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

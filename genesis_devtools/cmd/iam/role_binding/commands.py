@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -62,8 +62,8 @@ def show_role_binding(
             uuid = role_bindings[0]["uuid"]
         else:
             raise click.ClickException(f"role_binding with name {uuid} not found")
-    value = role_binding_lib.get_role_binding(client, uuid)
-    _print_values([value])
+    data = role_binding_lib.get_role_binding(client, uuid)
+    show_data(data)
 
 
 @role_bindings_group.command("delete", help="Delete role_binding")

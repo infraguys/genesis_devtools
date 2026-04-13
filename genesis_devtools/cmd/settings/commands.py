@@ -80,7 +80,7 @@ def get_realm(config: dict, realm: str | None = None) -> dict:
 
 
 def get_context(realm: dict, context: str | None = None) -> dict:
-    if "contexts" not in realm:
+    if not realm.get("contexts"):
         return {}
     if not context:
         context = realm.get("current-context")
@@ -118,7 +118,7 @@ def current_realm(ctx: click.Context) -> None:
     click.echo(realm if realm else "No current realm set")
 
 
-@settings_group.command("use-realm", help="Set the current-realm in a settings file")
+@settings_group.command("use-realm", help="Use the current-realm in a settings file")
 @click.argument("realm", type=str, required=True)
 @click.pass_context
 def use_realm(ctx: click.Context, realm: str) -> None:
@@ -140,9 +140,22 @@ def use_realm(ctx: click.Context, realm: str) -> None:
     default="yaml",
     help="Output format",
 )
+# add flag show-sensitive
+@click.option(
+    "--show-sensitive",
+    is_flag=True,
+    default=False,
+    help="Show sensitive data",
+)
 @click.pass_context
-def list_realms(ctx: click.Context, output: str) -> None:
+def list_realms(ctx: click.Context, output: str, show_sensitive: bool) -> None:
     config = load_config(ctx.obj.cfg_path)
+
+    if not show_sensitive:
+        for realm in config.get("realms", {}).values():
+            for context in realm.get("contexts", {}).values():
+                context["password"] = "*"
+                context["user"] = "*"
 
     if output == "json":
         click.echo(json.dumps(config.get("realms", {}), indent=2))
@@ -199,11 +212,13 @@ def set_realm(
         "skip_tls_verify": skip_tls_verify,
         "contexts": {},
     }
+    if realm in config["realms"]:
+        realm_config["contexts"] = config["realms"][realm].get("contexts", {})
+    config["realms"][realm] = realm_config
 
-    if current:
+    if current or len(config["realms"]) == 1:
         config["current-realm"] = realm
 
-    config["realms"][realm] = realm_config
     _save_config(config, ctx.obj.cfg_path)
     click.echo(f"realm '{realm}' set")
 
@@ -296,7 +311,7 @@ def config_get(ctx: click.Context, key: str) -> None:
     "--current",
     is_flag=True,
     default=False,
-    help="Set as current realm",
+    help="Set as current context",
 )
 @click.pass_context
 def set_context(
@@ -330,7 +345,7 @@ def set_context(
     if "contexts" not in config["realms"][realm]:
         config["realms"][realm]["contexts"] = {}
     config["realms"][realm]["contexts"][name] = context_config
-    if current:
+    if current or len(config["realms"][realm]["contexts"]) == 1:
         config["realms"][realm]["current-context"] = name
         config["current-realm"] = realm
     _save_config(config, ctx.obj.cfg_path)
@@ -338,7 +353,7 @@ def set_context(
 
 
 @settings_group.command(
-    "use-context", help="Set the current-context in a settings file"
+    "use-context", help="Use the current-context in a settings file"
 )
 @click.argument("name", type=str, required=True)
 @click.option(
