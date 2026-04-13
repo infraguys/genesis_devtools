@@ -78,19 +78,27 @@ def get_genesis_config(
     raise FileNotFoundError("Genesis configuration file not found")
 
 
-def get_keys_by_path_or_env(path: tp.Optional[str]) -> tp.Optional[str]:
+def get_keys_by_path_or_env(
+    cmd_path: tp.Optional[str], cli_path: tp.Optional[str]
+) -> tp.Optional[str]:
     # Keys by path has the first priority
-    if path is not None:
-        path = os.path.expanduser(path)
-        if not os.path.exists(path) or not os.path.isfile(path):
-            raise ValueError(f"Invalid path to the developer keys: {path}")
+    if cmd_path is not None:
+        cmd_path = os.path.expanduser(cmd_path)
+        if not os.path.exists(cmd_path) or not os.path.isfile(cmd_path):
+            raise ValueError(f"Invalid path to the developer keys: {cmd_path}")
 
-        with open(path) as f:
+        with open(cmd_path) as f:
             return f.read()
     # The second priority is the developer key by env
     elif developer_keys := os.environ.get(c.ENV_GEN_DEV_KEYS):
         return developer_keys
+    elif cli_path is not None:
+        cli_path = os.path.expanduser(cli_path)
+        if not os.path.exists(cli_path) or not os.path.isfile(cli_path):
+            raise ValueError(f"Invalid path to the developer keys: {cli_path}")
 
+        with open(cli_path) as f:
+            return f.read()
     return
 
 

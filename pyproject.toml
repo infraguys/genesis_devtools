@@ -33,6 +33,8 @@ dependencies = [
     "cowsay==v6.1",  # GNU General Public License v3 (GPLv3)
     "simple-term-menu>=1.6.6,<2.0.0",  # MIT License (MIT)
     "psutil>=7.2.2",  # BSD License (BSD-3-Clause)
+    "certifi>=2026.2.25",  # modified version of ca-bundle.crt
+    "questionary>=2.0.0", # MIT License (MIT)
 ]
 [project.urls]
 homepage = "https://github.com/infraguys/genesis_devtools/"

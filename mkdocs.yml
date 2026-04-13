@@ -77,3 +77,4 @@ nav:
   - Cli: cli
   - Realms: realms.md
   - Versioning: versioning.md
+  - Configuration: config.md

@@ -18,14 +18,14 @@ from __future__ import annotations
 import os
 import time
 import typing as tp
-import uuid as sys_uuid
 import yaml
 
 import rich_click as click
 
 from gcl_sdk.clients.http import base as http_client
 
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
+from genesis_devtools.common.utils import is_valid_uuid
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import manifest as manifests_lib
@@ -45,12 +45,7 @@ def elements_group():
 def list_element_cmd(ctx: click.Context) -> None:
     """List elements"""
     client = get_user_api_client(ctx.obj.auth_data)
-    table = get_table()
-    table.add_column("UUID")
-    table.add_column("Name")
-    table.add_column("Description")
-    table.add_column("Version")
-    table.add_column("Status")
+    table = get_table("UUID", "Name", "Description", "Version", "Status")
 
     elements = elements_lib.list_elements(client)
     for element in elements:
@@ -71,43 +66,20 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
     """Show element general information"""
     client = get_user_api_client(ctx.obj.auth_data)
 
-    element = elements_lib.list_elements(client, name=name)
-    if not element:
+    elements = elements_lib.list_elements(client, name=name)
+    if not elements:
         raise click.ClickException(f"Element {name} not found")
 
-    if len(element) > 1:
+    if len(elements) > 1:
         raise click.ClickException(f"Multiple elements found with name {name}")
 
-    element = element[0]
+    element = elements[0]
+    show_data(element)
 
-    table = get_table()
-    table.add_column("UUID")
-    table.add_column("Name")
-    table.add_column("Description")
-    table.add_column("Version")
-    table.add_column("Status")
-
-    table.add_row(
-        element["uuid"],
-        element["name"],
-        element["description"],
-        element["version"],
-        element["status"],
+    resources = elements_lib.list_resources(client, element["uuid"])
+    table = get_table(
+        "UUID", "Name", "Kind", "Full hash", "Status", "Created at", "Updated at"
     )
-
-    click.echo(f"Element {name}:")
-    print_table(table)
-
-    resources = elements_lib.list_resources(client, sys_uuid.UUID(element["uuid"]))
-    table = get_table()
-    table.add_column("UUID")
-    table.add_column("Name")
-    table.add_column("Kind")
-    table.add_column("Full hash")
-    table.add_column("Status")
-    table.add_column("Created at")
-    table.add_column("Updated at")
-
     for resource in resources:
         table.add_row(
             resource["uuid"],
@@ -118,8 +90,35 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
             resource["created_at"],
             resource["updated_at"],
         )
-
     click.echo("Resources:")
+    print_table(table)
+
+    imports = elements_lib.list_imports(client, element["uuid"])
+    table = get_table("UUID", "Name", "Kind", "Link", "Created at", "Updated at")
+    for resource in imports:
+        table.add_row(
+            resource["uuid"],
+            resource["name"],
+            resource["kind"],
+            resource["link"],
+            resource["created_at"],
+            resource["updated_at"],
+        )
+    click.echo("Imports:")
+    print_table(table)
+
+    exports = elements_lib.list_exports(client, element["uuid"])
+    table = get_table("UUID", "Name", "Kind", "Link", "Created at", "Updated at")
+    for resource in exports:
+        table.add_row(
+            resource["uuid"],
+            resource["name"],
+            resource["kind"],
+            resource["link"],
+            resource["created_at"],
+            resource["updated_at"],
+        )
+    click.echo("Exports:")
     print_table(table)
 
 
@@ -137,7 +136,7 @@ def show_element_ips(ctx: click.Context, name: str) -> None:
         raise click.ClickException(f"Multiple elements found with name {name}")
 
     resources = elements_lib.list_resources(
-        client, sys_uuid.UUID(element[0]["uuid"]), kind="em_core_compute_nodes"
+        client, element[0]["uuid"], kind="em_core_compute_nodes"
     )
     if len(resources) == 0:
         raise click.ClickException(f"No nodes found for element {name}")
@@ -158,11 +157,11 @@ def _apply_with_cleanup(
     """Apply a manifest and clean up old versions on success."""
 
     found_manifest_uuids = [
-        sys_uuid.UUID(item["uuid"])
+        item["uuid"]
         for item in manifests_lib.list_manifests(client, name=manifest_data["name"])
     ]
     manifest_data = manifests_lib.add_manifest(client, manifest_data)
-    manifest_uuid = sys_uuid.UUID(manifest_data["uuid"])
+    manifest_uuid = manifest_data["uuid"]
 
     try:
         apply_func(client, manifest_data["uuid"])
@@ -190,6 +189,8 @@ def upgrade_manifest(
     log = logger.ClickLogger()
 
     if os.path.exists(path_or_name):
+        if not os.path.isfile(path_or_name):
+            raise click.ClickException(f"{path_or_name} is not a file")
         with open(path_or_name, "r", encoding="utf-8") as f:
             manifest = yaml.safe_load(f)
     else:
@@ -217,9 +218,9 @@ def upgrade_manifest(
     installed_elements = {e["name"] for e in elements_lib.list_elements(client)}
     required_elements = set(requirements.keys()) - installed_elements
 
-    log.info(
+    log.important(
         "The following elements will be installed: "
-        f"{required_elements.union({manifest['name']})}"
+        f"{', '.join(required_elements.union({manifest['name']}))}"
     )
 
     while required_elements:
@@ -236,7 +237,9 @@ def upgrade_manifest(
         # unresolved dependencies but for the simplicity we will install it here
         req_manifest = manifests_lib.add_manifest(client, req_manifest)
         manifests_lib.install_manifest(client, req_manifest["uuid"])
-        log.important(f"Element {req_manifest['name']} installed successfully")
+        log.important(
+            f"Element {req_manifest['name']} ({req_manifest['version']}) was installed successfully"
+        )
 
         installed_elements.add(req_manifest["name"])
 
@@ -270,7 +273,30 @@ def install_manifest_cmd(
         path_or_name,
         install_only=True,
     )
-    log.important(f"Element {manifest['name']} installed successfully")
+    log.important(
+        f"Element {manifest['name']} ({manifest['version']}) was installed successfully"
+    )
+
+
+@elements_group.command("i", help="Install element from a manifest (YAML file)")
+@click.option(
+    "-r",
+    "--repository",
+    default=f"{c.ELEMENT_REPO_URL}/",
+    show_default=True,
+    help="Repository endpoint",
+)
+@click.argument("path_or_name")
+@click.pass_context
+def i(
+    ctx: click.Context, repository: str, path_or_name: str
+) -> None:  # pragma: no cover
+    ctx.invoke(
+        install_manifest_cmd,
+        repository=repository,
+        path_or_name=path_or_name,
+    )
+    return None
 
 
 @elements_group.command("update", help="Update element from a YAML file")
@@ -300,28 +326,40 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
     client = get_user_api_client(ctx.obj.auth_data)
     log = logger.ClickLogger()
 
-    def _uninstall(uuid: sys_uuid.UUID) -> None:
-        manifests_lib.uninstall_manifest(client, uuid)
-        manifests_lib.delete_manifest(client, uuid)
-        log.important(f"Element {uuid} uninstalled successfully")
+    def _uninstall(element_uuid: str, element_name: str = None) -> None:
+        manifests_lib.uninstall_manifest(client, element_uuid)
+        manifests_lib.delete_manifest(client, element_uuid)
+        log.important(
+            f"Element {element_name or element_uuid} uninstalled successfully"
+        )
 
     # UUID
-    try:
-        uuid = sys_uuid.UUID(path_uuid_name)
-        _uninstall(uuid)
+    if is_valid_uuid(path_uuid_name):
+        _uninstall(path_uuid_name)
         return
-    except ValueError:
-        pass
 
     # Name
     name = path_uuid_name
     manifests = manifests_lib.list_manifests(client, name=name)
     if len(manifests) == 1:
         uuid = manifests[0]["uuid"]
-        _uninstall(uuid)
+        _uninstall(uuid, name)
         return
     if len(manifests) > 1:
-        raise click.ClickException(f"Multiple elements found with name {name}")
+        import questionary as q
+
+        uuid = q.select(
+            "Select manifest to uninstall",
+            choices=[
+                q.Choice(
+                    f"{manifest['name']} ({manifest['version']})",
+                    value=manifest["uuid"],
+                )
+                for manifest in manifests
+            ],
+        ).ask()
+        _uninstall(uuid, name)
+        return
 
     # Path
     if os.path.exists(path_uuid_name):
@@ -337,7 +375,7 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
         manifests = manifests_lib.list_manifests(client, **filters)
         if len(manifests) == 1:
             uuid = manifests[0]["uuid"]
-            _uninstall(uuid)
+            _uninstall(uuid, manifests[0]["name"])
             return
         if len(manifests) > 1:
             raise click.ClickException(f"Multiple elements found with name {name}")

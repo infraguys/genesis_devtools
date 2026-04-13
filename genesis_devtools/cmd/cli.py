@@ -78,6 +78,7 @@ GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
 class CmdContext(tp.NamedTuple):
     auth_data: dict[str, tp.Any]
     cfg_path: str
+    developer_key_path: str
 
 
 @click.group(
@@ -148,6 +149,12 @@ class CmdContext(tp.NamedTuple):
     is_flag=True,
     help="Verbose logs",
 )
+@click.option(
+    "-i",
+    "--developer-key-path",
+    default=None,
+    help="Path to developer public key",
+)
 @click.pass_context
 def genesis(
     ctx: click.Context,
@@ -161,6 +168,7 @@ def genesis(
     context: str | None,
     project_id: sys_uuid.UUID | None,
     verbose: bool | None,
+    developer_key_path: str | None,
 ) -> None:
     if not ctx.invoked_subcommand:
         click.echo(ctx.get_help())
@@ -174,13 +182,13 @@ def genesis(
     realm_conf = settings_commands.get_realm(cfg, realm)
     context_conf = settings_commands.get_context(realm_conf, context)
 
-    # Determine parameter sources to respect CLI priority over config
-    ps = ctx.get_parameter_source
-
     def _get_final_value(
         param_name: str, cli_value: tp.Any, base_conf: dict, direct_conf: dict
     ) -> tp.Any:
-        if ps(param_name) == click.core.ParameterSource.COMMANDLINE:
+        if (
+            ctx.get_parameter_source(param_name)
+            == click.core.ParameterSource.COMMANDLINE
+        ):
             return cli_value
         return direct_conf.get(param_name, base_conf.get(param_name, cli_value))
 
@@ -194,7 +202,9 @@ def genesis(
     final_refresh_token = _get_final_value(
         "refresh_token", refresh_token, cfg, context_conf
     )
-
+    final_developer_key_path = _get_final_value(
+        "developer_key_path", developer_key_path, cfg, {}
+    )
     if final_check_updates and should_check_version():
         check_latest_version()
         save_last_check_time()
@@ -214,7 +224,7 @@ def genesis(
         refresh_token=final_refresh_token,
         scope=scope,
     )
-    ctx.obj = CmdContext(auth_data, config)
+    ctx.obj = CmdContext(auth_data, config, final_developer_key_path)
 
 
 def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
@@ -304,7 +314,9 @@ def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
     ),
 )
 @click.argument("project_dir", type=click.Path())
+@click.pass_context
 def build_cmd(
+    ctx: click.Context,
     genesis_cfg_file: str,
     deps_dir: str | None,
     build_dir: str | None,
@@ -341,7 +353,9 @@ def build_cmd(
         shutil.rmtree(output_dir)
 
     # Developer keys
-    developer_keys = utils.get_keys_by_path_or_env(developer_key_path)
+    developer_keys = utils.get_keys_by_path_or_env(
+        developer_key_path, ctx.obj.developer_key_path
+    )
 
     # Find path to genesis configuration
     try:
@@ -1050,23 +1064,48 @@ def dumphelp() -> None:
 @genesis.command(
     name="openapi", help="tool for creating openapi spec files", hidden=True
 )
+@click.option(
+    "-u",
+    "--url",
+    type=click.STRING,
+    required=False,
+    default=None,
+    help="openapi url",
+)
+@click.option(
+    "-e",
+    "--endpoint",
+    required=False,
+    default=None,
+)
 @click.argument(
     "path",
-    required=True,
+    required=False,
     type=click.Path(exists=False, dir_okay=False),
     help="Path to target file",
 )
 @click.pass_context
-def openapi_spec(ctx: click.Context, path: str) -> None:
+def openapi_spec(ctx: click.Context, url: str, endpoint: str, path: str) -> None:
+    from genesis_devtools.clients.base_client import get_user_api_client
     import ruamel.yaml
-    from genesis_devtools.clients import base_client
 
-    client = base_client.get_user_api_client(ctx.obj.auth_data)
-    data = client.filter("specifications/3.0.3")
+    if url:
+        response = requests.get(url, timeout=10).json()
+        response.raise_for_status()
+        data = response.json()
+    else:
+        auth_data = ctx.obj.auth_data
+        if endpoint:
+            auth_data["endpoint"] = endpoint
+        client = get_user_api_client(auth_data)
+        data = client.filter("specifications/3.0.3")
+
+    path = path or os.path.expanduser("~/.openapi.yaml")
     with open(path, "w") as f:
         yaml = ruamel.yaml.YAML()
         yaml.indent(sequence=4, offset=2)
         yaml.dump(data, f)
+    click.secho(f"OpenAPI spec written to {path}", fg="green")
     return None
 
 
@@ -1404,22 +1443,33 @@ def autocomplete_help() -> None:
     click.echo(autocomplete_data)
 
 
-@genesis.command("autocomplete", help="update genesis autocomplete for bash")
-def autocomplete() -> None:
-    import psutil
+@genesis.command("autocomplete", help="update genesis autocomplete for your shell")
+@click.option(
+    "-s",
+    "--shell",
+    type=click.Choice(["bash", "zsh"]),
+    required=False,
+    default=None,
+    help="shell kind",
+)
+def autocomplete(shell: str | None) -> None:
     from genesis_devtools.common.utils import PROJECT_PATH
 
-    parent_process_name = psutil.Process(os.getppid()).parent().name()
-    if parent_process_name == "bash":
+    if shell is None:
+        import psutil
+
+        shell = psutil.Process(os.getppid()).parent().name()
+
+    if shell == "bash":
         project_complete_path = "genesis-complete.bash"
         rc_complete_path = "bashrc-complete"
         rc_file = "~/.bashrc"
-    elif parent_process_name == "zsh":
+    elif shell == "zsh":
         project_complete_path = "genesis-complete.zsh"
         rc_complete_path = "zshrc-complete"
         rc_file = "~/.zshrc"
     else:
-        click.echo(f"autocomplete not supported for this shell {parent_process_name}")
+        click.echo(f"autocomplete not supported for this shell {shell}")
         return
     with open(
         os.path.join(PROJECT_PATH, c.PKG_NAME, "autocomplete", project_complete_path),
@@ -1444,7 +1494,7 @@ genesis.add_command(auth_commands.auth_group)  # noqa
 
 genesis.add_command(iam_group)  # noqa
 genesis.add_command(secret_group)  # noqa
-genesis.add_command(compute_group)  # noqa
+genesis.add_command(compute_group, aliases=["c"])  # noqa
 genesis.add_command(vs_group)  # noqa
 genesis.add_command(realms_group)  # noqa
 
@@ -1455,7 +1505,7 @@ genesis.add_command(services_commands.services_group)  # noqa
 genesis.add_command(configs_commands.configs_group)  # noqa
 genesis.add_command(settings_commands.settings_group)  # noqa
 genesis.add_command(repo_commands.repository_group)  # noqa
-genesis.add_command(resources_commands.resources_group)  # noqa
+genesis.add_command(resources_commands.resources_group, aliases=["r"])  # noqa
 
 genesis.add_command(initialization_commands.init_cmd)  # noqa
 

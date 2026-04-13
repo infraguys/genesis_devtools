@@ -98,7 +98,7 @@ def update_manifest(
 
 def delete_manifest(
     client: http_client.CollectionBaseClient,
-    uuid: sys_uuid.UUID,
+    uuid: sys_uuid.UUID | str,
 ) -> None:
     try:
         client.delete(c.MANIFEST_COLLECTION, uuid=uuid)
@@ -108,7 +108,7 @@ def delete_manifest(
 
 def install_manifest(
     client: http_client.CollectionBaseClient,
-    uuid: sys_uuid.UUID,
+    uuid: sys_uuid.UUID | str,
 ) -> None:
     try:
         client.do_action(c.MANIFEST_COLLECTION, uuid=uuid, name="install", invoke=True)
@@ -118,7 +118,7 @@ def install_manifest(
 
 def upgrade_manifest(
     client: http_client.CollectionBaseClient,
-    uuid: sys_uuid.UUID,
+    uuid: sys_uuid.UUID | str,
 ) -> None:
     try:
         client.do_action(c.MANIFEST_COLLECTION, uuid=uuid, name="upgrade", invoke=True)
@@ -128,7 +128,7 @@ def upgrade_manifest(
 
 def uninstall_manifest(
     client: http_client.CollectionBaseClient,
-    uuid: sys_uuid.UUID,
+    uuid: sys_uuid.UUID | str,
 ) -> None:
     try:
         client.do_action(
@@ -140,7 +140,7 @@ def uninstall_manifest(
 
 def validate_manifest(
     client: http_client.CollectionBaseClient,
-    uuid: sys_uuid.UUID,
+    uuid: sys_uuid.UUID | str,
 ) -> None:
     try:
         client.do_action(
@@ -158,7 +158,7 @@ def list_elements(
 
 def list_resources(
     client: http_client.CollectionBaseClient,
-    element_uuid: sys_uuid.UUID,
+    element_uuid: sys_uuid.UUID | str,
     **filters,
 ) -> list[dict[str, tp.Any]]:
     collection = f"{c.ELEMENT_COLLECTION}{element_uuid}/resources/"
