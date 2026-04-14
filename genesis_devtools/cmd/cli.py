@@ -696,17 +696,17 @@ def bootstrap_cmd(
         admin_password = secrets.token_urlsafe(16)
 
     # Load inventory and get image path and image URI.
-    inventory = base_builder.ElementInventory.load(pathlib.Path(inventory))
+    inventory_instance = base_builder.ElementInventory.load(pathlib.Path(inventory))
 
-    if not inventory.images:
+    if not inventory_instance.images:
         raise click.UsageError("No images found in the inventory")
 
-    if not inventory.manifests:
+    if not inventory_instance.manifests:
         raise click.UsageError("No manifests found in the inventory")
 
     # NOTE(akremenetsky): The core element has one image and manifest at the moment
-    image_path = str(inventory.images[0])
-    manifest_path = str(inventory.manifests[0])
+    image_path = str(inventory_instance.images[0])
+    manifest_path = str(inventory_instance.manifests[0])
     image_uri = _get_core_image_uri_from_manifest(manifest_path)
 
     if launch_mode not in ("element", "core"):
@@ -791,6 +791,11 @@ You can skip registration by using --no-registration flag.
         org_token=org_token,
     )
 
+    inventory_eco_instance = base_builder.ElementInventory.load(
+        pathlib.Path(inventory), 1
+    )
+    eco_manifest_path = str(inventory_eco_instance.manifests[0])
+
     return _bootstrap_core(
         image_path=image_path,
         image_uri=image_uri,
@@ -805,6 +810,7 @@ You can skip registration by using --no-registration flag.
         admin_password=admin_password,
         save_admin_password_file=save_admin_password_file,
         manifest_path=manifest_path,
+        eco_manifest_path=eco_manifest_path,
         hypervisors=hypervisors,
         no_start=no_start,
         ecosystem_endpoint=ecosystem_endpoint,
@@ -1268,6 +1274,7 @@ def _bootstrap_core(
     admin_password: str,
     save_admin_password_file: str | None,
     manifest_path: str,
+    eco_manifest_path: str,
     hypervisors: tp.Collection[stand_models.Hypervisor],
     no_start: bool,
     ecosystem_endpoint: str,
@@ -1338,6 +1345,7 @@ def _bootstrap_core(
         infra.create_stand(
             dev_stand,
             manifest_path=manifest_path,
+            eco_manifest_path=eco_manifest_path,
             no_start=no_start,
             repository=repository,
             admin_password=admin_password,
