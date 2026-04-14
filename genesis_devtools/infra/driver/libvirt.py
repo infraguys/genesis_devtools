@@ -140,6 +140,7 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
         self,
         stand: models.Stand,
         manifest_path: str,
+        eco_manifest_path: str,
         no_start: bool,
         **extra_data: tp.Any,
     ) -> models.Stand:
@@ -186,9 +187,11 @@ class LibvirtInfraDriver(base.AbstractInfraDriver):
         }
 
         with tempfile.TemporaryDirectory() as temp_dir:
-            # Copy the original manifest to the config drive
+            # Copy the original manifests to the config drive
             manifest_name = os.path.basename(manifest_path)
             shutil.copy(manifest_path, os.path.join(temp_dir, manifest_name))
+            eco_manifest_name = os.path.basename(eco_manifest_path)
+            shutil.copy(eco_manifest_path, os.path.join(temp_dir, eco_manifest_name))
 
             # Prepare and copy installation specification to the config drive
             spec_path = os.path.join(temp_dir, "spec.json")
