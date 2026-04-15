@@ -1,22 +1,30 @@
 
-# settings_use-realm
+# elements_i
 
-Use the current-realm in a settings file
+Install element from a manifest (YAML file)
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis settings use-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+ Usage: genesis elements i [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `realm` (REQUIRED):
+* `repository`:
+    * Type: text
+    * Default: `https://repository.genesis-core.tech/genesis-elements/`
+    * Usage: `-r
+--repository`
+
+  Repository endpoint
+
+* `path_or_name` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `realm`
+    * Usage: `path_or_name`
 
 * `help`:
     * Type: boolean
@@ -29,11 +37,12 @@ Use the current-realm in a settings file
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis settings use-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+ Usage: genesis elements i [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
- Use the current-realm in a settings file                                                                                                                                                                                                                                                                  
+ Install element from a manifest (YAML file)                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │
+│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

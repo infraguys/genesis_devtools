@@ -1,22 +1,30 @@
 
-# settings_use-realm
+# settings_use-context
 
-Use the current-realm in a settings file
+Use the current-context in a settings file
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis settings use-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+ Usage: genesis settings use-context [OPTIONS] NAME                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
+* `name` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `name`
+
 * `realm` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `realm`
+    * Usage: `-r
+--realm`
+
+  Name of the realm
 
 * `help`:
     * Type: boolean
@@ -29,11 +37,12 @@ Use the current-realm in a settings file
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis settings use-realm [OPTIONS] REALM                                                                                                                                                                                                                                                         
+ Usage: genesis settings use-context [OPTIONS] NAME                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
- Use the current-realm in a settings file                                                                                                                                                                                                                                                                  
+ Use the current-context in a settings file                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ *  --realm  -r  TEXT  Name of the realm [required]                                                                                                                                                                                                                                                      │
+│    --help             Show this message and exit.                                                                                                                                                                                                                                                       │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

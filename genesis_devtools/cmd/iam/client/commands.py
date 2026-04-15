@@ -19,7 +19,7 @@ import typing as tp
 import uuid as sys_uuid
 
 import rich_click as click
-from genesis_devtools.common.table import get_table, print_table
+from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 
@@ -60,8 +60,8 @@ def show_client(
             uuid = clients[0]["uuid"]
         else:
             raise click.ClickException(f"client with name {uuid} not found")
-    value = client_lib.get_client(client, uuid)
-    _print_values([value])
+    data = client_lib.get_client(client, uuid)
+    show_data(data)
 
 
 @clients_group.command("delete", help="Delete client")

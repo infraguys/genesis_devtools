@@ -1476,6 +1476,7 @@ def autocomplete(shell: str | None) -> None:
         "r",
     ) as f:
         autocomplete_data = f.read()
+    os.makedirs(os.path.expanduser(c.CONFIG_DIR), exist_ok=True)
     with open(os.path.expanduser(f"{c.CONFIG_DIR}/.{project_complete_path}"), "w") as f:
         f.write(autocomplete_data)
     with open(

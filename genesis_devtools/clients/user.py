@@ -37,8 +37,8 @@ def list_users(
 
 def get_user(
     client: http_client.CollectionBaseClient,
-    user_uuid: sys_uuid.UUID,
-):
+    user_uuid: sys_uuid.UUID | str,
+) -> dict:
     user = client.get(c.USER_COLLECTION, uuid=user_uuid)
     return user
 
@@ -56,7 +56,7 @@ def add_user(
 
 def delete_user(
     client: http_client.CollectionBaseClient,
-    uuid: sys_uuid.UUID,
+    uuid: sys_uuid.UUID | str,
 ) -> None:
     try:
         client.delete(c.USER_COLLECTION, uuid=uuid)

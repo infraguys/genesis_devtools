@@ -7,16 +7,19 @@ List resources
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis resources list [OPTIONS] NAME_UUID                                                                                                                                                                                                                                                         
+ Usage: genesis resources list [OPTIONS]                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `name_uuid` (REQUIRED):
+* `element`:
     * Type: text
-    * Default: `sentinel.unset`
-    * Usage: `name_uuid`
+    * Default: `none`
+    * Usage: `-e
+--element`
+
+  Name or uuid of the element
 
 * `help`:
     * Type: boolean
@@ -29,11 +32,12 @@ List resources
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis resources list [OPTIONS] NAME_UUID                                                                                                                                                                                                                                                         
+ Usage: genesis resources list [OPTIONS]                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
  List resources                                                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ --element  -e  TEXT  Name or uuid of the element                                                                                                                                                                                                                                                        │
+│ --help               Show this message and exit.                                                                                                                                                                                                                                                        │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
