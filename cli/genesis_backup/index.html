@@ -531,6 +531,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../elements_i/" class="md-nav__link">
+        elements_i
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_install/" class="md-nav__link">
         elements_install
       </a>
@@ -631,6 +645,20 @@
     <li class="md-nav__item">
       <a href="../genesis_auth/" class="md-nav__link">
         genesis_auth
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_autocomplete/" class="md-nav__link">
+        genesis_autocomplete
       </a>
     </li>
   
@@ -2574,6 +2602,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_use-context/" class="md-nav__link">
+        settings_use-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../settings_use-realm/" class="md-nav__link">
         settings_use-realm
       </a>
@@ -3111,23 +3153,6 @@
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
 <span class="go"> Usage: genesis backup [OPTIONS]                                                                                                                                                                                                                                                                           </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Backup the current installation                                                                                                                                                                                                                                                                           </span>
-<span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ --config                 PATH                                   Path to the backuper configuration file                                                                                                                                                                                                 │</span>
-<span class="go">│ --name               -n  TEXT                                   Name of the libvirt domain, if not provided, all will be backed up                                                                                                                                                                      │</span>
-<span class="go">│ --backup-dir         -d  PATH                                   Directory where backups will be stored                                                                                                                                                                                                  │</span>
-<span class="go">│ --period             -p  [1m|5m|15m|30m|1h|3h|6h|12h|1d|3d|7d]  the regularity of backups [default: 1d]                                                                                                                                                                                                 │</span>
-<span class="go">│ --offset             -o  [1m|5m|15m|30m|1h|3h|6h|12h|1d|3d|7d]  The time offset of the first backup. If not provided, the same value as the period will be used                                                                                                                                         │</span>
-<span class="go">│ --start                  _START_VALIDATION_TYPE                 Time of day to start backup in format HH:MM:SS. Cannot be used together with --offset. If provided, period must be &gt;= 1d.                                                                                                               │</span>
-<span class="go">│ --oneshot                                                       Do a backup once and exit                                                                                                                                                                                                               │</span>
-<span class="go">│ --compress           -c                                         Compress the backup.                                                                                                                                                                                                                    │</span>
-<span class="go">│ --encrypt            -e                                         Encrypt the backup. Works only with the compress flag. Use environment variable to specify the encryption key and the initialization vector: GEN_DEV_BACKUP_KEY and GEN_DEV_BACKUP_IV                                                   │</span>
-<span class="go">│ --min-free-space     -s  INTEGER                                Free disk space shouldn't be lower than this threshold. If the space becomes lower, the backup process is stopped. The value is in GB. [default: 50]                                                                                    │</span>
-<span class="go">│ --rotate             -r  INTEGER                                Maximum number of backups to keep. The oldest backups are deleted. `0` means no rotation. [default: 5]                                                                                                                                  │</span>
-<span class="go">│ --no,--exclude-name      TEXT                                   Name or pattern of libvirt domains to exclude from backup                                                                                                                                                                               │</span>
-<span class="go">│ --help                                                          Show this message and exit.                                                                                                                                                                                                             │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

@@ -531,6 +531,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../elements_i/" class="md-nav__link">
+        elements_i
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_install/" class="md-nav__link">
         elements_install
       </a>
@@ -631,6 +645,20 @@
     <li class="md-nav__item">
       <a href="../genesis_auth/" class="md-nav__link">
         genesis_auth
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_autocomplete/" class="md-nav__link">
+        genesis_autocomplete
       </a>
     </li>
   
@@ -2574,6 +2602,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_use-context/" class="md-nav__link">
+        settings_use-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../settings_use-realm/" class="md-nav__link">
         settings_use-realm
       </a>
@@ -2977,12 +3019,33 @@
 <p>tool for creating openapi spec files</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Usage: genesis openapi [OPTIONS] PATH                                                                                                                                                                                                                                                                     </span>
+<span class="go"> Usage: genesis openapi [OPTIONS] [PATH]                                                                                                                                                                                                                                                                   </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
 </code></pre></div>
 <h2 id="options">Options<a class="headerlink" href="#options" title="Permanent link">#</a></h2>
 <ul>
-<li><code>path</code> (REQUIRED):<ul>
+<li><code>url</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>-u
+--url</code></li>
+</ul>
+</li>
+</ul>
+<p>openapi url</p>
+<ul>
+<li>
+<p><code>endpoint</code>:</p>
+<ul>
+<li>Type: text</li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>-e
+--endpoint</code></li>
+</ul>
+</li>
+<li>
+<p><code>path</code>:</p>
+<ul>
 <li>Type: file</li>
 <li>Default: <code>sentinel.unset</code></li>
 <li>Usage: <code>path</code></li>
@@ -3001,16 +3064,8 @@
 <p>Show this message and exit.</p>
 <h2 id="cli-help">CLI Help<a class="headerlink" href="#cli-help" title="Permanent link">#</a></h2>
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Usage: genesis openapi [OPTIONS] PATH                                                                                                                                                                                                                                                                     </span>
+<span class="go"> Usage: genesis openapi [OPTIONS] [PATH]                                                                                                                                                                                                                                                                   </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> tool for creating openapi spec files                                                                                                                                                                                                                                                                      </span>
-<span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go">╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ *  PATH  FILE  Path to target file [required]                                                                                                                                                                                                                                                           │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
-<span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

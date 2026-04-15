@@ -531,6 +531,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../elements_i/" class="md-nav__link">
+        elements_i
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_install/" class="md-nav__link">
         elements_install
       </a>
@@ -686,6 +700,20 @@
     <li class="md-nav__item">
       <a href="../genesis_auth/" class="md-nav__link">
         genesis_auth
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_autocomplete/" class="md-nav__link">
+        genesis_autocomplete
       </a>
     </li>
   
@@ -2574,6 +2602,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_use-context/" class="md-nav__link">
+        settings_use-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../settings_use-realm/" class="md-nav__link">
         settings_use-realm
       </a>
@@ -3070,6 +3112,26 @@
 </ul>
 <p>Project ID for the client user</p>
 <ul>
+<li><code>verbose</code>:<ul>
+<li>Type: boolean</li>
+<li>Default: <code>false</code></li>
+<li>Usage: <code>-vvv
+--verbose</code></li>
+</ul>
+</li>
+</ul>
+<p>Verbose logs</p>
+<ul>
+<li><code>developer_key_path</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>none</code></li>
+<li>Usage: <code>-i
+--developer-key-path</code></li>
+</ul>
+</li>
+</ul>
+<p>Path to developer public key</p>
+<ul>
 <li><code>help</code>:<ul>
 <li>Type: boolean</li>
 <li>Default: <code>false</code></li>
@@ -3082,47 +3144,6 @@
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
 <span class="go"> Usage: genesis [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                                </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Provides all the necessary tools for work with Genesis Platform                                                                                                                                                                                                                                           </span>
-<span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ --config             FILE  Path to YAML config file [default: /home/user/.genesis/genesisctl.yaml]                                                                                                                                                                                                      │</span>
-<span class="go">│ --endpoint       -e  TEXT  Genesis API endpoint [default: http://localhost:11010]                                                                                                                                                                                                                       │</span>
-<span class="go">│ --user           -u  TEXT  Client user name                                                                                                                                                                                                                                                             │</span>
-<span class="go">│ --password       -p  TEXT  Password for the client user                                                                                                                                                                                                                                                 │</span>
-<span class="go">│ --access_token   -a  TEXT  access token for the client user                                                                                                                                                                                                                                             │</span>
-<span class="go">│ --refresh_token      TEXT  refresh token for the client user                                                                                                                                                                                                                                            │</span>
-<span class="go">│ --realm          -r  TEXT  Name of the realm                                                                                                                                                                                                                                                            │</span>
-<span class="go">│ --context        -c  TEXT  Name of the context                                                                                                                                                                                                                                                          │</span>
-<span class="go">│ --project-id     -P  UUID  Project ID for the client user                                                                                                                                                                                                                                               │</span>
-<span class="go">│ --help                     Show this message and exit.                                                                                                                                                                                                                                                  │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
-<span class="go">╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ auth                Authenticate and manage IAM token                                                                                                                                                                                                                                                   │</span>
-<span class="go">│ autocomplete_help   Display a autocomplete help                                                                                                                                                                                                                                                         │</span>
-<span class="go">│ backup              Backup the current installation                                                                                                                                                                                                                                                     │</span>
-<span class="go">│ backup-decrypt      Decrypt a backup file                                                                                                                                                                                                                                                               │</span>
-<span class="go">│ bootstrap           Bootstrap genesis locally                                                                                                                                                                                                                                                           │</span>
-<span class="go">│ build               Build a Genesis element. The command build all images, manifests and other artifacts required for the element. The manifest in the project may be a raw YAML file or a template using Jinja2 templates. For Jinja2 templates, the following variables are available by default:     │</span>
-<span class="go">│ compute             Compute group in the Genesis installation                                                                                                                                                                                                                                           │</span>
-<span class="go">│ configs             Manage configs in the Genesis installation                                                                                                                                                                                                                                          │</span>
-<span class="go">│ cowsay              Display a cow message                                                                                                                                                                                                                                                               │</span>
-<span class="go">│ elements            Manage elements in the Genesis installation                                                                                                                                                                                                                                         │</span>
-<span class="go">│ get-version         Return the version of the project                                                                                                                                                                                                                                                   │</span>
-<span class="go">│ hello               Display a genesis message                                                                                                                                                                                                                                                           │</span>
-<span class="go">│ iam                 iam group in the Genesis installation                                                                                                                                                                                                                                               │</span>
-<span class="go">│ init                Platformize the project                                                                                                                                                                                                                                                             │</span>
-<span class="go">│ latest              Check for the latest version on GitHub                                                                                                                                                                                                                                              │</span>
-<span class="go">│ manifests           Manage manifests in the Genesis installation                                                                                                                                                                                                                                        │</span>
-<span class="go">│ push                Push the element to the repository                                                                                                                                                                                                                                                  │</span>
-<span class="go">│ realms              Manage Genesis realms                                                                                                                                                                                                                                                               │</span>
-<span class="go">│ repo                Manage Genesis repository                                                                                                                                                                                                                                                           │</span>
-<span class="go">│ resources           Manage resources in the Genesis installation                                                                                                                                                                                                                                        │</span>
-<span class="go">│ secret              Secret group in the Genesis installation                                                                                                                                                                                                                                            │</span>
-<span class="go">│ services            Manage services in the Genesis installation                                                                                                                                                                                                                                         │</span>
-<span class="go">│ settings            Modify genesis settings files                                                                                                                                                                                                                                                       │</span>
-<span class="go">│ version             Prints the genesis_devtools version                                                                                                                                                                                                                                                 │</span>
-<span class="go">│ vs                  vs group in the Genesis installation                                                                                                                                                                                                                                                │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

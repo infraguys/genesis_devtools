@@ -531,6 +531,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../elements_i/" class="md-nav__link">
+        elements_i
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_install/" class="md-nav__link">
         elements_install
       </a>
@@ -631,6 +645,20 @@
     <li class="md-nav__item">
       <a href="../genesis_auth/" class="md-nav__link">
         genesis_auth
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_autocomplete/" class="md-nav__link">
+        genesis_autocomplete
       </a>
     </li>
   
@@ -2574,6 +2602,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_use-context/" class="md-nav__link">
+        settings_use-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../settings_use-realm/" class="md-nav__link">
         settings_use-realm
       </a>
@@ -3179,31 +3221,6 @@
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
 <span class="go"> Usage: genesis bootstrap [OPTIONS]                                                                                                                                                                                                                                                                        </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Bootstrap genesis locally                                                                                                                                                                                                                                                                                 </span>
-<span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ --inventory                 -i  TEXT                                 Path to the genesis inventory file or directory with inventory.json                                                                                                                                                                │</span>
-<span class="go">│ --profile                       [develop|small|medium|large|legacy]  Profile for the installation. [default: small]                                                                                                                                                                                     │</span>
-<span class="go">│ --name                          TEXT                                 Name of the installation                                                                                                                                                                                                           │</span>
-<span class="go">│ --launch-mode               -m  [core|element|custom]                Launch mode for start element, core or custom configuration [default: element]                                                                                                                                                     │</span>
-<span class="go">│ --stand-spec                -s  PATH                                 Additional stand specification for core mode.                                                                                                                                                                                      │</span>
-<span class="go">│ --cidr                          IPV4NETWORK                          The main network CIDR [default: 10.20.0.0/22]                                                                                                                                                                                      │</span>
-<span class="go">│ --core-ip                       IPV4ADDRESS                          The IP address for the core VM. If `None` is provided, second IP address from the main network will be used.                                                                                                                       │</span>
-<span class="go">│ --bridge                        TEXT                                 Name of the linux bridge for the main network, it will be created if not set.                                                                                                                                                      │</span>
-<span class="go">│ --boot-cidr                     IPV4NETWORK                          The bootstrap network CIDR [default: 10.30.0.0/24]                                                                                                                                                                                 │</span>
-<span class="go">│ --boot-bridge                   TEXT                                 Name of the linux bridge for the bootstrap network, it will be created if not set.                                                                                                                                                 │</span>
-<span class="go">│ --force                     -f                                       Rebuild if the output already exists                                                                                                                                                                                               │</span>
-<span class="go">│ --no-wait                                                            Cancel waiting for the installation to start                                                                                                                                                                                       │</span>
-<span class="go">│ --repository                -r  TEXT                                 Default element repository [default: https://repository.genesis-core.tech/]                                                                                                                                                        │</span>
-<span class="go">│ --admin-password                TEXT                                 A password for the admin user in. If not provided, the password will be generated.                                                                                                                                                 │</span>
-<span class="go">│ --save-admin-password-file      TEXT                                 If the option is specified the admin password is saved to the file. Otherwise it's printed to the console.                                                                                                                         │</span>
-<span class="go">│ --hyper-connection-uri          TEXT                                 Connection URI for the hypervisor, e.g. 'qemu+tcp://10.0.0.1/system' or 'qemu+ssh://user@10.0.0.1/system'. If not set, the first address of the network(--cidr option) will be used.                                               │</span>
-<span class="go">│ --hyper-storage-pool            TEXT                                 Storage pool for the hypervisor. [default: default]                                                                                                                                                                                │</span>
-<span class="go">│ --hyper-machine-prefix          TEXT                                 A prefix for new VMs. [default: vm-]                                                                                                                                                                                               │</span>
-<span class="go">│ --hyper-iface-rom-file          TEXT                                 A path to the custom ROM file of a network interface. [default: /usr/share/qemu/1af41041.rom]                                                                                                                                      │</span>
-<span class="go">│ --no-start                                                           Do not start the stand after creation                                                                                                                                                                                              │</span>
-<span class="go">│ --help                                                               Show this message and exit.                                                                                                                                                                                                        │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 

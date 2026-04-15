@@ -531,6 +531,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../elements_i/" class="md-nav__link">
+        elements_i
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_install/" class="md-nav__link">
         elements_install
       </a>
@@ -631,6 +645,20 @@
     <li class="md-nav__item">
       <a href="../genesis_auth/" class="md-nav__link">
         genesis_auth
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_autocomplete/" class="md-nav__link">
+        genesis_autocomplete
       </a>
     </li>
   
@@ -2574,6 +2602,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../settings_use-context/" class="md-nav__link">
+        settings_use-context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../settings_use-realm/" class="md-nav__link">
         settings_use-realm
       </a>
@@ -3104,26 +3146,6 @@
 <div class="highlight"><pre><span></span><code><span class="go">                                                                                                                                                                                                                                                                                                           </span>
 <span class="go"> Usage: genesis build [OPTIONS] PROJECT_DIR                                                                                                                                                                                                                                                                </span>
 <span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Build a Genesis element. The command build all images, manifests and other artifacts required for the element. The manifest in the project may be a raw YAML file or a template using Jinja2 templates. For Jinja2 templates, the following variables are available by default:                           </span>
-<span class="go"> - {{ version }}: version of the element                                                                                                                                                                                                                                                                   </span>
-<span class="go"> - {{ name }}: name of the element                                                                                                                                                                                                                                                                         </span>
-<span class="go"> - {{ images }}: list of images                                                                                                                                                                                                                                                                            </span>
-<span class="go"> - {{ manifests }}: list of manifests                                                                                                                                                                                                                                                                      </span>
-<span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go"> Additional variables can be passed using the --manifest-var options.                                                                                                                                                                                                                                      </span>
-<span class="go">                                                                                                                                                                                                                                                                                                           </span>
-<span class="go">╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮</span>
-<span class="go">│ --genesis-cfg-file    -c  TEXT                   Name of the project configuration file                                                                                                                                                                                                                 │</span>
-<span class="go">│ --deps-dir                TEXT                   Directory where dependencies will be fetched                                                                                                                                                                                                           │</span>
-<span class="go">│ --build-dir               TEXT                   Directory where temporary build artifacts will be stored                                                                                                                                                                                               │</span>
-<span class="go">│ --output-dir              TEXT                   Directory where output artifacts will be stored                                                                                                                                                                                                        │</span>
-<span class="go">│ --developer-key-path  -i  TEXT                   Path to developer public key                                                                                                                                                                                                                           │</span>
-<span class="go">│ --version-suffix      -s  [latest|none|element]  Version suffix will be used for the build [default: none]                                                                                                                                                                                              │</span>
-<span class="go">│ --force               -f                         Rebuild if the output already exists                                                                                                                                                                                                                   │</span>
-<span class="go">│ --inventory                                      Build using the inventory format                                                                                                                                                                                                                       │</span>
-<span class="go">│ --manifest-var            TEXT                   Additional variables to pass to the manifest template. The format is 'key=value'. For example: --manifest-var key1=value1 --manifest-var key2=value2                                                                                                   │</span>
-<span class="go">│ --help                                           Show this message and exit.                                                                                                                                                                                                                            │</span>
-<span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
 
 
