@@ -7,19 +7,16 @@ Delete user
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam users delete [OPTIONS]                                                                                                                                                                                                                                                                 
+ Usage: genesis iam users delete [OPTIONS] UUID                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid`:
-    * Type: uuid
-    * Default: `none`
-    * Usage: `-u
---uuid`
-
-  user UUID
+* `uuid` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -32,12 +29,11 @@ Delete user
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam users delete [OPTIONS]                                                                                                                                                                                                                                                                 
+ Usage: genesis iam users delete [OPTIONS] UUID                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
  Delete user                                                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  user UUID                                                                                                                                                                                                                                                                             │
-│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -21,66 +21,80 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
-from genesis_devtools.clients import certificate as certificate_lib
-from genesis_devtools.common import utils
+from genesis_devtools import constants as c
+from genesis_devtools import utils
+
+ENTITY = "certificate"
+ENTITY_COLLECTION = c.CERTIFICATE_COLLECTION
 
 
-@click.group("certificates", help="Manage certificates in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def certificates_group():
     pass
 
 
-@certificates_group.command("list", help="List certificates")
+@certificates_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_certificates(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    certificates = certificate_lib.list_certificates(client)
-    _print_certificates(certificates)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@certificates_group.command("show", help="Show certificate")
+@certificates_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_certificate_cmd(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        certificates = certificate_lib.list_certificates(client, name=uuid)
-        if certificates:
-            uuid = certificates[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"certificate with name {uuid} not found")
-    certificate = certificate_lib.get_certificate(client, uuid)
-    show_data(certificate)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
-@certificates_group.command("delete", help="Delete certificate")
+@certificates_group.command("delete", help=f"Delete {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def delete_certificate_cmd(
+def delete_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        certificates = certificate_lib.list_certificates(client, name=uuid)
-        if certificates:
-            uuid = certificates[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"certificate with name {uuid} not found")
-    certificate_lib.delete_certificate(client, uuid)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
 @certificates_group.command(
@@ -122,7 +136,7 @@ def add_certificate_cmd(
     name: str,
     description: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -132,9 +146,8 @@ def add_certificate_cmd(
         "name": name,
         "description": description,
     }
-
-    certificate_resp = certificate_lib.add_certificate(client, data)
-    show_data(certificate_resp)
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
 @certificates_group.command("update", help="Update certificate")
@@ -172,7 +185,7 @@ def update_certificate_cmd(
     name: str | None,
     description: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)
@@ -180,11 +193,11 @@ def update_certificate_cmd(
         data["name"] = name
     if description is not None:
         data["description"] = description
-    certificate_resp = certificate_lib.update_certificate(client, uuid, data)
-    show_data(certificate_resp)
+    entity = base_client.update_entity(client, ENTITY_COLLECTION, uuid, data)
+    show_data(entity)
 
 
-def _print_certificates(certificates: tp.List[dict]) -> None:
+def _print_entities(certificates: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

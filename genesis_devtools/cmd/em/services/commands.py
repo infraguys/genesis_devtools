@@ -24,7 +24,7 @@ from genesis_devtools.common.table import get_table, print_table, show_data
 from genesis_devtools.clients.base_client import get_user_api_client
 
 from genesis_devtools.clients import service as service_lib
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 
 
 @click.group("services", help="Manage services in the Genesis installation")

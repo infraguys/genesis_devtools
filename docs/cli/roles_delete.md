@@ -7,19 +7,16 @@ Delete role
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam roles delete [OPTIONS]                                                                                                                                                                                                                                                                 
+ Usage: genesis iam roles delete [OPTIONS] UUID                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid`:
-    * Type: uuid
-    * Default: `none`
-    * Usage: `-u
---uuid`
-
-  role UUID
+* `uuid` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -32,12 +29,11 @@ Delete role
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam roles delete [OPTIONS]                                                                                                                                                                                                                                                                 
+ Usage: genesis iam roles delete [OPTIONS] UUID                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
  Delete role                                                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  role UUID                                                                                                                                                                                                                                                                             │
-│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -15,21 +15,26 @@
 #    under the License.
 from __future__ import annotations
 
+import json
 import io
 import os
 import time
 import shutil
 import itertools
 import subprocess
+import uuid
 import typing as tp
 from importlib.metadata import entry_points
 
+from jsonschema.exceptions import ValidationError
 import git
 import yaml
+import rich_click as click
 from cryptography.hazmat.primitives import ciphers
 from cryptography.hazmat.primitives.ciphers import modes as cipher_models
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat import backends as crypto_back
+import openapi_schema_validator
 
 import genesis_devtools.constants as c
 
@@ -446,3 +451,81 @@ def make_iso(src_dir: str, iso_path: str, label: str = "config-drive") -> None:
 def current_dir_name() -> str:
     """Returns the name of the current working directory."""
     return os.path.basename(os.getcwd())
+
+
+def is_valid_uuid(uuid_to_test: tp.Any, version: int = 4) -> bool:
+    try:
+        uuid.UUID(uuid_to_test, version=version)
+        return True
+    except (ValueError, AttributeError):
+        return False
+
+
+def get_project_path() -> str:
+    # Repository path
+    return os.sep.join(__file__.split(os.sep)[:-2])
+
+
+def convert_to_nearest_type(value: str) -> bool | int | float | list | dict | str:
+    lower_value = value.lower()
+    if lower_value in ("true", "false"):
+        return lower_value == "true"
+
+    try:
+        return int(value)
+    except ValueError:
+        pass
+
+    try:
+        return float(value)
+    except ValueError:
+        pass
+
+    if (value.startswith("[") and value.endswith("]")) or (
+        value.startswith("{") and value.endswith("}")
+    ):
+        try:
+            parsed = json.loads(value)
+            if isinstance(parsed, (list, dict)):
+                return parsed
+        except (ValueError, TypeError):
+            pass
+
+    return value
+
+
+PROJECT_PATH = get_project_path()
+
+
+def validate_config(data: dict, schema: tp.Optional[dict]) -> None:
+    if data and schema:
+        try:
+            openapi_schema_validator.validate(
+                data, schema, cls=openapi_schema_validator.OAS30Validator
+            )
+        except ValidationError as err:
+            raise ValueError(f"{err.message} in {err.json_path}")
+    return None
+
+
+def load_spec() -> dict:
+    spec_path = os.path.join(PROJECT_PATH, c.PKG_NAME, "spec", "genesis_spec.yaml")
+    # if not os.path.exists(spec_path):
+    #     return {}
+    with open(
+        spec_path,
+        "r",
+    ) as f:
+        return yaml.safe_load(f)
+
+
+def convert_input_multiply(params: tuple[str, ...]) -> dict[str, str]:
+    result = {}
+    for param in params:
+        if "=" not in param:
+            raise click.UsageError(
+                f"Invalid variable format: '{param}'. Expected 'key=value'."
+            )
+        key, value = param.split("=", 1)
+        result[key] = value
+    return result

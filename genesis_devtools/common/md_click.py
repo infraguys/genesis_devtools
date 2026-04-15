@@ -19,7 +19,7 @@ import os
 from rich_click.rich_context import RichContext
 import pathlib
 
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 
 md_base_template = """
 # {command_name}

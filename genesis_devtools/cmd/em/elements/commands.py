@@ -25,7 +25,7 @@ import rich_click as click
 from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.common.table import get_table, print_table, show_data
-from genesis_devtools.common.utils import is_valid_uuid
+from genesis_devtools.utils import is_valid_uuid
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import manifest as manifests_lib

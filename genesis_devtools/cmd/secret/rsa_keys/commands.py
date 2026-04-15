@@ -21,97 +21,111 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
-from genesis_devtools.clients import rsa_key as rsa_key_lib
-from genesis_devtools.common import utils
+from genesis_devtools import utils
+from genesis_devtools import constants as c
+
+ENTITY = "rsa_key"
+ENTITY_COLLECTION = c.RSA_KEY_COLLECTION
 
 
-@click.group("rsa_keys", help="Manage rsa_keys in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def rsa_keys_group():
     pass
 
 
-@rsa_keys_group.command("list", help="List rsa_keys")
+@rsa_keys_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_rsa_keys(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    rsa_keys = rsa_key_lib.list_rsa_keys(client)
-    _print_rsa_keys(rsa_keys)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@rsa_keys_group.command("show", help="Show rsa_key")
+@rsa_keys_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_rsa_key_cmd(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        rsa_keys = rsa_key_lib.list_rsa_keys(client, name=uuid)
-        if rsa_keys:
-            uuid = rsa_keys[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"rsa_key with name {uuid} not found")
-    rsa_key = rsa_key_lib.get_rsa_key(client, uuid)
-    show_data(rsa_key)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
-@rsa_keys_group.command("delete", help="Delete rsa_key")
+@rsa_keys_group.command("delete", help=f"Delete {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def delete_rsa_key_cmd(
+def delete_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        rsa_keys = rsa_key_lib.list_rsa_keys(client, name=uuid)
-        if rsa_keys:
-            uuid = rsa_keys[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"rsa_key with name {uuid} not found")
-    rsa_key_lib.delete_rsa_key(client, uuid)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
-@rsa_keys_group.command("add", help="Add a new rsa_key to the Genesis installation")
+@rsa_keys_group.command("add", help=f"Add a new {ENTITY} to the Genesis installation")
 @click.pass_context
 @click.option(
     "-u",
     "--uuid",
     type=click.UUID,
     default=None,
-    help="UUID of the rsa_key",
+    help=f"UUID of the {ENTITY}",
 )
 @click.option(
     "-p",
     "--project-id",
     type=click.UUID,
     required=True,
-    help="Name of the project in which to deploy the rsa_key",
+    help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
     "-n",
     "--name",
     type=str,
-    default="test_rsa_key",
-    help="Name of the rsa_key",
+    default=f"test_{ENTITY}",
+    help=f"Name of the {ENTITY}",
 )
 @click.option(
     "-D",
     "--description",
     type=str,
     default="",
-    help="Description of the rsa_key",
+    help=f"Description of the {ENTITY}",
 )
 def add_rsa_key_cmd(
     ctx: click.Context,
@@ -120,7 +134,7 @@ def add_rsa_key_cmd(
     name: str,
     description: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -131,11 +145,11 @@ def add_rsa_key_cmd(
         "description": description,
     }
 
-    rsa_key_resp = rsa_key_lib.add_rsa_key(client, data)
-    show_data(rsa_key_resp)
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
-@rsa_keys_group.command("update", help="Update rsa_key")
+@rsa_keys_group.command("update", help=f"Update {ENTITY}")
 @click.pass_context
 @click.argument(
     "uuid",
@@ -147,30 +161,30 @@ def add_rsa_key_cmd(
     "--project-id",
     type=click.UUID,
     default=None,
-    help="Name of the project in which to deploy the rsa_key",
+    help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
     "-n",
     "--name",
     type=str,
     default=None,
-    help="Name of the rsa_key",
+    help=f"Name of the {ENTITY}",
 )
 @click.option(
     "-D",
     "--description",
     type=str,
     default=None,
-    help="Description of the rsa_key",
+    help=f"Description of the {ENTITY}",
 )
-def update_rsa_key_cmd(
+def update_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID,
     project_id: sys_uuid.UUID | None,
     name: str | None,
     description: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)
@@ -178,11 +192,12 @@ def update_rsa_key_cmd(
         data["name"] = name
     if description is not None:
         data["description"] = description
-    rsa_key_resp = rsa_key_lib.update_rsa_key(client, uuid, data)
-    show_data(rsa_key_resp)
+
+    entity = base_client.update_entity(client, ENTITY_COLLECTION, uuid, data)
+    show_data(entity)
 
 
-def _print_rsa_keys(rsa_keys: tp.List[dict]) -> None:
+def _print_entities(rsa_keys: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

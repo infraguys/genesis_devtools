@@ -27,7 +27,7 @@ from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools import constants as c
 from genesis_devtools.clients import value as value_lib
 from genesis_devtools.clients import variable as variable_lib
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 
 
 @click.group("vars", help="Manage variables in the Genesis installation")

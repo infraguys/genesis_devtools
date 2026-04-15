@@ -35,6 +35,7 @@ dependencies = [
     "psutil>=7.2.2",  # BSD License (BSD-3-Clause)
     "certifi>=2026.2.25",  # modified version of ca-bundle.crt
     "questionary>=2.0.0", # MIT License (MIT)
+    "openapi-schema-validator>=0.8.1",  # BSD-3
 ]
 [project.urls]
 homepage = "https://github.com/infraguys/genesis_devtools/"
@@ -75,6 +76,7 @@ docs = [
     "mkdocs-material==9.1.0",
     "mkdocs-glightbox",
     "mkdocs-include-dir-to-nav",
+    "mkdocs-static-i18n[material]"
 ]
 bin = [
     "pyinstaller",

@@ -37,7 +37,7 @@ def list_values(
 def get_value(
     client: http_client.CollectionBaseClient,
     value_uuid: sys_uuid.UUID,
-):
+) -> dict[str, tp.Any]:
     value = client.get(c.VALUE_COLLECTION, uuid=value_uuid)
     return value
 

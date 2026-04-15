@@ -32,7 +32,16 @@ plugins:
         - ru
   - glightbox
   - include_dir_to_nav
-
+  - i18n:
+      docs_structure: suffix
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: ru
+          name: Russian
+          build: true
 extra:
   repo_icon: github
 

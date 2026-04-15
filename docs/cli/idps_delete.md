@@ -7,19 +7,16 @@ Delete idp
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam idps delete [OPTIONS]                                                                                                                                                                                                                                                                  
+ Usage: genesis iam idps delete [OPTIONS] UUID                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid`:
-    * Type: uuid
-    * Default: `none`
-    * Usage: `-u
---uuid`
-
-  idp UUID
+* `uuid` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -32,12 +29,11 @@ Delete idp
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam idps delete [OPTIONS]                                                                                                                                                                                                                                                                  
+ Usage: genesis iam idps delete [OPTIONS] UUID                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            
  Delete idp                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  idp UUID                                                                                                                                                                                                                                                                              │
-│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

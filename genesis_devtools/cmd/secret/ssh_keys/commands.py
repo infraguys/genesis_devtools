@@ -21,116 +21,130 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
-from genesis_devtools.clients import ssh_key as ssh_key_lib
-from genesis_devtools.common import utils
+from genesis_devtools import constants as c
+from genesis_devtools import utils
+
+ENTITY = "ssh_key"
+ENTITY_COLLECTION = c.SSH_KEY_COLLECTION
 
 
-@click.group("ssh_keys", help="Manage ssh_keys in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def ssh_keys_group():
     pass
 
 
-@ssh_keys_group.command("list", help="List ssh_keys")
+@ssh_keys_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_ssh_keys(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    ssh_keys = ssh_key_lib.list_ssh_keys(client)
-    _print_ssh_keys(ssh_keys)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@ssh_keys_group.command("show", help="Show ssh_key")
+@ssh_keys_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_ssh_key_cmd(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        ssh_keys = ssh_key_lib.list_ssh_keys(client, name=uuid)
-        if ssh_keys:
-            uuid = ssh_keys[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"ssh_key with name {uuid} not found")
-    ssh_key = ssh_key_lib.get_ssh_key(client, uuid)
-    show_data(ssh_key)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
-@ssh_keys_group.command("delete", help="Delete ssh_key")
+@ssh_keys_group.command("delete", help=f"Delete {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def delete_ssh_key_cmd(
+def delete_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        ssh_keys = ssh_key_lib.list_ssh_keys(client, name=uuid)
-        if ssh_keys:
-            uuid = ssh_keys[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"ssh_key with name {uuid} not found")
-    ssh_key_lib.delete_ssh_key(client, uuid)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
-@ssh_keys_group.command("add", help="Add a new ssh_key to the Genesis installation")
+@ssh_keys_group.command("add", help=f"Add a new {ENTITY} to the Genesis installation")
 @click.pass_context
 @click.option(
     "-u",
     "--uuid",
     type=click.UUID,
     default=None,
-    help="UUID of the ssh_key",
+    help=f"UUID of the {ENTITY}",
 )
 @click.option(
     "-p",
     "--project-id",
     type=click.UUID,
     required=True,
-    help="Name of the project in which to deploy the ssh_key",
+    help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
     "-n",
     "--name",
     type=str,
-    default="test_ssh_key",
-    help="Name of the ssh_key",
+    default=f"test_{ENTITY}",
+    help=f"Name of the {ENTITY}",
 )
 @click.option(
     "-D",
     "--description",
     type=str,
     default="",
-    help="Description of the ssh_key",
+    help=f"Description of the {ENTITY}",
 )
 @click.option(
     "--node",
     type=click.UUID,
     required=True,
-    help="node uuid of the ssh_key",
+    help=f"node uuid of the {ENTITY}",
 )
 @click.option(
     "--user",
     type=str,
     required=True,
-    help="user uuid of the ssh_key",
+    help=f"user uuid of the {ENTITY}",
 )
 @click.option(
     "--target_public_key",
     type=str,
     default=None,
 )
-def add_ssh_key_cmd(
+def add_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
     project_id: sys_uuid.UUID,
@@ -140,7 +154,7 @@ def add_ssh_key_cmd(
     user: str,
     target_public_key: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -159,11 +173,11 @@ def add_ssh_key_cmd(
     if target_public_key is not None:
         data["target_public_key"] = target_public_key
 
-    ssh_key_resp = ssh_key_lib.add_ssh_key(client, data)
-    show_data(ssh_key_resp)
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
-@ssh_keys_group.command("update", help="Update ssh_key")
+@ssh_keys_group.command("update", help=f"Update {ENTITY}")
 @click.pass_context
 @click.argument(
     "uuid",
@@ -175,30 +189,30 @@ def add_ssh_key_cmd(
     "--project-id",
     type=click.UUID,
     default=None,
-    help="Name of the project in which to deploy the ssh_key",
+    help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
     "-n",
     "--name",
     type=str,
     default=None,
-    help="Name of the ssh_key",
+    help=f"Name of the {ENTITY}",
 )
 @click.option(
     "-D",
     "--description",
     type=str,
     default=None,
-    help="Description of the ssh_key",
+    help=f"Description of the {ENTITY}",
 )
-def update_ssh_key_cmd(
+def update_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID,
     project_id: sys_uuid.UUID | None,
     name: str | None,
     description: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)
@@ -206,11 +220,12 @@ def update_ssh_key_cmd(
         data["name"] = name
     if description is not None:
         data["description"] = description
-    ssh_key_resp = ssh_key_lib.update_ssh_key(client, uuid, data)
-    show_data(ssh_key_resp)
+
+    entity = base_client.update_entity(client, ENTITY_COLLECTION, uuid, data)
+    show_data(entity)
 
 
-def _print_ssh_keys(ssh_keys: tp.List[dict]) -> None:
+def _print_entities(ssh_keys: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

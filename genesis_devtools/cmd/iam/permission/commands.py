@@ -21,67 +21,127 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
+from genesis_devtools import utils
+from genesis_devtools import constants as c
 
-from genesis_devtools.clients import permission as permission_lib
-from genesis_devtools.common import utils
+ENTITY = "permission"
+ENTITY_COLLECTION = c.PERMISSION_COLLECTION
 
 
-@click.group("permissions", help="Manage permissions in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def permissions_group():
     pass
 
 
-@permissions_group.command("list", help="List permissions")
+@permissions_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_permissions(
-    ctx: click.Context,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    permissions = permission_lib.list_permissions(client)
-    _print_values(permissions)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@permissions_group.command("show", help="Show permission")
+@permissions_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_permission(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        permissions = permission_lib.list_permissions(client, permissionname=uuid)
-        if permissions:
-            uuid = permissions[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"permission with name {uuid} not found")
-    data = permission_lib.get_permission(client, uuid)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
     show_data(data)
 
 
-@permissions_group.command("delete", help="Delete permission")
+@permissions_group.command("delete", help=f"Delete {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
+)
+@click.pass_context
+def delete_cmd(
+    ctx: click.Context,
+    uuid: str,
+) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    if not utils.is_valid_uuid(uuid):
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
+        else:
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
+
+
+@permissions_group.command(
+    "add", help=f"Add a new {ENTITY} to the Genesis installation"
+)
+@click.pass_context
 @click.option(
     "-u",
     "--uuid",
     type=click.UUID,
     default=None,
-    help="permission UUID",
+    help=f"UUID of the {ENTITY}",
 )
-@click.pass_context
-def delete_permission(
+@click.option(
+    "-n",
+    "--name",
+    type=str,
+    default=f"test_{ENTITY}",
+    help=f"Name of the {ENTITY}",
+)
+@click.option(
+    "-D",
+    "--description",
+    type=str,
+    default="",
+    help=f"Description of the {ENTITY}",
+)
+def add_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
+    name: str,
+    description: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    permission_lib.delete_permission(client, uuid)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    if uuid is None:
+        uuid = sys_uuid.uuid4()
+
+    data = {
+        "uuid": str(uuid),
+        "name": name,
+        "description": description,
+    }
+
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
-def _print_values(permissions: tp.List[dict]) -> None:
+def _print_entities(permissions: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Name")

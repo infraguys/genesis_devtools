@@ -62,12 +62,24 @@ def add_entity(
     client: http_client.CollectionBaseClient,
     collection: str,
     data: dict[str, tp.Any],
+    handle_conflict_error: bool = True,
 ) -> dict[str, tp.Any]:
     try:
-        variable_resp = client.create(collection, data=data)
+        entity = client.create(collection, data=data)
     except bazooka_exc.ConflictError:
-        raise click.ClickException("Already exists")
-    return variable_resp
+        if handle_conflict_error:
+            raise click.ClickException(f"Already exists: {data}")
+        raise
+    return entity
+
+
+def update_entity(
+    client: http_client.CollectionBaseClient,
+    collection: str,
+    uuid: sys_uuid.UUID | str,
+    data: dict[str, tp.Any],
+) -> dict[str, tp.Any]:
+    return client.update(collection, uuid, **data)
 
 
 def delete_entity(

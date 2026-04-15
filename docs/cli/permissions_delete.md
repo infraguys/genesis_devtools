@@ -7,19 +7,16 @@ Delete permission
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam permissions delete [OPTIONS]                                                                                                                                                                                                                                                           
+ Usage: genesis iam permissions delete [OPTIONS] UUID                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid`:
-    * Type: uuid
-    * Default: `none`
-    * Usage: `-u
---uuid`
-
-  permission UUID
+* `uuid` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -32,12 +29,11 @@ Delete permission
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis iam permissions delete [OPTIONS]                                                                                                                                                                                                                                                           
+ Usage: genesis iam permissions delete [OPTIONS] UUID                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                            
  Delete permission                                                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --uuid  -u  UUID  permission UUID                                                                                                                                                                                                                                                                       │
-│ --help            Show this message and exit.                                                                                                                                                                                                                                                           │
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
