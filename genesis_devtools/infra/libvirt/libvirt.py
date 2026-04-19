@@ -15,6 +15,7 @@
 #    under the License.
 from __future__ import annotations
 
+import json
 import os
 import re
 import tempfile
@@ -638,6 +639,17 @@ def get_pool_info(pool: str) -> dict[str, int | str]:
     }
 
 
+def _get_vol_path(pool: str, name: str) -> str:
+    out = subprocess.check_output(["sudo", "virsh", "vol-path", "--pool", pool, name])
+    return out.decode().strip()
+
+
+def _get_image_format(path: str) -> str:
+    out = subprocess.check_output(["sudo", "qemu-img", "info", "--output=json", path])
+    info = json.loads(out.decode().strip())
+    return info["format"]
+
+
 def create_volume(
     pool: str,
     name: str,
@@ -660,10 +672,30 @@ def create_volume(
     subprocess.check_call(args, stdout=subprocess.DEVNULL)
 
     if source_path is not None:
-        subprocess.check_call(
-            ["sudo", "virsh", "vol-upload", "--pool", pool, name, source_path],
-            stdout=subprocess.DEVNULL,
-        )
+        if fmt == "raw":
+            # vol-upload copies raw bytes without format conversion,
+            # so we must use qemu-img convert to handle any source format.
+            vol_path = _get_vol_path(pool, name)
+            src_fmt = _get_image_format(source_path)
+            subprocess.check_call(
+                [
+                    "sudo",
+                    "qemu-img",
+                    "convert",
+                    "-f",
+                    src_fmt,
+                    "-O",
+                    "raw",
+                    source_path,
+                    vol_path,
+                ],
+                stdout=subprocess.DEVNULL,
+            )
+        else:
+            subprocess.check_call(
+                ["sudo", "virsh", "vol-upload", "--pool", pool, name, source_path],
+                stdout=subprocess.DEVNULL,
+            )
 
 
 def update_volume(
