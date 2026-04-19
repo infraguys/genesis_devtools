@@ -476,7 +476,7 @@ def destroy_domain(name: str) -> None:
 
     try:
         subprocess.run(
-            ["sudo", "virsh", "undefine", "--nvram", name],
+            ["sudo", "virsh", "undefine", "--nvram", "--remove-all-storage", name],
             stdout=subprocess.DEVNULL,
             check=True,
         )
@@ -484,7 +484,7 @@ def destroy_domain(name: str) -> None:
         # Nothing to do, the domain is already undefined
         pass
 
-    # Remove the disk
+    # Remove leftover disks not managed by a pool (e.g. config drive ISOs)
     for disk_path in domain_disks:
         subprocess.check_call(
             ["sudo", "rm", "-f", disk_path],
