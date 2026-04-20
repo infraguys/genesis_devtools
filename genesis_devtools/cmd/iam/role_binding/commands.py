@@ -21,69 +21,134 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
+from genesis_devtools import constants as c
+from genesis_devtools import utils
 
-from genesis_devtools.clients import role_binding as role_binding_lib
-from genesis_devtools.common import utils
+ENTITY = "role_binding"
+ENTITY_COLLECTION = c.ROLE_BINDING_COLLECTION
 
 
-@click.group("role_bindings", help="Manage role_bindings in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def role_bindings_group():
     pass
 
 
-@role_bindings_group.command("list", help="List role_bindings")
+@role_bindings_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_role_bindings(
-    ctx: click.Context,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    role_bindings = role_binding_lib.list_role_bindings(client)
-    _print_values(role_bindings)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@role_bindings_group.command("show", help="Show role_binding")
+@role_bindings_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_role_binding(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        role_bindings = role_binding_lib.list_role_bindings(
-            client, role_bindingname=uuid
-        )
-        if role_bindings:
-            uuid = role_bindings[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"role_binding with name {uuid} not found")
-    data = role_binding_lib.get_role_binding(client, uuid)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
     show_data(data)
 
 
-@role_bindings_group.command("delete", help="Delete role_binding")
+@role_bindings_group.command("delete", help=f"Delete {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
+)
+@click.pass_context
+def delete_cmd(
+    ctx: click.Context,
+    uuid: str,
+) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    if not utils.is_valid_uuid(uuid):
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
+        else:
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
+
+
+@role_bindings_group.command(
+    "add", help=f"Add a new {ENTITY} to the Genesis installation"
+)
+@click.pass_context
 @click.option(
     "-u",
     "--uuid",
     type=click.UUID,
     default=None,
-    help="role_binding UUID",
+    help=f"UUID of the {ENTITY}",
 )
-@click.pass_context
-def delete_role_binding(
+@click.option(
+    "-p",
+    "--project-id",
+    type=click.UUID,
+    required=True,
+    help=f"Name of the project in which to deploy the {ENTITY}",
+)
+@click.option(
+    "--user",
+    type=click.UUID,
+    required=True,
+    help="role uuid",
+)
+@click.option(
+    "--role",
+    type=click.UUID,
+    required=True,
+    help="user uuid",
+)
+def add_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
+    project_id: sys_uuid.UUID,
+    user: sys_uuid.UUID,
+    role: sys_uuid.UUID,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    role_binding_lib.delete_role_binding(client, uuid)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    if uuid is None:
+        uuid = sys_uuid.uuid4()
+
+    data = {
+        "uuid": str(uuid),
+        "project": f"{c.PROJECT_COLLECTION}{project_id}",
+        "role": f"{c.ROLE_COLLECTION}{role}",
+        "user": f"{c.USER_COLLECTION}{user}",
+    }
+
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
-def _print_values(role_bindings: tp.List[dict]) -> None:
+def _print_entities(role_bindings: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Role")

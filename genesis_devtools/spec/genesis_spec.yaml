@@ -1,0 +1,100 @@
+# Specification for genesis.yaml configuration file
+
+version: "1.0"
+
+description: |
+  Configuration file for Genesis Core project build process and element definitions
+
+properties:
+  build:
+    type: object
+    description: Build section. It specifies the build process of the project
+    properties:
+      deps:
+        type: array
+        description: Dependencies of the project
+        items:
+          type: object
+          properties:
+            dst:
+              type: string
+              description: Destination path
+            path:
+              type: object
+              description: Local path configuration
+              properties:
+                src:
+                  type: string
+                  description: Source path
+            http:
+              type: object
+              description: HTTP source configuration
+              properties:
+                src:
+                  type: string
+                  description: HTTP source URL
+            optional:
+              type: boolean
+              description: Whether dependency is optional
+            exclude:
+              type: array
+              description: Excluded paths
+              items:
+                type: string
+      elements:
+        type: array
+        description: List of elements in the project
+        items:
+          type: object
+          properties:
+            manifest:
+              type: string
+              description: Manifest file path
+            images:
+              type: array
+              description: List of images
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Image name
+                  format:
+                    type: string
+                    description: Image format
+                  profile:
+                    type: string
+                    description: OS profile
+                  script:
+                    type: string
+                    description: Provisioning script
+                  override:
+                    type: object
+                    description: Override parameters
+                    properties:
+                      disk_size:
+                        type: string
+                        description: Disk size override
+                  envs:
+                    type: array
+                    description: Environment variables
+                    items:
+                      type: string
+            configs:
+              type: array
+              description: List of configs
+              items:
+                type: object
+                properties:
+                  path:
+                    type: string
+                    description: Config path
+            artifacts:
+              type: array
+              description: List of artifacts
+              items:
+                type: object
+                properties:
+                  path:
+                    type: string
+                    description: Artifact path

@@ -48,7 +48,8 @@ Additional variables can be passed using the --manifest-var options.
 - `output_dir`:
     - Type: text
     - Default: `output`
-    - Usage: `--output-dir`
+    - Usage: `-o
+--output-dir`
 
   Directory where output artifacts will be stored
 

@@ -227,18 +227,6 @@ def genesis(
     ctx.obj = CmdContext(auth_data, config, final_developer_key_path)
 
 
-def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
-    result = {}
-    for var in manifest_vars:
-        if "=" not in var:
-            raise click.UsageError(
-                f"Invalid manifest variable format: '{var}'. Expected 'key=value'."
-            )
-        key, value = var.split("=", 1)
-        result[key] = value
-    return result
-
-
 @genesis.command(
     "build",
     help=(
@@ -273,6 +261,7 @@ def _convert_manifest_vars(manifest_vars: tuple[str, ...]) -> dict[str, str]:
     help="Directory where temporary build artifacts will be stored",
 )
 @click.option(
+    "-o",
     "--output-dir",
     default=c.DEF_GEN_OUTPUT_DIR_NAME,
     help="Directory where output artifacts will be stored",
@@ -331,7 +320,7 @@ def build_cmd(
     if not project_dir:
         raise click.UsageError("No project directories specified")
 
-    manifest_vars = _convert_manifest_vars(manifest_var)
+    manifest_vars = utils.convert_input_multiply(manifest_var)
 
     # Leave 'none' for backward compatibility
     if version_suffix == "none" and inventory:
@@ -365,6 +354,8 @@ def build_cmd(
             f"Genesis configuration file not found in {project_dir}"
         )
 
+    spec = utils.load_spec()
+    utils.validate_config(gen_config, spec)
     # Take all build sections from the configuration
     builds = {k: v for k, v in gen_config.items() if k.startswith("build")}
     if not builds:
@@ -1386,7 +1377,7 @@ def should_check_version():
             return True
         return False
     except Exception:
-        return True  # Default to checking if we can't read the file
+        return False  # Default to no checking if we can't read the file
 
 
 def save_last_check_time():
@@ -1431,7 +1422,7 @@ def hello() -> None:
 
 @genesis.command("autocomplete_help", help="Display a autocomplete help")
 def autocomplete_help() -> None:
-    from genesis_devtools.common.utils import PROJECT_PATH
+    from genesis_devtools.utils import PROJECT_PATH
 
     with open(
         os.path.join(
@@ -1453,7 +1444,7 @@ def autocomplete_help() -> None:
     help="shell kind",
 )
 def autocomplete(shell: str | None) -> None:
-    from genesis_devtools.common.utils import PROJECT_PATH
+    from genesis_devtools.utils import PROJECT_PATH
 
     if shell is None:
         import psutil

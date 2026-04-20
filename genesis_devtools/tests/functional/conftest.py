@@ -19,7 +19,7 @@ from click.testing import CliRunner
 import pytest
 import yaml
 
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 
 
 @pytest.fixture(scope="session")

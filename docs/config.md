@@ -50,3 +50,11 @@ The path to your ssh key.
 
 You can change the path to the ssh key by config or by setting the command line argument `--developer_key_path` or `-i`
 or by environment variable `GEN_DEV_KEYS`.
+
+## Init
+
+You can interactively init the config file by running the following command:
+
+```bash
+genesis settings init
+```

@@ -76,12 +76,41 @@ class Image:
         return cls(script=script, format=img_format, **image_config)
 
 
+@dataclasses.dataclass
+class Config:
+    """Config representation."""
+
+    abs_path: str
+    path: str
+
+    @classmethod
+    def from_config(cls, config: dict[str, tp.Any], work_dir: str) -> "Config":
+        """Create a config from configuration."""
+        abs_path = os.path.join(work_dir, config["path"])
+        return cls(abs_path=abs_path, path=config["path"])
+
+
+@dataclasses.dataclass
+class Artifact:
+    """Artifact representation."""
+
+    abs_path: str
+    path: str
+
+    @classmethod
+    def from_config(cls, config: dict[str, tp.Any], work_dir: str) -> "Artifact":
+        """Create an artifact from configuration."""
+        abs_path = os.path.join(work_dir, config["path"])
+        return cls(abs_path=abs_path, path=config["path"])
+
+
 class Element(tp.NamedTuple):
     """Element representation."""
 
     manifest: tp.Optional[str] = None
     images: tp.Optional[tp.List[Image]] = None
-    artifacts: tp.Optional[tp.List[str]] = None
+    artifacts: tp.Optional[tp.List[Artifact]] = None
+    configs: tp.Optional[tp.List[Config]] = None
 
     def __str__(self):
         if self.manifest:
@@ -100,7 +129,17 @@ class Element(tp.NamedTuple):
         """Create an element from configuration."""
         image_configs = element_config.pop("images", [])
         images = [Image.from_config(img, work_dir) for img in image_configs]
-        return cls(images=images, **element_config)
+
+        config_configs = element_config.pop("configs", [])
+        configs = [Config.from_config(config, work_dir) for config in config_configs]
+
+        artifacts_configs = element_config.pop("artifacts", [])
+        artifacts = [
+            Artifact.from_config(artifact, work_dir) for artifact in artifacts_configs
+        ]
+        return cls(
+            images=images, configs=configs, artifacts=artifacts, **element_config
+        )
 
 
 class ElementInventory(tp.NamedTuple):

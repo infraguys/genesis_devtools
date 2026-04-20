@@ -20,7 +20,7 @@ import tempfile
 from click.testing import CliRunner
 
 
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 from genesis_devtools.cmd import cli
 
 from genesis_devtools.cmd.settings import commands as settings_commands

@@ -55,7 +55,7 @@ def add_config_from_env(
     base64: bool,
     node: sys_uuid.UUID,
     uuid: sys_uuid.UUID | None = None,
-) -> dict[str, tp.Any]:
+) -> None:
     envs = {}
     cfgs = {}
     log = logger.ClickLogger()

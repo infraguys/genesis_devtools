@@ -22,7 +22,7 @@ from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients.base_client import get_user_api_client
 from genesis_devtools.clients import node as node_lib
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 
 
 LIST_FIELDS = ["UUID", "Project", "Name", "Cores", "RAM", "IP", "Status"]

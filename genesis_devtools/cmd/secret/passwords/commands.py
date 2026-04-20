@@ -21,10 +21,13 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
-from genesis_devtools.clients import password as password_lib
-from genesis_devtools.common import utils
+from genesis_devtools import constants as c
+from genesis_devtools import utils
+
+ENTITY = "password"
+ENTITY_COLLECTION = c.PASSWORD_COLLECTION
 
 
 @click.group("passwords", help="Manage passwords in the Genesis installation")
@@ -32,95 +35,106 @@ def passwords_group():
     pass
 
 
-@passwords_group.command("list", help="List passwords")
+@passwords_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_passwords(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    passwords = password_lib.list_passwords(client)
-    _print_passwords(passwords)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@passwords_group.command("show", help="Show password")
+@passwords_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_password_cmd(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        passwords = password_lib.list_passwords(client, name=uuid)
-        if passwords:
-            uuid = passwords[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"password with name {uuid} not found")
-    password = password_lib.get_password(client, uuid)
-    show_data(password)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
-@passwords_group.command("delete", help="Delete password")
+@passwords_group.command("delete", help=f"Delete {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def delete_password_cmd(
+def delete_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        passwords = password_lib.list_passwords(client, name=uuid)
-        if passwords:
-            uuid = passwords[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"password with name {uuid} not found")
-    password_lib.delete_password(client, uuid)
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
-@passwords_group.command("add", help="Add a new password to the Genesis installation")
+@passwords_group.command("add", help=f"Add a new {ENTITY} to the Genesis installation")
 @click.pass_context
 @click.option(
     "-u",
     "--uuid",
     type=click.UUID,
     default=None,
-    help="UUID of the password",
+    help=f"UUID of the {ENTITY}",
 )
 @click.option(
     "-p",
     "--project-id",
     type=click.UUID,
     required=True,
-    help="Name of the project in which to deploy the password",
+    help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
     "-n",
     "--name",
     type=str,
-    default="test_password",
-    help="Name of the password",
+    default=f"test_{ENTITY}",
+    help=f"Name of the {ENTITY}",
 )
 @click.option(
     "-D",
     "--description",
     type=str,
     default="",
-    help="Description of the password",
+    help=f"Description of the {ENTITY}",
 )
-def add_password_cmd(
+def add_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
     project_id: sys_uuid.UUID,
     name: str,
     description: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -131,11 +145,11 @@ def add_password_cmd(
         "description": description,
     }
 
-    password_resp = password_lib.add_password(client, data)
-    show_data(password_resp)
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
-@passwords_group.command("update", help="Update password")
+@passwords_group.command("update", help=f"Update {ENTITY}")
 @click.pass_context
 @click.argument(
     "uuid",
@@ -147,21 +161,21 @@ def add_password_cmd(
     "--project-id",
     type=click.UUID,
     default=None,
-    help="Name of the project in which to deploy the password",
+    help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
     "-n",
     "--name",
     type=str,
     default=None,
-    help="Name of the password",
+    help=f"Name of the {ENTITY}",
 )
 @click.option(
     "-D",
     "--description",
     type=str,
     default=None,
-    help="Description of the password",
+    help=f"Description of the {ENTITY}",
 )
 def update_password_cmd(
     ctx: click.Context,
@@ -170,7 +184,7 @@ def update_password_cmd(
     name: str | None,
     description: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)
@@ -178,11 +192,12 @@ def update_password_cmd(
         data["name"] = name
     if description is not None:
         data["description"] = description
-    password_resp = password_lib.update_password(client, uuid, data)
-    show_data(password_resp)
+
+    entity = base_client.update_entity(client, ENTITY_COLLECTION, uuid, data)
+    show_data(entity)
 
 
-def _print_passwords(passwords: tp.List[dict]) -> None:
+def _print_entities(passwords: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

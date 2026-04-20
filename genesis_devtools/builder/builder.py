@@ -56,6 +56,28 @@ class SimpleBuilder:
         if not os.path.exists(self._elements_output_dir):
             os.makedirs(self._elements_output_dir)
 
+    def _build_config_artifact(
+        self,
+        config_artifact: base.Config | base.Artifact,
+        output_dir: str,
+        inventory_mode: bool = False,
+    ) -> str:
+
+        # Determine config/artifact output directory
+        if inventory_mode:
+            _output_dir = os.path.join(self._elements_output_dir, output_dir)
+        else:
+            _output_dir = self._elements_output_dir
+
+        # Move config/artifact to the final location
+        if not os.path.exists(_output_dir):
+            os.makedirs(_output_dir)
+        dst_path = os.path.join(_output_dir, config_artifact.path)
+        src_path = config_artifact.abs_path
+        shutil.copy(src_path, _output_dir)
+
+        return dst_path
+
     def _build_image(
         self,
         img: base.Image,
@@ -135,8 +157,24 @@ class SimpleBuilder:
     ) -> base.ElementInventory | None:
         """Build an element."""
         self._logger.info(f"Building element: {element}")
-        image_paths = []
+        image_paths, configs, artifacts = [], [], []
 
+        if element.artifacts:
+            for artifact in element.artifacts:
+                _path = self._build_config_artifact(
+                    artifact,
+                    "artifacts",
+                    inventory_mode,
+                )
+                artifacts.append(_path)
+        if element.configs:
+            for config in element.configs:
+                _path = self._build_config_artifact(
+                    config,
+                    "configs",
+                    inventory_mode,
+                )
+                configs.append(_path)
         # Build images
         for img in element.images:
             if build_suffix and not inventory_mode:
@@ -222,6 +260,8 @@ class SimpleBuilder:
                 version=version,
                 images=image_paths,
                 manifests=manifests,
+                configs=configs,
+                artifacts=artifacts,
             )
             return inventory
 

@@ -23,7 +23,7 @@ from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients import base_client
 
-from genesis_devtools.common import utils
+from genesis_devtools import utils
 from genesis_devtools import constants as c
 
 
@@ -36,8 +36,8 @@ def profiles_group():
 @click.pass_context
 def list_profiles(ctx: click.Context) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    profiles = base_client.list_entities(client, c.PROFILE_COLLECTION)
-    _print_profiles(profiles)
+    entities = base_client.list_entities(client, c.PROFILE_COLLECTION)
+    _print_entities(entities)
 
 
 @profiles_group.command("show", help="Show profile")
@@ -53,13 +53,13 @@ def show_profile_cmd(
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        profiles = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
-        if profiles:
-            uuid = profiles[0]["uuid"]
+        entities = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
             raise click.ClickException(f"Profile with name {uuid} not found")
-    profile = base_client.get_entity(client, c.PROFILE_COLLECTION, uuid)
-    show_data(profile)
+    data = base_client.get_entity(client, c.PROFILE_COLLECTION, uuid)
+    show_data(data)
 
 
 @profiles_group.command("delete", help="Delete profile")
@@ -74,9 +74,9 @@ def delete_profile_cmd(
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        profiles = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
-        if profiles:
-            uuid = profiles[0]["uuid"]
+        entities = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
             raise click.ClickException(f"Profile with name {uuid} not found")
     base_client.delete_entity(client, c.PROFILE_COLLECTION, uuid)
@@ -94,9 +94,9 @@ def activate_profile_cmd(
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        profiles = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
-        if profiles:
-            uuid = profiles[0]["uuid"]
+        entities = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
             raise click.ClickException(f"Profile with name {uuid} not found")
     base_client.action_entity(client, c.PROFILE_COLLECTION, "activate", uuid)
@@ -157,11 +157,11 @@ def add_profile_cmd(
         "description": description,
         "profile_type": profile_type,
     }
-    profile = base_client.add_entity(client, c.PROFILE_COLLECTION, data)
-    show_data(profile)
+    data = base_client.add_entity(client, c.PROFILE_COLLECTION, data)
+    show_data(data)
 
 
-def _print_profiles(profiles: tp.List[dict]) -> None:
+def _print_entities(profiles: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

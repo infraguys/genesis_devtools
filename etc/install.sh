@@ -128,6 +128,14 @@ download_and_extract() {
     fi
 }
 
+CONFIG_FILE=~/.genesis/genesisctl.yaml
+
+check_config() {
+    if [ ! -f $CONFIG_FILE ]; then
+        warning "You don't have a configuration file. Please, read the docs https://infraguys.github.io/genesis_devtools/config/"
+    fi
+}
+
 for BINDIR in /usr/local/bin /usr/bin /bin; do
     echo $PATH | grep -q $BINDIR && break || continue
 done
@@ -140,6 +148,7 @@ $SUDO chmod +x "$BINDIR"/genesis
 install_success() {
     genesis hello
     genesis autocomplete_help
+    check_config
     status 'Install complete. Run "genesis" from the command line.'
 }
 trap install_success EXIT

@@ -36,6 +36,10 @@ def load_config(cfg_path: str | None = c.CONFIG_FILE) -> dict:
             with open(cfg_path, "r") as f:
                 config = yaml.safe_load(f) or {}
         else:
+            click.echo(
+                f"You don't have a configuration file {cfg_path}. "
+                f"Please, read the docs https://infraguys.github.io/genesis_devtools/config/"
+            )
             config = {}
     except Exception as e:
         raise click.ClickException(f"Error reading settings: {e}")
@@ -453,3 +457,97 @@ def rename_context(
 
     _save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{old_context}' renamed to '{new_context}'")
+
+
+def _prompt_required_text(
+    prompt: str,
+    default: str | None = None,
+    hide_input: bool = False,
+) -> str:
+    while True:
+        value = click.prompt(
+            prompt,
+            type=str,
+            default=default,
+            show_default=default is not None,
+            hide_input=hide_input,
+        )
+        if hide_input:
+            if value:
+                return value
+        else:
+            value = value.strip()
+            if value:
+                return value
+
+        click.echo("Value cannot be empty. Please try again.", err=True)
+
+
+def _build_interactive_config() -> dict:
+    realm_name = _prompt_required_text("Realm name", default="default-realm")
+    endpoint = _prompt_required_text("Endpoint", default="http://localhost:11010")
+    check_updates = click.confirm("Check for updates on startup?", default=True)
+    skip_tls_verify = click.confirm(
+        "Skip TLS certificate verification?",
+        default=False,
+    )
+    context_name = _prompt_required_text("Context name", default="default")
+    use_tokens = click.confirm("Use access token authentication?", default=False)
+
+    context_config: dict[str, str] = {}
+    if use_tokens:
+        context_config["access_token"] = _prompt_required_text(
+            "Access token",
+            hide_input=True,
+        )
+        context_config["refresh_token"] = _prompt_required_text(
+            "Refresh token",
+            hide_input=True,
+        )
+    else:
+        context_config["user"] = _prompt_required_text("User")
+        context_config["password"] = _prompt_required_text(
+            "Password",
+            hide_input=True,
+        )
+
+    return {
+        "schema_version": 1,
+        "realms": {
+            realm_name: {
+                "endpoint": endpoint,
+                "check_updates": check_updates,
+                "skip_tls_verify": skip_tls_verify,
+                "contexts": {
+                    context_name: context_config,
+                },
+                "current-context": context_name,
+            }
+        },
+        "current-realm": realm_name,
+    }
+
+
+@settings_group.command("init", help="Interactively create a genesis settings file")
+@click.pass_context
+def init_config(ctx: click.Context) -> None:
+    cfg_path = ctx.obj.cfg_path or c.CONFIG_FILE
+
+    if os.path.exists(cfg_path):
+        should_write = click.confirm(
+            f"Config file '{cfg_path}' already exists. Overwrite it?",
+            default=False,
+        )
+    else:
+        should_write = click.confirm(
+            f"Create config file '{cfg_path}'?",
+            default=True,
+        )
+
+    if not should_write:
+        click.echo("Config initialization cancelled")
+        return
+
+    config = _build_interactive_config()
+    _save_config(config, cfg_path)
+    click.echo(f"Config saved to '{cfg_path}'")
