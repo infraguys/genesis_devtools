@@ -733,24 +733,25 @@ def bootstrap_cmd(
     # Validate org-token requirement based on no-registration flag
     if no_registration:
         org_token = None
-    elif not org_token:
-        click.secho(
-            click.style(
-                """\
+    # TODO: re-enable after preparations
+    #     elif not org_token:
+    #         click.secho(
+    #             click.style(
+    #                 """\
 
-Register your realm in the Genesis ecosystem to get access to additional features and support.
-You can skip registration by using --no-registration flag.
+    # Register your realm in the Genesis ecosystem to get access to additional features and support.
+    # You can skip registration by using --no-registration flag.
 
-""",
-                bold=True,
-                fg="yellow",
-            ),
-            bold=True,
-            # Underline makes the text more visible
-            underline=True,
-        )
+    # """,
+    #                 bold=True,
+    #                 fg="yellow",
+    #             ),
+    #             bold=True,
+    #             # Underline makes the text more visible
+    #             underline=True,
+    #         )
 
-        org_token = click.prompt("Organization token", hide_input=True)
+    #         org_token = click.prompt("Organization token", hide_input=True)
 
     if stand_spec is not None:
         with open(stand_spec) as f:
