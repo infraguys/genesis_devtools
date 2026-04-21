@@ -13,13 +13,13 @@ List nodes
 
 ## Options
 
-* `project_id`:
+* `filters`:
     * Type: text
-    * Default: `none`
-    * Usage: `-P
---project-id`
+    * Default: `sentinel.unset`
+    * Usage: `-f
+--filters`
 
-  Filter nodes by project
+  Additional filters to pass to the api. The format is 'key=value'. For example: --f parent=11111111-1111-1111-1111-11111111111 --filters status=NEW
 
 * `help`:
     * Type: boolean
@@ -37,7 +37,7 @@ List nodes
  List nodes                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --project-id  -P  TEXT  Filter nodes by project                                                                                                                                                                                                                                                         │
-│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
+│ --filters  -f  TEXT  Additional filters to pass to the api. The format is 'key=value'. For example: --f parent=11111111-1111-1111-1111-11111111111 --filters status=NEW                                                                                                                                 │
+│ --help               Show this message and exit.                                                                                                                                                                                                                                                        │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -1,22 +1,49 @@
 
-# hypervisors_delete
+# variables_add
 
-Delete hypervisor
+Add a new variable to the Genesis installation
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables add [OPTIONS]                                                                                                                                                                                                                                                                 
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid` (REQUIRED):
-    * Type: text
+* `uuid`:
+    * Type: uuid
+    * Default: `none`
+    * Usage: `-u
+--uuid`
+
+  UUID of the variable
+
+* `project_id` (REQUIRED):
+    * Type: uuid
     * Default: `sentinel.unset`
-    * Usage: `uuid`
+    * Usage: `-p
+--project-id`
+
+  Name of the project in which to deploy the variable
+
+* `name`:
+    * Type: text
+    * Default: `example_variable`
+    * Usage: `-n
+--name`
+
+  Name of the variable
+
+* `description`:
+    * Type: text
+    * Default: ``
+    * Usage: `-D
+--description`
+
+  Description of the variable
 
 * `help`:
     * Type: boolean
@@ -29,11 +56,15 @@ Delete hypervisor
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables add [OPTIONS]                                                                                                                                                                                                                                                                 
                                                                                                                                                                                                                                                                                                            
- Delete hypervisor                                                                                                                                                                                                                                                                                         
+ Add a new variable to the Genesis installation                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│    --uuid         -u  UUID  UUID of the variable                                                                                                                                                                                                                                                        │
+│ *  --project-id   -p  UUID  Name of the project in which to deploy the variable [required]                                                                                                                                                                                                              │
+│    --name         -n  TEXT  Name of the variable                                                                                                                                                                                                                                                        │
+│    --description  -D  TEXT  Description of the variable                                                                                                                                                                                                                                                 │
+│    --help                   Show this message and exit.                                                                                                                                                                                                                                                 │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

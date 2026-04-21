@@ -1,22 +1,17 @@
 
-# hypervisors_delete
+# elements_available
 
-Delete hypervisor
+Print available elements in repository
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis elements available [OPTIONS]                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
-
-* `uuid` (REQUIRED):
-    * Type: text
-    * Default: `sentinel.unset`
-    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -29,9 +24,9 @@ Delete hypervisor
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis elements available [OPTIONS]                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
- Delete hypervisor                                                                                                                                                                                                                                                                                         
+ Print available elements in repository                                                                                                                                                                                                                                                                    
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

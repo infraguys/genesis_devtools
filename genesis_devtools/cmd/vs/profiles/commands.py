@@ -52,12 +52,6 @@ def show_profile_cmd(
     uuid: str,
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        entities = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
-        if entities:
-            uuid = entities[0]["uuid"]
-        else:
-            raise click.ClickException(f"Profile with name {uuid} not found")
     data = base_client.get_entity(client, c.PROFILE_COLLECTION, uuid)
     show_data(data)
 
@@ -73,12 +67,6 @@ def delete_profile_cmd(
     uuid: sys_uuid.UUID | None,
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        entities = base_client.list_entities(client, c.PROFILE_COLLECTION, name=uuid)
-        if entities:
-            uuid = entities[0]["uuid"]
-        else:
-            raise click.ClickException(f"Profile with name {uuid} not found")
     base_client.delete_entity(client, c.PROFILE_COLLECTION, uuid)
 
 

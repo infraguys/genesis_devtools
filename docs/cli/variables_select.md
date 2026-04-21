@@ -1,13 +1,13 @@
 
-# hypervisors_delete
+# variables_select
 
-Delete hypervisor
+Select variable
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables select [OPTIONS] UUID                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -17,6 +17,14 @@ Delete hypervisor
     * Type: text
     * Default: `sentinel.unset`
     * Usage: `uuid`
+
+* `value` (REQUIRED):
+    * Type: uuid
+    * Default: `sentinel.unset`
+    * Usage: `-v
+--value`
+
+  Uuid of the value to select as the value of the variable
 
 * `help`:
     * Type: boolean
@@ -29,11 +37,12 @@ Delete hypervisor
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables select [OPTIONS] UUID                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
- Delete hypervisor                                                                                                                                                                                                                                                                                         
+ Select variable                                                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ *  --value  -v  UUID  Uuid of the value to select as the value of the variable [required]                                                                                                                                                                                                               │
+│    --help             Show this message and exit.                                                                                                                                                                                                                                                       │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

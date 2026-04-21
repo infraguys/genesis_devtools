@@ -67,12 +67,6 @@ def show_cmd(
     uuid: str,
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
-        if entities:
-            uuid = entities[0]["uuid"]
-        else:
-            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
     data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
     show_data(data)
 
@@ -89,12 +83,6 @@ def delete_cmd(
     uuid: str,
 ) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
-        if entities:
-            uuid = entities[0]["uuid"]
-        else:
-            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
     base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 

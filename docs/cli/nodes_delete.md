@@ -7,16 +7,16 @@ Delete node
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes delete [OPTIONS] UUID_NAME                                                                                                                                                                                                                                                   
+ Usage: genesis compute nodes delete [OPTIONS] UUID                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid_name` (REQUIRED):
+* `uuid` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `uuid_name`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -29,7 +29,7 @@ Delete node
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes delete [OPTIONS] UUID_NAME                                                                                                                                                                                                                                                   
+ Usage: genesis compute nodes delete [OPTIONS] UUID                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
  Delete node                                                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            

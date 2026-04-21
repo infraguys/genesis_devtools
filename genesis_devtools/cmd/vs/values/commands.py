@@ -21,70 +21,71 @@ import uuid as sys_uuid
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
-from genesis_devtools.clients import value as value_lib
 from genesis_devtools import utils
 from genesis_devtools import constants as c
 
+ENTITY = "value"
+ENTITY_COLLECTION = c.VALUE_COLLECTION
 
-@click.group("values", help="Manage values in the Genesis installation")
+
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def values_group():
     pass
 
 
-@values_group.command("list", help="List values")
+@values_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_values(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    values = value_lib.list_values(client)
-    _print_values(values)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@values_group.command("show", help="Show value")
+@values_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_value_cmd(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        values = value_lib.list_values(client, name=uuid)
-        if values:
-            uuid = values[0]["uuid"]
-        else:
-            raise click.ClickException(f"Value with name {uuid} not found")
-    value = value_lib.get_value(client, uuid)
-    show_data(value)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
-@values_group.command("delete", help="Delete value")
+@values_group.command("delete", help=f"Delete {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def delete_value_cmd(
+def delete_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        values = value_lib.list_values(client, name=uuid)
-        if values:
-            uuid = values[0]["uuid"]
-        else:
-            raise click.ClickException(f"Value with name {uuid} not found")
-    value_lib.delete_value(client, uuid)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
-@values_group.command("add", help="Add a new value to the Genesis installation")
+@values_group.command("add", help=f"Add a new {ENTITY} to the Genesis installation")
 @click.pass_context
 @click.option(
     "-u",
@@ -136,7 +137,7 @@ def add_value_cmd(
     var: str | None,
     value: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
@@ -156,8 +157,8 @@ def add_value_cmd(
             raise click.ClickException(f"Variable {var} is not a valid UUID")
         data["variable"] = f"{c.VARIABLE_COLLECTION}{var}"
 
-    value_resp = value_lib.add_value(client, data)
-    show_data(value_resp)
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
 @values_group.command("update", help="Update value")
@@ -211,7 +212,7 @@ def update_value_cmd(
     value: str | None,
     variable: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     data = {}
     if project_id is not None:
         data["project_id"] = str(project_id)
@@ -223,11 +224,11 @@ def update_value_cmd(
         data["value"] = utils.convert_to_nearest_type(value)
     if variable is not None:
         data["variable"] = variable
-    value_resp = value_lib.update_value(client, uuid, data)
-    show_data(value_resp)
+    entity = base_client.update_entity(client, ENTITY_COLLECTION, uuid, data)
+    show_data(entity)
 
 
-def _print_values(values: tp.List[dict]) -> None:
+def _print_entities(values: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

@@ -16,71 +16,74 @@
 from __future__ import annotations
 
 import typing as tp
-import uuid as sys_uuid
 
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
-from genesis_devtools.clients import hypervisor as hypervisor_lib
+from genesis_devtools.clients import base_client
 from genesis_devtools import utils
+from genesis_devtools import constants as c
+
+ENTITY = "hypervisor"
+ENTITY_COLLECTION = c.HYPERVISOR_COLLECTION
 
 
-@click.group("hypervisors", help="Manage hypervisors in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def hypervisors_group():
     pass
 
 
-@hypervisors_group.command("list", help="List hypervisors")
+@hypervisors_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_hypervisors(
-    ctx: click.Context,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    hypervisors = hypervisor_lib.list_hypervisors(client)
-    _print_values(hypervisors)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@hypervisors_group.command("show", help="Show hypervisor")
+@hypervisors_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_hypervisor(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        hypervisors = hypervisor_lib.list_hypervisors(client, name=uuid)
-        if hypervisors:
-            uuid = hypervisors[0]["uuid"]
-        else:
-            raise click.ClickException(f"hypervisor with name {uuid} not found")
-    hypervisor = hypervisor_lib.get_hypervisor(client, uuid)
-    show_data(hypervisor)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
-@hypervisors_group.command("delete", help="Delete hypervisor")
-@click.option(
-    "-u",
-    "--uuid",
-    type=click.UUID,
-    default=None,
-    help="hypervisor UUID",
+@hypervisors_group.command("delete", help=f"Delete {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
 )
 @click.pass_context
-def delete_hypervisor(
+def delete_cmd(
     ctx: click.Context,
-    uuid: sys_uuid.UUID | None,
+    uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    hypervisor_lib.delete_hypervisor(client, uuid)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
-def _print_values(hypervisors: tp.List[dict]) -> None:
+def _print_entities(hypervisors: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Name")

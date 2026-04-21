@@ -22,47 +22,53 @@ import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 from bazooka import exceptions as bazooka_exc
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
 from genesis_devtools import constants as c
-from genesis_devtools.clients import value as value_lib
-from genesis_devtools.clients import variable as variable_lib
 from genesis_devtools import utils
 
+ENTITY = "variable"
+ENTITY_COLLECTION = c.VARIABLE_COLLECTION
 
-@click.group("vars", help="Manage variables in the Genesis installation")
+
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def variables_group():
     pass
 
 
-@variables_group.command("list", help="List variables")
+@variables_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_variables(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    variables = variable_lib.list_variables(client)
-    _print_variables(variables)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
-@variables_group.command("show", help="Show variable")
+@variables_group.command("show", help=f"Show {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def show_variable_cmd(
+def show_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        variables = variable_lib.list_variables(client, name=uuid)
-        if variables:
-            uuid = variables[0]["uuid"]
-        else:
-            raise click.ClickException(f"Variable with name {uuid} not found")
-    variable = variable_lib.get_variable(client, uuid)
-    show_data(variable)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
 
 
 @variables_group.command(
@@ -114,7 +120,7 @@ def set_variable_cmd(
     description: str | None,
     rotate: bool,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
 
     var_uuid: str | None = None
     variable: dict[str, tp.Any] | None = None
@@ -123,12 +129,14 @@ def set_variable_cmd(
         var_uuid = str(var_uuid_or_name)
         # Try to find variable by UUID
         try:
-            variable = variable_lib.get_variable(client, sys_uuid.UUID(var_uuid))
+            variable = base_client.get_entity(client, ENTITY_COLLECTION, var_uuid)
         except bazooka_exc.NotFoundError:
             # No message found, just to create a variable with specified UUID
             pass
     else:
-        variables = variable_lib.list_variables(client, name=var_uuid_or_name)
+        variables = base_client.list_entities(
+            client, ENTITY_COLLECTION, name=var_uuid_or_name
+        )
         if len(variables) > 1:
             raise click.ClickException(
                 f"Multiple variables with name {var_uuid_or_name} found; use UUID"
@@ -150,24 +158,23 @@ def set_variable_cmd(
         variable_name = name if name else var_uuid_or_name
         variable_description = description if description else ""
 
-        created = variable_lib.add_variable(
-            client,
-            {
-                "uuid": var_uuid if var_uuid else str(sys_uuid.uuid4()),
-                "project_id": str(project_id),
-                "name": variable_name,
-                "description": variable_description,
-                "setter": {"kind": "selector", "selector_strategy": "latest"},
-            },
-        )
-        variable = created
-        var_uuid = created["uuid"]
+        data = {
+            "uuid": var_uuid if var_uuid else str(sys_uuid.uuid4()),
+            "project_id": str(project_id),
+            "name": variable_name,
+            "description": variable_description,
+            "setter": {"kind": "selector", "selector_strategy": "latest"},
+        }
+        variable = base_client.add_entity(client, ENTITY_COLLECTION, data)
+        var_uuid = variable["uuid"]
 
     if rotate:
         variable_ref = f"{c.VARIABLE_COLLECTION}{var_uuid}"
-        existing_values = value_lib.list_values(client, variable=variable_ref)
+        existing_values = base_client.list_entities(
+            client, c.VALUE_COLLECTION, variable=variable_ref
+        )
         for existing in existing_values:
-            value_lib.delete_value(client, sys_uuid.UUID(existing["uuid"]))
+            base_client.delete_entity(client, c.VALUE_COLLECTION, existing["uuid"])
 
     data = {
         "uuid": str(sys_uuid.uuid4()),
@@ -177,31 +184,25 @@ def set_variable_cmd(
         "value": utils.convert_to_nearest_type(value),
         "variable": f"{c.VARIABLE_COLLECTION}{var_uuid}",
     }
-    value_lib.add_value(client, data)
+    base_client.add_entity(client, c.VALUE_COLLECTION, data)
 
-    variable = variable_lib.get_variable(client, sys_uuid.UUID(var_uuid))
-    show_data(variable)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, var_uuid)
+    show_data(data)
 
 
-@variables_group.command("delete", help="Delete variable")
+@variables_group.command("delete", help=f"Delete {ENTITY}")
 @click.argument(
     "uuid",
     type=str,
     required=True,
 )
 @click.pass_context
-def delete_variable_cmd(
+def delete_cmd(
     ctx: click.Context,
     uuid: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        variables = variable_lib.list_variables(client, name=uuid)
-        if variables:
-            uuid = variables[0]["uuid"]
-        else:
-            raise click.ClickException(f"Variable with name {uuid} not found")
-    variable_lib.delete_variable(client, uuid)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
 @variables_group.command("select", help="Select variable")
@@ -223,14 +224,16 @@ def select_variable_cmd(
     uuid: str,
     value: sys_uuid.UUID,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if not utils.is_valid_uuid(uuid):
-        variables = variable_lib.list_variables(client, name=uuid)
-        if variables:
-            uuid = variables[0]["uuid"]
+        entities = base_client.list_entities(client, ENTITY_COLLECTION, name=uuid)
+        if entities:
+            uuid = entities[0]["uuid"]
         else:
-            raise click.ClickException(f"Variable with name {uuid} not found")
-    variable_lib.select_value(client, uuid, str(value))
+            raise click.ClickException(f"{ENTITY} with name {uuid} not found")
+    base_client.action_entity(
+        client, ENTITY_COLLECTION, "select_value", uuid, value=value
+    )
 
 
 @variables_group.command("add", help="Add a new variable to the Genesis installation")
@@ -270,28 +273,26 @@ def add_variable_cmd(
     name: str,
     description: str,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if uuid is None:
         uuid = sys_uuid.uuid4()
-    variable = variable_lib.add_variable(
-        client,
-        {
-            "uuid": str(uuid),
-            "project_id": str(project_id),
-            "name": name,
-            "description": description,
-            "setter": {
-                "kind": "profile",
-                "fallback_strategy": "ignore",
-                "profiles": [],
-                "element": None,
-            },
+    data = {
+        "uuid": str(uuid),
+        "project_id": str(project_id),
+        "name": name,
+        "description": description,
+        "setter": {
+            "kind": "profile",
+            "fallback_strategy": "ignore",
+            "profiles": [],
+            "element": None,
         },
-    )
-    show_data(variable)
+    }
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    show_data(entity)
 
 
-def _print_variables(variables: tp.List[dict]) -> None:
+def _print_entities(variables: tp.List[dict]) -> None:
     table = get_table()
     table.add_column("UUID")
     table.add_column("Project")

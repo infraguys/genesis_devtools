@@ -7,7 +7,7 @@ Install element from a manifest (YAML file)
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis elements install [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                    
+ Usage: genesis elements install [OPTIONS] [PATH_OR_NAME]                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -21,7 +21,15 @@ Install element from a manifest (YAML file)
 
   Repository endpoint
 
-* `path_or_name` (REQUIRED):
+* `version`:
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `-v
+--version`
+
+  version of the element
+
+* `path_or_name`:
     * Type: text
     * Default: `sentinel.unset`
     * Usage: `path_or_name`
@@ -37,12 +45,13 @@ Install element from a manifest (YAML file)
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis elements install [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                    
+ Usage: genesis elements install [OPTIONS] [PATH_OR_NAME]                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
  Install element from a manifest (YAML file)                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │
+│ --version     -v  TEXT  version of the element                                                                                                                                                                                                                                                          │
 │ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -15,15 +15,20 @@
 #    under the License.
 from __future__ import annotations
 
+import time
 import uuid as sys_uuid
 
+from bazooka import exceptions as bazooka_exc
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
-from genesis_devtools.clients import node as node_lib
+from genesis_devtools.clients import base_client
+from genesis_devtools import logger
 from genesis_devtools import utils
+from genesis_devtools import constants as c
 
+ENTITY = "node"
+ENTITY_COLLECTION = c.NODE_COLLECTION
 
 LIST_FIELDS = ["UUID", "Project", "Name", "Cores", "RAM", "IP", "Status"]
 
@@ -33,34 +38,54 @@ def nodes_group():
     pass
 
 
-@nodes_group.command("list", help="List nodes")
+@nodes_group.command("list", help=f"List {ENTITY}s")
 @click.option(
-    "-P",
-    "--project-id",
-    type=str,
-    default=None,
-    help="Filter nodes by project",
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
 )
 @click.pass_context
-def list_node_cmd(
-    ctx: click.Context,
-    project_id: str | None,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    nodes = node_lib.list_nodes(client, project_id=project_id)
-    table = get_table(*LIST_FIELDS)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
-    for node in nodes:
-        table.add_row(
-            node["uuid"],
-            node["project_id"],
-            node["name"],
-            str(node["cores"]),
-            str(node["ram"]),
-            node["default_network"].get("ipv4", ""),
-            node["status"],
-        )
-    print_table(table)
+
+@nodes_group.command("show", help=f"Show {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
+)
+@click.pass_context
+def show_cmd(
+    ctx: click.Context,
+    uuid: str,
+) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
+
+
+@nodes_group.command("delete", help=f"Delete {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
+)
+@click.pass_context
+def delete_cmd(
+    ctx: click.Context,
+    uuid: str,
+) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
 @nodes_group.command("add", help="Add a new node to the Genesis installation")
@@ -143,20 +168,32 @@ def add_node_cmd(
     description: str,
     wait: bool,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    node = node_lib.add_node(
-        client,
-        uuid,
-        project_id,
-        cores,
-        ram,
-        root_disk,
-        image,
-        name,
-        description,
-        wait,
-    )
-    show_data(node)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    log = logger.ClickLogger()
+    if uuid is None:
+        uuid = sys_uuid.uuid4()
+    data = {
+        "uuid": str(uuid),
+        "project_id": str(project_id),
+        "cores": cores,
+        "ram": ram,
+        "name": name,
+        "description": description,
+        "disk_spec": {
+            "kind": "root_disk",
+            "size": root_disk,
+            "image": image,
+        },
+    }
+    entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
+    if not wait:
+        show_data(entity)
+        return
+    while entity["status"] != "ACTIVE":
+        log.info(f"Waiting for node to be ready. Status: {entity['status']}")
+        time.sleep(2)
+        entity = client.get(c.NODE_COLLECTION, uuid=uuid)
+    show_data(entity)
 
 
 @nodes_group.command("add-or-update", help="Add a new node or update an existing one")
@@ -239,58 +276,73 @@ def add_or_update_node_cmd(
     description: str,
     wait: bool,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    node = node_lib.add_or_update_node(
-        client,
-        uuid,
-        project_id,
-        cores,
-        ram,
-        root_disk,
-        image,
-        name,
-        description,
-        wait,
-    )
-    show_data(node)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    if uuid is None:
+        return ctx.invoke(
+            add_node_cmd,
+            uuid=uuid,
+            project_id=project_id,
+            cores=cores,
+            ram=ram,
+            root_disk=root_disk,
+            image=image,
+            name=name,
+            description=description,
+            wait=wait,
+        )
+
+    try:
+        base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    except bazooka_exc.NotFoundError:
+        return ctx.invoke(
+            add_node_cmd,
+            uuid=uuid,
+            project_id=project_id,
+            cores=cores,
+            ram=ram,
+            root_disk=root_disk,
+            image=image,
+            name=name,
+            description=description,
+            wait=wait,
+        )
+
+    data = {
+        "cores": cores,
+        "ram": ram,
+        "name": name,
+        "description": description,
+        "disk_spec": {
+            "kind": "root_disk",
+            "size": root_disk,
+            "image": image,
+        },
+    }
+    entity = base_client.update_entity(client, ENTITY_COLLECTION, uuid, data)
+    if not wait:
+        show_data(entity)
+        return None
+    log = logger.ClickLogger()
+    while entity["status"] != "ACTIVE":
+        log.info(f"Waiting for node to be ready. Status: {entity['status']}")
+        time.sleep(2)
+        entity = client.get(c.NODE_COLLECTION, uuid=uuid)
+    show_data(entity)
+    return None
 
 
-@nodes_group.command("delete", help="Delete node")
-@click.argument(
-    "uuid_name",
-    type=str,
-)
-@click.pass_context
-def delete_node_cmd(
-    ctx: click.Context,
-    uuid_name: str,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid_name):
-        nodes = node_lib.list_nodes(client, name=uuid_name)
-        if nodes:
-            uuid_name = nodes[0]["uuid"]
-        else:
-            raise click.ClickException(f"Node with name {uuid_name} not found")
-    node_lib.delete_node(client, uuid_name)
+def _print_entities(entities) -> None:
+    table = get_table(*LIST_FIELDS)
 
+    for node in entities:
+        table.add_row(
+            node["uuid"],
+            node["project_id"],
+            node["name"],
+            str(node["cores"]),
+            str(node["ram"]),
+            node["default_network"].get("ipv4", ""),
+            node["status"],
+        )
 
-@nodes_group.command("show", help="Show node")
-@click.argument(
-    "uuid_name",
-    type=str,
-)
-@click.pass_context
-def show_node_cmd(
-    ctx: click.Context,
-    uuid_name: str,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid_name):
-        nodes = node_lib.list_nodes(client, name=uuid_name)
-        if nodes:
-            uuid_name = nodes[0]["uuid"]
-        else:
-            raise click.ClickException(f"node with name {uuid_name} not found")
-    node = node_lib.get_node(client, uuid_name)
-    show_data(node)
+    print_table(table)

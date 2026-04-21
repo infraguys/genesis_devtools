@@ -1,22 +1,56 @@
 
-# hypervisors_delete
+# variables_set
 
-Delete hypervisor
+Create variable if missing and set its value by creating a new value record
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables set [OPTIONS] VAR_UUID_OR_NAME VALUE                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `uuid` (REQUIRED):
+* `var_uuid_or_name` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `uuid`
+    * Usage: `var_uuid_or_name`
+
+* `value` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `value`
+
+* `project_id`:
+    * Type: uuid
+    * Default: `none`
+    * Usage: `-p
+--project-id`
+
+  UUID of the project in which to deploy the variable
+
+* `name`:
+    * Type: text
+    * Default: `none`
+    * Usage: `--name`
+
+  Name of the variable to create if it does not exist
+
+* `description`:
+    * Type: text
+    * Default: `none`
+    * Usage: `--description`
+
+  Description of the variable to create if it does not exist
+
+* `rotate`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--rotate`
+
+  Delete all existing values for the variable before creating the new one
 
 * `help`:
     * Type: boolean
@@ -29,11 +63,15 @@ Delete hypervisor
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables set [OPTIONS] VAR_UUID_OR_NAME VALUE                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
- Delete hypervisor                                                                                                                                                                                                                                                                                         
+ Create variable if missing and set its value by creating a new value record                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ --project-id   -p  UUID  UUID of the project in which to deploy the variable                                                                                                                                                                                                                            │
+│ --name             TEXT  Name of the variable to create if it does not exist                                                                                                                                                                                                                            │
+│ --description      TEXT  Description of the variable to create if it does not exist                                                                                                                                                                                                                     │
+│ --rotate                 Delete all existing values for the variable before creating the new one                                                                                                                                                                                                        │
+│ --help                   Show this message and exit.                                                                                                                                                                                                                                                    │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
