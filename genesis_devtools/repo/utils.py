@@ -25,9 +25,12 @@ def load_repo_driver(
     genesis_cfg_file: str,
     target: str | None,
     project_dir: str,
+    genesisctl_cfg_file: str = c.CONFIG_FILE,
 ) -> base_repo.AbstractRepoDriver:
     try:
-        gen_config = utils.get_genesis_config(project_dir, genesis_cfg_file)
+        gen_config = utils.get_genesis_config(
+            project_dir, genesis_cfg_file, genesisctl_cfg_file
+        )
     except FileNotFoundError:
         raise base_repo.UnableLoadDriverError(
             f"Genesis configuration file {genesis_cfg_file} not found in {project_dir}"
@@ -48,7 +51,7 @@ def load_repo_driver(
             )
         push: dict = pushes[target]
     elif len(pushes) == 1:
-        push = next(iter(pushes.values()))
+        target, push = next(iter(pushes.items()))
     else:
         raise base_repo.UnableLoadDriverError(
             f"Multiple push targets found ({list(pushes.keys())}) in the "
@@ -61,8 +64,8 @@ def load_repo_driver(
         )
 
     # Load driver from entry points
-    driver_name = push.pop("driver")
-    driver_class = utils.load_from_entry_point(c.EP_REPO_DRIVERS, driver_name)
-    driver: base_repo.AbstractRepoDriver = driver_class(**push)
+    driver_kind = push.pop("driver")
+    driver_class = utils.load_from_entry_point(c.EP_REPO_DRIVERS, driver_kind)
+    driver: base_repo.AbstractRepoDriver = driver_class(name=target, **push)
 
     return driver

@@ -26,13 +26,13 @@ import rich_click as click
 from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.common.table import get_table, print_table, show_data
-from genesis_devtools.utils import is_valid_uuid
+from genesis_devtools import utils
 from genesis_devtools.clients import base_client
 from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import manifest as manifests_lib
 from genesis_devtools.clients import repo as repo_lib
 import genesis_devtools.constants as c
-from genesis_devtools import logger
+from genesis_devtools.logger import ClickLogger
 
 
 @click.group("elements", help="Manage elements in the Genesis installation")
@@ -189,7 +189,7 @@ def upgrade_manifest(
     The command will install the element if it's not installed or update it
     if it's installed.
     """
-    log = logger.ClickLogger()
+    log = ClickLogger()
 
     if os.path.exists(path_or_name):
         if not os.path.isfile(path_or_name):
@@ -276,7 +276,7 @@ def install_manifest_cmd(
     ctx: click.Context, repository: str, version: str | None, path_or_name: str | None
 ) -> None:
     """Install manifest from a YAML file"""
-    log = logger.ClickLogger()
+    log = ClickLogger()
 
     if not path_or_name:
         all_elements = repo_lib.get_all_elements(repository)
@@ -342,11 +342,16 @@ def i(
 )
 @click.argument("path_or_name")
 @click.pass_context
-def update_manifest_cmd(ctx: click.Context, repository: str, version: str | None, path_or_name: str) -> None:
+def update_manifest_cmd(
+    ctx: click.Context, repository: str, version: str | None, path_or_name: str
+) -> None:
     """Update manifest from a YAML file"""
-    log = logger.ClickLogger()
+    log = ClickLogger()
     manifest = upgrade_manifest(
-        base_client.get_user_api_client(ctx.obj.auth_data), repository, path_or_name, version=version
+        base_client.get_user_api_client(ctx.obj.auth_data),
+        repository,
+        path_or_name,
+        version=version,
     )
     log.important(f"Element {manifest['name']} updated successfully")
 
@@ -357,7 +362,7 @@ def update_manifest_cmd(ctx: click.Context, repository: str, version: str | None
 def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
     """Uninstall manifest by UUID, path or name"""
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    log = logger.ClickLogger()
+    log = ClickLogger()
 
     def _uninstall(element_uuid: str, element_name: str = None) -> None:
         manifests_lib.uninstall_manifest(client, element_uuid)
@@ -367,7 +372,7 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
         )
 
     # UUID
-    if is_valid_uuid(path_uuid_name):
+    if utils.is_valid_uuid(path_uuid_name):
         _uninstall(path_uuid_name)
         return
 
