@@ -51,6 +51,11 @@ class RepoMetaV1(tp.NamedTuple):
 
 
 class AbstractRepoDriver(abc.ABC):
+    @property
+    def name(self) -> str:
+        """Return the name of the repo."""
+        ...
+
     @abc.abstractmethod
     def init_repo(self) -> None:
         """Initialize the repo."""

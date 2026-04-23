@@ -18,7 +18,7 @@ from unittest.mock import MagicMock, patch
 import rich_click as click
 import pytest
 
-from genesis_devtools.cmd.cli import backup_cmd
+from genesis_devtools.cmd.stand.commands import backup_cmd
 
 
 class TestCmdBackup:
@@ -32,14 +32,14 @@ class TestCmdBackup:
         # Local backuper constructor should return our mock instance
         with (
             patch(
-                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                "genesis_devtools.cmd.stand.commands.backup_local.LocalQcowBackuper",
                 return_value=backuper_mock,
             ) as local_backuper_ctor,
             patch(
-                "genesis_devtools.cmd.cli._domains_for_backup",
+                "genesis_devtools.cmd.stand.commands._domains_for_backup",
                 return_value=domains,
             ) as domains_for_backup,
-            patch("genesis_devtools.cmd.cli.utils.load_driver") as load_driver,
+            patch("genesis_devtools.utils.load_driver") as load_driver,
         ):
             # Act
             backup_cmd.callback(
@@ -81,15 +81,15 @@ class TestCmdBackup:
 
         with (
             patch(
-                "genesis_devtools.cmd.cli.utils.load_driver",
+                "genesis_devtools.utils.load_driver",
                 return_value=backuper_mock,
             ) as load_driver,
             patch(
-                "genesis_devtools.cmd.cli._domains_for_backup",
+                "genesis_devtools.cmd.stand.commands._domains_for_backup",
                 return_value=domains,
             ) as domains_for_backup,
             patch(
-                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper"
+                "genesis_devtools.cmd.stand.commands.backup_local.LocalQcowBackuper"
             ) as local_backuper_ctor,
         ):
             # Act
@@ -123,14 +123,14 @@ class TestCmdBackup:
 
         with (
             patch(
-                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                "genesis_devtools.cmd.stand.commands.backup_local.LocalQcowBackuper",
                 return_value=backuper_mock,
             ) as local_backuper_ctor,
             patch(
-                "genesis_devtools.cmd.cli._domains_for_backup",
+                "genesis_devtools.cmd.stand.commands._domains_for_backup",
                 return_value=filtered_domains,
             ) as domains_for_backup,
-            patch("genesis_devtools.cmd.cli.utils.load_driver") as load_driver,
+            patch("genesis_devtools.utils.load_driver") as load_driver,
         ):
             # Act
             backup_cmd.callback(
@@ -186,11 +186,11 @@ class TestCmdBackup:
         backuper_mock = MagicMock()
         with (
             patch(
-                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                "genesis_devtools.cmd.stand.commands.backup_local.LocalQcowBackuper",
                 return_value=backuper_mock,
             ),
             patch(
-                "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.validate_env",
+                "genesis_devtools.cmd.stand.commands.backup_base.EncryptionCreds.validate_env",
                 side_effect=ValueError("invalid env"),
             ),
         ):
@@ -221,19 +221,19 @@ class TestCmdBackup:
 
         with (
             patch(
-                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                "genesis_devtools.cmd.stand.commands.backup_local.LocalQcowBackuper",
                 return_value=backuper_mock,
             ),
             patch(
-                "genesis_devtools.cmd.cli._domains_for_backup",
+                "genesis_devtools.cmd.stand.commands._domains_for_backup",
                 return_value=domains,
             ),
             patch(
-                "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.validate_env",
+                "genesis_devtools.cmd.stand.commands.backup_base.EncryptionCreds.validate_env",
                 return_value=None,
             ),
             patch(
-                "genesis_devtools.cmd.cli.backup_base.EncryptionCreds.from_env",
+                "genesis_devtools.cmd.stand.commands.backup_base.EncryptionCreds.from_env",
                 return_value=encryption_obj,
             ),
         ):
@@ -274,22 +274,22 @@ class TestCmdBackup:
 
         with (
             patch(
-                "genesis_devtools.cmd.cli.backup_local.LocalQcowBackuper",
+                "genesis_devtools.cmd.stand.commands.backup_local.LocalQcowBackuper",
                 return_value=backuper_mock,
             ),
             patch(
-                "genesis_devtools.cmd.cli._domains_for_backup",
+                "genesis_devtools.cmd.stand.commands._domains_for_backup",
                 return_value=domains,
             ) as domains_for_backup,
             patch(
-                "genesis_devtools.cmd.cli.time.time",
+                "genesis_devtools.cmd.stand.commands.time.time",
                 side_effect=[now_ts, now_ts],
             ),
             patch(
-                "genesis_devtools.cmd.cli.time.localtime",
+                "genesis_devtools.cmd.stand.commands.time.localtime",
                 return_value=now_struct,
             ),
-            patch("genesis_devtools.cmd.cli.time.sleep") as sleep_mock,
+            patch("genesis_devtools.cmd.stand.commands.time.sleep") as sleep_mock,
         ):
             # Make rotate raise to stop after first iteration
             backuper_mock.rotate.side_effect = SystemExit

@@ -20,19 +20,19 @@ import questionary
 import time
 import typing as tp
 import yaml
+import uuid as sys_uuid
 
 import rich_click as click
 
 from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.common.table import get_table, print_table, show_data
-from genesis_devtools.utils import is_valid_uuid
+from genesis_devtools import utils
 from genesis_devtools.clients import base_client
 from genesis_devtools.clients import element as elements_lib
-from genesis_devtools.clients import manifest as manifests_lib
 from genesis_devtools.clients import repo as repo_lib
 import genesis_devtools.constants as c
-from genesis_devtools import logger
+from genesis_devtools.logger import ClickLogger
 
 
 @click.group("elements", help="Manage elements in the Genesis installation")
@@ -154,25 +154,36 @@ def show_element_ips(ctx: click.Context, name: str) -> None:
 def _apply_with_cleanup(
     client: http_client.CollectionBaseClient,
     manifest_data: dict[str, tp.Any],
-    apply_func: tp.Callable[[http_client.CollectionBaseClient, str], None],
+    install_only: bool = False,
 ) -> dict[str, tp.Any]:
     """Apply a manifest and clean up old versions on success."""
 
     found_manifest_uuids = [
         item["uuid"]
-        for item in manifests_lib.list_manifests(client, name=manifest_data["name"])
+        for item in base_client.list_entities(
+            client, c.MANIFEST_COLLECTION, name=manifest_data["name"]
+        )
     ]
-    manifest_data = manifests_lib.add_manifest(client, manifest_data)
+    if "uuid" not in manifest_data:
+        manifest_data["uuid"] = str(sys_uuid.uuid4())
+    manifest_data = base_client.add_entity(client, c.MANIFEST_COLLECTION, manifest_data)
     manifest_uuid = manifest_data["uuid"]
 
     try:
-        apply_func(client, manifest_data["uuid"])
+        if install_only:
+            base_client.action_entity(
+                client, c.MANIFEST_COLLECTION, "uninstall", manifest_data["uuid"]
+            )
+        else:
+            base_client.action_entity(
+                client, c.MANIFEST_COLLECTION, "install", manifest_data["uuid"]
+            )
     except Exception:
-        manifests_lib.delete_manifest(client, manifest_uuid)
+        base_client.delete_entity(client, c.MANIFEST_COLLECTION, manifest_uuid)
         raise
 
     for manifest_uuid in found_manifest_uuids:
-        manifests_lib.delete_manifest(client, manifest_uuid)
+        base_client.delete_entity(client, c.MANIFEST_COLLECTION, manifest_uuid)
 
     return manifest_data
 
@@ -189,7 +200,7 @@ def upgrade_manifest(
     The command will install the element if it's not installed or update it
     if it's installed.
     """
-    log = logger.ClickLogger()
+    log = ClickLogger()
 
     if os.path.exists(path_or_name):
         if not os.path.isfile(path_or_name):
@@ -206,15 +217,9 @@ def upgrade_manifest(
     if installed and install_only:
         raise click.ClickException(f"Element {manifest['name']} is already installed")
 
-    apply_func = (
-        manifests_lib.install_manifest
-        if install_only
-        else manifests_lib.upgrade_manifest
-    )
-
     # Install element if no requirements
     if not requirements:
-        manifest = _apply_with_cleanup(client, manifest, apply_func)
+        manifest = _apply_with_cleanup(client, manifest, install_only)
         return manifest
 
     # Resolve dependencies
@@ -238,8 +243,14 @@ def upgrade_manifest(
 
         # NOTE(akremenetsky): We should install the element since there are
         # unresolved dependencies but for the simplicity we will install it here
-        req_manifest = manifests_lib.add_manifest(client, req_manifest)
-        manifests_lib.install_manifest(client, req_manifest["uuid"])
+        if "uuid" not in req_manifest:
+            req_manifest["uuid"] = str(sys_uuid.uuid4())
+        req_manifest = base_client.add_entity(
+            client, c.MANIFEST_COLLECTION, req_manifest
+        )
+        base_client.action_entity(
+            client, c.MANIFEST_COLLECTION, "install", req_manifest["uuid"]
+        )
         log.important(
             f"Element {req_manifest['name']} ({req_manifest['version']}) was installed successfully"
         )
@@ -251,7 +262,7 @@ def upgrade_manifest(
         # sleep.
         time.sleep(3)
 
-    manifest = _apply_with_cleanup(client, manifest, apply_func)
+    manifest = _apply_with_cleanup(client, manifest, install_only)
     return manifest
 
 
@@ -276,7 +287,7 @@ def install_manifest_cmd(
     ctx: click.Context, repository: str, version: str | None, path_or_name: str | None
 ) -> None:
     """Install manifest from a YAML file"""
-    log = logger.ClickLogger()
+    log = ClickLogger()
 
     if not path_or_name:
         all_elements = repo_lib.get_all_elements(repository)
@@ -342,11 +353,16 @@ def i(
 )
 @click.argument("path_or_name")
 @click.pass_context
-def update_manifest_cmd(ctx: click.Context, repository: str, version: str | None, path_or_name: str) -> None:
+def update_manifest_cmd(
+    ctx: click.Context, repository: str, version: str | None, path_or_name: str
+) -> None:
     """Update manifest from a YAML file"""
-    log = logger.ClickLogger()
+    log = ClickLogger()
     manifest = upgrade_manifest(
-        base_client.get_user_api_client(ctx.obj.auth_data), repository, path_or_name, version=version
+        base_client.get_user_api_client(ctx.obj.auth_data),
+        repository,
+        path_or_name,
+        version=version,
     )
     log.important(f"Element {manifest['name']} updated successfully")
 
@@ -357,23 +373,26 @@ def update_manifest_cmd(ctx: click.Context, repository: str, version: str | None
 def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
     """Uninstall manifest by UUID, path or name"""
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    log = logger.ClickLogger()
+    log = ClickLogger()
 
     def _uninstall(element_uuid: str, element_name: str = None) -> None:
-        manifests_lib.uninstall_manifest(client, element_uuid)
-        manifests_lib.delete_manifest(client, element_uuid)
+        base_client.action_entity(
+            client, c.MANIFEST_COLLECTION, "uninstall", element_uuid
+        )
+        base_client.delete_entity(client, c.MANIFEST_COLLECTION, element_uuid)
         log.important(
             f"Element {element_name or element_uuid} uninstalled successfully"
         )
 
     # UUID
-    if is_valid_uuid(path_uuid_name):
+    if utils.is_valid_uuid(path_uuid_name):
         _uninstall(path_uuid_name)
         return
 
     # Name
     name = path_uuid_name
-    manifests = manifests_lib.list_manifests(client, name=name)
+
+    manifests = base_client.list_entities(client, c.MANIFEST_COLLECTION, name=name)
     if len(manifests) == 1:
         uuid = manifests[0]["uuid"]
         _uninstall(uuid, name)
@@ -405,7 +424,7 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
         else:
             raise click.ClickException("Manifest must have uuid or name")
 
-        manifests = manifests_lib.list_manifests(client, **filters)
+        manifests = base_client.list_entities(client, c.MANIFEST_COLLECTION, **filters)
         if len(manifests) == 1:
             uuid = manifests[0]["uuid"]
             _uninstall(uuid, manifests[0]["name"])

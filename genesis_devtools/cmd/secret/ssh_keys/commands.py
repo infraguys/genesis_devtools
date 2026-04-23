@@ -15,6 +15,7 @@
 #    under the License.
 from __future__ import annotations
 
+import os
 import typing as tp
 import uuid as sys_uuid
 
@@ -85,7 +86,11 @@ def delete_cmd(
     base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
 
 
-@ssh_keys_group.command("add", help=f"Add a new {ENTITY} to the Genesis installation")
+@ssh_keys_group.command(
+    "add",
+    help=f"Add a new {ENTITY} to the Genesis installation, example: `secret ssh_keys add "
+    f"--node 2cc70850-3df7-4234-b9c1-0e20ed3672c7 --user ubuntu --target_public_key ~/.ssh/id_rsa.pub`",
+)
 @click.pass_context
 @click.option(
     "-u",
@@ -98,7 +103,7 @@ def delete_cmd(
     "-p",
     "--project-id",
     type=click.UUID,
-    required=True,
+    required=False,
     help=f"Name of the project in which to deploy the {ENTITY}",
 )
 @click.option(
@@ -118,27 +123,35 @@ def delete_cmd(
 @click.option(
     "--node",
     type=click.UUID,
-    required=True,
-    help=f"node uuid of the {ENTITY}",
+    required=False,
+    help="node uuid",
+)
+@click.option(
+    "--node_set",
+    type=click.UUID,
+    required=False,
+    help="node_set uuid",
 )
 @click.option(
     "--user",
     type=str,
     required=True,
-    help=f"user uuid of the {ENTITY}",
+    help=f"user name of the {ENTITY}",
 )
 @click.option(
     "--target_public_key",
     type=str,
-    default=None,
+    required=False,
+    help="key or path to it, for example: /home/user/.ssh/id_rsa.pub",
 )
 def add_cmd(
     ctx: click.Context,
     uuid: sys_uuid.UUID | None,
-    project_id: sys_uuid.UUID,
+    project_id: sys_uuid.UUID | None,
     name: str,
     description: str,
-    node: sys_uuid.UUID,
+    node: sys_uuid.UUID | None,
+    node_set: sys_uuid.UUID | None,
     user: str,
     target_public_key: str | None,
 ) -> None:
@@ -146,20 +159,38 @@ def add_cmd(
     if uuid is None:
         uuid = sys_uuid.uuid4()
 
-    data = {
+    data: dict[str, tp.Any] = {
         "uuid": str(uuid),
-        "project_id": str(project_id),
         "name": name,
         "description": description,
-        "target": {
-            "kind": "node",
-            "node": str(node),
-        },
         "user": str(user),
     }
 
+    if node is None and node_set is None:
+        raise click.ClickException("Either node or node_set must be specified")
+    if node is not None:
+        target_entity = base_client.get_entity(client, c.NODE_COLLECTION, node)
+        data["target"] = {
+            "kind": "node",
+            "node": str(node),
+        }
+    else:
+        target_entity = base_client.get_entity(client, c.SET_COLLECTION, node_set)
+        data["target"] = {
+            "kind": "node_set",
+            "node_set": str(node_set),
+        }
+
     if target_public_key is not None:
-        data["target_public_key"] = target_public_key
+        path = os.path.expanduser(target_public_key)
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                target_public_key = f.read()
+        data["target_public_key"] = target_public_key.strip()
+
+    if project_id is None:
+        project_id = target_entity["project_id"]
+    data["project_id"] = str(project_id)
 
     entity = base_client.add_entity(client, ENTITY_COLLECTION, data)
     show_data(entity)

@@ -37,6 +37,7 @@ class NginxRepoDriver(base.AbstractRepoDriver):
     def __init__(
         self,
         url: str,
+        name: str = "nginx_repo",
         auth: tuple[str, str] | None = None,
         logger: logger_base.AbstractLogger = logger_base.ClickLogger(),
     ):
@@ -48,11 +49,16 @@ class NginxRepoDriver(base.AbstractRepoDriver):
             logger: Logger instance for output
         """
         self._base_url = url.rstrip("/")
+        self._name = name
         self._auth = auth
         self._logger = logger
         self._session = requests.Session()
         if self._auth:
             self._session.auth = self._auth
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def elements_path(self) -> str:
