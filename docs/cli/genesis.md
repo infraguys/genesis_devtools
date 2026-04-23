@@ -99,6 +99,14 @@ Provides all the necessary tools for work with Genesis Platform
 
   Path to developer public key
 
+* `silent`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `-s
+--silent`
+
+  Do not print messages, warnings or errors
+
 * `help`:
     * Type: boolean
     * Default: `false`

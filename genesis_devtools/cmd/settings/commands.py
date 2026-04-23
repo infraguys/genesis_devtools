@@ -29,17 +29,18 @@ def settings_group():
     pass
 
 
-def load_config(cfg_path: str | None = c.CONFIG_FILE) -> dict:
+def load_config(cfg_path: str | None = c.CONFIG_FILE, silent: bool = False) -> dict:
     """Load configuration from file"""
     try:
         if cfg_path and os.path.exists(cfg_path):
             with open(cfg_path, "r") as f:
                 config = yaml.safe_load(f) or {}
         else:
-            click.echo(
-                f"You don't have a configuration file {cfg_path}. "
-                f"Please, read the docs https://infraguys.github.io/genesis_devtools/config/"
-            )
+            if not silent:
+                click.echo(
+                    f"You don't have a configuration file {cfg_path}. "
+                    f"Please, read the docs https://infraguys.github.io/genesis_devtools/config/"
+                )
             config = {}
     except Exception as e:
         raise click.ClickException(f"Error reading settings: {e}")

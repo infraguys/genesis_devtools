@@ -160,7 +160,7 @@ jobs:
       run: |
         set -eux
         chmod +x ./dist/genesis-linux
-        VERSION=$(./dist/genesis-linux version)
+        VERSION=$(./dist/genesis-linux --silent version)
         
         # Upload VERSION release
         curl -X PUT --upload-file ./dist/genesis-macos \
