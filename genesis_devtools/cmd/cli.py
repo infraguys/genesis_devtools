@@ -150,6 +150,13 @@ GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
     default=None,
     help="Path to developer public key",
 )
+@click.option(
+    "-s",
+    "--silent",
+    show_default=True,
+    is_flag=True,
+    help="Do not print messages, warnings or errors",
+)
 @click.pass_context
 def genesis(
     ctx: click.Context,
@@ -164,6 +171,7 @@ def genesis(
     project_id: sys_uuid.UUID | None,
     verbose: bool | None,
     developer_key_path: str | None,
+    silent: bool | None,
 ) -> None:
     if not ctx.invoked_subcommand:
         click.echo(ctx.get_help())
@@ -172,7 +180,7 @@ def genesis(
         logging.basicConfig(level=logging.DEBUG)
     # Load configuration from file (if exists)
     cfg_path = config if config else None
-    cfg = settings_commands.load_config(cfg_path)
+    cfg = settings_commands.load_config(cfg_path, silent)
 
     realm_conf = settings_commands.get_realm(cfg, realm)
     context_conf = settings_commands.get_context(realm_conf, context)
