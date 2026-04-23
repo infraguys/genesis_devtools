@@ -35,7 +35,7 @@ Add a new user to the Genesis installation
     * Usage: `-p
 --password`
 
-  Password of the user
+  Password of the user. If not provided, will be asked interactively
 
 * `description`:
     * Type: text
@@ -113,7 +113,7 @@ Add a new user to the Genesis installation
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │    --uuid                       -u  UUID  UUID of the user                                                                                                                                                                                                                                              │
 │    --name                       -n  TEXT  Name of the user                                                                                                                                                                                                                                              │
-│    --password                   -p  TEXT  Password of the user                                                                                                                                                                                                                                          │
+│    --password                   -p  TEXT  Password of the user. If not provided, will be asked interactively                                                                                                                                                                                            │
 │    --description                -D  TEXT  Description of the user                                                                                                                                                                                                                                       │
 │    --first_name                     TEXT                                                                                                                                                                                                                                                                │
 │    --last_name                      TEXT                                                                                                                                                                                                                                                                │

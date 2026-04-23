@@ -1,13 +1,13 @@
 
-# hypervisors_delete
+# variables_delete
 
-Delete hypervisor
+Delete variable
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables delete [OPTIONS] UUID                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -29,9 +29,9 @@ Delete hypervisor
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors delete [OPTIONS] UUID                                                                                                                                                                                                                                                  
+ Usage: genesis vs variables delete [OPTIONS] UUID                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
- Delete hypervisor                                                                                                                                                                                                                                                                                         
+ Delete variable                                                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

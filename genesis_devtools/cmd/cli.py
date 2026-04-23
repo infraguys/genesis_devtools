@@ -37,6 +37,7 @@ from gcl_sdk.clients.http import base as http_client
 
 import genesis_devtools.constants as c
 from genesis_devtools import utils
+from genesis_devtools.common.cmd_context import ContextObject
 from genesis_devtools.backup import base as backup_base
 from genesis_devtools.backup import local as backup_local
 from genesis_devtools.logger import ClickLogger
@@ -73,12 +74,6 @@ BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
 GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
 GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
-
-
-class CmdContext(tp.NamedTuple):
-    auth_data: dict[str, tp.Any]
-    cfg_path: str
-    developer_key_path: str
 
 
 @click.group(
@@ -224,7 +219,7 @@ def genesis(
         refresh_token=final_refresh_token,
         scope=scope,
     )
-    ctx.obj = CmdContext(auth_data, config, final_developer_key_path)
+    ctx.obj = ContextObject(auth_data, config, final_developer_key_path)
 
 
 @genesis.command(

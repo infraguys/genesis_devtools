@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import os
+import questionary
 import time
 import typing as tp
 import yaml
@@ -26,10 +27,9 @@ from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.common.table import get_table, print_table, show_data
 from genesis_devtools.utils import is_valid_uuid
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import manifest as manifests_lib
-from genesis_devtools.clients import node as node_lib
 from genesis_devtools.clients import repo as repo_lib
 import genesis_devtools.constants as c
 from genesis_devtools import logger
@@ -44,7 +44,7 @@ def elements_group():
 @click.pass_context
 def list_element_cmd(ctx: click.Context) -> None:
     """List elements"""
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     table = get_table("UUID", "Name", "Description", "Version", "Status")
 
     elements = elements_lib.list_elements(client)
@@ -64,7 +64,7 @@ def list_element_cmd(ctx: click.Context) -> None:
 @click.pass_context
 def show_element_cmd(ctx: click.Context, name: str) -> None:
     """Show element general information"""
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
 
     elements = elements_lib.list_elements(client, name=name)
     if not elements:
@@ -126,7 +126,7 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
 @click.argument("name")
 @click.pass_context
 def show_element_ips(ctx: click.Context, name: str) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
 
     element = elements_lib.list_elements(client, name=name)
     if not element:
@@ -142,11 +142,13 @@ def show_element_ips(ctx: click.Context, name: str) -> None:
         raise click.ClickException(f"No nodes found for element {name}")
     elif len(resources) > 1:
         for resource in resources:
-            node = node_lib.get_node(client, resource["uuid"])
-            click.echo(f"Name: {node['name']}, IP: {node_lib.get_node_ip(node)}")
+            node = client.get(c.NODE_COLLECTION, uuid=resource["uuid"])
+            click.echo(
+                f"Name: {node['name']}, IP: {node['default_network'].get('ipv4', None)}"
+            )
     else:
-        node = node_lib.get_node(client, resources[0]["uuid"])
-        click.echo(node_lib.get_node_ip(node))
+        node = client.get(c.NODE_COLLECTION, uuid=resources[0]["uuid"])
+        click.echo(node["default_network"].get("ipv4", None))
 
 
 def _apply_with_cleanup(
@@ -180,6 +182,7 @@ def upgrade_manifest(
     repository: str,
     path_or_name: str,
     install_only: bool = False,
+    version: str | None = None,
 ) -> dict[str, tp.Any]:
     """Install or update element from a YAML file or repository.
 
@@ -194,7 +197,7 @@ def upgrade_manifest(
         with open(path_or_name, "r", encoding="utf-8") as f:
             manifest = yaml.safe_load(f)
     else:
-        manifest = repo_lib.download_manifest(repository, path_or_name)
+        manifest = repo_lib.download_manifest(repository, path_or_name, version)
 
     requirements: dict = manifest.get("requirements", {})
 
@@ -260,18 +263,33 @@ def upgrade_manifest(
     show_default=True,
     help="Repository endpoint",
 )
-@click.argument("path_or_name")
+@click.option(
+    "-v",
+    "--version",
+    type=str,
+    required=False,
+    help="version of the element",
+)
+@click.argument("path_or_name", required=False)
 @click.pass_context
 def install_manifest_cmd(
-    ctx: click.Context, repository: str, path_or_name: str
+    ctx: click.Context, repository: str, version: str | None, path_or_name: str | None
 ) -> None:
     """Install manifest from a YAML file"""
     log = logger.ClickLogger()
+
+    if not path_or_name:
+        all_elements = repo_lib.get_all_elements(repository)
+        path_or_name = questionary.select(
+            "Select manifest to install",
+            choices=[questionary.Choice(e) for e in all_elements],
+        ).ask()
     manifest = upgrade_manifest(
-        get_user_api_client(ctx.obj.auth_data),
+        base_client.get_user_api_client(ctx.obj.auth_data),
         repository,
         path_or_name,
         install_only=True,
+        version=version,
     )
     log.important(
         f"Element {manifest['name']} ({manifest['version']}) was installed successfully"
@@ -286,15 +304,23 @@ def install_manifest_cmd(
     show_default=True,
     help="Repository endpoint",
 )
-@click.argument("path_or_name")
+@click.option(
+    "-v",
+    "--version",
+    type=str,
+    required=False,
+    help="version of the element",
+)
+@click.argument("path_or_name", required=False)
 @click.pass_context
 def i(
-    ctx: click.Context, repository: str, path_or_name: str
+    ctx: click.Context, repository: str, version: str | None, path_or_name: str | None
 ) -> None:  # pragma: no cover
     ctx.invoke(
         install_manifest_cmd,
         repository=repository,
         path_or_name=path_or_name,
+        version=version,
     )
     return None
 
@@ -307,13 +333,20 @@ def i(
     show_default=True,
     help="Repository endpoint",
 )
+@click.option(
+    "-v",
+    "--version",
+    type=str,
+    required=False,
+    help="version of the element",
+)
 @click.argument("path_or_name")
 @click.pass_context
-def update_manifest_cmd(ctx: click.Context, repository: str, path_or_name: str) -> None:
+def update_manifest_cmd(ctx: click.Context, repository: str, version: str | None, path_or_name: str) -> None:
     """Update manifest from a YAML file"""
     log = logger.ClickLogger()
     manifest = upgrade_manifest(
-        get_user_api_client(ctx.obj.auth_data), repository, path_or_name
+        base_client.get_user_api_client(ctx.obj.auth_data), repository, path_or_name, version=version
     )
     log.important(f"Element {manifest['name']} updated successfully")
 
@@ -323,7 +356,7 @@ def update_manifest_cmd(ctx: click.Context, repository: str, path_or_name: str) 
 @click.pass_context
 def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
     """Uninstall manifest by UUID, path or name"""
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     log = logger.ClickLogger()
 
     def _uninstall(element_uuid: str, element_name: str = None) -> None:
@@ -383,3 +416,22 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
         return
 
     log.warn(f"Element {path_uuid_name} not found")
+
+
+@elements_group.command("available", help="Print available elements in repository")
+def available_elements() -> None:
+    """Update manifest from a YAML file"""
+    elements = repo_lib.get_all_elements(c.ELEMENT_REPO_URL)
+    for e in elements:
+        click.echo(e)
+
+
+@elements_group.command("versions", help="Print available elements in repository")
+@click.argument("name")
+def versions(name) -> None:
+    """Update manifest from a YAML file"""
+    element_versions = repo_lib.get_element_versions_by_inventory(
+        c.ELEMENT_REPO_URL, name
+    )
+    for version in element_versions:
+        click.echo(version)

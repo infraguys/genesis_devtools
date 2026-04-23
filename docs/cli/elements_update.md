@@ -21,6 +21,14 @@ Update element from a YAML file
 
   Repository endpoint
 
+* `version`:
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `-v
+--version`
+
+  version of the element
+
 * `path_or_name` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
@@ -43,6 +51,7 @@ Update element from a YAML file
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │
+│ --version     -v  TEXT  version of the element                                                                                                                                                                                                                                                          │
 │ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

@@ -1,13 +1,13 @@
 
-# genesis_elements
+# vs_variables
 
-Manage elements in the Genesis installation
+Manage variables in the Genesis installation
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis elements [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                       
+ Usage: genesis vs variables [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -24,22 +24,19 @@ Manage elements in the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis elements [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                       
+ Usage: genesis vs variables [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
- Manage elements in the Genesis installation                                                                                                                                                                                                                                                               
+ Manage variables in the Genesis installation                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ available                                               Print available elements in repository                                                                                                                                                                                                          │
-│ i                                                       Install element from a manifest (YAML file)                                                                                                                                                                                                     │
-│ install                                                 Install element from a manifest (YAML file)                                                                                                                                                                                                     │
-│ ips                                                     Show element ips                                                                                                                                                                                                                                │
-│ list                                                    List elements                                                                                                                                                                                                                                   │
-│ show                                                    Show element general information                                                                                                                                                                                                                │
-│ uninstall                                               Uninstall manifest by UUID, path or name                                                                                                                                                                                                        │
-│ update                                                  Update element from a YAML file                                                                                                                                                                                                                 │
-│ versions                                                Print available elements in repository                                                                                                                                                                                                          │
+│ add                       Add a new variable to the Genesis installation                                                                                                                                                                                                                                │
+│ delete                    Delete variable                                                                                                                                                                                                                                                               │
+│ list                      List variables                                                                                                                                                                                                                                                                │
+│ select                    Select variable                                                                                                                                                                                                                                                               │
+│ set                       Create variable if missing and set its value by creating a new value record                                                                                                                                                                                                   │
+│ show                      Show variable                                                                                                                                                                                                                                                                 │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

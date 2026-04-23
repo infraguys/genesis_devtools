@@ -24,6 +24,8 @@ import rich_click as click
 from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
 
+from genesis_devtools import utils
+
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
 
@@ -43,6 +45,26 @@ def get_user_api_client(auth_data: dict) -> http_client.CollectionBaseClient:
     return client
 
 
+def _get_entity_uuid(
+    client: http_client.CollectionBaseClient,
+    collection: str,
+    entity_uuid_or_name: sys_uuid.UUID | str,
+) -> sys_uuid.UUID | str:
+    if not utils.is_valid_uuid(entity_uuid_or_name):
+        entities = list_entities(client, collection, name=entity_uuid_or_name)
+        if entities:
+            if len(entities) > 1:
+                raise click.ClickException(
+                    f"Multiple entities ({collection}) with name {entity_uuid_or_name} found"
+                )
+            return entities[0]["uuid"]
+        else:
+            raise click.ClickException(
+                f"entity ({collection}) with name {entity_uuid_or_name} not found"
+            )
+    return entity_uuid_or_name
+
+
 def list_entities(
     client: http_client.CollectionBaseClient, collection: str, **filters
 ) -> list[dict[str, tp.Any]]:
@@ -52,10 +74,21 @@ def list_entities(
 def get_entity(
     client: http_client.CollectionBaseClient,
     collection: str,
-    entity_uuid: sys_uuid.UUID | str,
+    entity_uuid_or_name: sys_uuid.UUID | str,
 ):
-    entity = client.get(collection, uuid=entity_uuid)
-    return entity
+    if not utils.is_valid_uuid(entity_uuid_or_name):
+        entities = list_entities(client, collection, name=entity_uuid_or_name)
+        if entities:
+            if len(entities) > 1:
+                raise click.ClickException(
+                    f"Multiple entities ({collection}) with name {entity_uuid_or_name} found"
+                )
+            return entities[0]
+        else:
+            raise click.ClickException(
+                f"entity ({collection}) with name {entity_uuid_or_name} not found"
+            )
+    return client.get(collection, uuid=entity_uuid_or_name)
 
 
 def add_entity(
@@ -76,21 +109,22 @@ def add_entity(
 def update_entity(
     client: http_client.CollectionBaseClient,
     collection: str,
-    uuid: sys_uuid.UUID | str,
+    entity_uuid_or_name: sys_uuid.UUID | str,
     data: dict[str, tp.Any],
 ) -> dict[str, tp.Any]:
-    return client.update(collection, uuid, **data)
+    return client.update(
+        collection, _get_entity_uuid(client, collection, entity_uuid_or_name), **data
+    )
 
 
 def delete_entity(
     client: http_client.CollectionBaseClient,
     collection: str,
-    uuid: sys_uuid.UUID | str,
+    entity_uuid_or_name: sys_uuid.UUID | str,
 ) -> None:
-    try:
-        client.delete(collection, uuid=uuid)
-    except bazooka_exc.NotFoundError:
-        raise click.ClickException(f"UUID {uuid} not found")
+    client.delete(
+        collection, uuid=_get_entity_uuid(client, collection, entity_uuid_or_name)
+    )
 
 
 def action_entity(
@@ -98,8 +132,9 @@ def action_entity(
     collection: str,
     action: str,
     uuid: sys_uuid.UUID | str,
+    **kwargs,
 ) -> None:
     try:
-        client.do_action(collection, uuid=uuid, name=action, invoke=True)
+        client.do_action(collection, uuid=uuid, name=action, invoke=True, **kwargs)
     except bazooka_exc.NotFoundError:
         raise click.ClickException(f"UUID {uuid} not found")

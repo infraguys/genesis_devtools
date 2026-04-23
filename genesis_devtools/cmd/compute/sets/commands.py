@@ -18,38 +18,76 @@ from __future__ import annotations
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
-from genesis_devtools.clients import set as set_lib
+from genesis_devtools.clients import base_client
 from genesis_devtools import utils
+
+from genesis_devtools import constants as c
+
+ENTITY = "set"
+ENTITY_COLLECTION = c.SET_COLLECTION
 
 
 LIST_FIELDS = ["UUID", "Project", "Name", "Cores", "RAM", "NodeType", "Status"]
-SHOW_FIELDS = [
-    "UUID",
-    "Project",
-    "Name",
-    "Cores",
-    "RAM",
-    "Replicas",
-    "Disk_Spec",
-    "Network",
-    "NodeType",
-    "SetType",
-    "Status",
-]
 
 
-@click.group("sets", help="Manage sets in the Genesis installation")
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def sets_group():
     pass
 
 
-@sets_group.command("list", help="List sets")
+@sets_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_sets(ctx: click.Context) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    sets = set_lib.list_sets(client)
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
+
+
+@sets_group.command("show", help=f"Show {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
+)
+@click.pass_context
+def show_cmd(
+    ctx: click.Context,
+    uuid: str,
+) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, uuid)
+    show_data(data)
+
+
+@sets_group.command("delete", help=f"Delete {ENTITY}")
+@click.argument(
+    "uuid",
+    type=str,
+    required=True,
+)
+@click.pass_context
+def delete_cmd(
+    ctx: click.Context,
+    uuid: str,
+) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    base_client.delete_entity(client, ENTITY_COLLECTION, uuid)
+
+
+def _print_entities(sets: list) -> None:
     table = get_table(*LIST_FIELDS)
+
     for set_obj in sets:
         table.add_row(
             set_obj["uuid"],
@@ -62,46 +100,3 @@ def list_sets(ctx: click.Context) -> None:
         )
 
     print_table(table)
-
-
-@sets_group.command("show", help="Show set")
-@click.argument(
-    "uuid",
-    type=str,
-    required=True,
-)
-@click.pass_context
-def show_set_cmd(
-    ctx: click.Context,
-    uuid: str,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        sets = set_lib.list_sets(client, name=uuid)
-        if sets:
-            uuid = sets[0]["uuid"]
-        else:
-            raise click.ClickException(f"set with name {uuid} not found")
-    set_obj = set_lib.get_set(client, uuid)
-    show_data(set_obj)
-
-
-@sets_group.command("delete", help="Delete set")
-@click.argument(
-    "uuid",
-    type=str,
-    required=True,
-)
-@click.pass_context
-def delete_set_cmd(
-    ctx: click.Context,
-    uuid: str,
-) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
-    if not utils.is_valid_uuid(uuid):
-        sets = set_lib.list_sets(client, name=uuid)
-        if sets:
-            uuid = sets[0]["uuid"]
-        else:
-            raise click.ClickException(f"set with name {uuid} not found")
-    set_lib.delete_set(client, uuid)
