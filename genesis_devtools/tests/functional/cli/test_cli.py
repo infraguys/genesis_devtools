@@ -18,7 +18,7 @@ import os
 import tempfile
 
 from click.testing import CliRunner
-
+from click.globals import get_current_context
 
 from genesis_devtools import utils
 from genesis_devtools.cmd import cli
@@ -55,7 +55,9 @@ class TestCli:
     def test_save_config(self, cli_runner, cli_config_data):
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
             settings_commands._save_config(cli_config_data, f.name)
-            saved = settings_commands.load_config(f.name)
+            saved = settings_commands.load_config(
+                get_current_context(silent=True), f.name
+            )
             assert saved["current-realm"] == cli_config_data["current-realm"]
 
     def test_view_command(self, cli_runner):

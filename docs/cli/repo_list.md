@@ -1,7 +1,7 @@
 
 # repo_list
 
-List the repository
+List elements in the repository
 
 ## Usage
 
@@ -55,7 +55,7 @@ List the repository
                                                                                                                                                                                                                                                                                                            
  Usage: genesis repo list [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
- List the repository                                                                                                                                                                                                                                                                                       
+ List elements in the repository                                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --genesis-cfg-file  -c  TEXT  Name of the project configuration file                                                                                                                                                                                                                                    │

@@ -29,13 +29,41 @@ def settings_group():
     pass
 
 
-def load_config(cfg_path: str | None = c.CONFIG_FILE, silent: bool = False) -> dict:
+def load_config(
+    ctx: click.Context, cfg_path: str | None = c.CONFIG_FILE, silent: bool = False
+) -> dict:
     """Load configuration from file"""
     try:
         if cfg_path and os.path.exists(cfg_path):
             with open(cfg_path, "r") as f:
                 config = yaml.safe_load(f) or {}
         else:
+            if not silent:
+                endpoint_provided = (
+                    ctx.get_parameter_source("endpoint")
+                    == click.core.ParameterSource.COMMANDLINE
+                )
+                user_provided = (
+                    ctx.get_parameter_source("user")
+                    == click.core.ParameterSource.COMMANDLINE
+                )
+                password_provided = (
+                    ctx.get_parameter_source("password")
+                    == click.core.ParameterSource.COMMANDLINE
+                )
+                access_token_provided = (
+                    ctx.get_parameter_source("access_token")
+                    == click.core.ParameterSource.COMMANDLINE
+                )
+                refresh_token_provided = (
+                    ctx.get_parameter_source("refresh_token")
+                    == click.core.ParameterSource.COMMANDLINE
+                )
+                if endpoint_provided and (
+                    (user_provided and password_provided)
+                    or (access_token_provided and refresh_token_provided)
+                ):
+                    silent = True
             if not silent:
                 click.echo(
                     f"You don't have a configuration file {cfg_path}. "
@@ -106,7 +134,7 @@ def get_context(realm: dict, context: str | None = None) -> dict:
 )
 @click.pass_context
 def view(ctx: click.Context, raw: bool) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if raw:
         click.echo(yaml.dump(config, default_flow_style=False))
@@ -118,7 +146,7 @@ def view(ctx: click.Context, raw: bool) -> None:
 @settings_group.command("current-realm", help="Display the current-realm")
 @click.pass_context
 def current_realm(ctx: click.Context) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
     realm = get_current_realm(config)
     click.echo(realm if realm else "No current realm set")
 
@@ -127,7 +155,7 @@ def current_realm(ctx: click.Context) -> None:
 @click.argument("realm", type=str, required=True)
 @click.pass_context
 def use_realm(ctx: click.Context, realm: str) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if "realms" not in config or realm not in config["realms"]:
         raise click.ClickException(f"realm '{realm}' not found")
@@ -154,7 +182,7 @@ def use_realm(ctx: click.Context, realm: str) -> None:
 )
 @click.pass_context
 def list_realms(ctx: click.Context, output: str, show_sensitive: bool) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if not show_sensitive:
         for realm in config.get("realms", {}).values():
@@ -206,7 +234,7 @@ def set_realm(
     skip_tls_verify: bool,
     current: bool,
 ) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if "realms" not in config:
         config["realms"] = {}
@@ -234,7 +262,7 @@ def set_realm(
 @click.argument("realm", type=str, required=True)
 @click.pass_context
 def delete_realm(ctx: click.Context, realm: str) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if "realms" not in config or realm not in config["realms"]:
         raise click.ClickException(f"realm '{realm}' not found")
@@ -249,7 +277,7 @@ def delete_realm(ctx: click.Context, realm: str) -> None:
 @click.argument("value", type=str, required=True)
 @click.pass_context
 def config_set(ctx: click.Context, key: str, value: str) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
     config[key] = value
     _save_config(config, ctx.obj.cfg_path)
     click.echo(f"Set {key} to {value}")
@@ -259,7 +287,7 @@ def config_set(ctx: click.Context, key: str, value: str) -> None:
 @click.argument("key", type=str, required=True)
 @click.pass_context
 def config_unset(ctx: click.Context, key: str) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
     if key in config:
         del config[key]
         _save_config(config, ctx.obj.cfg_path)
@@ -272,7 +300,7 @@ def config_unset(ctx: click.Context, key: str) -> None:
 @click.argument("key", type=str, required=True)
 @click.pass_context
 def config_get(ctx: click.Context, key: str) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
     if key in config:
         click.echo(config[key])
     else:
@@ -329,7 +357,7 @@ def set_context(
     refresh_token: str | None,
     current: bool,
 ) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if "realms" not in config:
         config["realms"] = {}
@@ -374,7 +402,7 @@ def use_context(
     name: str,
     realm: str,
 ) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if "realms" not in config or realm not in config["realms"]:
         raise click.ClickException(f"Realm '{realm}' not found")
@@ -406,7 +434,7 @@ def delete_context(
     name: str,
     realm: str | None,
 ) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if realm:
         if "realms" not in config or realm not in config["realms"]:
@@ -439,7 +467,7 @@ def delete_context(
 def rename_context(
     ctx: click.Context, old_context: str, new_context: str, realm: str
 ) -> None:
-    config = load_config(ctx.obj.cfg_path)
+    config = ctx.obj.cfg
 
     if "realms" not in config or realm not in config["realms"]:
         raise click.ClickException(f"Realm '{realm}' not found")
@@ -529,7 +557,9 @@ def _build_interactive_config() -> dict:
     }
 
 
-@settings_group.command("init", help="Interactively create a genesis settings file")
+@settings_group.command(
+    "init", help="Interactively create/update a genesis settings file"
+)
 @click.pass_context
 def init_config(ctx: click.Context) -> None:
     cfg_path = ctx.obj.cfg_path or c.CONFIG_FILE

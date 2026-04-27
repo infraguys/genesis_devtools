@@ -24,9 +24,10 @@ import itertools
 import subprocess
 import uuid
 import typing as tp
+import urllib.parse
+import socket
 from importlib.metadata import entry_points
 
-from jsonschema.exceptions import ValidationError
 import git
 import yaml
 import rich_click as click
@@ -34,7 +35,6 @@ from cryptography.hazmat.primitives import ciphers
 from cryptography.hazmat.primitives.ciphers import modes as cipher_models
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat import backends as crypto_back
-import openapi_schema_validator
 
 import genesis_devtools.constants as c
 
@@ -67,12 +67,15 @@ def load_driver(config_file: str, group: str = c.EP_BACKUP_DRIVERS) -> tp.Any:
 
 
 def get_genesis_config(
-    project_dir: str, genesiss_cfg_file: str = c.DEF_GEN_CFG_FILE_NAME
+    project_dir: str,
+    genesis_cfg_file: str = c.DEF_GEN_CFG_FILE_NAME,
+    genesisctl_cfg_file: str = c.CONFIG_FILE,
 ) -> tp.Dict[str, tp.Any]:
     """Find the project configuration file."""
     alternatives = [
-        os.path.join(project_dir, genesiss_cfg_file),
-        os.path.join(project_dir, c.DEF_GEN_WORK_DIR_NAME, genesiss_cfg_file),
+        os.path.join(project_dir, genesis_cfg_file),
+        os.path.join(project_dir, c.DEF_GEN_WORK_DIR_NAME, genesis_cfg_file),
+        genesisctl_cfg_file,
     ]
 
     for alt in alternatives:
@@ -104,7 +107,7 @@ def get_keys_by_path_or_env(
 
         with open(cli_path) as f:
             return f.read()
-    return
+    return None
 
 
 def installation_net_name(name: str) -> str:
@@ -121,6 +124,11 @@ def installation_bootstrap_name(name: str) -> str:
 
 def installation_name_from_bootstrap(bootstrap_name: str) -> str:
     return bootstrap_name.replace("-bootstrap", "")
+
+
+def get_repo(path: str) -> git.Repo:
+    repo = git.Repo(path)
+    return repo
 
 
 def get_project_version(
@@ -265,6 +273,8 @@ def compress_dir(
     :param directory: The path to the directory to be compressed.
     :param output_dir: The path to the directory where the compressed
                        archive will be placed.
+    :param compression_format: The compression format to use. Defaults
+                              to gztar.
     """
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
@@ -455,6 +465,8 @@ def current_dir_name() -> str:
 
 def is_valid_uuid(uuid_to_test: tp.Any, version: int = 4) -> bool:
     try:
+        if isinstance(uuid_to_test, uuid.UUID):
+            return True
         uuid.UUID(uuid_to_test, version=version)
         return True
     except (ValueError, AttributeError):
@@ -498,6 +510,9 @@ PROJECT_PATH = get_project_path()
 
 
 def validate_config(data: dict, schema: tp.Optional[dict]) -> None:
+    import openapi_schema_validator
+    from jsonschema.exceptions import ValidationError
+
     if data and schema:
         try:
             openapi_schema_validator.validate(
@@ -529,3 +544,15 @@ def convert_input_multiply(params: tuple[str, ...]) -> dict[str, str]:
         key, value = param.split("=", 1)
         result[key] = value
     return result
+
+
+def get_ip_from_url(url: str) -> str:
+    parsed_url = urllib.parse.urlparse(url)
+    hostname = parsed_url.hostname
+    if not hostname:
+        raise ValueError("Invalid URL: no hostname found")
+    try:
+        ip_info = socket.getaddrinfo(hostname, None)
+        return ip_info[0][4][0]
+    except socket.gaierror as e:
+        raise RuntimeError(f"Failed to resolve hostname {hostname}: {e}")
