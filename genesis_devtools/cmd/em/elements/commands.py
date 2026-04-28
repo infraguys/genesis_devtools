@@ -172,11 +172,11 @@ def _apply_with_cleanup(
     try:
         if install_only:
             base_client.action_entity(
-                client, c.MANIFEST_COLLECTION, "uninstall", manifest_data["uuid"]
+                client, c.MANIFEST_COLLECTION, "install", manifest_data["uuid"]
             )
         else:
             base_client.action_entity(
-                client, c.MANIFEST_COLLECTION, "install", manifest_data["uuid"]
+                client, c.MANIFEST_COLLECTION, "upgrade", manifest_data["uuid"]
             )
     except Exception:
         base_client.delete_entity(client, c.MANIFEST_COLLECTION, manifest_uuid)
