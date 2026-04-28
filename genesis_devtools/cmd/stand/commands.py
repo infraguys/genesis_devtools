@@ -173,6 +173,7 @@ def _bootstrap_core(
     realm_uuid: str,
     realm_secret: str,
     realm_tokens: dict,
+    ssh_public_key: str | None = None,
 ) -> None:
     logger = ClickLogger()
     logger.info("Starting genesis bootstrap in 'core' mode")
@@ -246,6 +247,7 @@ def _bootstrap_core(
             realm_uuid=realm_uuid,
             realm_secret=realm_secret,
             realm_tokens=realm_tokens,
+            developer_keys=ssh_public_key,
         )
         logger.info(f"Launched genesis installation in `{profile.value}` profile")
 
@@ -481,6 +483,16 @@ def _bootstrap_core(
     is_flag=True,
     help="Interactively create a genesis settings file",
 )
+@click.option(
+    "--ssh-public-key",
+    multiple=True,
+    type=click.Path(exists=True),
+    help=(
+        "Path to a public SSH key file to inject into the VM "
+        "after bootstrap. Can be specified multiple times. "
+        "If not provided, no key will be injected."
+    ),
+)
 @click.pass_context
 def bootstrap_cmd(
     ctx: click.Context,
@@ -509,6 +521,7 @@ def bootstrap_cmd(
     org_token: str | None,
     ecosystem_endpoint: str,
     settings: bool,
+    ssh_public_key: tp.Tuple[str, ...],
 ) -> None:
     if not inventory or not os.path.exists(inventory):
         raise click.UsageError("No inventory specified or not found")
@@ -630,6 +643,15 @@ def bootstrap_cmd(
     )
     eco_manifest_path = str(inventory_eco_instance.manifests[0])
 
+    ssh_public_key_content = None
+    if ssh_public_key:
+        key_parts = []
+        for key_path in ssh_public_key:
+            with open(key_path) as f:
+                key_content = f.read().strip()
+                key_parts.append(key_content + "\n")
+        ssh_public_key_content = "".join(key_parts)
+
     _bootstrap_core(
         image_path=image_path,
         image_uri=image_uri,
@@ -652,6 +674,7 @@ def bootstrap_cmd(
         realm_uuid=realm_uuid,
         realm_secret=realm_secret,
         realm_tokens=realm_tokens,
+        ssh_public_key=ssh_public_key_content,
     )
     if settings:
         from genesis_devtools.cmd.settings.commands import init_config
