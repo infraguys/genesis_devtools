@@ -1,17 +1,30 @@
 
-# genesis_hello
+# genesis_sync
 
-Display a genesis message
+copy genesis core from local git repo to bootstrap
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis hello [OPTIONS]                                                                                                                                                                                                                                                                            
+ Usage: genesis sync [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
+
+* `target_dir`:
+    * Type: path
+    * Default: `sentinel.unset`
+    * Usage: `-t
+--target-dir`
+
+  Directory to copy genesis core to
+
+* `project_dir`:
+    * Type: path
+    * Default: `sentinel.unset`
+    * Usage: `project_dir`
 
 * `help`:
     * Type: boolean
@@ -24,11 +37,12 @@ Display a genesis message
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis hello [OPTIONS]                                                                                                                                                                                                                                                                            
+ Usage: genesis sync [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
- Display a genesis message                                                                                                                                                                                                                                                                                 
+ copy genesis core from local git repo to bootstrap                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ --target-dir  -t  PATH  Directory to copy genesis core to                                                                                                                                                                                                                                               │
+│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

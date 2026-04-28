@@ -1,5 +1,5 @@
 
-# genesis_push
+# repo_push
 
 Push the element to the repository
 
@@ -7,7 +7,7 @@ Push the element to the repository
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis push [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                               
+ Usage: genesis repo push [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -69,7 +69,7 @@ Push the element to the repository
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis push [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                               
+ Usage: genesis repo push [OPTIONS] [PROJECT_DIR]                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
  Push the element to the repository                                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            

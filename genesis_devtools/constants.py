@@ -81,6 +81,7 @@ PERMISSION_BINDING_COLLECTION = "/v1/iam/permission_bindings/"
 CONFIG_DIR = "~/.genesis"
 CONFIG_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.yaml")
 LAST_CHECK_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.last_version_check")
+BOOTSTRAP_USER = "ubuntu"
 UPDATE_CHECK_INTERVAL = 60 * 60  # 1 hour in seconds
 
 

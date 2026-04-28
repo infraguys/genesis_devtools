@@ -21,3 +21,4 @@ class ContextObject(tp.NamedTuple):
     auth_data: dict[str, tp.Any]
     cfg_path: str
     developer_key_path: str
+    cfg: dict[str, tp.Any]

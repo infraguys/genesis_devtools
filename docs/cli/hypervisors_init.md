@@ -1,13 +1,13 @@
 
-# genesis_hello
+# hypervisors_init
 
-Display a genesis message
+Initialize hypervisor
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis hello [OPTIONS]                                                                                                                                                                                                                                                                            
+ Usage: genesis compute hypervisors init [OPTIONS]                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -24,9 +24,9 @@ Display a genesis message
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis hello [OPTIONS]                                                                                                                                                                                                                                                                            
+ Usage: genesis compute hypervisors init [OPTIONS]                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
- Display a genesis message                                                                                                                                                                                                                                                                                 
+ Initialize hypervisor                                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

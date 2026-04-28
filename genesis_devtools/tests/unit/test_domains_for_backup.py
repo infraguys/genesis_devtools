@@ -15,14 +15,14 @@
 #    under the License.
 from unittest.mock import patch
 
-from genesis_devtools.cmd.cli import _domains_for_backup
+from genesis_devtools.cmd.stand.commands import _domains_for_backup
 
 
 def test_domains_for_backup_exclude_patterns():
     all_domains = {"vm1", "vm2", "stand-01", "stand-02"}
 
     with patch(
-        "genesis_devtools.cmd.cli.libvirt.list_domains",
+        "genesis_devtools.cmd.stand.commands.libvirt.list_domains",
         return_value=all_domains,
     ):
         # Case 1: exclude multiple exact names

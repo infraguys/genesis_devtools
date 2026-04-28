@@ -132,9 +132,10 @@ def action_entity(
     collection: str,
     action: str,
     uuid: sys_uuid.UUID | str,
+    invoke: bool = True,
     **kwargs,
 ) -> None:
     try:
-        client.do_action(collection, uuid=uuid, name=action, invoke=True, **kwargs)
+        client.do_action(collection, uuid=uuid, name=action, invoke=invoke, **kwargs)
     except bazooka_exc.NotFoundError:
         raise click.ClickException(f"UUID {uuid} not found")

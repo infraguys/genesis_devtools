@@ -72,7 +72,9 @@ class SimpleBuilder:
         # Move config/artifact to the final location
         if not os.path.exists(_output_dir):
             os.makedirs(_output_dir)
-        dst_path = os.path.abspath(os.path.join(_output_dir, os.path.basename(config_artifact.path)))
+        dst_path = os.path.abspath(
+            os.path.join(_output_dir, os.path.basename(config_artifact.path))
+        )
         src_path = config_artifact.abs_path
         shutil.copy(src_path, _output_dir)
 

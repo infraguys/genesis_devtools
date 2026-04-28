@@ -29,10 +29,16 @@ class FSRepoDriver(base.AbstractRepoDriver):
     def __init__(
         self,
         path: str,
+        name: str = "fs_repo",
         logger: logger_base.AbstractLogger = logger_base.ClickLogger(),
     ):
         self._repo_path = path
         self._logger = logger
+        self._name = name
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     def _push_directory(
         self, element: builder_base.ElementInventory, dst: str, name: str
