@@ -16,47 +16,52 @@
 from __future__ import annotations
 
 import os
-import questionary
+from rich.prompt import Prompt
+import subprocess
+import tempfile
 import time
 import typing as tp
 import yaml
-import uuid as sys_uuid
 
 import rich_click as click
 
+from bazooka import exceptions as bazooka_exc
 from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.common.table import get_table, print_table, show_data
 from genesis_devtools import utils
 from genesis_devtools.clients import base_client
-from genesis_devtools.clients import element as elements_lib
 from genesis_devtools.clients import repo as repo_lib
 import genesis_devtools.constants as c
 from genesis_devtools.logger import ClickLogger
 
 
-@click.group("elements", help="Manage elements in the Genesis installation")
+ENTITY = "element"
+ENTITY_COLLECTION = c.ELEMENT_COLLECTION
+
+
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def elements_group():
     pass
 
 
-@elements_group.command("list", help="List elements")
+@elements_group.command("list", help=f"List {ENTITY}s")
+@click.option(
+    "-f",
+    "--filters",
+    multiple=True,
+    help=(
+        "Additional filters to pass to the api. "
+        "The format is 'key=value'. For example: --f "
+        "parent=11111111-1111-1111-1111-11111111111 --filters status=NEW"
+    ),
+)
 @click.pass_context
-def list_element_cmd(ctx: click.Context) -> None:
-    """List elements"""
+def list_cmd(ctx: click.Context, filters: tuple[str, ...]) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
-    table = get_table("UUID", "Name", "Description", "Version", "Status")
-
-    elements = elements_lib.list_elements(client)
-    for element in elements:
-        table.add_row(
-            element["uuid"],
-            element["name"],
-            element["description"],
-            element["version"],
-            element["status"],
-        )
-    print_table(table)
+    filters = utils.convert_input_multiply(filters)
+    entities = base_client.list_entities(client, ENTITY_COLLECTION, **filters)
+    _print_entities(entities)
 
 
 @elements_group.command("show", help="Show element general information")
@@ -65,18 +70,12 @@ def list_element_cmd(ctx: click.Context) -> None:
 def show_element_cmd(ctx: click.Context, name: str) -> None:
     """Show element general information"""
     client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, ENTITY_COLLECTION, name)
+    show_data(data)
 
-    elements = elements_lib.list_elements(client, name=name)
-    if not elements:
-        raise click.ClickException(f"Element {name} not found")
-
-    if len(elements) > 1:
-        raise click.ClickException(f"Multiple elements found with name {name}")
-
-    element = elements[0]
-    show_data(element)
-
-    resources = elements_lib.list_resources(client, element["uuid"])
+    resources = base_client.list_entities(
+        client, f"{c.ELEMENT_COLLECTION}{data['uuid']}/resources/"
+    )
     table = get_table(
         "UUID", "Name", "Kind", "Full hash", "Status", "Created at", "Updated at"
     )
@@ -93,7 +92,9 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
     click.echo("Resources:")
     print_table(table)
 
-    imports = elements_lib.list_imports(client, element["uuid"])
+    imports = base_client.list_entities(
+        client, f"{c.ELEMENT_COLLECTION}{data['uuid']}/imports/"
+    )
     table = get_table("UUID", "Name", "Kind", "Link", "Created at", "Updated at")
     for resource in imports:
         table.add_row(
@@ -107,7 +108,9 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
     click.echo("Imports:")
     print_table(table)
 
-    exports = elements_lib.list_exports(client, element["uuid"])
+    exports = base_client.list_entities(
+        client, f"{c.ELEMENT_COLLECTION}{data['uuid']}/exports/"
+    )
     table = get_table("UUID", "Name", "Kind", "Link", "Created at", "Updated at")
     for resource in exports:
         table.add_row(
@@ -128,15 +131,12 @@ def show_element_cmd(ctx: click.Context, name: str) -> None:
 def show_element_ips(ctx: click.Context, name: str) -> None:
     client = base_client.get_user_api_client(ctx.obj.auth_data)
 
-    element = elements_lib.list_elements(client, name=name)
-    if not element:
-        raise click.ClickException(f"Element {name} not found")
+    data = base_client.get_entity(client, ENTITY_COLLECTION, name)
 
-    if len(element) > 1:
-        raise click.ClickException(f"Multiple elements found with name {name}")
-
-    resources = elements_lib.list_resources(
-        client, element[0]["uuid"], kind="em_core_compute_nodes"
+    resources = base_client.list_entities(
+        client,
+        f"{c.ELEMENT_COLLECTION}{data['uuid']}/resources/",
+        kind="em_core_compute_nodes",
     )
     if len(resources) == 0:
         raise click.ClickException(f"No nodes found for element {name}")
@@ -155,6 +155,8 @@ def _apply_with_cleanup(
     client: http_client.CollectionBaseClient,
     manifest_data: dict[str, tp.Any],
     install_only: bool = False,
+    update_manifest: bool = False,
+    **kwargs: tp.Any,
 ) -> dict[str, tp.Any]:
     """Apply a manifest and clean up old versions on success."""
 
@@ -164,26 +166,44 @@ def _apply_with_cleanup(
             client, c.MANIFEST_COLLECTION, name=manifest_data["name"]
         )
     ]
-    if "uuid" not in manifest_data:
-        manifest_data["uuid"] = str(sys_uuid.uuid4())
-    manifest_data = base_client.add_entity(client, c.MANIFEST_COLLECTION, manifest_data)
+    if update_manifest:
+        manifest_uuid = kwargs["manifest_uuid"]
+        manifest_data.pop("created_at", None)
+        manifest_data.pop("updated_at", None)
+        manifest_data.pop("status", None)
+        try:
+            manifest_data = base_client.update_entity(
+                client, c.MANIFEST_COLLECTION, manifest_uuid, manifest_data
+            )
+        except bazooka_exc.NotFoundError:
+            manifest_data = base_client.add_entity(
+                client, c.MANIFEST_COLLECTION, manifest_data
+            )
+        manifest_data["uuid"] = manifest_uuid
+    else:
+        manifest_data = base_client.add_entity(
+            client, c.MANIFEST_COLLECTION, manifest_data
+        )
     manifest_uuid = manifest_data["uuid"]
 
     try:
         if install_only:
             base_client.action_entity(
-                client, c.MANIFEST_COLLECTION, "install", manifest_data["uuid"]
+                client, c.MANIFEST_COLLECTION, "install", manifest_uuid
             )
         else:
             base_client.action_entity(
-                client, c.MANIFEST_COLLECTION, "upgrade", manifest_data["uuid"]
+                client, c.MANIFEST_COLLECTION, "upgrade", manifest_uuid
             )
     except Exception:
         base_client.delete_entity(client, c.MANIFEST_COLLECTION, manifest_uuid)
         raise
 
-    for manifest_uuid in found_manifest_uuids:
-        base_client.delete_entity(client, c.MANIFEST_COLLECTION, manifest_uuid)
+    for found_manifest_uuid in found_manifest_uuids:
+        if found_manifest_uuid != manifest_uuid:
+            base_client.delete_entity(
+                client, c.MANIFEST_COLLECTION, found_manifest_uuid
+            )
 
     return manifest_data
 
@@ -194,13 +214,14 @@ def upgrade_manifest(
     path_or_name: str,
     install_only: bool = False,
     version: str | None = None,
+    update_manifest: bool = False,
+    **kwargs: tp.Any,
 ) -> dict[str, tp.Any]:
     """Install or update element from a YAML file or repository.
 
     The command will install the element if it's not installed or update it
     if it's installed.
     """
-    log = ClickLogger()
 
     if os.path.exists(path_or_name):
         if not os.path.isfile(path_or_name):
@@ -212,23 +233,30 @@ def upgrade_manifest(
 
     requirements: dict = manifest.get("requirements", {})
 
-    installed = bool(elements_lib.list_elements(client, name=manifest["name"]))
+    installed = bool(
+        base_client.list_entities(client, ENTITY_COLLECTION, name=manifest["name"])
+    )
 
     if installed and install_only:
         raise click.ClickException(f"Element {manifest['name']} is already installed")
 
     # Install element if no requirements
     if not requirements:
-        manifest = _apply_with_cleanup(client, manifest, install_only)
-        return manifest
+        new_manifest = _apply_with_cleanup(
+            client, manifest, install_only, update_manifest, **kwargs
+        )
+        return new_manifest
 
     # Resolve dependencies
-    installed_elements = {e["name"] for e in elements_lib.list_elements(client)}
+    installed_elements = {
+        e["name"] for e in base_client.list_entities(client, ENTITY_COLLECTION)
+    }
     required_elements = set(requirements.keys()) - installed_elements
 
-    log.important(
-        "The following elements will be installed: "
-        f"{', '.join(required_elements.union({manifest['name']}))}"
+    all_installed_elements = required_elements.union({manifest["name"]})
+    click.echo(
+        f"The following elements will be {'installed' if install_only else 'upgraded'}: "
+        f"{click.style(', '.join(all_installed_elements), fg='green')}"
     )
 
     while required_elements:
@@ -243,16 +271,15 @@ def upgrade_manifest(
 
         # NOTE(akremenetsky): We should install the element since there are
         # unresolved dependencies but for the simplicity we will install it here
-        if "uuid" not in req_manifest:
-            req_manifest["uuid"] = str(sys_uuid.uuid4())
         req_manifest = base_client.add_entity(
             client, c.MANIFEST_COLLECTION, req_manifest
         )
         base_client.action_entity(
             client, c.MANIFEST_COLLECTION, "install", req_manifest["uuid"]
         )
-        log.important(
-            f"Element {req_manifest['name']} ({req_manifest['version']}) was installed successfully"
+        installed_name = f"{req_manifest['name']} ({req_manifest['version']})"
+        click.echo(
+            f"Element {click.style(installed_name, fg='green')} was installed successfully"
         )
 
         installed_elements.add(req_manifest["name"])
@@ -262,8 +289,8 @@ def upgrade_manifest(
         # sleep.
         time.sleep(3)
 
-    manifest = _apply_with_cleanup(client, manifest, install_only)
-    return manifest
+    new_manifest = _apply_with_cleanup(client, manifest, install_only, update_manifest)
+    return new_manifest
 
 
 @elements_group.command("install", help="Install element from a manifest (YAML file)")
@@ -291,10 +318,10 @@ def install_manifest_cmd(
 
     if not path_or_name:
         all_elements = repo_lib.get_all_elements(repository)
-        path_or_name = questionary.select(
+        path_or_name = Prompt.ask(
             "Select manifest to install",
-            choices=[questionary.Choice(e) for e in all_elements],
-        ).ask()
+            choices=all_elements,
+        )
     manifest = upgrade_manifest(
         base_client.get_user_api_client(ctx.obj.auth_data),
         repository,
@@ -357,14 +384,44 @@ def update_manifest_cmd(
     ctx: click.Context, repository: str, version: str | None, path_or_name: str
 ) -> None:
     """Update manifest from a YAML file"""
-    log = ClickLogger()
     manifest = upgrade_manifest(
         base_client.get_user_api_client(ctx.obj.auth_data),
         repository,
         path_or_name,
         version=version,
     )
-    log.important(f"Element {manifest['name']} updated successfully")
+    click.echo(
+        f"Element {click.style(manifest['name'], fg='green')} was successfully updated to version {click.style(manifest['version'], fg='green')}"
+    )
+
+
+@elements_group.command(help="Update element from a YAML file")
+@click.option(
+    "-r",
+    "--repository",
+    default=f"{c.ELEMENT_REPO_URL}/",
+    show_default=True,
+    help="Repository endpoint",
+)
+@click.option(
+    "-v",
+    "--version",
+    type=str,
+    required=False,
+    help="version of the element",
+)
+@click.argument("path_or_name")
+@click.pass_context
+def u(
+    ctx: click.Context, repository: str, version: str | None, path_or_name: str | None
+) -> None:  # pragma: no cover
+    ctx.invoke(
+        update_manifest_cmd,
+        repository=repository,
+        version=version,
+        path_or_name=path_or_name,
+    )
+    return None
 
 
 @elements_group.command("uninstall", help="Uninstall manifest by UUID, path or name")
@@ -397,20 +454,18 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
         uuid = manifests[0]["uuid"]
         _uninstall(uuid, name)
         return
-    if len(manifests) > 1:
-        import questionary as q
+    elif len(manifests) > 1:
 
-        uuid = q.select(
+        manifest_choice = Prompt.ask(
             "Select manifest to uninstall",
-            choices=[
-                q.Choice(
-                    f"{manifest['name']} ({manifest['version']})",
-                    value=manifest["uuid"],
-                )
-                for manifest in manifests
-            ],
-        ).ask()
-        _uninstall(uuid, name)
+            choices=[f"{manifest['name']} {manifest['version']}" for manifest in manifests],
+        )
+        m_name, m_version = manifest_choice.split(" ")
+        for manifest in manifests:
+            if manifest["name"] == m_name and manifest["version"] == m_version:
+                uuid = manifest["uuid"]
+                _uninstall(uuid, name)
+                break
         return
 
     # Path
@@ -454,3 +509,78 @@ def versions(name) -> None:
     )
     for version in element_versions:
         click.echo(version)
+
+
+def edit_data(data: str, editor: str = "nano") -> tp.Tuple[str, dict]:
+    tf_path = None
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".yaml", mode="a+", delete=False) as tf:
+            tf.write(data)
+            tf.flush()
+            tf_path = tf.name
+            subprocess.call([editor, tf_path])
+            tf.seek(0)
+            new_data = tf.read()
+    finally:
+        if tf_path and os.path.exists(tf_path):
+            os.remove(tf_path)
+    json_data = yaml.load(new_data, Loader=yaml.FullLoader)
+    return new_data, json_data
+
+
+@elements_group.command(help="Edit manifest", context_settings={"show_default": True})
+@click.argument("uuid_name")
+@click.option(
+    "-e",
+    "--editor",
+    default="nano",
+    type=click.Choice(["nano", "vim"], case_sensitive=False),
+    help="Editor (nano or vim)",
+)
+@click.option(
+    "-r",
+    "--repository",
+    default=f"{c.ELEMENT_REPO_URL}/",
+    show_default=True,
+    help="Repository endpoint",
+)
+@click.pass_context
+def edit(ctx: click.Context, uuid_name: str, editor: str, repository: str) -> None:
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
+    data = base_client.get_entity(client, c.MANIFEST_COLLECTION, uuid_name)
+    tf_path = None
+    try:
+        with tempfile.NamedTemporaryFile(suffix=".yaml", mode="a+", delete=False) as tf:
+            yaml.dump(data, tf)
+            tf.flush()
+            tf_path = tf.name
+            subprocess.call([editor, tf_path])
+            tf.seek(0)
+            manifest = upgrade_manifest(
+                client,
+                repository,
+                tf_path,
+                update_manifest=True,
+                manifest_uuid=data["uuid"],
+            )
+    finally:
+        if tf_path and os.path.exists(tf_path):
+            os.remove(tf_path)
+    click.echo(
+        f"Element {click.style(manifest['name'], fg='green')} was successfully edited"
+    )
+
+
+def _print_entities(entities: tp.List[dict]) -> None:
+    table = get_table("UUID", "Name", "Description", "Version", "Status")
+
+    for entity in entities:
+        table.add_row(
+            entity["uuid"],
+            entity["name"],
+            entity["description"],
+            entity["version"],
+            entity["status"],
+        )
+
+    print_table(table)

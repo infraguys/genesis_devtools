@@ -1,7 +1,7 @@
 
 # settings_init
 
-Interactively create a genesis settings file
+Interactively create/update a genesis settings file
 
 ## Usage
 
@@ -26,7 +26,7 @@ Interactively create a genesis settings file
                                                                                                                                                                                                                                                                                                            
  Usage: genesis settings init [OPTIONS]                                                                                                                                                                                                                                                                    
                                                                                                                                                                                                                                                                                                            
- Interactively create a genesis settings file                                                                                                                                                                                                                                                              
+ Interactively create/update a genesis settings file                                                                                                                                                                                                                                                       
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

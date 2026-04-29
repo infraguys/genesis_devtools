@@ -7,7 +7,7 @@ Add a new service to the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services add [OPTIONS]                                                                                                                                                                                                                                                                     
+ Usage: genesis e services add [OPTIONS]                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -56,7 +56,7 @@ Add a new service to the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services add [OPTIONS]                                                                                                                                                                                                                                                                     
+ Usage: genesis e services add [OPTIONS]                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
  Add a new service to the Genesis installation                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            

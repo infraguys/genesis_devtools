@@ -1,13 +1,13 @@
 
-# resources_show
+# imports_list
 
-Show resource
+List imports
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis e imports list [OPTIONS]                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -21,11 +21,6 @@ Show resource
 
   Name or uuid of the element
 
-* `resource_name_uuid` (REQUIRED):
-    * Type: text
-    * Default: `sentinel.unset`
-    * Usage: `resource_name_uuid`
-
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -37,9 +32,9 @@ Show resource
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis e imports list [OPTIONS]                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                            
- Show resource                                                                                                                                                                                                                                                                                             
+ List imports                                                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --element  -e  TEXT  Name or uuid of the element                                                                                                                                                                                                                                                        │

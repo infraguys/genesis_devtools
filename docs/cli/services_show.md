@@ -7,7 +7,7 @@ Show service
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services show [OPTIONS] UUID                                                                                                                                                                                                                                                               
+ Usage: genesis e services show [OPTIONS] UUID                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -29,7 +29,7 @@ Show service
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services show [OPTIONS] UUID                                                                                                                                                                                                                                                               
+ Usage: genesis e services show [OPTIONS] UUID                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            
  Show service                                                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            

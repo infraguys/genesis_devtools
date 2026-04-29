@@ -1,30 +1,22 @@
 
-# resources_show
+# configs_show
 
-Show resource
+Show config
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis configs show [OPTIONS] UUID                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `element`:
-    * Type: text
-    * Default: `none`
-    * Usage: `-e
---element`
-
-  Name or uuid of the element
-
-* `resource_name_uuid` (REQUIRED):
+* `uuid` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `resource_name_uuid`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -37,12 +29,11 @@ Show resource
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis configs show [OPTIONS] UUID                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
- Show resource                                                                                                                                                                                                                                                                                             
+ Show config                                                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --element  -e  TEXT  Name or uuid of the element                                                                                                                                                                                                                                                        │
-│ --help               Show this message and exit.                                                                                                                                                                                                                                                        │
+│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

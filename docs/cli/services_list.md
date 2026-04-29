@@ -7,7 +7,7 @@ List services
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services list [OPTIONS]                                                                                                                                                                                                                                                                    
+ Usage: genesis e services list [OPTIONS]                                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -32,7 +32,7 @@ List services
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services list [OPTIONS]                                                                                                                                                                                                                                                                    
+ Usage: genesis e services list [OPTIONS]                                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
  List services                                                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            

@@ -1,7 +1,7 @@
 
 # ssh_keys_add
 
-Add a new ssh_key to the Genesis installation
+Add a new ssh_key to the Genesis installation, example: `secret ssh_keys add --node 2cc70850-3df7-4234-b9c1-0e20ed3672c7 --user ubuntu --target_public_key ~/.ssh/id_rsa.pub`
 
 ## Usage
 
@@ -21,7 +21,7 @@ Add a new ssh_key to the Genesis installation
 
   UUID of the ssh_key
 
-* `project_id` (REQUIRED):
+* `project_id`:
     * Type: uuid
     * Default: `sentinel.unset`
     * Usage: `-p
@@ -45,24 +45,33 @@ Add a new ssh_key to the Genesis installation
 
   Description of the ssh_key
 
-* `node` (REQUIRED):
+* `node`:
     * Type: uuid
     * Default: `sentinel.unset`
     * Usage: `--node`
 
-  node uuid of the ssh_key
+  node uuid
+
+* `node_set`:
+    * Type: uuid
+    * Default: `sentinel.unset`
+    * Usage: `--node_set`
+
+  node_set uuid
 
 * `user` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
     * Usage: `--user`
 
-  user uuid of the ssh_key
+  user name of the ssh_key
 
 * `target_public_key`:
     * Type: text
-    * Default: `none`
+    * Default: `sentinel.unset`
     * Usage: `--target_public_key`
+
+  key or path to it, for example: /home/user/.ssh/id_rsa.pub
 
 * `help`:
     * Type: boolean
@@ -77,16 +86,17 @@ Add a new ssh_key to the Genesis installation
                                                                                                                                                                                                                                                                                                            
  Usage: genesis secret ssh_keys add [OPTIONS]                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
- Add a new ssh_key to the Genesis installation                                                                                                                                                                                                                                                             
+ Add a new ssh_key to the Genesis installation, example: `secret ssh_keys add --node 2cc70850-3df7-4234-b9c1-0e20ed3672c7 --user ubuntu --target_public_key ~/.ssh/id_rsa.pub`                                                                                                                             
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │    --uuid               -u  UUID  UUID of the ssh_key                                                                                                                                                                                                                                                   │
-│ *  --project-id         -p  UUID  Name of the project in which to deploy the ssh_key [required]                                                                                                                                                                                                         │
+│    --project-id         -p  UUID  Name of the project in which to deploy the ssh_key                                                                                                                                                                                                                    │
 │    --name               -n  TEXT  Name of the ssh_key                                                                                                                                                                                                                                                   │
 │    --description        -D  TEXT  Description of the ssh_key                                                                                                                                                                                                                                            │
-│ *  --node                   UUID  node uuid of the ssh_key [required]                                                                                                                                                                                                                                   │
-│ *  --user                   TEXT  user uuid of the ssh_key [required]                                                                                                                                                                                                                                   │
-│    --target_public_key      TEXT                                                                                                                                                                                                                                                                        │
+│    --node                   UUID  node uuid                                                                                                                                                                                                                                                             │
+│    --node_set               UUID  node_set uuid                                                                                                                                                                                                                                                         │
+│ *  --user                   TEXT  user name of the ssh_key [required]                                                                                                                                                                                                                                   │
+│    --target_public_key      TEXT  key or path to it, for example: /home/user/.ssh/id_rsa.pub                                                                                                                                                                                                            │
 │    --help                         Show this message and exit.                                                                                                                                                                                                                                           │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

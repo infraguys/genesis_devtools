@@ -7,7 +7,7 @@ Add a new node to the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes add [OPTIONS]                                                                                                                                                                                                                                                                
+ Usage: genesis nodes add [OPTIONS]                                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -95,7 +95,7 @@ Add a new node to the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes add [OPTIONS]                                                                                                                                                                                                                                                                
+ Usage: genesis nodes add [OPTIONS]                                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                                                                            
  Add a new node to the Genesis installation                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            

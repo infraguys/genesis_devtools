@@ -13,6 +13,28 @@ Initialize hypervisor
 
 ## Options
 
+* `romfile_version`:
+    * Type: text
+    * Default: `latest`
+    * Usage: `--romfile_version`
+
+  version of the rom file
+
+* `pool_name`:
+    * Type: text
+    * Default: `latest`
+    * Usage: `--pool_name`
+
+  storage pool name
+
+* `packer`:
+    * Type: boolean
+    * Default: `true`
+    * Usage: `-p
+--packer`
+
+  Install packer
+
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -29,6 +51,9 @@ Initialize hypervisor
  Initialize hypervisor                                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
+│ --romfile_version      TEXT  version of the rom file                                                                                                                                                                                                                                                    │
+│ --pool_name            TEXT  storage pool name                                                                                                                                                                                                                                                          │
+│ --packer           -p        Install packer [default: True]                                                                                                                                                                                                                                             │
+│ --help                       Show this message and exit.                                                                                                                                                                                                                                                │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
