@@ -16,7 +16,6 @@
 from __future__ import annotations
 
 import os
-import subprocess
 import typing as tp
 
 import rich_click as click
@@ -24,6 +23,7 @@ from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.logger import ClickLogger
 from genesis_devtools.clients import base_client
+from genesis_devtools.common.run import runsh, run_command
 from genesis_devtools import utils
 from genesis_devtools import constants as c
 
@@ -112,17 +112,6 @@ def _print_entities(hypervisors: tp.List[dict]) -> None:
     print_table(table)
 
 
-def _run_command(cmd: str, check: bool = True) -> subprocess.CompletedProcess:
-    """Run shell command and return result."""
-    try:
-        result = subprocess.run(
-            cmd, shell=True, check=check, capture_output=True, text=True
-        )
-        return result
-    except subprocess.CalledProcessError as e:
-        raise click.ClickException(f"Command failed: {cmd}\nError: {e.stderr}")
-
-
 def _is_superuser() -> bool:
     """Check if running with superuser privileges."""
     return os.geteuid() == 0
@@ -131,14 +120,17 @@ def _is_superuser() -> bool:
 def _install_packages() -> None:
     """Install required Debian packages."""
     packages = [
-        "qemu-kvm",
+        "qemu-system-x86",
         "qemu-utils",
         "libvirt-daemon-system",
         "libvirt-dev",
-        "mkisofs",
+        "genisoimage",
     ]
-    _run_command("apt-get update")
-    _run_command(f"apt-get install -y {' '.join(packages)}")
+    cmd = ["apt-get", "update"]
+    run_command(cmd)
+    cmd = ["apt-get", "install", "-y"]
+    cmd.extend(packages)
+    run_command(cmd)
 
 
 def _add_user_to_groups() -> None:
@@ -146,23 +138,36 @@ def _add_user_to_groups() -> None:
     username = os.environ.get("USER")
     if not username:
         raise click.ClickException("Cannot determine current username")
+    else:
+        click.echo(f"Current username: {username}")
 
-    _run_command(f"usermod -a -G libvirt {username}")
-    _run_command(f"usermod -a -G kvm {username}")
+    cmd = ["usermod", "-a", "-G", "libvirt", username]
+    run_command(cmd)
+    cmd = ["usermod", "-a", "-G", "kvm", username]
+    run_command(cmd)
 
 
 def _create_storage_pool(pool_name: str) -> None:
     """Create libvirt storage pool if it doesn't exist."""
     # Check if pool exists
-    result = _run_command("virsh pool-list --all", check=False)
-    if pool_name not in result.stdout:
+    result = runsh("virsh pool-list --all").raise_on_result()
+    if pool_name not in result.output:
         # Create storage pool
-        _run_command(
-            f"virsh pool-define-as {pool_name} dir --target /var/lib/libvirt/images"
-        )
-        _run_command(f"virsh pool-build {pool_name}")
-        _run_command(f"virsh pool-start {pool_name}")
-        _run_command(f"virsh pool-autostart {pool_name}")
+        cmd = [
+            "virsh",
+            "pool-define-as",
+            pool_name,
+            "dir",
+            "--target",
+            "/var/lib/libvirt/images",
+        ]
+        run_command(cmd)
+        cmd = ["virsh", "pool-build", pool_name]
+        run_command(cmd)
+        cmd = ["virsh", "pool-start", pool_name]
+        run_command(cmd)
+        cmd = ["virsh", "pool-autostart", pool_name]
+        run_command(cmd)
 
 
 def _download_rom_file(version: str) -> None:
@@ -170,9 +175,12 @@ def _download_rom_file(version: str) -> None:
     rom_filename = "1af41041.rom"
     rom_path = f"/usr/share/qemu/{rom_filename}"
     if not os.path.exists(rom_path):
-        _run_command(
+        runsh(
             f"wget -O {rom_path} https://repository.genesis-core.tech/seed_os/{version}/{rom_filename}"
-        )
+        ).raise_on_result()
+
+    else:
+        click.echo(f"ROM file {rom_path} already exists")
 
 
 def _configure_libvirt() -> None:
@@ -198,9 +206,12 @@ def _configure_libvirt() -> None:
         f.write(content)
 
     # Restart services
-    _run_command("systemctl stop libvirtd")
-    _run_command("systemctl enable --now libvirtd-tcp.socket")
-    _run_command("systemctl start libvirtd")
+    cmd = ["systemctl", "stop", "libvirtd"]
+    run_command(cmd)
+    cmd = ["systemctl", "enable", "--now", "libvirtd-tcp.socket"]
+    run_command(cmd)
+    cmd = ["systemctl", "start", "libvirtd"]
+    run_command(cmd)
 
 
 def _check_debian_like():
@@ -223,6 +234,35 @@ def _check_debian_like():
     return False
 
 
+def _install_packer() -> None:
+    """Install packer."""
+
+    try:
+        run_command(["which", "packer"])
+        click.echo("Packer is already installed")
+        return None
+    except Exception:
+        pass
+
+    cmd = ["mkdir", "-p", "/opt/packer"]
+    run_command(cmd)
+    # Version 1.9.2 is the latest free
+    cmd = [
+        "wget",
+        "https://hashicorp-releases.yandexcloud.net/packer/1.9.2/packer_1.9.2_linux_amd64.zip",
+        "-P",
+        "/opt/packer",
+    ]
+    run_command(cmd)
+    cmd = ["unzip", "/opt/packer/packer_1.9.2_linux_amd64.zip", "-d", "/opt/packer"]
+    run_command(cmd)
+    cmd = ["mv", "/opt/packer/packer", "/usr/local/bin/"]
+    run_command(cmd)
+    cmd = ["/usr/local/bin/packer", "-version"]
+    run_command(cmd)
+    return None
+
+
 @hypervisors_group.command("init", help="Initialize hypervisor")
 @click.option(
     "--romfile_version",
@@ -236,16 +276,22 @@ def _check_debian_like():
     default="latest",
     help="storage pool name",
 )
-def init_cmd(romfile_version: str, pool_name: str) -> None:
+@click.option(
+    "-p",
+    "--packer",
+    show_default=True,
+    is_flag=True,
+    default=False,
+    help="Install packer",
+)
+def init_cmd(romfile_version: str, pool_name: str, packer: bool) -> None:
     """Initialize hypervisor with all required components."""
 
-    # Check a Debian like OS. If not, print an error message and exit
     if not _check_debian_like():
         raise click.ClickException(
             "This command is only supported on Debian-based systems."
         )
 
-    # Check if user is superuser. If not, print an error message and exit
     if not _is_superuser():
         raise click.ClickException(
             "This command requires superuser privileges. Please run with sudo."
@@ -253,24 +299,23 @@ def init_cmd(romfile_version: str, pool_name: str) -> None:
 
     log = ClickLogger()
 
-    # Install packages
     log.info("Installing required packages...")
     _install_packages()
 
-    # Add user to groups
     log.info("Adding user to required groups...")
     _add_user_to_groups()
 
-    # Create storage pool
     log.info("Setting up storage pool...")
     _create_storage_pool(pool_name)
 
-    # Download ROM file
     log.info("Checking ROM file...")
     _download_rom_file(romfile_version)
 
-    # Configure libvirt
     log.info("Configuring libvirt...")
     _configure_libvirt()
+
+    if packer:
+        log.info("Configuring packer...")
+        _install_packer()
 
     log.important("Hypervisor environment initialized successfully")

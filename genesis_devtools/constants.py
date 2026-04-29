@@ -77,6 +77,8 @@ PERMISSION_COLLECTION = "/v1/iam/permissions/"
 ROLE_BINDING_COLLECTION = "/v1/iam/role_bindings/"
 PERMISSION_BINDING_COLLECTION = "/v1/iam/permission_bindings/"
 
+CONFIG_COLLECTION = "/v1/config/configs/"
+
 # Cli
 CONFIG_DIR = "~/.genesis"
 CONFIG_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.yaml")

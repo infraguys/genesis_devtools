@@ -20,18 +20,21 @@ import typing as tp
 import rich_click as click
 from genesis_devtools.common.table import get_table, print_table, show_data
 
-from genesis_devtools.clients.base_client import get_user_api_client
+from genesis_devtools.clients import base_client
 
-from genesis_devtools.clients import element as elements_lib
+from genesis_devtools import constants as c
 from genesis_devtools import utils
 
+ENTITY = "resource"
+ENTITY_COLLECTION = c.RESOURCE_COLLECTION
 
-@click.group("resources", help="Manage resources in the Genesis installation")
+
+@click.group(f"{ENTITY}s", help=f"Manage {ENTITY}s in the Genesis installation")
 def resources_group():
     pass
 
 
-@resources_group.command("list", help="List resources")
+@resources_group.command("list", help=f"List {ENTITY}s")
 @click.option(
     "-e",
     "--element",
@@ -40,19 +43,25 @@ def resources_group():
 )
 @click.pass_context
 def list_resource_cmd(ctx: click.Context, element: str) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
     if element is None:
-        resources = elements_lib.list_all_resources(client)
+        resources = base_client.list_entities(client, c.RESOURCE_COLLECTION)
     else:
         if not utils.is_valid_uuid(element):
-            elements = elements_lib.list_elements(client, name=element)
+            elements = base_client.list_entities(
+                client, c.ELEMENT_COLLECTION, name=element
+            )
             if elements:
                 uuid = elements[0]["uuid"]
-                resources = elements_lib.list_resources(client, uuid)
+                resources = base_client.list_entities(
+                    client, f"{c.ELEMENT_COLLECTION}{uuid}/resources/"
+                )
             else:
                 raise click.ClickException(f"Element with name {element} not found")
         else:
-            resources = elements_lib.list_resources(client, element)
+            resources = base_client.list_entities(
+                client, f"{c.ELEMENT_COLLECTION}{element}/resources/"
+            )
 
     _print_resources(resources)
 
@@ -75,30 +84,38 @@ def show_resource_cmd(
     element: str | None,
     resource_name_uuid: str | None,
 ) -> None:
-    client = get_user_api_client(ctx.obj.auth_data)
+    client = base_client.get_user_api_client(ctx.obj.auth_data)
 
     if element is None:
         if not utils.is_valid_uuid(resource_name_uuid):
-            resources = elements_lib.list_all_resources(client, name=resource_name_uuid)
+            resources = base_client.list_entities(
+                client, c.RESOURCE_COLLECTION, name=resource_name_uuid
+            )
             if resources:
                 resource_name_uuid = resources[0]["uuid"]
             else:
                 raise click.ClickException(
                     f"resource with name {resource_name_uuid} not found"
                 )
-        resource = elements_lib.get_all_resource(client, resource_name_uuid)
+        resource = base_client.get_entity(
+            client, c.RESOURCE_COLLECTION, resource_name_uuid
+        )
 
     else:
         if not utils.is_valid_uuid(element):
-            elements = elements_lib.list_elements(client, name=element)
+            elements = base_client.list_entities(
+                client, ENTITY_COLLECTION, name=element
+            )
             if elements:
                 element = elements[0]["uuid"]
             else:
                 raise click.ClickException(f"Element with name {element} not found")
 
         if not utils.is_valid_uuid(resource_name_uuid):
-            resources = elements_lib.list_resources(
-                client, element, name=resource_name_uuid
+            resources = base_client.list_entities(
+                client,
+                f"{c.ELEMENT_COLLECTION}{element}/resources/",
+                name=resource_name_uuid,
             )
             if resources:
                 resource_name_uuid = resources[0]["uuid"]
@@ -107,7 +124,9 @@ def show_resource_cmd(
                     f"resource with name {resource_name_uuid} not found"
                 )
 
-        resource = elements_lib.get_resource(client, element, resource_name_uuid)
+        resource = base_client.get_entity(
+            client, f"{c.ELEMENT_COLLECTION}{element}/resources/", resource_name_uuid
+        )
 
     show_data(resource)
 
