@@ -32,11 +32,11 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 def get_user_api_client(auth_data: dict) -> http_client.CollectionBaseClient:
     auth = http_client.CoreIamAuthenticator(
         base_url=auth_data["endpoint"],
-        username=auth_data["username"],
-        password=auth_data["password"],
-        access_token=auth_data["access_token"],
-        refresh_token=auth_data["refresh_token"],
-        scope=auth_data["scope"],
+        username=auth_data.get("username"),
+        password=auth_data.get("password"),
+        access_token=auth_data.get("access_token"),
+        refresh_token=auth_data.get("refresh_token"),
+        scope=auth_data.get("scope"),
     )
     client = http_client.CollectionBaseClient(
         base_url=auth_data["endpoint"],

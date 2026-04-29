@@ -17,3 +17,7 @@
 
 class DevToolsException(Exception):
     """Base exception for all exceptions."""
+
+
+class RunException(DevToolsException):
+    pass
