@@ -15,14 +15,21 @@
 #    under the License.
 from __future__ import annotations
 
+import hashlib
+import json
 import os
+import subprocess
 import time
 import typing as tp
 import ipaddress
 import pathlib
+import urllib.parse
 import yaml
 import fnmatch
 
+import requests
+import rich.progress
+import rich.status
 import rich_click as click
 
 from genesis_devtools.builder import base as base_builder
@@ -39,6 +46,162 @@ BOOTSTRAP_TAG = "bootstrap"
 LaunchModeType = tp.Literal["core", "element", "custom"]
 GC_CIDR = ipaddress.IPv4Network("10.20.0.0/22")
 GC_BOOT_CIDR = ipaddress.IPv4Network("10.30.0.0/24")
+_INVENTORY_CACHE_BASE = pathlib.Path.home() / ".cache" / "genesis"
+
+
+def _is_url(value: str) -> bool:
+    """Return True if *value* looks like an HTTP(S) URL."""
+    parsed = urllib.parse.urlparse(value)
+    return parsed.scheme in ("http", "https")
+
+
+def _is_version(value: str) -> bool:
+    """Return True if *value* looks like a plain version string (e.g. '0.0.6')."""
+    import re
+
+    return bool(re.fullmatch(r"[0-9]+\.[0-9]+(\.[0-9]+)*", value.strip()))
+
+
+def _inventory_cache_dir(base_url: str) -> pathlib.Path:
+    """Return the local cache directory for a given inventory base URL.
+
+    The path is ``~/.cache/genesis/<name>/<version>/`` derived from the
+    last two segments of *base_url*'s path.  Falls back to a SHA-256 hash
+    when the URL has fewer than two path segments.
+    """
+    url_parts = [
+        p for p in urllib.parse.urlparse(base_url).path.split("/") if p and p != ".."
+    ]
+    if len(url_parts) >= 2:
+        element_name = url_parts[-2]
+        element_version = url_parts[-1]
+    else:
+        url_hash = hashlib.sha256(base_url.encode()).hexdigest()[:16]
+        element_name = "unknown"
+        element_version = url_hash
+    return _INVENTORY_CACHE_BASE / element_name / element_version
+
+
+def _download_inventory_json(session: requests.Session, base_url: str) -> dict:
+    """Fetch ``inventory.json`` from *base_url* and return its parsed content."""
+    inventory_url = f"{base_url}/inventory.json"
+    with rich.progress.Progress(
+        rich.progress.SpinnerColumn(),
+        rich.progress.TextColumn("[progress.description]{task.description}"),
+        rich.progress.BarColumn(),
+        rich.progress.DownloadColumn(),
+        rich.progress.TransferSpeedColumn(),
+        rich.progress.TimeRemainingColumn(),
+        transient=True,
+    ) as progress:
+        task = progress.add_task(
+            f"Downloading inventory.json from {base_url}", total=None
+        )
+        response = session.get(inventory_url)
+        response.raise_for_status()
+        progress.update(task, completed=1, total=1)
+    return response.json()
+
+
+def _download_inventory_files(
+    session: requests.Session,
+    base_url: str,
+    raw: dict,
+    cache_dir: pathlib.Path,
+) -> None:
+    """Download all artefact files referenced in *raw* inventory to *cache_dir*.
+
+    Remote layout:  ``base_url/<category>/<filename>``
+    Local layout:   ``cache_dir/<category>/<filename>``
+
+    Already-cached files are skipped.  On completion, *raw* is mutated in-place
+    so that every category list contains absolute local paths, and the final
+    ``inventory.json`` is written to *cache_dir*.
+    """
+    inventories = raw if isinstance(raw, list) else [raw]
+
+    # rel_path in inventory.json is a bare filename (no category subdir).
+    # Remote: base_url/<category>/<filename>  (Nginx layout with subdirs)
+    # Local:  cache_dir/<category>/<filename>  (matches ElementInventory.load)
+    all_files: list[tuple[str, pathlib.Path, str]] = []
+    for inv in inventories:
+        for category in base_builder.ElementInventory.categories():
+            for rel_path in inv.get(category, []):
+                file_name = pathlib.Path(rel_path).name
+                remote_url = f"{base_url}/{category}/{file_name}"
+                local_file = cache_dir / category / file_name
+                all_files.append((remote_url, local_file, file_name))
+
+    with rich.progress.Progress(
+        rich.progress.SpinnerColumn(),
+        rich.progress.TextColumn("[progress.description]{task.description}"),
+        rich.progress.BarColumn(),
+        rich.progress.DownloadColumn(),
+        rich.progress.TransferSpeedColumn(),
+        rich.progress.TimeRemainingColumn(),
+    ) as progress:
+        for remote_url, local_file, file_name in all_files:
+            task = progress.add_task(f"Downloading {file_name}", total=None)
+            local_file.parent.mkdir(parents=True, exist_ok=True)
+            if local_file.exists():
+                progress.update(
+                    task,
+                    description=f"[dim]Cached[/dim] {file_name}",
+                    completed=1,
+                    total=1,
+                )
+                continue
+            temp_file = local_file.with_suffix(".tmp")
+            with session.get(remote_url, stream=True) as resp:
+                resp.raise_for_status()
+                content_length = resp.headers.get("Content-Length")
+                total = int(content_length) if content_length else None
+                progress.update(task, total=total)
+                downloaded = 0
+                with open(temp_file, "wb") as fh:
+                    for chunk in resp.iter_content(chunk_size=1024 * 64):
+                        fh.write(chunk)
+                        downloaded += len(chunk)
+                        progress.update(task, completed=downloaded)
+            temp_file.replace(local_file)
+
+    for inv in inventories:
+        for category in base_builder.ElementInventory.categories():
+            inv[category] = [
+                str(cache_dir / category / pathlib.Path(rel_path).name)
+                for rel_path in inv.get(category, [])
+            ]
+
+    inventory_local = cache_dir / "inventory.json"
+    inventory_local.write_text(json.dumps(raw, indent=2))
+
+
+def _resolve_inventory_from_url(url: str) -> pathlib.Path:
+    """Download inventory and all artefacts from an Nginx URL, with caching.
+
+    Args:
+        url: URL of the inventory directory or ``inventory.json`` file.
+
+    Returns:
+        Local cache directory path accepted by :py:meth:`ElementInventory.load`.
+    """
+    base_url = url.rstrip("/")
+    if base_url.endswith("/inventory.json"):
+        base_url = base_url[: -len("/inventory.json")]
+
+    cache_dir = _inventory_cache_dir(base_url)
+    inventory_local = cache_dir / "inventory.json"
+
+    if inventory_local.exists():
+        click.secho(f"Using cached inventory from {cache_dir}", fg="cyan")
+        return cache_dir
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    with requests.Session() as session:
+        raw = _download_inventory_json(session, base_url)
+        _download_inventory_files(session, base_url, raw, cache_dir)
+
+    return cache_dir
 
 
 def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
@@ -300,7 +463,21 @@ def _bootstrap_core(
 @click.option(
     "-i",
     "--inventory",
-    help="Path to the genesis inventory file or directory with inventory.json",
+    help=(
+        "Path to the inventory directory containing inventory.json, "
+        "or an HTTP(S) URL pointing to an Nginx-served directory. "
+        "When a URL is given, inventory.json and all referenced artefacts are "
+        "downloaded and cached under ~/.cache/genesis/<name>/<version>/. "
+        "Trailing /inventory.json in the URL is accepted and treated identically "
+        "to the bare directory URL. "
+        "A bare version string (e.g. '0.0.6') is expanded automatically to "
+        f"{c.ELEMENT_REPO_URL}/core/<version>/. "
+        "Examples: "
+        "0.0.6  "
+        "/path/to/core/0.0.6  "
+        "https://repository.example.com/genesis-elements/core/0.0.6/  "
+        "https://repository.example.com/genesis-elements/core/0.0.6/inventory.json"
+    ),
 )
 @click.option(
     "--profile",
@@ -523,8 +700,17 @@ def bootstrap_cmd(
     settings: bool,
     ssh_public_key: tp.Tuple[str, ...],
 ) -> None:
-    if not inventory or not os.path.exists(inventory):
-        raise click.UsageError("No inventory specified or not found")
+    if not inventory:
+        raise click.UsageError("No inventory specified")
+
+    if _is_version(inventory):
+        inventory = f"{c.ELEMENT_REPO_URL}/core/{inventory.strip()}/"
+
+    if _is_url(inventory):
+        inventory_path = _resolve_inventory_from_url(inventory)
+        inventory = str(inventory_path)
+    elif not os.path.exists(inventory):
+        raise click.UsageError(f"Inventory path not found: {inventory}")
 
     profile = c.Profile[profile.upper()]
 
@@ -632,11 +818,12 @@ def bootstrap_cmd(
     )
     hypervisors.append(hypervisor)
 
-    realm_uuid, realm_secret, realm_tokens = _register_core(
-        ecosystem_endpoint=ecosystem_endpoint,
-        disable_telemetry=disable_telemetry,
-        org_token=org_token,
-    )
+    with rich.status.Status("Registering realm in ecosystem...", spinner="dots"):
+        realm_uuid, realm_secret, realm_tokens = _register_core(
+            ecosystem_endpoint=ecosystem_endpoint,
+            disable_telemetry=disable_telemetry,
+            org_token=org_token,
+        )
 
     inventory_eco_instance = base_builder.ElementInventory.load(
         pathlib.Path(inventory), 1
@@ -652,30 +839,38 @@ def bootstrap_cmd(
                 key_parts.append(key_content + "\n")
         ssh_public_key_content = "".join(key_parts)
 
-    _bootstrap_core(
-        image_path=image_path,
-        image_uri=image_uri,
-        profile=profile,
-        name=name,
-        stand_spec=stand_spec,
-        stand_main_network=stand_main_network,
-        stand_boot_network=stand_boot_network,
-        force=force,
-        core_ip=core_ip,
-        repository=repository,
-        admin_password=admin_password,
-        save_admin_password_file=save_admin_password_file,
-        manifest_path=manifest_path,
-        eco_manifest_path=eco_manifest_path,
-        hypervisors=hypervisors,
-        no_start=no_start,
-        ecosystem_endpoint=ecosystem_endpoint,
-        disable_telemetry=disable_telemetry,
-        realm_uuid=realm_uuid,
-        realm_secret=realm_secret,
-        realm_tokens=realm_tokens,
-        ssh_public_key=ssh_public_key_content,
-    )
+    if subprocess.call(["sudo", "-n", "true"], stderr=subprocess.DEVNULL) != 0:
+        click.secho("Sudo privileges are required to proceed.", fg="yellow")
+        if subprocess.call(["sudo", "-v"]) != 0:
+            raise click.ClickException("Failed to obtain sudo privileges. Aborting.")
+
+    with rich.status.Status(
+        f"Launching genesis installation '{name}'... ", spinner="dots"
+    ):
+        _bootstrap_core(
+            image_path=image_path,
+            image_uri=image_uri,
+            profile=profile,
+            name=name,
+            stand_spec=stand_spec,
+            stand_main_network=stand_main_network,
+            stand_boot_network=stand_boot_network,
+            force=force,
+            core_ip=core_ip,
+            repository=repository,
+            admin_password=admin_password,
+            save_admin_password_file=save_admin_password_file,
+            manifest_path=manifest_path,
+            eco_manifest_path=eco_manifest_path,
+            hypervisors=hypervisors,
+            no_start=no_start,
+            ecosystem_endpoint=ecosystem_endpoint,
+            disable_telemetry=disable_telemetry,
+            realm_uuid=realm_uuid,
+            realm_secret=realm_secret,
+            realm_tokens=realm_tokens,
+            ssh_public_key=ssh_public_key_content,
+        )
     if settings:
         from genesis_devtools.cmd.settings.commands import init_config
 
