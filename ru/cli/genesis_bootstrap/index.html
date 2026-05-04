@@ -571,6 +571,76 @@
   
   
     <li class="md-nav__item">
+      <a href="../configs_show/" class="md-nav__link">
+        configs_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../e_exports/" class="md-nav__link">
+        e_exports
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../e_imports/" class="md-nav__link">
+        e_imports
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../e_resources/" class="md-nav__link">
+        e_resources
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../e_services/" class="md-nav__link">
+        e_services
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../elements_available/" class="md-nav__link">
         elements_available
       </a>
@@ -587,6 +657,20 @@
     <li class="md-nav__item">
       <a href="../elements_build/" class="md-nav__link">
         elements_build
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elements_edit/" class="md-nav__link">
+        elements_edit
       </a>
     </li>
   
@@ -699,6 +783,34 @@
     <li class="md-nav__item">
       <a href="../elements_versions/" class="md-nav__link">
         elements_versions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exports_list/" class="md-nav__link">
+        exports_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exports_show/" class="md-nav__link">
+        exports_show
       </a>
     </li>
   
@@ -964,6 +1076,20 @@
     <li class="md-nav__item">
       <a href="../genesis_dumphelp/" class="md-nav__link">
         genesis_dumphelp
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genesis_e/" class="md-nav__link">
+        genesis_e
       </a>
     </li>
   
@@ -1720,6 +1846,34 @@
     <li class="md-nav__item">
       <a href="../idps_show/" class="md-nav__link">
         idps_show
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imports_list/" class="md-nav__link">
+        imports_list
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imports_show/" class="md-nav__link">
+        imports_show
       </a>
     </li>
   
@@ -3571,6 +3725,51 @@
 </ul>
 <p>Do not start the stand after creation</p>
 <ul>
+<li><code>no_registration</code>:<ul>
+<li>Type: boolean</li>
+<li>Default: <code>false</code></li>
+<li>Usage: <code>--no-registration</code></li>
+</ul>
+</li>
+</ul>
+<p>Don't register in ecosystem.</p>
+<ul>
+<li><code>disable_telemetry</code>:<ul>
+<li>Type: boolean</li>
+<li>Default: <code>false</code></li>
+<li>Usage: <code>--disable-telemetry</code></li>
+</ul>
+</li>
+</ul>
+<p>Disable telemetry. Anonymized data only is sent by default.</p>
+<ul>
+<li><code>org_token</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>sentinel.unset</code></li>
+<li>Usage: <code>--org-token</code></li>
+</ul>
+</li>
+</ul>
+<p>Organization token, used to register stand in ecosystem</p>
+<ul>
+<li><code>ecosystem_endpoint</code>:<ul>
+<li>Type: text</li>
+<li>Default: <code>https://console.genesis-core.tech</code></li>
+<li>Usage: <code>--ecosystem-endpoint</code></li>
+</ul>
+</li>
+</ul>
+<p>Ecosystem's endpoint to connect to</p>
+<ul>
+<li><code>settings</code>:<ul>
+<li>Type: boolean</li>
+<li>Default: <code>false</code></li>
+<li>Usage: <code>--settings</code></li>
+</ul>
+</li>
+</ul>
+<p>Interactively create a genesis settings file</p>
+<ul>
 <li><code>help</code>:<ul>
 <li>Type: boolean</li>
 <li>Default: <code>false</code></li>
@@ -3606,6 +3805,11 @@
 <span class="go">│ --hyper-machine-prefix          TEXT                                 A prefix for new VMs. [default: vm-]                                                                                                                                                                                               │</span>
 <span class="go">│ --hyper-iface-rom-file          TEXT                                 A path to the custom ROM file of a network interface. [default: /usr/share/qemu/1af41041.rom]                                                                                                                                      │</span>
 <span class="go">│ --no-start                                                           Do not start the stand after creation                                                                                                                                                                                              │</span>
+<span class="go">│ --no-registration                                                    Don't register in ecosystem.                                                                                                                                                                                                       │</span>
+<span class="go">│ --disable-telemetry                                                  Disable telemetry. Anonymized data only is sent by default.                                                                                                                                                                        │</span>
+<span class="go">│ --org-token                     TEXT                                 Organization token, used to register stand in ecosystem                                                                                                                                                                            │</span>
+<span class="go">│ --ecosystem-endpoint            TEXT                                 Ecosystem's endpoint to connect to                                                                                                                                                                                                 │</span>
+<span class="go">│ --settings                                                           Interactively create a genesis settings file                                                                                                                                                                                       │</span>
 <span class="go">│ --help                                                               Show this message and exit.                                                                                                                                                                                                        │</span>
 <span class="go">╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯</span>
 </code></pre></div>
