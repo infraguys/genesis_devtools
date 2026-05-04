@@ -74,13 +74,6 @@ def openapi_spec(ctx: click.Context, url: str, endpoint: str, path: str) -> None
     return None
 
 
-@click.command("cowsay", help="Display a cow message")
-def cowsay_cmd() -> None:
-    import cowsay
-
-    cowsay.cow("I am genesis-cli")
-
-
 @click.command("hello", help="Display a genesis message")
 def hello() -> None:
     msg = """
@@ -89,6 +82,43 @@ def hello() -> None:
 ▙▌▙▖▌▌▙▖▄▌▌▄▌
 """
     click.echo(msg)
+
+
+def get_grandparent_process_name() -> str:
+    try:
+        # Получаем PID родительского процесса
+        ppid = os.getppid()
+
+        # Получаем PID родителя родителя (прадедушки)
+        with open(f"/proc/{ppid}/stat", "r") as f:
+            stat_info = f.read().split()
+            # В поле 4 содержится PID родителя
+            grandparent_pid = int(stat_info[3])
+
+        # Получаем имя прадедушки из /proc/<pid>/comm
+        with open(f"/proc/{grandparent_pid}/comm", "r") as f:
+            name = f.read().strip()
+            if name:
+                return name
+    except (FileNotFoundError, PermissionError, ValueError, IndexError):
+        pass
+
+    # Альтернативный способ через ps
+    try:
+        result = subprocess.run(
+            ["ps", "-o", "comm=", "-p", str(ppid)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True
+        )
+        name = result.stdout.strip()
+        if name:
+            return name
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        pass
+
+    return "unknown"
 
 
 @click.command("autocomplete_help", help="Display a autocomplete help")
@@ -118,9 +148,7 @@ def autocomplete(shell: str | None) -> None:
     from genesis_devtools.utils import PROJECT_PATH
 
     if shell is None:
-        import psutil
-
-        shell = psutil.Process(os.getppid()).parent().name()
+        shell = get_grandparent_process_name()
 
     if shell == "bash":
         project_complete_path = "genesis-complete.bash"

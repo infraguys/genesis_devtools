@@ -19,111 +19,14 @@ import os
 import yaml
 import rich_click as click
 import json
-import tempfile
 
 from genesis_devtools import constants as c
+from genesis_devtools.cmd.settings.config import get_current_realm, save_config
 
 
 @click.group("settings", help="Modify genesis settings files")
 def settings_group():
     pass
-
-
-def load_config(
-    ctx: click.Context, cfg_path: str | None = c.CONFIG_FILE, silent: bool = False
-) -> dict:
-    """Load configuration from file"""
-    try:
-        if cfg_path and os.path.exists(cfg_path):
-            with open(cfg_path, "r") as f:
-                config = yaml.safe_load(f) or {}
-        else:
-            if not silent:
-                endpoint_provided = (
-                    ctx.get_parameter_source("endpoint")
-                    == click.core.ParameterSource.COMMANDLINE
-                )
-                user_provided = (
-                    ctx.get_parameter_source("user")
-                    == click.core.ParameterSource.COMMANDLINE
-                )
-                password_provided = (
-                    ctx.get_parameter_source("password")
-                    == click.core.ParameterSource.COMMANDLINE
-                )
-                access_token_provided = (
-                    ctx.get_parameter_source("access_token")
-                    == click.core.ParameterSource.COMMANDLINE
-                )
-                refresh_token_provided = (
-                    ctx.get_parameter_source("refresh_token")
-                    == click.core.ParameterSource.COMMANDLINE
-                )
-                if endpoint_provided and (
-                    (user_provided and password_provided)
-                    or (access_token_provided and refresh_token_provided)
-                ):
-                    silent = True
-            if not silent:
-                click.echo(
-                    f"You don't have a configuration file {cfg_path}. "
-                    f"Please, read the docs https://infraguys.github.io/genesis_devtools/config/"
-                )
-            config = {}
-    except Exception as e:
-        raise click.ClickException(f"Error reading settings: {e}")
-    return config
-
-
-def _save_config(config: dict, cfg_path: str = c.CONFIG_FILE) -> None:
-    """Save configuration to file atomically"""
-    try:
-        dir_name = os.path.dirname(cfg_path) or "."
-        os.makedirs(dir_name, exist_ok=True)
-
-        with tempfile.NamedTemporaryFile(
-            mode="w", dir=dir_name, delete=False, suffix=".tmp"
-        ) as tmp_f:
-            tmp_path = tmp_f.name
-            yaml.dump(config, tmp_f, default_flow_style=False)
-            tmp_f.flush()
-            os.fsync(tmp_f.fileno())
-
-        # Atomically replace the original file
-        os.replace(tmp_path, cfg_path)
-        os.chmod(cfg_path, 0o600)
-    except Exception as e:
-        if "tmp_path" in locals() and os.path.exists(tmp_path):
-            os.unlink(tmp_path)
-        raise click.ClickException(f"Error writing settings: {e}")
-
-
-def get_current_realm(config: dict) -> dict | None:
-    return config.get("current-realm")
-
-
-def get_realm(config: dict, realm: str | None = None) -> dict:
-    if not realm:
-        realm = get_current_realm(config)
-        if not realm:
-            return {}
-    if "realms" not in config or realm not in config["realms"]:
-        return {}
-    return config["realms"][realm]
-
-
-def get_context(realm: dict, context: str | None = None) -> dict:
-    if not realm.get("contexts"):
-        return {}
-    if not context:
-        context = realm.get("current-context")
-        if not context:
-            raise click.ClickException("No current context")
-    if context not in realm["contexts"]:
-        raise click.ClickException(
-            f"context '{context}' not found for realm '{realm['name']}'"
-        )
-    return realm["contexts"][context]
 
 
 @settings_group.command("view", help="Display merged genesis settings")
@@ -161,7 +64,7 @@ def use_realm(ctx: click.Context, realm: str) -> None:
         raise click.ClickException(f"realm '{realm}' not found")
 
     config["current-realm"] = realm
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"Switched to realm '{realm}'")
 
 
@@ -252,7 +155,7 @@ def set_realm(
     if current or len(config["realms"]) == 1:
         config["current-realm"] = realm
 
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"realm '{realm}' set")
 
 
@@ -268,7 +171,7 @@ def delete_realm(ctx: click.Context, realm: str) -> None:
         raise click.ClickException(f"realm '{realm}' not found")
 
     del config["realms"][realm]
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"realm '{realm}' deleted")
 
 
@@ -279,7 +182,7 @@ def delete_realm(ctx: click.Context, realm: str) -> None:
 def config_set(ctx: click.Context, key: str, value: str) -> None:
     config = ctx.obj.cfg
     config[key] = value
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"Set {key} to {value}")
 
 
@@ -290,7 +193,7 @@ def config_unset(ctx: click.Context, key: str) -> None:
     config = ctx.obj.cfg
     if key in config:
         del config[key]
-        _save_config(config, ctx.obj.cfg_path)
+        save_config(config, ctx.obj.cfg_path)
         click.echo(f"Unset {key}")
     else:
         raise click.ClickException(f"Key '{key}' not found in config")
@@ -381,7 +284,7 @@ def set_context(
     if current or len(config["realms"][realm]["contexts"]) == 1:
         config["realms"][realm]["current-context"] = name
         config["current-realm"] = realm
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{name}' for realm '{realm}' set")
 
 
@@ -414,7 +317,7 @@ def use_context(
         raise click.ClickException(f"Context '{name}' not found")
 
     config["realms"][realm]["current-context"] = name
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{name}' for realm '{realm}' set")
 
 
@@ -447,7 +350,7 @@ def delete_context(
                 raise click.ClickException(f"Context '{name}' not found")
             del config["realms"][realm]["contexts"][name]
 
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{name}' deleted")
 
 
@@ -484,7 +387,7 @@ def rename_context(
     ):
         config["current_context"] = new_context
 
-    _save_config(config, ctx.obj.cfg_path)
+    save_config(config, ctx.obj.cfg_path)
     click.echo(f"Context '{old_context}' renamed to '{new_context}'")
 
 
@@ -580,5 +483,5 @@ def init_config(ctx: click.Context) -> None:
         return
 
     config = _build_interactive_config()
-    _save_config(config, cfg_path)
+    save_config(config, cfg_path)
     click.echo(f"Config saved to '{cfg_path}'")

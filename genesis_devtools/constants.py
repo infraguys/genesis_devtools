@@ -13,7 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-import enum
+
 import os
 import typing as tp
 
@@ -87,67 +87,3 @@ CONFIG_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.yaml")
 LAST_CHECK_FILE = os.path.expanduser(f"{CONFIG_DIR}/genesisctl.last_version_check")
 BOOTSTRAP_USER = "ubuntu"
 UPDATE_CHECK_INTERVAL = 60 * 60  # 1 hour in seconds
-
-
-class BackupPeriod(str, enum.Enum):
-    M1 = "1m"
-    M5 = "5m"
-    M15 = "15m"
-    M30 = "30m"
-    H1 = "1h"
-    H3 = "3h"
-    H6 = "6h"
-    H12 = "12h"
-    D1 = "1d"
-    D3 = "3d"
-    D7 = "7d"
-
-    @property
-    def timeout(self) -> int:
-        """Return timeout in seconds based on current element in enum."""
-        timeouts = {
-            self.M1: 60,
-            self.M5: 60 * 5,
-            self.M15: 60 * 15,
-            self.M30: 60 * 30,
-            self.H1: 60 * 60,
-            self.H3: 60 * 60 * 3,
-            self.H6: 60 * 60 * 6,
-            self.H12: 60 * 60 * 12,
-            self.D1: 60 * 60 * 24,
-            self.D3: 60 * 60 * 24 * 3,
-            self.D7: 60 * 60 * 24 * 7,
-        }
-        return timeouts[self]
-
-
-class Profile(str, enum.Enum):
-    DEVELOP = "develop"
-    SMALL = "small"
-    MEDIUM = "medium"
-    LARGE = "large"
-    LEGACY = "legacy"
-
-    @property
-    def ram(self) -> int:
-        """Return memory in Mb based on current element in enum."""
-        memory = {
-            self.DEVELOP: 1024,
-            self.SMALL: 2048,
-            self.MEDIUM: 8192,
-            self.LARGE: 16384,
-            self.LEGACY: 4096,
-        }
-        return memory[self]
-
-    @property
-    def cores(self) -> int:
-        """Return CPU cores based on current element in enum."""
-        cores = {
-            self.DEVELOP: 1,
-            self.SMALL: 2,
-            self.MEDIUM: 4,
-            self.LARGE: 8,
-            self.LEGACY: 2,
-        }
-        return cores[self]

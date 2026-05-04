@@ -1,39 +1,38 @@
 
-# hypervisors_init
+# elements_u
 
-Initialize hypervisor
+Update element from a YAML file
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors init [OPTIONS]                                                                                                                                                                                                                                                         
+ Usage: genesis elements u [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `romfile_version`:
+* `repository`:
     * Type: text
-    * Default: `latest`
-    * Usage: `--romfile_version`
+    * Default: `https://repository.genesis-core.tech/genesis-elements/`
+    * Usage: `-r
+--repository`
 
-  version of the rom file
+  Repository endpoint
 
-* `pool_name`:
+* `version`:
     * Type: text
-    * Default: `latest`
-    * Usage: `--pool_name`
+    * Default: `sentinel.unset`
+    * Usage: `-v
+--version`
 
-  storage pool name
+  version of the element
 
-* `packer`:
-    * Type: boolean
-    * Default: `false`
-    * Usage: `-p
---packer`
-
-  Install packer
+* `path_or_name` (REQUIRED):
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `path_or_name`
 
 * `help`:
     * Type: boolean
@@ -46,14 +45,13 @@ Initialize hypervisor
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute hypervisors init [OPTIONS]                                                                                                                                                                                                                                                         
+ Usage: genesis elements u [OPTIONS] PATH_OR_NAME                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
- Initialize hypervisor                                                                                                                                                                                                                                                                                     
+ Update element from a YAML file                                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --romfile_version      TEXT  version of the rom file                                                                                                                                                                                                                                                    │
-│ --pool_name            TEXT  storage pool name                                                                                                                                                                                                                                                          │
-│ --packer           -p        Install packer                                                                                                                                                                                                                                                             │
-│ --help                       Show this message and exit.                                                                                                                                                                                                                                                │
+│ --repository  -r  TEXT  Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                           │
+│ --version     -v  TEXT  version of the element                                                                                                                                                                                                                                                          │
+│ --help                  Show this message and exit.                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

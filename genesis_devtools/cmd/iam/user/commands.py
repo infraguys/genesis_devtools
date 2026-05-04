@@ -193,7 +193,8 @@ def add_cmd(
     data = {
         "uuid": str(uuid),
         "username": name,
-        "password": password or Prompt.ask("Enter password for {ENTITY} {name}:", password=True),
+        "password": password
+        or Prompt.ask("Enter password for {ENTITY} {name}:", password=True),
         "description": description,
         "email": email,
         "email_verified": email_verified,
@@ -205,7 +206,7 @@ def add_cmd(
     if last_name is not None:
         data["last_name"] = last_name
     if surname is not None:
-        data["surrname"] = surname
+        data["surname"] = surname
     if phone is not None:
         data["phone"] = phone
     if confirmation_code is not None:

@@ -13,10 +13,10 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-from __future__ import annotations
 
 import hashlib
 import json
+import enum
 import os
 import subprocess
 import time
@@ -204,6 +204,70 @@ def _resolve_inventory_from_url(url: str) -> pathlib.Path:
     return cache_dir
 
 
+class Profile(str, enum.Enum):
+    DEVELOP = "develop"
+    SMALL = "small"
+    MEDIUM = "medium"
+    LARGE = "large"
+    LEGACY = "legacy"
+
+    @property
+    def ram(self) -> int:
+        """Return memory in Mb based on current element in enum."""
+        memory = {
+            self.DEVELOP: 1024,
+            self.SMALL: 2048,
+            self.MEDIUM: 8192,
+            self.LARGE: 16384,
+            self.LEGACY: 4096,
+        }
+        return memory[self]
+
+    @property
+    def cores(self) -> int:
+        """Return CPU cores based on current element in enum."""
+        cores = {
+            self.DEVELOP: 1,
+            self.SMALL: 2,
+            self.MEDIUM: 4,
+            self.LARGE: 8,
+            self.LEGACY: 2,
+        }
+        return cores[self]
+
+
+class BackupPeriod(str, enum.Enum):
+    M1 = "1m"
+    M5 = "5m"
+    M15 = "15m"
+    M30 = "30m"
+    H1 = "1h"
+    H3 = "3h"
+    H6 = "6h"
+    H12 = "12h"
+    D1 = "1d"
+    D3 = "3d"
+    D7 = "7d"
+
+    @property
+    def timeout(self) -> int:
+        """Return timeout in seconds based on current element in enum."""
+        timeouts = {
+            self.M1: 60,
+            self.M5: 60 * 5,
+            self.M15: 60 * 15,
+            self.M30: 60 * 30,
+            self.H1: 60 * 60,
+            self.H3: 60 * 60 * 3,
+            self.H6: 60 * 60 * 6,
+            self.H12: 60 * 60 * 12,
+            self.D1: 60 * 60 * 24,
+            self.D3: 60 * 60 * 24 * 3,
+            self.D7: 60 * 60 * 24 * 7,
+        }
+        return timeouts[self]
+
+
 def _get_core_image_uri_from_manifest(manifest_path: str) -> str:
     """Get image URI from manifest file."""
     if not os.path.exists(manifest_path):
@@ -317,7 +381,7 @@ def _register_core(
 def _bootstrap_core(
     image_path: str | None,
     image_uri: str | None,
-    profile: c.Profile,
+    profile: Profile,
     name: str,
     stand_spec: tp.Dict[str, tp.Any] | None,
     stand_main_network: stand_models.Network,
@@ -481,10 +545,10 @@ def _bootstrap_core(
 )
 @click.option(
     "--profile",
-    default=c.Profile.SMALL.value,
+    default=Profile.SMALL.value,
     show_default=True,
     help="Profile for the installation.",
-    type=click.Choice([p.value for p in c.Profile]),
+    type=click.Choice([p.value for p in Profile]),
 )
 @click.option(
     "--name",
@@ -712,7 +776,7 @@ def bootstrap_cmd(
     elif not os.path.exists(inventory):
         raise click.UsageError(f"Inventory path not found: {inventory}")
 
-    profile = c.Profile[profile.upper()]
+    profile = Profile[profile.upper()]
 
     # Determine the IP address for the core VM
     if core_ip is None:
@@ -941,8 +1005,8 @@ def _domains_for_backup(
 @click.option(
     "-p",
     "--period",
-    default=c.BackupPeriod.D1.value,
-    type=click.Choice([p.value for p in c.BackupPeriod]),
+    default=BackupPeriod.D1.value,
+    type=click.Choice([p.value for p in BackupPeriod]),
     show_default=True,
     help="the regularity of backups",
 )
@@ -950,7 +1014,7 @@ def _domains_for_backup(
     "-o",
     "--offset",
     default=None,
-    type=click.Choice([p.value for p in c.BackupPeriod]),
+    type=click.Choice([p.value for p in BackupPeriod]),
     show_default=True,
     help=(
         "The time offset of the first backup. If not provided, "
@@ -1036,9 +1100,9 @@ def backup_cmd(
     min_free_space: int,
     rotate: int,
 ) -> None:
-    period = c.BackupPeriod(period)
+    period = BackupPeriod(period)
     if offset:
-        offset = c.BackupPeriod(offset)
+        offset = BackupPeriod(offset)
 
     # Forbid using both include and exclude options
     if name and exclude_name:
@@ -1102,7 +1166,7 @@ def backup_cmd(
             )
 
         # If --start is specified, period must be at least daily
-        if period.timeout < c.BackupPeriod.D1.timeout:
+        if period.timeout < BackupPeriod.D1.timeout:
             raise click.UsageError(
                 "The '--start' option requires the period to be at least 1 day (1d)."
             )
