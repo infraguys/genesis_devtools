@@ -7,7 +7,7 @@ Show node
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes show [OPTIONS] UUID                                                                                                                                                                                                                                                          
+ Usage: genesis nodes show [OPTIONS] UUID                                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -29,7 +29,7 @@ Show node
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes show [OPTIONS] UUID                                                                                                                                                                                                                                                          
+ Usage: genesis nodes show [OPTIONS] UUID                                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            
  Show node                                                                                                                                                                                                                                                                                                 
                                                                                                                                                                                                                                                                                                            

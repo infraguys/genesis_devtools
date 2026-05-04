@@ -53,6 +53,8 @@ MANIFEST_COLLECTION = "/v1/em/manifests/"
 ELEMENT_COLLECTION = "/v1/em/elements/"
 SERVICE_COLLECTION = "/v1/em/services/"
 RESOURCE_COLLECTION = "/v1/em/resources/"
+IMPORTS_COLLECTION = "/v1/em/imports/"
+EXPORTS_COLLECTION = "/v1/em/exports/"
 
 PROFILE_COLLECTION = "/v1/vs/profiles/"
 VALUE_COLLECTION = "/v1/vs/values/"

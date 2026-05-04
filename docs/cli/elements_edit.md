@@ -1,30 +1,38 @@
 
-# resources_show
+# elements_edit
 
-Show resource
+Edit manifest
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis elements edit [OPTIONS] UUID_NAME                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `element`:
-    * Type: text
-    * Default: `none`
-    * Usage: `-e
---element`
-
-  Name or uuid of the element
-
-* `resource_name_uuid` (REQUIRED):
+* `uuid_name` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `resource_name_uuid`
+    * Usage: `uuid_name`
+
+* `editor`:
+    * Type: choice
+    * Default: `nano`
+    * Usage: `-e
+--editor`
+
+  Editor (nano or vim)
+
+* `repository`:
+    * Type: text
+    * Default: `https://repository.genesis-core.tech/genesis-elements/`
+    * Usage: `-r
+--repository`
+
+  Repository endpoint
 
 * `help`:
     * Type: boolean
@@ -37,12 +45,13 @@ Show resource
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis elements edit [OPTIONS] UUID_NAME                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                            
- Show resource                                                                                                                                                                                                                                                                                             
+ Edit manifest                                                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --element  -e  TEXT  Name or uuid of the element                                                                                                                                                                                                                                                        │
-│ --help               Show this message and exit.                                                                                                                                                                                                                                                        │
+│ --editor      -e  [nano|vim]  Editor (nano or vim)                                                                                                                                                                                                                                                      │
+│ --repository  -r  TEXT        Repository endpoint [default: https://repository.genesis-core.tech/genesis-elements/]                                                                                                                                                                                     │
+│ --help                        Show this message and exit.                                                                                                                                                                                                                                               │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

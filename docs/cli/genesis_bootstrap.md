@@ -158,6 +158,41 @@ Bootstrap genesis locally
 
   Do not start the stand after creation
 
+* `no_registration`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--no-registration`
+
+  Don't register in ecosystem.
+
+* `disable_telemetry`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--disable-telemetry`
+
+  Disable telemetry. Anonymized data only is sent by default.
+
+* `org_token`:
+    * Type: text
+    * Default: `sentinel.unset`
+    * Usage: `--org-token`
+
+  Organization token, used to register stand in ecosystem
+
+* `ecosystem_endpoint`:
+    * Type: text
+    * Default: `https://console.genesis-core.tech`
+    * Usage: `--ecosystem-endpoint`
+
+  Ecosystem's endpoint to connect to
+
+* `settings`:
+    * Type: boolean
+    * Default: `false`
+    * Usage: `--settings`
+
+  Interactively create a genesis settings file
+
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -194,6 +229,11 @@ Bootstrap genesis locally
 │ --hyper-machine-prefix          TEXT                                 A prefix for new VMs. [default: vm-]                                                                                                                                                                                               │
 │ --hyper-iface-rom-file          TEXT                                 A path to the custom ROM file of a network interface. [default: /usr/share/qemu/1af41041.rom]                                                                                                                                      │
 │ --no-start                                                           Do not start the stand after creation                                                                                                                                                                                              │
+│ --no-registration                                                    Don't register in ecosystem.                                                                                                                                                                                                       │
+│ --disable-telemetry                                                  Disable telemetry. Anonymized data only is sent by default.                                                                                                                                                                        │
+│ --org-token                     TEXT                                 Organization token, used to register stand in ecosystem                                                                                                                                                                            │
+│ --ecosystem-endpoint            TEXT                                 Ecosystem's endpoint to connect to                                                                                                                                                                                                 │
+│ --settings                                                           Interactively create a genesis settings file                                                                                                                                                                                       │
 │ --help                                                               Show this message and exit.                                                                                                                                                                                                        │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

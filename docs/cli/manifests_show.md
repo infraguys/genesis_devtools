@@ -1,22 +1,22 @@
 
 # manifests_show
 
-Show manifest general information
+Show manifest
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis manifests show [OPTIONS] NAME                                                                                                                                                                                                                                                              
+ Usage: genesis manifests show [OPTIONS] UUID                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
 ```
 
 ## Options
 
-* `name` (REQUIRED):
+* `uuid` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `name`
+    * Usage: `uuid`
 
 * `help`:
     * Type: boolean
@@ -29,9 +29,9 @@ Show manifest general information
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis manifests show [OPTIONS] NAME                                                                                                                                                                                                                                                              
+ Usage: genesis manifests show [OPTIONS] UUID                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
- Show manifest general information                                                                                                                                                                                                                                                                         
+ Show manifest                                                                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │

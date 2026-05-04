@@ -18,8 +18,8 @@ from __future__ import annotations
 import typing as tp
 import uuid as sys_uuid
 
-import questionary
 import rich_click as click
+from rich.prompt import Prompt
 from genesis_devtools.common.table import get_table, print_table, show_data
 
 from genesis_devtools.clients import base_client
@@ -193,8 +193,7 @@ def add_cmd(
     data = {
         "uuid": str(uuid),
         "username": name,
-        "password": password
-        or questionary.password(f"Enter password for {ENTITY} {name}:").ask(),
+        "password": password or Prompt.ask("Enter password for {ENTITY} {name}:", password=True),
         "description": description,
         "email": email,
         "email_verified": email_verified,

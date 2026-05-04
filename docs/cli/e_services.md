@@ -1,13 +1,13 @@
 
-# genesis_nodes
+# e_services
 
-Manage nodes in the Genesis installation
+Manage services in the Genesis installation
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                          
+ Usage: genesis e services [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -24,18 +24,18 @@ Manage nodes in the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                          
+ Usage: genesis e services [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                            
- Manage nodes in the Genesis installation                                                                                                                                                                                                                                                                  
+ Manage services in the Genesis installation                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ add                                                                       Add a new node to the Genesis installation                                                                                                                                                                                    │
-│ add-or-update                                                             Add a new node or update an existing one                                                                                                                                                                                      │
-│ delete                                                                    Delete node                                                                                                                                                                                                                   │
-│ list                                                                      List nodes                                                                                                                                                                                                                    │
-│ show                                                                      Show node                                                                                                                                                                                                                     │
+│ add                                     Add a new service to the Genesis installation                                                                                                                                                                                                                   │
+│ delete                                  Delete service                                                                                                                                                                                                                                                  │
+│ list                                    List services                                                                                                                                                                                                                                                   │
+│ show                                    Show service                                                                                                                                                                                                                                                    │
+│ update                                  Update service                                                                                                                                                                                                                                                  │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

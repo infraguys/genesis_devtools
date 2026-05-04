@@ -1,13 +1,13 @@
 
-# genesis_nodes
+# e_imports
 
-Manage nodes in the Genesis installation
+Manage imports in the Genesis installation
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                          
+ Usage: genesis e imports [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -24,18 +24,15 @@ Manage nodes in the Genesis installation
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis nodes [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                          
+ Usage: genesis e imports [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                                                                                                            
- Manage nodes in the Genesis installation                                                                                                                                                                                                                                                                  
+ Manage imports in the Genesis installation                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --help  Show this message and exit.                                                                                                                                                                                                                                                                     │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ add                                                                       Add a new node to the Genesis installation                                                                                                                                                                                    │
-│ add-or-update                                                             Add a new node or update an existing one                                                                                                                                                                                      │
-│ delete                                                                    Delete node                                                                                                                                                                                                                   │
-│ list                                                                      List nodes                                                                                                                                                                                                                    │
-│ show                                                                      Show node                                                                                                                                                                                                                     │
+│ list                                                                               List imports                                                                                                                                                                                                         │
+│ show                                                                               Show import                                                                                                                                                                                                          │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

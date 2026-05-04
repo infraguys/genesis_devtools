@@ -7,7 +7,7 @@ Update service
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services update [OPTIONS] UUID                                                                                                                                                                                                                                                             
+ Usage: genesis e services update [OPTIONS] UUID                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -53,7 +53,7 @@ Update service
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis services update [OPTIONS] UUID                                                                                                                                                                                                                                                             
+ Usage: genesis e services update [OPTIONS] UUID                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                                                                                                            
  Update service                                                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                            

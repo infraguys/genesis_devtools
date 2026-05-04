@@ -7,7 +7,7 @@ Add a new node or update an existing one
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes add-or-update [OPTIONS]                                                                                                                                                                                                                                                      
+ Usage: genesis nodes add-or-update [OPTIONS]                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -95,7 +95,7 @@ Add a new node or update an existing one
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis compute nodes add-or-update [OPTIONS]                                                                                                                                                                                                                                                      
+ Usage: genesis nodes add-or-update [OPTIONS]                                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                                                            
  Add a new node or update an existing one                                                                                                                                                                                                                                                                  
                                                                                                                                                                                                                                                                                                            

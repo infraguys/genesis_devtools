@@ -34,20 +34,21 @@ from genesis_devtools.cmd.iam import iam_group
 from genesis_devtools.cmd.secret import secret_group
 from genesis_devtools.cmd.vs import vs_group
 from genesis_devtools.cmd.compute import compute_group
+from genesis_devtools.cmd.compute.nodes import commands as nodes_commands
 from genesis_devtools.cmd.realms.commands import realms_group
 from genesis_devtools.cmd.version import commands as version_commands
 from genesis_devtools.cmd.stand import commands as stand_commands
 from genesis_devtools.cmd.stand import utils_commands
 
+from genesis_devtools.cmd.em import elements_group
 from genesis_devtools.cmd.em.builder import commands as builder_commands
 from genesis_devtools.cmd.em.manifests import commands as manifests_commands
 from genesis_devtools.cmd.em.elements import commands as elements_commands
-from genesis_devtools.cmd.em.services import commands as services_commands
 
 from genesis_devtools.cmd.initialization import commands as initialization_commands
 from genesis_devtools.cmd.configs import commands as configs_commands
 from genesis_devtools.cmd.repo import commands as repo_commands
-from genesis_devtools.cmd.em.resources import commands as resources_commands
+
 from genesis_devtools.cmd.settings import commands as settings_commands
 
 from genesis_devtools.cmd.aliases import ClickAliasedGroup
@@ -220,19 +221,20 @@ genesis.add_command(auth_commands.auth_group)  # noqa
 genesis.add_command(iam_group)  # noqa
 genesis.add_command(secret_group, aliases=["s"])  # noqa
 genesis.add_command(compute_group, aliases=["c"])  # noqa
+genesis.add_command(nodes_commands.nodes_group, aliases=["n"])  # noqa
+
 genesis.add_command(vs_group)  # noqa
 genesis.add_command(realms_group)  # noqa
 
+genesis.add_command(elements_group)  # noqa
 genesis.add_command(manifests_commands.manifests_group, aliases=["m"])  # noqa
 genesis.add_command(elements_commands.elements_group, aliases=["e"])  # noqa
 genesis.add_command(builder_commands.build_cmd)  # noqa
-genesis.add_command(services_commands.services_group)  # noqa
 
 genesis.add_command(configs_commands.configs_group)  # noqa
 genesis.add_command(settings_commands.settings_group)  # noqa
 genesis.add_command(repo_commands.repository_group)  # noqa
 genesis.add_command(repo_commands.push_cmd)  # noqa
-genesis.add_command(resources_commands.resources_group, aliases=["r"])  # noqa
 
 genesis.add_command(initialization_commands.init_cmd)  # noqa
 

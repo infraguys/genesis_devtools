@@ -1,13 +1,13 @@
 
-# resources_show
+# exports_show
 
-Show resource
+Show export
 
 ## Usage
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis e exports show [OPTIONS] NAME_UUID                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
 ```
 
@@ -21,10 +21,10 @@ Show resource
 
   Name or uuid of the element
 
-* `resource_name_uuid` (REQUIRED):
+* `name_uuid` (REQUIRED):
     * Type: text
     * Default: `sentinel.unset`
-    * Usage: `resource_name_uuid`
+    * Usage: `name_uuid`
 
 * `help`:
     * Type: boolean
@@ -37,9 +37,9 @@ Show resource
 
 ```console
                                                                                                                                                                                                                                                                                                            
- Usage: genesis e resources show [OPTIONS] RESOURCE_NAME_UUID                                                                                                                                                                                                                                              
+ Usage: genesis e exports show [OPTIONS] NAME_UUID                                                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                                            
- Show resource                                                                                                                                                                                                                                                                                             
+ Show export                                                                                                                                                                                                                                                                                               
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │ --element  -e  TEXT  Name or uuid of the element                                                                                                                                                                                                                                                        │
