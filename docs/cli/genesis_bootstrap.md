@@ -19,7 +19,7 @@ Bootstrap genesis locally
     * Usage: `-i
 --inventory`
 
-  Path to the genesis inventory file or directory with inventory.json
+  Path to the inventory directory containing inventory.json, or an HTTP(S) URL pointing to an Nginx-served directory. When a URL is given, inventory.json and all referenced artefacts are downloaded and cached under ~/.cache/genesis/<name>/<version>/. Trailing /inventory.json in the URL is accepted and treated identically to the bare directory URL. A bare version string (e.g. '0.0.6') is expanded automatically to <https://repository.genesis-core.tech/genesis-elements/core/><version>/. Examples: 0.0.6  /path/to/core/0.0.6  <https://repository.example.com/genesis-elements/core/0.0.6/>  <https://repository.example.com/genesis-elements/core/0.0.6/inventory.json>
 
 * `profile`:
     * Type: choice
@@ -193,6 +193,13 @@ Bootstrap genesis locally
 
   Interactively create a genesis settings file
 
+* `ssh_public_key`:
+    * Type: path
+    * Default: `sentinel.unset`
+    * Usage: `--ssh-public-key`
+
+  Path to a public SSH key file to inject into the VM after bootstrap. Can be specified multiple times. If not provided, no key will be injected.
+
 * `help`:
     * Type: boolean
     * Default: `false`
@@ -209,7 +216,10 @@ Bootstrap genesis locally
  Bootstrap genesis locally                                                                                                                                                                                                                                                                                 
                                                                                                                                                                                                                                                                                                            
 ╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --inventory                 -i  TEXT                                 Path to the genesis inventory file or directory with inventory.json                                                                                                                                                                │
+│ --inventory                 -i  TEXT                                 Path to the inventory directory containing inventory.json, or an HTTP(S) URL pointing to an Nginx-served directory. When a URL is given, inventory.json and all referenced artefacts are downloaded and cached under               │
+│                                                                      ~/.cache/genesis/<name>/<version>/. Trailing /inventory.json in the URL is accepted and treated identically to the bare directory URL. A bare version string (e.g. '0.0.6') is expanded automatically to                           │
+│                                                                      https://repository.genesis-core.tech/genesis-elements/core/<version>/. Examples: 0.0.6  /path/to/core/0.0.6  https://repository.example.com/genesis-elements/core/0.0.6/                                                           │
+│                                                                      https://repository.example.com/genesis-elements/core/0.0.6/inventory.json                                                                                                                                                          │
 │ --profile                       [develop|small|medium|large|legacy]  Profile for the installation. [default: small]                                                                                                                                                                                     │
 │ --name                          TEXT                                 Name of the installation                                                                                                                                                                                                           │
 │ --launch-mode               -m  [core|element|custom]                Launch mode for start element, core or custom configuration [default: element]                                                                                                                                                     │
@@ -234,6 +244,7 @@ Bootstrap genesis locally
 │ --org-token                     TEXT                                 Organization token, used to register stand in ecosystem                                                                                                                                                                            │
 │ --ecosystem-endpoint            TEXT                                 Ecosystem's endpoint to connect to                                                                                                                                                                                                 │
 │ --settings                                                           Interactively create a genesis settings file                                                                                                                                                                                       │
+│ --ssh-public-key                PATH                                 Path to a public SSH key file to inject into the VM after bootstrap. Can be specified multiple times. If not provided, no key will be injected.                                                                                    │
 │ --help                                                               Show this message and exit.                                                                                                                                                                                                        │
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

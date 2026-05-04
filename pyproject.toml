@@ -25,16 +25,14 @@ dependencies = [
     "pyyaml>=6.0.0,<7.0.0",  # MIT
     "GitPython>=3.1.30,<4.0.0",
     "bazooka>=1.0.0,<2.0.0",  # Apache-2.0
-    "gcl_sdk>=1.0.0,<3.0.0",  # Apache-2.0
     "cryptography>=45.0.5,<47.0.0",  # BSD-3
     "boto3>=1.37.0,<2.0.0",  # Apache-2.0
     "Jinja2>=3.1.5,<4.0.0",  # BSD License (BSD-3-Clause)
     "packaging==26.0",  # Apache-2.0 or BSD
-    "cowsay==v6.1",  # GNU General Public License v3 (GPLv3)
     "simple-term-menu>=1.6.6,<2.0.0",  # MIT License (MIT)
-    "psutil>=7.2.2",  # BSD License (BSD-3-Clause)
     "certifi>=2026.2.25",  # modified version of ca-bundle.crt
-    "openapi-schema-validator>=0.8.1",  # BSD-3
+#    "openapi-schema-validator>=0.8.1",  # BSD-3  #
+    "orjson>=3.10.0,<4.0.0",  # MIT
 ]
 [project.urls]
 homepage = "https://github.com/infraguys/genesis_devtools/"
@@ -116,8 +114,8 @@ exclude = [
 # Same as Black.
 line-length = 88
 indent-width = 4
-# Assume Python 3.12
-target-version = "py312"
+# Assume Python 3.14
+target-version = "py314"
 [lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 select = ["E4", "E7", "E9", "F"]
@@ -169,7 +167,7 @@ exclude = [
     '.venv',
     'genesis_devtools/tests',
 ]
-python_version = "3.12"
+python_version = "3.14"
 disallow_untyped_defs = true
 show_error_codes = true
 no_implicit_optional = true

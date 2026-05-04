@@ -23,7 +23,7 @@ from click.globals import get_current_context
 from genesis_devtools import utils
 from genesis_devtools.cmd import cli
 
-from genesis_devtools.cmd.settings import commands as settings_commands
+from genesis_devtools.cmd.settings import config as settings_config
 
 
 class TestCli:
@@ -44,18 +44,14 @@ class TestCli:
         result = cli_runner.invoke(cli.genesis)
         assert result.exit_code == 0
 
-        result = cli_runner.invoke(cli.genesis, ["cowsay"])
-        assert result.exit_code == 0
-        assert result.output
-
         result = cli_runner.invoke(cli.genesis, ["version"])
         assert result.exit_code == 0
         assert result.output
 
     def test_save_config(self, cli_runner, cli_config_data):
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            settings_commands._save_config(cli_config_data, f.name)
-            saved = settings_commands.load_config(
+            settings_config.save_config(cli_config_data, f.name)
+            saved = settings_config.load_config(
                 get_current_context(silent=True), f.name
             )
             assert saved["current-realm"] == cli_config_data["current-realm"]
@@ -77,7 +73,7 @@ class TestCli:
     def test_use_realm_command(self, cli_runner, cli_config_data):
         new_realm = "slavoniy-realm"
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            settings_commands._save_config(cli_config_data, f.name)
+            settings_config.save_config(cli_config_data, f.name)
             result = cli_runner.invoke(
                 cli.genesis, ["--config", f.name, "settings", "use-realm", new_realm]
             )
@@ -94,7 +90,7 @@ class TestCli:
     def test_set_realm_command(self, cli_runner, cli_config_data):
         new_realm = "test-realm"
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            settings_commands._save_config(cli_config_data, f.name)
+            settings_config.save_config(cli_config_data, f.name)
             result = cli_runner.invoke(
                 cli.genesis,
                 [
@@ -113,7 +109,7 @@ class TestCli:
     def test_delete_realm_command(self, cli_runner, cli_config_data):
         new_realm = "test-realm"
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            settings_commands._save_config(cli_config_data, f.name)
+            settings_config.save_config(cli_config_data, f.name)
             result = cli_runner.invoke(
                 cli.genesis,
                 [
@@ -135,7 +131,7 @@ class TestCli:
 
     def test_config_set_get_unset_command(self, cli_runner, cli_config_data):
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            settings_commands._save_config(cli_config_data, f.name)
+            settings_config.save_config(cli_config_data, f.name)
             result = cli_runner.invoke(
                 cli.genesis, ["--config", f.name, "settings", "set", "key", "value"]
             )
@@ -157,7 +153,7 @@ class TestCli:
     def test_context_command(self, cli_runner, cli_config_data):
         realm = "slavoniy-realm"
         with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            settings_commands._save_config(cli_config_data, f.name)
+            settings_config.save_config(cli_config_data, f.name)
             result = cli_runner.invoke(
                 cli.genesis,
                 [

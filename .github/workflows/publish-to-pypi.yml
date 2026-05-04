@@ -22,7 +22,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
-        python-version: "3.12"
+        python-version: "3.14"
     - name: Install pypa/build
       run: >-
         python3 -m
@@ -61,7 +61,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.12"]
+        python-version: ["3.14"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository

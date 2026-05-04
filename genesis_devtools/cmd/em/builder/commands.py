@@ -158,6 +158,7 @@ def build_cmd(
             f"Genesis configuration file not found in {project_dir}"
         )
 
+    # NOTE(slashburygin): openapi_schema_validator is very heavy for cli, need replace it to simple validator
     spec = utils.load_spec()
     utils.validate_config(gen_config, spec)
     # Take all build sections from the configuration

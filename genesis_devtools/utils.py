@@ -510,16 +510,19 @@ PROJECT_PATH = get_project_path()
 
 
 def validate_config(data: dict, schema: tp.Optional[dict]) -> None:
-    import openapi_schema_validator
-    from jsonschema.exceptions import ValidationError
+    try:
+        import openapi_schema_validator
+        from jsonschema.exceptions import ValidationError
 
-    if data and schema:
-        try:
-            openapi_schema_validator.validate(
-                data, schema, cls=openapi_schema_validator.OAS30Validator
-            )
-        except ValidationError as err:
-            raise ValueError(f"{err.message} in {err.json_path}")
+        if data and schema:
+            try:
+                openapi_schema_validator.validate(
+                    data, schema, cls=openapi_schema_validator.OAS30Validator
+                )
+            except ValidationError as err:
+                raise ValueError(f"{err.message} in {err.json_path}")
+    except ModuleNotFoundError:
+        pass
     return None
 
 

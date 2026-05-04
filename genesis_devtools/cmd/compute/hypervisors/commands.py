@@ -125,6 +125,7 @@ def _install_packages() -> None:
         "libvirt-daemon-system",
         "libvirt-dev",
         "genisoimage",
+        "unzip",
     ]
     cmd = ["apt-get", "update"]
     run_command(cmd)
@@ -176,7 +177,7 @@ def _download_rom_file(version: str) -> None:
     rom_path = f"/usr/share/qemu/{rom_filename}"
     if not os.path.exists(rom_path):
         runsh(
-            f"wget -O {rom_path} https://repository.genesis-core.tech/seed_os/{version}/{rom_filename}"
+            f"wget -O {rom_path} --timeout=30 https://repository.genesis-core.tech/seed_os/{version}/{rom_filename}"
         ).raise_on_result()
 
     else:

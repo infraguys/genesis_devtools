@@ -13,7 +13,6 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-from __future__ import annotations
 
 import os
 import requests
@@ -22,8 +21,7 @@ import time
 import rich_click as click
 
 import genesis_devtools.constants as c
-from genesis_devtools.logger import ClickLogger
-from genesis_devtools import utils
+from genesis_devtools.common.version import get_project_version
 
 
 def check_latest_version(echo_on_latest: bool = False) -> None:
@@ -105,6 +103,5 @@ def latest_cmd() -> None:
 @click.command("get-version", help="Return the version of the project")
 @click.argument("element_dir", type=click.Path())
 def get_project_version_cmd(element_dir: str) -> None:
-    logger = ClickLogger()
-    version = utils.get_project_version(element_dir)
-    logger.important(version)
+    version = get_project_version(element_dir)
+    click.secho(version, fg="green")

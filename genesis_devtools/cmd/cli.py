@@ -13,9 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-from __future__ import annotations
 
-import logging
 from requests.exceptions import RequestException
 import typing as tp
 import uuid as sys_uuid
@@ -23,7 +21,6 @@ import uuid as sys_uuid
 import rich_click as click
 
 from bazooka import exceptions as bazooka_exc
-from gcl_sdk.clients.http import base as http_client
 
 import genesis_devtools.constants as c
 from genesis_devtools.common.cmd_context import ContextObject
@@ -50,6 +47,7 @@ from genesis_devtools.cmd.configs import commands as configs_commands
 from genesis_devtools.cmd.repo import commands as repo_commands
 
 from genesis_devtools.cmd.settings import commands as settings_commands
+from genesis_devtools.cmd.settings import config as settings_config
 
 from genesis_devtools.cmd.aliases import ClickAliasedGroup
 
@@ -155,13 +153,15 @@ def genesis(
         click.echo(ctx.get_help())
         return
     if verbose:
+        import logging
+
         logging.basicConfig(level=logging.DEBUG)
     # Load configuration from file (if exists)
     cfg_path = config if config else None
-    cfg = settings_commands.load_config(ctx, cfg_path, silent)
+    cfg = settings_config.load_config(ctx, cfg_path, silent)
 
-    realm_conf = settings_commands.get_realm(cfg, realm)
-    context_conf = settings_commands.get_context(realm_conf, context)
+    realm_conf = settings_config.get_realm(cfg, realm)
+    context_conf = settings_config.get_context(realm_conf, context)
 
     def _get_final_value(
         param_name: str, cli_value: tp.Any, base_conf: dict, direct_conf: dict
@@ -191,11 +191,7 @@ def genesis(
         version_commands.save_last_check_time()
 
     final_project_id = _get_final_value("project_id", project_id, cfg, context_conf)
-
-    if final_project_id is not None:
-        scope = http_client.CoreIamAuthenticator.project_scope(final_project_id)
-    else:
-        scope = None
+    scope = f"project:{final_project_id}" if final_project_id else None
 
     auth_data = dict(
         endpoint=final_endpoint,
@@ -247,7 +243,6 @@ genesis.add_command(stand_commands.backup_cmd)  # noqa
 genesis.add_command(stand_commands.backup_decrypt_cmd)  # noqa
 
 genesis.add_command(utils_commands.openapi_spec)  # noqa
-genesis.add_command(utils_commands.cowsay_cmd)  # noqa
 genesis.add_command(utils_commands.hello)  # noqa
 genesis.add_command(utils_commands.autocomplete_help)  # noqa
 genesis.add_command(utils_commands.autocomplete)  # noqa

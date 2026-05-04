@@ -26,7 +26,6 @@ import yaml
 import rich_click as click
 
 from bazooka import exceptions as bazooka_exc
-from gcl_sdk.clients.http import base as http_client
 
 from genesis_devtools.common.table import get_table, print_table, show_data
 from genesis_devtools import utils
@@ -34,6 +33,9 @@ from genesis_devtools.clients import base_client
 from genesis_devtools.clients import repo as repo_lib
 import genesis_devtools.constants as c
 from genesis_devtools.logger import ClickLogger
+
+if tp.TYPE_CHECKING:
+    from genesis_devtools.clients.base import CollectionBaseClient
 
 
 ENTITY = "element"
@@ -152,7 +154,7 @@ def show_element_ips(ctx: click.Context, name: str) -> None:
 
 
 def _apply_with_cleanup(
-    client: http_client.CollectionBaseClient,
+    client: "CollectionBaseClient",
     manifest_data: dict[str, tp.Any],
     install_only: bool = False,
     update_manifest: bool = False,
@@ -209,7 +211,7 @@ def _apply_with_cleanup(
 
 
 def upgrade_manifest(
-    client: http_client.CollectionBaseClient,
+    client: "CollectionBaseClient",
     repository: str,
     path_or_name: str,
     install_only: bool = False,
@@ -455,10 +457,11 @@ def uninstall_manifest_cmd(ctx: click.Context, path_uuid_name: str) -> None:
         _uninstall(uuid, name)
         return
     elif len(manifests) > 1:
-
         manifest_choice = Prompt.ask(
             "Select manifest to uninstall",
-            choices=[f"{manifest['name']} {manifest['version']}" for manifest in manifests],
+            choices=[
+                f"{manifest['name']} {manifest['version']}" for manifest in manifests
+            ],
         )
         m_name, m_version = manifest_choice.split(" ")
         for manifest in manifests:
